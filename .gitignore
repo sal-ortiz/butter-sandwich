@@ -1,0 +1,7 @@
+# build and test artifacts
+build
+tmp
+log
+
+# editor artifacts
+*.sw*
