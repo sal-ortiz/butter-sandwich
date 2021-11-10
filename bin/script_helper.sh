@@ -10,7 +10,7 @@ ROOT_PATH="$( readlink --canonicalize $(dirname $0)/.. )"
 
 BIN_PATH="$ROOT_PATH/bin"
 CFG_PATH="$ROOT_PATH/cfg"
-SRC_PATH="$ROOT_PATH/lib"
+SRC_PATH="$ROOT_PATH/src"
 LOG_PATH="$ROOT_PATH/log"
 BUILD_PATH=$ROOT_PATH/build
 
