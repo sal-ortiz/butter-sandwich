@@ -1,0 +1,79 @@
+#!/bin/bash
+
+source "$( dirname $0 )/script_helper.sh"
+
+initialize
+
+FILE_TYPES=".c .cpp"
+
+OUTPUT_PATH=$ROOT_PATH/build
+LOG_FILE=$LOG_PATH/test.log
+
+TEST_PATHS="test test/core"
+
+for CURRENT_TEST_PATH in $TEST_PATHS; do
+  CPP_WILDCARD=$ROOT_PATH/$CURRENT_TEST_PATH/*.cpp
+  C_WILDCARD=$ROOT_PATH/$CURRENT_TEST_PATH/*.c
+
+  TESTS_LIST="$TESTS_LIST $( ls --almost-all $CPP_WILDCARD $C_WILDCARD 2> /dev/null )"
+done
+
+HEADER="[TEST $( run_time )][$( date --rfc-2822 )]: START ===============\n"
+
+echo -e "[TEST $( run_time )] Testing..."
+echo -e "\n$HEADER" >> $LOG_FILE
+
+if [ ! -d $( dirname $LOG_FILE ) ]; then
+  mkdir $( dirname $LOG_FILE )
+fi
+
+if [ ! -d $OUTPUT_PATH ]; then
+  mkdir $OUTPUT_PATH
+fi
+
+for TEST in $TESTS_LIST; do
+  OUTPUT=$TEST
+
+  for TYPE in $FILE_TYPES; do
+    OUTPUT=$( basename $OUTPUT $TYPE )
+  done
+
+
+  cd $OUTPUT_PATH
+
+  SHORT_TEST_NAME=$( realpath --relative-to=$ROOT_PATH "$TEST" )
+  echo -n -e "  * [TEST $( run_time )]: testing /$SHORT_TEST_NAME..."
+  echo -e -n "[TEST $( run_time )]: $OUTPUT...\n" >> $LOG_FILE
+
+  $BIN_PATH/build $TEST &>> $LOG_FILE
+  EXITCODE=$?
+
+  if [ $EXITCODE == $EXITCODE_SUCCESS ] && [ -x $OUTPUT_PATH/$OUTPUT ]; then
+    echo -n -e "[TEST $( run_time )]: testing $OUTPUT..." >> $LOG_FILE
+
+    $OUTPUT_PATH/$OUTPUT &>> $LOG_FILE
+
+    if [ $? == $EXITCODE_SUCCESS ]; then
+      echo -n -e "passed!\n"
+      echo -n -e "passed!\n" >> $LOG_FILE
+    else
+      echo -e "failed!! see $LOG_FILE for details.\n"
+      echo -e "failed!!\n" >> $LOG_FILE
+    fi
+
+  else
+    echo -e "failed!! [$( run_time )]"
+    echo -e "    see $LOG_FILE for details.\n"
+
+  fi
+
+  echo -e -n "[TEST $( run_time )]: complete!\n\n" >> $LOG_FILE
+  #echo -e "\n"
+
+done
+
+echo -e "[TEST $( run_time )] Complete!"
+echo -e -n "[TEST $( run_time )][$( date --rfc-2822 )]: END =============\n\n" >> $LOG_FILE
+
+
+exit $EXITCODE_SUCCESS

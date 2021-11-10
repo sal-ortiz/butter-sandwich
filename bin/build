@@ -1,0 +1,81 @@
+#!/bin/bash
+
+source "$( readlink --canonicalize $( dirname $0 )/script_helper.sh )"
+
+initialize
+
+if [ $# -lt 1 ];  then  # validate our parameters.
+  echo "  Usage: $0 <entry_point.cpp>"
+  exit $EXITCODE_FAILURE
+fi
+
+INP_FILENAME=$1   # our input file name
+FILE_LIST=""      # initialize a blank file list.
+
+# an output file name, based on the given input file name.
+PROJECT_NAME="$( echo $(basename "$INP_FILENAME") | cut -d'.' -f1 )"
+OUTP_FILENAME="$BUILD_PATH/$PROJECT_NAME"
+
+# conditionally set some command line switches for our linker.
+CMD_OPTS="-m32 -w"
+
+
+if [ ! -z "$( requires_lib 'pthread.h' )" ]; then
+  # check to see if the pthread library should be lnked in.
+  CMD_OPTS="$CMD_OPTS -pthread"
+fi
+
+if [ ! -z "$( requires_lib 'GL/gl.h' )" ]; then
+  # check to see if the gl library should be lnked in.
+  CMD_OPTS="$CMD_OPTS -lGL"
+fi
+
+if [ ! -z "$( requires_lib 'GL/glut.h' )" ]; then
+  # check to see if the glut library should be lnked in.
+  CMD_OPTS="$CMD_OPTS -lglut"
+fi
+
+#if [ ! -z "$( requires_lib 'also/asoundlib.h' )" ]; then
+#  # check to see if the asound library should be lnked in.
+#  CMD_OPTS="$CMD_OPTS -lasound";
+#fi
+
+
+echo "[BUILD $( run_time )]: Preparing dependencies..."
+
+if [ "$( ls -1 $SRC_PATH/**/*.asm 2> /dev/null | wc -l )" != "0" ]; then
+  # assemble each of our ASM dependencies.
+
+  for CURR_INP_FILE in $( ls -1 $SRC_PATH/**/*.asm );  do
+    CURR_INP_FILE=$( readlink --canonicalize $CURR_INP_FILE )
+    CURR_OUTP_FILE=$BUILD_PATH/$( basename ${CURR_INP_FILE%.*}.asm.o )
+
+    SHORT_INP_FILENAME=$( realpath --relative-to=$ROOT_PATH "$CURR_INP_FILE" )
+    SHORT_OUTP_FILENAME=$( realpath --relative-to=$ROOT_PATH "$CURR_OUTP_FILE" )
+    echo -n "  * [BUILD $( run_time )] assembling $SHORT_INP_FILENAME => $SHORT_OUTP_FILENAME ..."
+
+    FILE_LIST="$FILE_LIST $CURR_OUTP_FILE"
+
+    # assemble!
+    $NASM_BIN $CURR_INP_FILE -felf -o $CURR_OUTP_FILE
+
+    echo "done!"
+  done
+
+fi
+
+shift
+SHORT_INP_FILENAME=$( realpath --relative-to=$ROOT_PATH "$INP_FILENAME" )
+SHORT_OUTP_FILENAME=$( realpath --relative-to=$ROOT_PATH "$OUTP_FILENAME" )
+COMPILE_CMD="$GCC_BIN $CMD_OPTS $@ -o $OUTP_FILENAME $FILE_LIST $INP_FILENAME"
+echo -n "  * [BUILD $(run_time)] compiling $SHORT_INP_FILENAME => $SHORT_OUTP_FILENAME..."
+
+#compile!
+$COMPILE_CMD
+
+echo "done!"
+
+echo "[BUILD $(run_time)] complete!"
+
+
+exit $EXITCODE_SUCCESS
