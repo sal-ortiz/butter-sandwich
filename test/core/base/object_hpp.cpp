@@ -11,14 +11,16 @@ class Inherited: public Base {
 Base* baseObj;            // Base is the object.
 Inherited* inheritedObj;  // Base is inherited.
 
-int main( int argc, char *argv[] ){
-
+int main(int argc, char *argv[]){
   baseObj = new Base();
   inheritedObj = new Inherited();
 
-  assert( baseObj->getIdentifier() != 0 );
-  assert( inheritedObj->getIdentifier() != 0 );
-  assert( inheritedObj->getIdentifier() != baseObj->getIdentifier() );
+  unsigned long int baseId = baseObj->getIdentifier();
+  unsigned long int inheritedId = inheritedObj->getIdentifier();
+
+  assert( baseId != 0 );
+  assert( inheritedId != 0 );
+  assert( inheritedId != baseId );
 
   return 0x0000;  // EXIT_SUCCESS;
 }
