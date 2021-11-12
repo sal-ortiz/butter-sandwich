@@ -10,11 +10,11 @@
     public:
 
       String(const char* str){
-        setVal(str);
+        setVal((char*)str);
       }
 
       const char* operator= (const char* str){
-        setVal(str);
+        setVal((char*)str);
 
         return str;
       }

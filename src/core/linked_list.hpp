@@ -134,7 +134,7 @@
         LinkedListEntry<class_type>* currentNode = getByIndex(length()-1);
 
         if (!currentNode) {
-          LinkedListEntry<class_type> newRoot = new LinkedListEntry<class_type>(idVal, newVal);
+          LinkedListEntry<class_type>* newRoot = new LinkedListEntry<class_type>(idVal, newVal);
 
           setRoot(newRoot);
 
