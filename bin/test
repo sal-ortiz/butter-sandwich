@@ -9,7 +9,7 @@ FILE_TYPES=".c .cpp"
 OUTPUT_PATH=$ROOT_PATH/build
 LOG_FILE=$LOG_PATH/test.log
 
-TEST_PATHS="test test/core"
+TEST_PATHS="test test/core test/core/base"
 
 for CURRENT_TEST_PATH in $TEST_PATHS; do
   CPP_WILDCARD=$ROOT_PATH/$CURRENT_TEST_PATH/*.cpp

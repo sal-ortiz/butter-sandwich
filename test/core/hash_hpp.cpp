@@ -1,8 +1,10 @@
 
 #include <assert.h>
 #include <stdlib.h>
+
 #include "../../src/core/hash.hpp"
-#include "../../src/core/tools.h"
+//#include "../../src/core/base/object.hpp"
+//#include "../../src/core/base/tools.h"
 
 
 Hash<unsigned char> hsh;

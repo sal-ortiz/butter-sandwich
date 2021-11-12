@@ -2,7 +2,7 @@
 #ifndef _HASH_HPP_
   #define _HASH_HPP_
 
-  #include "./tools.h"
+  #include "./base/tools.h"
   #include "./array.hpp"
   #include "./linked_list.hpp"
 

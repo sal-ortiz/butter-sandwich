@@ -1,6 +1,6 @@
 
 #include <assert.h>
-#include "../../src/core/base.hpp"
+#include "../../../src/core/base/object.hpp"
 
 
 class Inherited: public Base {

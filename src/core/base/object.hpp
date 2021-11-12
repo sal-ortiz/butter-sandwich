@@ -1,10 +1,13 @@
-#ifndef _BASE_HPP_ 
+#ifndef _BASE_HPP_
   #define _BASE_HPP_
 
   #include <math.h>
+  #include <time.h>
+  #include <stdlib.h>
 
   #include "./tools.h"
-  #include "./timer.h"
+//  #include "./timer.h"
+
 
   #define HAMBURGER_NUMBER    0xb00b135
 
@@ -13,7 +16,10 @@
     private:
       unsigned long int identifier;
       inline unsigned long int generateIdentifier( unsigned long int multiplier = HAMBURGER_NUMBER ){
-        return hashCode( int_to_str((unsigned long int)(get_elapsed_runtime() * multiplier)) );
+        unsigned long int elapsed = time(NULL);
+        unsigned long int salt = (rand() % 1337) + 1;
+
+        return hashCode( int_to_str(elapsed * multiplier * salt) );
       }
 
 
@@ -36,4 +42,4 @@
 
   };
 
-#endif  // #ifndef _BASE_HPP_ 
+#endif  // #ifndef _BASE_HPP_

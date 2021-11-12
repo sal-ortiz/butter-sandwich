@@ -1,7 +1,7 @@
 
 #include <assert.h>
 #include <stdlib.h>
-#include "../../src/core/tools.h"
+#include "../../../src/core/base/tools.h"
 
 #define _TEST_HASHCODE_NUMBER_OF_PASSES   0xf
 
