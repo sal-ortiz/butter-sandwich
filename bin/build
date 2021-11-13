@@ -35,6 +35,11 @@ if [ ! -z "$( requires_lib 'GL/glut.h' )" ]; then
   CMD_OPTS="$CMD_OPTS -lglut"
 fi
 
+if [ ! -z "$( requires_lib 'SDL2/SDL.h' )" ]; then
+  # check to see if the glut library should be lnked in.
+  CMD_OPTS="$CMD_OPTS -lSDL2"
+fi
+
 #if [ ! -z "$( requires_lib 'also/asoundlib.h' )" ]; then
 #  # check to see if the asound library should be lnked in.
 #  CMD_OPTS="$CMD_OPTS -lasound";
