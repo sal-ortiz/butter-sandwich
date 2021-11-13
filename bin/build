@@ -17,7 +17,7 @@ PROJECT_NAME="$( echo $(basename "$INP_FILENAME") | cut -d'.' -f1 )"
 OUTP_FILENAME="$BUILD_PATH/$PROJECT_NAME"
 
 # conditionally set some command line switches for our linker.
-CMD_OPTS="-m32 -w"
+CMD_OPTS="-m64 -w"
 
 
 if [ ! -z "$( requires_lib 'pthread.h' )" ]; then
