@@ -81,9 +81,15 @@ echo -n "  * [BUILD $(run_time)] compiling $SHORT_INP_FILENAME => $SHORT_OUTP_FI
 
 #compile!
 $COMPILE_CMD
+EXITCODE=$?
+
+if [ $EXITCODE != 0 ]; then
+  echo "[BUILD $(run_time)] failure!"
+
+  exit $EXITCODE_FAILURE
+fi
 
 echo "done!"
-
 echo "[BUILD $(run_time)] complete!"
 
 
