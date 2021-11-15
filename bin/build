@@ -9,6 +9,10 @@ if [ $# -lt 1 ];  then  # validate our parameters.
   exit $EXITCODE_FAILURE
 fi
 
+GCC_BIN=$( which g++ )
+NASM_BIN=$( which nasm )
+
+
 INP_FILENAME=$1   # our input file name
 FILE_LIST=""      # initialize a blank file list.
 

@@ -12,7 +12,8 @@ BIN_PATH="$ROOT_PATH/bin"
 CFG_PATH="$ROOT_PATH/cfg"
 SRC_PATH="$ROOT_PATH/src"
 LOG_PATH="$ROOT_PATH/log"
-BUILD_PATH=$ROOT_PATH/build
+BUILD_PATH="$ROOT_PATH/build"
+
 
 requires_lib() {
   TARG_LIB=$1
@@ -23,30 +24,21 @@ requires_lib() {
   echo -n $RETVAL
 }
 
-#configure_environment(){
-#  if [ -z $CFG_PATH ]; then   CFG_PATH="$ROOT_PATH/cfg";    fi
-#
-#  config_file=$CFG_PATH/$( basename ${0}.cfg)
-#  if [ -r $config_file ]; then    source "$config_file";    fi
-#
-#} # function configure_environment()
-
 initialize() {
-  if [ ! -d $LOG_PATH ]; then   mkdir $LOG_PATH;    fi
-  if [ ! -d $BUILD_PATH ]; then   mkdir $BUILD_PATH;    fi
+  if [ ! -d $LOG_PATH ]; then
+    mkdir $LOG_PATH
+  fi
 
-  if [ -z $NASM_BIN ]; then   NASM_BIN=$(which nasm);   fi
-  if [ -z $GCC_BIN ]; then    GCC_BIN=$(which g++);   fi
+  if [ ! -d $BUILD_PATH ]; then
+    mkdir $BUILD_PATH
+  fi
+
 }
 
 start_time() {
   echo -n ${APP_START_TIME}ms
 }
+
 run_time() {
   echo -n "+$(($(date +%s%N | cut -b1-13)-APP_START_TIME))ms"
 } # function run_time()
-
-
-#configure_environment   # autoconfigure.
-
-
