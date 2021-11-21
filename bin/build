@@ -66,7 +66,7 @@ if [ "$( ls -1 $SRC_PATH/**/*.asm 2> /dev/null | wc -l )" != "0" ]; then
     FILE_LIST="$FILE_LIST $CURR_OUTP_FILE"
 
     # assemble!
-    $NASM_BIN $CURR_INP_FILE -felf -o $CURR_OUTP_FILE
+    $NASM_BIN $CURR_INP_FILE -felf64 -o $CURR_OUTP_FILE
 
     echo "done!"
   done
