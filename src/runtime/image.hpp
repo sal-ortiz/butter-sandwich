@@ -25,7 +25,7 @@
         SDL_FreeSurface(surface);
       }
 
-      void load(const char* filename, uint32_t viewX, uint32_t viewY, uint32_t viewW=NULL, uint32_t viewH=NULL) {
+      void load(const char* filename, uint16_t viewX, uint16_t viewY, uint16_t viewW=0, uint16_t viewH=0) {
         this->surface = SDL_LoadBMP(filename);
         this->view = { viewX, viewY, viewW, viewH };
       }

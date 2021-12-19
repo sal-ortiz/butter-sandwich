@@ -7,7 +7,7 @@
   #include "./core/list.hpp"
 
 
-  typedef struct Position {
+  struct Position {
     uint32_t horz;
     uint32_t vert;
     float scale;

@@ -16,8 +16,8 @@
         this->image = img;
       }
 
-      void render(SDL_Renderer* renderer, uint32_t dstX, uint32_t dstY) {
-        SDL_Rect dstRect = { dstX, dstY, NULL, NULL };
+      void render(SDL_Renderer* renderer, uint16_t dstX, uint16_t dstY) {
+        SDL_Rect dstRect = { dstX, dstY, 0, 0 };
 
 
         this->image->render(renderer, dstRect);
