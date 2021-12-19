@@ -46,14 +46,14 @@
       SpriteFrame* nextFrame() {
         uint32_t idx = this->currentFrame;
 
-        this->currentFrame = (currentFrame + 1) % this->frames->length();
+        this->currentFrame = (currentFrame + 1) % this->frames->getLength();
 
         return this->frames->get(idx);
       }
 
       SpriteFrame* prevFrame() {
         if (this->currentFrame == 0) {
-          this->currentFrame = this->frames->length() - 1;
+          this->currentFrame = this->frames->getLength() - 1;
         } else {
           this->currentFrame--;
         }
