@@ -19,7 +19,6 @@
 
     public:
 
-
       static bool poll() {
         SDL_Event evt;
 
@@ -33,17 +32,22 @@
       }
 
       static bool parse(SDL_Event evt) {
+        bool(*callback)() = _callbacks.get("QUIT");
         bool retVal = true;
 
         if (evt.type == SDL_QUIT) {
-          retVal = _callbacks.get("QUIT")();
+          callback = _callbacks.get("QUIT");
+
+          retVal = callback();
 
         } else if (evt.type == SDL_WINDOWEVENT) {
 
           switch (evt.window.event) {
 
             case SDL_WINDOWEVENT_CLOSE:
-              retVal = _callbacks.get("CLOSE")();
+              callback = _callbacks.get("CLOSE");
+
+              retVal = callback();
               break;
 
           }
