@@ -4,6 +4,7 @@
 
   #include "./runtime/image.hpp"
 
+
   class SpriteFrame {
 
     private:
@@ -18,7 +19,6 @@
 
       void render(SDL_Renderer* renderer, uint16_t dstX, uint16_t dstY) {
         SDL_Rect dstRect = { dstX, dstY, 0, 0 };
-
 
         this->image->render(renderer, dstRect);
       }

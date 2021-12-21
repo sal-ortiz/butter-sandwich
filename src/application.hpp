@@ -26,7 +26,7 @@ class Application {
       return Event::poll();
     }
 
-    static void on(const char* id, bool (*callback)()) {
+    static void on(const char* id, bool(*callback)()) {
       Event::on(id, callback);
     }
 
