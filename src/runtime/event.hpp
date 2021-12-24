@@ -8,7 +8,13 @@
   #include "../core/dict.hpp"
   #include "./event/base.hpp"
 
-  Dict<bool(*)()> _callbacks;
+
+  struct CallbackRecord {
+    bool(*method)(void*);
+    void* input;
+  };
+
+  Dict<CallbackRecord> _callbacks;
 
 
   class Event {
@@ -27,27 +33,32 @@
         return parse(evt);
       }
 
-      static void on(const char* id, bool (*callback)()) {
-        _callbacks.set(id, callback);
+      static void on(const char* id, bool(*callback)(void*), void* inp=NULL) {
+          CallbackRecord entry = { callback, inp };
+
+        _callbacks.set(id, entry);
       }
 
       static bool parse(SDL_Event evt) {
-        bool(*callback)() = _callbacks.get("QUIT");
         bool retVal = true;
 
         if (evt.type == SDL_QUIT) {
-          callback = _callbacks.get("QUIT");
+          CallbackRecord callbackRec = _callbacks.get("QUIT");
+          bool(*callback)(void*) = callbackRec.method;
+          void* inp = callbackRec.input;
 
-          retVal = callback();
+          retVal = callback(inp);
 
         } else if (evt.type == SDL_WINDOWEVENT) {
 
           switch (evt.window.event) {
 
             case SDL_WINDOWEVENT_CLOSE:
-              callback = _callbacks.get("CLOSE");
+              CallbackRecord callbackRec = _callbacks.get("CLOSE");
+              bool(*callback)(void*) = callbackRec.method;
+              void* inp = callbackRec.input;
 
-              retVal = callback();
+              retVal = callback(&inp);
               break;
 
           }

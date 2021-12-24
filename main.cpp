@@ -31,7 +31,6 @@ int main(int argc, char *argv[]) {
   sprite->addFrame(img);
 
   while (app->evaluate()) {
-
     sprite->render(win->getRenderer(), 0, 0);
 
     win->render();
