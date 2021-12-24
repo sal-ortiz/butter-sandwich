@@ -15,7 +15,7 @@ class Application {
     bool isRunning;
 
     Application() {
-      bool* inp = (bool*)false;
+      unsigned long int* inp = (unsigned long int*)666;
 
       this->isRunning = false;
       this->events = new Event();
@@ -33,7 +33,7 @@ class Application {
     }
 
     static bool quitCallback(void* inp) {;
-      printf("QUITTING!!!!\t%d\n", (bool)(bool*)inp);
+      printf("QUITTING!!!!\t%ld\n", *(unsigned long int*)inp);
       //printf("QUITTING!!!!\n");
 
       return false;
