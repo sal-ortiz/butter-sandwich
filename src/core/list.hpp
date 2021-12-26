@@ -125,6 +125,11 @@
       }
 
       class_type get(unsigned long int targIndex) {
+
+        if (targIndex > (this->getLength() - 1)) {
+          throw;
+        }
+
         ListEntry<class_type>* node = this->getEntry(targIndex);
 
         return node->getValue();

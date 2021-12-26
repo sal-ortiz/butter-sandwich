@@ -85,18 +85,26 @@
 
         unsigned long int listLen = list.getLength();
 
+        bool found = false;
+
         for (unsigned long int idx = 0; idx < listLen; idx++) {
           entry = list.get(idx);
           unsigned int cmp = strcmp(entry.getKey(), key);
 
-
           if (cmp == 0) {
+            found = true;
+
             break;
           }
 
         }
 
-        return entry.getValue();
+        if (!found) {
+          throw;
+        } else {
+          return entry.getValue();
+        }
+
       }
 
       void set(const char* key, class_type value) {
