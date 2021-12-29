@@ -13,18 +13,25 @@
 
     public:
 
-      SpriteFrame(Image* img) {
-        this->image = img;
+      SpriteFrame() {
+        this->image = NULL;
       }
 
       void render(SDL_Renderer* renderer, uint16_t dstX, uint16_t dstY) {
         SDL_Rect dstRect = { dstX, dstY, 0, 0 };
 
-        this->image->render(renderer, dstRect);
+        if (this->image) {
+          this->image->render(renderer, dstRect);
+        }
+
+      }
+
+      void setImage(Image* img) {
+        this->image = img;
       }
 
       Image* getImage() {
-        return image;
+        return this->image;
       }
 
   };

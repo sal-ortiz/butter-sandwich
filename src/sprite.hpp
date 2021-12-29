@@ -18,23 +18,56 @@
     private:
 
       List<SpriteFrame*>* frames;
+      List<uint32_t>* framesList;
 
       Position position;
       uint32_t currentFrame;
+
+      void normalizeFramesList() {
+        uint32_t lastRenderedFrame = -1;
+        uint32_t framesListLen = this->framesList->getLength();
+
+        for (uint32_t idx = 0; idx < framesListLen; idx++) {
+          uint32_t curFrame = this->framesList->get(idx);
+
+          if (curFrame < framesListLen) {
+            lastRenderedFrame = this->framesList->get(idx);
+          }
+
+          this->framesList->set(idx, lastRenderedFrame);
+        }
+
+      }
+
 
     public:
 
       Sprite() {
         this->frames = new List<SpriteFrame*>();
+        this->framesList = new List<uint32_t>();
 
-        position.horz = 0;
-        position.vert = 0;
+        this->currentFrame = 0;
+
+        this->position.horz = 0;
+        this->position.vert = 0;
       }
 
-      void addFrame(Image* img) {
-        SpriteFrame* newFrame = new SpriteFrame(img);
+      void addFrame(unsigned int frameNum) {
+        framesList->set(frameNum, frames->getLength() - 1);
 
+        this->normalizeFramesList();
+      }
+
+      void addFrame(Image* img, unsigned int frameNum) {
+        // NOTE: The first frasme *must* begin at index 0.
+
+        SpriteFrame* newFrame = new SpriteFrame();
+
+        newFrame->setImage(img);
         frames->push(newFrame);
+        framesList->set(frameNum, frames->getLength() - 1);
+
+        this->normalizeFramesList();
       }
 
       void render(SDL_Renderer* renderer, uint32_t dstX, uint32_t dstY) {
@@ -45,10 +78,12 @@
 
       SpriteFrame* nextFrame() {
         uint32_t idx = this->currentFrame;
+        uint32_t frameRef = this->framesList->get(idx);
 
-        this->currentFrame = (currentFrame + 1) % this->frames->getLength();
 
-        return this->frames->get(idx);
+        this->currentFrame = (this->currentFrame + 1) % this->framesList->getLength();
+
+        return this->frames->get(frameRef);
       }
 
       SpriteFrame* prevFrame() {
