@@ -213,6 +213,21 @@
         return outpValue;
       }
 
+      void fill(class_type value, unsigned long int start=0, unsigned long int end=0) {
+        unsigned long int endIdx;
+
+        if (end == 0) {
+          endIdx = this->getLength() - 1;
+        } else {
+          endIdx = end;
+        }
+
+        for (unsigned long int idx = start; idx <= endIdx; idx++) {
+          this->setEntry(idx, value);
+        }
+
+      }
+
   };
 
 #endif
