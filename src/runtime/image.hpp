@@ -15,6 +15,7 @@
       SDL_Surface* surface;
       SDL_Rect view;
 
+
     public:
 
       Image() {

@@ -25,10 +25,15 @@ int main(int argc, char *argv[]) {
 
   win->open("The window!", 50, 50, 480, 360);
 
-  Image* img = new Image();
+  Image* imgOne = new Image();
+  Image* imgTwo = new Image();
 
-  img->load("./img.bmp", 0, 0);
-  sprite->addFrame(img);
+  imgOne->load("./img.bmp", 0, 0);
+  imgTwo->load("./img2.bmp", 0, 0);
+
+  sprite->addFrame(imgOne, 0);
+  sprite->addFrame(imgTwo, 5);
+  sprite->addFrame(10);
 
   while (app->evaluate()) {
     sprite->render(win->getRenderer(), 0, 0);

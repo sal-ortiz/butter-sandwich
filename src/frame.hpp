@@ -11,6 +11,7 @@
 
       Image* image;
 
+
     public:
 
       SpriteFrame() {
