@@ -23,6 +23,8 @@
       Position position;
       uint32_t currentFrame;
 
+      bool loop;
+
       void normalizeFramesList() {
         uint32_t lastRenderedFrame = -1;
         uint32_t framesListLen = this->framesList->getLength();
@@ -50,6 +52,16 @@
 
         this->position.horz = 0;
         this->position.vert = 0;
+
+        this->loop = true;
+      }
+
+      void setLoop(bool value) {
+        this->loop = value;
+      }
+
+      void jumpToFrame(uint32_t frameNum) {
+        this->currentFrame = frameNum;
       }
 
       void addFrame(unsigned int frameNum) {
@@ -80,10 +92,17 @@
         uint32_t idx = this->currentFrame;
         uint32_t frameRef = this->framesList->get(idx);
 
+        SpriteFrame* frame = this->frames->get(frameRef);
 
-        this->currentFrame = (this->currentFrame + 1) % this->framesList->getLength();
+        if (this->currentFrame < (this->framesList->getLength() - 1)) {
+          this->currentFrame = (this->currentFrame + 1);
 
-        return this->frames->get(frameRef);
+        } else if (this->loop == true) {
+          this->currentFrame = this->currentFrame % (this->framesList->getLength() - 1);
+
+        }
+
+        return frame;
       }
 
       SpriteFrame* prevFrame() {
