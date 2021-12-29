@@ -31,9 +31,11 @@ int main(int argc, char *argv[]) {
   imgOne->load("./img.bmp", 0, 0);
   imgTwo->load("./img2.bmp", 0, 0);
 
+//  sprite->setLoop(false);
+
   sprite->addFrame(imgOne, 0);
-  sprite->addFrame(imgTwo, 5);
-  sprite->addFrame(10);
+  sprite->addFrame(imgTwo, 50);
+  sprite->addFrame(100);
 
   while (app->evaluate()) {
     sprite->render(win->getRenderer(), 0, 0);
