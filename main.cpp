@@ -21,6 +21,8 @@ Application* app = new Application();
 int main(int argc, char *argv[]) {
   bool isRunning = true;
 
+  app->inp = (unsigned long int*)666;
+
   Sprite* sprite = new Sprite();
 
   win->open("The window!", 50, 50, 480, 360);

@@ -13,9 +13,10 @@ class Application {
   public:
 
     bool isRunning;
+    unsigned long int* inp;
 
     Application() {
-      unsigned long int* inp = (unsigned long int*)666;
+      this->inp = (unsigned long int*)1;
 
       this->isRunning = false;
       this->events = new Event();
