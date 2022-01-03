@@ -13,29 +13,28 @@ class Application {
   public:
 
     bool isRunning;
-    unsigned long int* inp;
+    unsigned long int inp;
 
     Application() {
-      this->inp = (unsigned long int*)1;
+      this->inp = 1;
 
       this->isRunning = false;
       this->events = new Event();
 
-      this->events->on("CLOSE", quitCallback, (void*)inp);
-      this->events->on("QUIT", quitCallback, (void*)inp);
+      this->on("CLOSE", quitCallback, &this->inp);
+      this->on("QUIT", quitCallback, &this->inp);
     }
 
     bool evaluate() {
       return Event::poll();
     }
 
-    static void on(const char* id, bool(*callback)(void*), void* inp=NULL) {
+    static void on(const char* id, bool(*callback)(unsigned long int*), unsigned long int* inp) {
       Event::on(id, callback, inp);
     }
 
-    static bool quitCallback(void* inp) {;
-      printf("QUITTING!!!!\t%ld\n", *(unsigned long int*)inp);
-      //printf("QUITTING!!!!\n");
+    static bool quitCallback(unsigned long int* inp) {
+      printf("QUITTING!!!!\t%ld\n", *inp);
 
       return false;
     }

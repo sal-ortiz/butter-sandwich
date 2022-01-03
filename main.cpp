@@ -21,7 +21,7 @@ Application* app = new Application();
 int main(int argc, char *argv[]) {
   bool isRunning = true;
 
-  app->inp = (unsigned long int*)666;
+  app->inp = (unsigned long int)666;
 
   Sprite* sprite = new Sprite();
 
