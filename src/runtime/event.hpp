@@ -10,8 +10,8 @@
 
 
   struct CallbackRecord {
-    bool(*method)(unsigned long int*);
-    unsigned long int* input;
+    bool(*method)(void*);
+    void* input;
   };
 
   Dict<CallbackRecord> _callbacks;
@@ -33,7 +33,7 @@
         return parse(evt);
       }
 
-      static void on(const char* id, bool(*callback)(unsigned long int*), unsigned long int* inp) {
+      static void on(const char* id, bool(*callback)(void*), void* inp) {
           CallbackRecord entry = { callback, inp };
 
         _callbacks.set(id, entry);
@@ -44,8 +44,8 @@
 
         if (evt.type == SDL_QUIT) {
           CallbackRecord callbackRec = _callbacks.get("QUIT");
-          bool(*callback)(unsigned long int*) = callbackRec.method;
-          unsigned long int* inp = callbackRec.input;
+          bool(*callback)(void*) = callbackRec.method;
+          void* inp = callbackRec.input;
 
           retVal = callback(inp);
 
@@ -55,8 +55,8 @@
 
             case SDL_WINDOWEVENT_CLOSE:
               CallbackRecord callbackRec = _callbacks.get("CLOSE");
-              bool(*callback)(unsigned long int*) = callbackRec.method;
-              unsigned long int* inp = callbackRec.input;
+              bool(*callback)(void*) = callbackRec.method;
+              void* inp = callbackRec.input;
 
               retVal = callback(inp);
               break;

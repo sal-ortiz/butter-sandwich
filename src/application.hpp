@@ -29,12 +29,12 @@ class Application {
       return Event::poll();
     }
 
-    static void on(const char* id, bool(*callback)(unsigned long int*), unsigned long int* inp) {
+    static void on(const char* id, bool(*callback)(void*), void* inp) {
       Event::on(id, callback, inp);
     }
 
-    static bool quitCallback(unsigned long int* inp) {
-      printf("QUITTING!!!!\t%ld\n", *inp);
+    static bool quitCallback(void* inp) {
+      printf("QUITTING!!!!\t%ld\n", *(unsigned long int*)inp);
 
       return false;
     }
