@@ -14,6 +14,13 @@
 #include "./src/core/dict.hpp"
 
 
+
+class AppInput {
+  public:
+    unsigned long int val;
+};
+
+
 Window* win = new Window();
 Application* app = new Application();
 
@@ -27,12 +34,14 @@ static bool quitCallback(void* inp) {
 int main(int argc, char *argv[]) {
   bool isRunning = true;
 
-  unsigned long int inp = 0;
+  AppInput* inp = new AppInput();
 
-  app->on("CLOSE", quitCallback, &inp);
-  app->on("QUIT", quitCallback, &inp);
+  inp->val = 0;
 
-  inp = 666;
+  app->on("CLOSE", quitCallback, inp);
+  app->on("QUIT", quitCallback, inp);
+
+  inp->val = 666;
 
   Sprite* sprite = new Sprite();
 
