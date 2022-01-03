@@ -30,14 +30,14 @@ int main(int argc, char *argv[]) {
   Image* imgOne = new Image();
   Image* imgTwo = new Image();
 
-  imgOne->load("./img.bmp", 0, 0);
+  imgOne->load("./img1.bmp", 0, 0);
   imgTwo->load("./img2.bmp", 0, 0);
 
 //  sprite->setLoop(false);
 
   sprite->addFrame(imgOne, 0);
-  sprite->addFrame(imgTwo, 50);
-  sprite->addFrame(100);
+  sprite->addFrame(imgTwo, 150);
+  sprite->addFrame(200);
 
   while (app->evaluate()) {
     sprite->render(win->getRenderer(), 0, 0);
