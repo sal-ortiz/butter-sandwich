@@ -17,11 +17,22 @@
 Window* win = new Window();
 Application* app = new Application();
 
+static bool quitCallback(void* inp) {
+  printf("QUITTING!!!!\t%ld\n", *(unsigned long int*)inp);
+
+  return false;
+}
+
 
 int main(int argc, char *argv[]) {
   bool isRunning = true;
 
-  app->inp = (unsigned long int)666;
+  unsigned long int inp = 0;
+
+  app->on("CLOSE", quitCallback, &inp);
+  app->on("QUIT", quitCallback, &inp);
+
+  inp = 666;
 
   Sprite* sprite = new Sprite();
 
