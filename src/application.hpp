@@ -12,10 +12,8 @@ class Application {
 
   public:
 
-    bool isRunning;
 
     Application() {
-      this->isRunning = false;
       this->events = new Event();
     }
 
