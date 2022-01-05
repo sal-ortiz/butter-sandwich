@@ -10,7 +10,7 @@
 
 
   struct CallbackRecord {
-    bool(*method)(void*);
+    void*(*method)(void*);
     void* input;
   };
 
@@ -25,7 +25,7 @@
 
     public:
 
-      static bool poll() {
+      static void* poll() {
         SDL_Event evt;
 
         SDL_PollEvent(&evt);
@@ -33,18 +33,18 @@
         return parse(evt);
       }
 
-      static void on(const char* id, bool(*callback)(void*), void* inp) {
+      static void on(const char* id, void*(*callback)(void*), void* inp) {
           CallbackRecord entry = { callback, inp };
 
         _callbacks.set(id, entry);
       }
 
-      static bool parse(SDL_Event evt) {
-        bool retVal = true;
+      static void* parse(SDL_Event evt) {
+        void* retVal = (void*)true;
 
         if (evt.type == SDL_QUIT) {
           CallbackRecord callbackRec = _callbacks.get("QUIT");
-          bool(*callback)(void*) = callbackRec.method;
+          void*(*callback)(void*) = callbackRec.method;
           void* inp = callbackRec.input;
 
           retVal = callback(inp);
@@ -55,7 +55,7 @@
 
             case SDL_WINDOWEVENT_CLOSE:
               CallbackRecord callbackRec = _callbacks.get("CLOSE");
-              bool(*callback)(void*) = callbackRec.method;
+              void*(*callback)(void*) = callbackRec.method;
               void* inp = callbackRec.input;
 
               retVal = callback(inp);

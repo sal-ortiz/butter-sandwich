@@ -24,10 +24,10 @@ class AppInput {
 Window* win = new Window();
 Application* app = new Application();
 
-static bool quitCallback(void* inp) {
+static void* quitCallback(void* inp) {
   printf("QUITTING!!!!\t%ld\n", *(unsigned long int*)inp);
 
-  return false;
+  return (void*)false;
 }
 
 
