@@ -3,7 +3,6 @@
 #ifndef _WINDOW_HPP
   #define _WINDOW_HPP
 
-  #include <assert.h>
   #include <SDL2/SDL.h>
   #include "./image.hpp"
 

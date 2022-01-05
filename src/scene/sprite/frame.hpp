@@ -2,7 +2,7 @@
 #ifndef _SPRITE_FRAME_HPP
   #define _SPRITE_FRAME_HPP
 
-  #include "./runtime/image.hpp"
+  #include "../../runtime/image.hpp"
 
 
   class SpriteFrame {

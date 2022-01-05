@@ -6,7 +6,6 @@
   #include <SDL2/SDL.h>
 
   #include "../core/dict.hpp"
-  #include "./event/base.hpp"
 
 
   struct CallbackRecord {
@@ -18,10 +17,6 @@
 
 
   class Event {
-
-//    private:
-
-
 
     public:
 

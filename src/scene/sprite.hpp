@@ -3,8 +3,8 @@
 #ifndef _SPRITE_HPP
   #define _SPRITE_HPP
 
-  #include "./frame.hpp"
-  #include "./core/list.hpp"
+  #include "./sprite/frame.hpp"
+  #include "../core/list.hpp"
 
 
   struct Position {

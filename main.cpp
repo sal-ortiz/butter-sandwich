@@ -7,9 +7,9 @@
 #include "./src/runtime/window.hpp"
 #include "./src/runtime/image.hpp"
 #include "./src/runtime/event.hpp"
-#include "./src/application.hpp"
+#include "./src/runtime/application.hpp"
 
-#include "./src/sprite.hpp"
+#include "./src/scene/sprite.hpp"
 
 #include "./src/core/dict.hpp"
 
