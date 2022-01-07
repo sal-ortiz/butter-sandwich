@@ -38,22 +38,28 @@
         void* retVal = (void*)true;
 
         if (evt.type == SDL_QUIT) {
-          CallbackRecord callbackRec = _callbacks.get("QUIT");
-          void*(*callback)(void*) = callbackRec.method;
-          void* inp = callbackRec.input;
 
-          retVal = callback(inp);
+          if (_callbacks.has("QUIT")) {
+            CallbackRecord callbackRec = _callbacks.get("QUIT");
+            void*(*callback)(void*) = callbackRec.method;
+            void* inp = callbackRec.input;
+
+            retVal = callback(inp);
+          }
 
         } else if (evt.type == SDL_WINDOWEVENT) {
 
           switch (evt.window.event) {
 
             case SDL_WINDOWEVENT_CLOSE:
-              CallbackRecord callbackRec = _callbacks.get("CLOSE");
-              void*(*callback)(void*) = callbackRec.method;
-              void* inp = callbackRec.input;
+              if (_callbacks.has("CLOSE")) {
+                CallbackRecord callbackRec = _callbacks.get("CLOSE");
+                void*(*callback)(void*) = callbackRec.method;
+                void* inp = callbackRec.input;
 
-              retVal = callback(inp);
+                retVal = callback(inp);
+              }
+
               break;
 
           }
