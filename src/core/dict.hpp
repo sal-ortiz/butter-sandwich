@@ -100,7 +100,7 @@
         }
 
         if (!found) {
-          throw;
+          throw (void*)NULL;
         } else {
           return entry.getValue();
         }
@@ -114,6 +114,17 @@
         DictEntry<class_type>* newEntry = new DictEntry<class_type>(key, value);
 
         list.unshift(*newEntry);
+      }
+
+      bool has(const char* key) {
+
+        try {
+          this->get(key);
+        } catch(...) {
+          return false;
+        }
+
+        return true;
       }
 
   };
