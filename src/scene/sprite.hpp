@@ -1,6 +1,6 @@
 
-
 #ifndef _SPRITE_HPP
+
   #define _SPRITE_HPP
 
   #include "./sprite/frame.hpp"
@@ -12,6 +12,7 @@
     uint32_t vert;
     float scale;
   };
+
 
   class Sprite {
 

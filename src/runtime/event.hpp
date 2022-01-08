@@ -1,6 +1,6 @@
 
-
 #ifndef _EVENT_HPP
+
   #define _EVENT_HPP
 
   #include <SDL2/SDL.h>
@@ -29,7 +29,7 @@
       }
 
       static void on(const char* id, void*(*callback)(void*), void* inp) {
-          CallbackRecord entry = { callback, inp };
+        CallbackRecord entry = { callback, inp };
 
         _callbacks.set(id, entry);
       }
@@ -61,7 +61,6 @@
               }
 
               break;
-
           }
 
         }

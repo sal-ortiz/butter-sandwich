@@ -1,9 +1,10 @@
 
-
 #ifndef _IMAGE_HPP
+
   #define _IMAGE_HPP
 
   #include <assert.h>
+
   #include <SDL2/SDL.h>
   #include <SDL2/SDL_image.h>
 

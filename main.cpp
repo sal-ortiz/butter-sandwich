@@ -1,6 +1,4 @@
 
-
-
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 
@@ -8,11 +6,8 @@
 #include "./src/runtime/image.hpp"
 #include "./src/runtime/event.hpp"
 #include "./src/runtime/application.hpp"
-
 #include "./src/scene/sprite.hpp"
-
 #include "./src/core/dict.hpp"
-
 
 
 class AppInput {

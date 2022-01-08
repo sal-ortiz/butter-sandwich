@@ -1,9 +1,10 @@
 
-
 #ifndef _WINDOW_HPP
+
   #define _WINDOW_HPP
 
   #include <SDL2/SDL.h>
+
   #include "./image.hpp"
 
 
@@ -14,10 +15,8 @@
       SDL_Window* handle;
       SDL_Renderer* renderer;
 
-    public:
 
-      //Window() {
-      //}
+    public:
 
       ~Window() {
         SDL_DestroyRenderer(this->renderer);

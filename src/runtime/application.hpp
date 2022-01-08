@@ -1,28 +1,32 @@
 
-#include "./event.hpp"
+#ifndef _APPLICATION_HPP
+
+  #define _APPLICATION_HPP
+
+  #include "./event.hpp"
 
 
+  class Application {
 
-class Application {
+    private:
 
-  private:
-
-    Event* events;
-
-
-  public:
+      Event* events;
 
 
-    Application() {
-      this->events = new Event();
-    }
+    public:
 
-    bool evaluate() {
-      return Event::poll();
-    }
+      Application() {
+        this->events = new Event();
+      }
 
-    static void on(const char* id, void*(*callback)(void*), void* inp) {
-      Event::on(id, callback, inp);
-    }
+      bool evaluate() {
+        return Event::poll();
+      }
 
-};
+      static void on(const char* id, void*(*callback)(void*), void* inp) {
+        Event::on(id, callback, inp);
+      }
+
+  };
+
+#endif
