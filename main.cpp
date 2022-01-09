@@ -16,8 +16,8 @@ Application* app = new Application();
 
 static void* quitCallback(void* inp) {
   WindowEventParams* params = reinterpret_cast<WindowEventParams*>(inp);
-
-  printf("QUITTING!!!!\t%ld\n", (unsigned long int)params->user);
+  printf("QUITTING!!!!\t\n");
+  app->exit();
 
   return (void*)false;
 }
@@ -36,8 +36,8 @@ static void* movedCallback(void* inp) {
 int main(int argc, char *argv[]) {
   bool isRunning = true;
 
-  app->on("CLOSED", quitCallback, (unsigned long int*)666);
-  //app->on("QUIT", quitCallback, (unsigned long int*(666);
+  app->on("CLOSED", closedCallback, win);
+  app->on("QUIT", quitCallback, app);
   app->on("MOVED", movedCallback, (unsigned long int*)666);
 
   Sprite* sprite = new Sprite();
@@ -56,7 +56,10 @@ int main(int argc, char *argv[]) {
   sprite->addFrame(imgTwo, 150);
   sprite->addFrame(200);
 
-  while (app->evaluate()) {
+  app->start();
+
+  while (app->isActive) {
+    app->evaluate();
     sprite->render(win->getRenderer(), 0, 0);
 
     win->render();

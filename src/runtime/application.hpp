@@ -8,7 +8,18 @@
 
   class Application {
 
+
     public:
+
+      bool isActive;
+
+      void start() {
+        this->isActive = true;
+      }
+
+      void exit() {
+        this->isActive = false;
+      }
 
       bool evaluate() {
         return Event::evaluate();
