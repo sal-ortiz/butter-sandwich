@@ -13,6 +13,10 @@
 
       bool isActive;
 
+      Application() {
+        Event::on("QUIT", Application::quitCallback, this);
+      }
+
       void start() {
         this->isActive = true;
       }
@@ -25,8 +29,16 @@
         return Event::evaluate();
       }
 
-      static void on(const char* id, void*(*callback)(void*), void* inp) {
-        Event::on(id, callback, inp);
+      static void* quitCallback(void* inp) {
+        // TODO: This callback is causing an exception to be thrown.
+
+        WindowEventParams* params = reinterpret_cast<WindowEventParams*>(inp);
+        Application* app = (Application*)params->user;
+
+        printf("QUITTING!!!!\t\n");
+        app->exit();
+
+        return (void*)NULL;
       }
 
   };

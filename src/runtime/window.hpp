@@ -6,6 +6,7 @@
   #include <SDL2/SDL.h>
 
   #include "./image.hpp"
+  #include "./event.hpp"
 
 
   class Window {
@@ -17,6 +18,12 @@
 
 
     public:
+
+      Window() {
+        Event::on("CLOSED", Window::closedCallback, this);
+        Event::on("MOVED", Window::movedCallback, this);
+        Event::on("RESIZED", Window::resizedCallback, this);
+      }
 
       ~Window() {
         SDL_DestroyRenderer(this->renderer);
@@ -45,6 +52,32 @@
 
       SDL_Renderer* getRenderer() {
         return renderer;
+      }
+
+      static void* closedCallback(void* inp) {
+        WindowEventParams* params = reinterpret_cast<WindowEventParams*>(inp);
+        Window* win = (Window*)params->user;
+
+        printf("CLOSING!!!!\t\n");
+        win->close();
+
+        return (void*)NULL;
+      }
+
+      static void* movedCallback(void* inp) {
+        WindowEventParams* params = reinterpret_cast<WindowEventParams*>(inp);
+
+        printf("MOVED TO %ld, %ld\n", params->horz, params->vert);
+
+        return (void*)NULL;
+      }
+
+      static void* resizedCallback(void* inp) {
+        WindowEventParams* params = reinterpret_cast<WindowEventParams*>(inp);
+
+        printf("RESIZED TO %ld, %ld\n", params->horz, params->vert);
+
+        return (void*)NULL;
       }
 
   };
