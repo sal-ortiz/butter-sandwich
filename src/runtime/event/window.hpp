@@ -39,19 +39,15 @@
 
       static void* parse(SDL_WindowEvent evt) {
         void* retVal = (void*)true;
-        WindowEventParams params;
+        WindowEventParams params = WindowEvent::parseEventParams(evt);
 
         switch (evt.event) {
 
           case SDL_WINDOWEVENT_CLOSE:
-            params = WindowEvent::parseEventParams(evt);
-
             retVal = handleWindowClosedEvent(evt, params);
             break;
 
           case SDL_WINDOWEVENT_MOVED:
-            params = WindowEvent::parseEventParams(evt);
-
             retVal = handleWindowMovedEvent(evt, params);
             break;
 
