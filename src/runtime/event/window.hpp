@@ -6,6 +6,18 @@
   #include "./base.hpp"
 
 
+  struct WindowEventParams {
+
+    unsigned long int id;
+    unsigned long int timestamp;
+
+    signed long int horz;
+    signed long int vert;
+
+    void* user;
+  };
+
+
   class WindowEvent: public EventBase {
 
     public:
@@ -32,9 +44,15 @@
           CallbackRecord callbackRec = _callbacks.get("CLOSE");
 
           void*(*callback)(void*) = callbackRec.method;
-          void* inp = callbackRec.input;
+          WindowEventParams inp = {
+            evt.windowID,
+            evt.timestamp,
+            evt.data1,
+            evt.data2,
+            callbackRec.input
+          };
 
-          retVal = callback(inp);
+          retVal = callback((void*)&inp);
         }
 
         return retVal;

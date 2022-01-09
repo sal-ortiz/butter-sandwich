@@ -20,7 +20,10 @@ Window* win = new Window();
 Application* app = new Application();
 
 static void* quitCallback(void* inp) {
-  printf("QUITTING!!!!\t%ld\n", *(unsigned long int*)inp);
+  WindowEventParams* params = (WindowEventParams*)inp;
+  AppInput* appInp = (AppInput*)params->user;
+
+  printf("QUITTING!!!!\t%ld\n", appInp->val);
 
   return (void*)false;
 }

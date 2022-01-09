@@ -6,6 +6,14 @@
   #include "./base.hpp"
 
 
+  struct ApplicationEventParams {
+
+    unsigned long int timestamp;
+
+    void* user;
+  };
+
+
   class ApplicationEvent: public EventBase {
 
     public:
@@ -21,9 +29,12 @@
           CallbackRecord callbackRec = _callbacks.get("QUIT");
 
           void*(*callback)(void*) = callbackRec.method;
-          void* inp = callbackRec.input;
+          ApplicationEventParams inp = {
+            evt.timestamp,
+            callbackRec.input
+          };
 
-          retVal = callback(inp);
+          retVal = callback((void*)&inp);
         }
 
         return retVal;
