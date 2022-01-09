@@ -6,15 +6,12 @@
   #include "./base.hpp"
 
 
-  struct WindowEventParams {
-
+  struct WindowEventParams: EventParamsBase {
     unsigned long int id;
-    unsigned long int timestamp;
 
     signed long int horz;
     signed long int vert;
 
-    void* user;
   };
 
 
@@ -24,11 +21,12 @@
 
       static WindowEventParams parseEventParams(SDL_WindowEvent evt) {
         WindowEventParams params = {
-          evt.windowID,
           evt.timestamp,
+          NULL,
+
+          evt.windowID,
           evt.data1,
           evt.data2,
-          NULL
         };
 
         return params;
@@ -68,7 +66,7 @@
 
           void*(*callback)(void*) = callbackRec.method;
 
-          params.user = callbackRec.input;
+          params.data = callbackRec.input;
           retVal = callback((void*)&params);
         }
 

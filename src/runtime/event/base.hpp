@@ -9,6 +9,12 @@
     void* input;
   };
 
+  struct EventParamsBase {
+    unsigned long int timestamp;
+    void* data;
+  };
+
+
   Dict<CallbackRecord> _callbacks;
 
 

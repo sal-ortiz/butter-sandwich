@@ -8,7 +8,6 @@
 
   class Application {
 
-
     public:
 
       bool isActive;
@@ -30,10 +29,8 @@
       }
 
       static void* quitCallback(void* inp) {
-        // TODO: This callback is causing an exception to be thrown.
-
         WindowEventParams* params = reinterpret_cast<WindowEventParams*>(inp);
-        Application* app = (Application*)params->user;
+        Application* app = (Application*)params->data;
 
         printf("QUITTING!!!!\t\n");
         app->exit();

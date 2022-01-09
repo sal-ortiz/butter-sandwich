@@ -6,11 +6,8 @@
   #include "./base.hpp"
 
 
-  struct ApplicationEventParams {
-
-    unsigned long int timestamp;
-
-    void* user;
+  struct ApplicationEventParams: EventParamsBase {
+    // intentionally left blank.
   };
 
 
@@ -44,7 +41,7 @@
 
           void*(*callback)(void*) = callbackRec.method;
 
-          params.user = callbackRec.input;
+          params.data = callbackRec.input;
           retVal = callback((void*)&params);
         }
 

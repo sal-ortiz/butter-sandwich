@@ -56,7 +56,7 @@
 
       static void* closedCallback(void* inp) {
         WindowEventParams* params = reinterpret_cast<WindowEventParams*>(inp);
-        Window* win = (Window*)params->user;
+        Window* win = (Window*)params->data;
 
         printf("CLOSING!!!!\t\n");
         win->close();
