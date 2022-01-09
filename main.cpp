@@ -19,7 +19,7 @@ static void* quitCallback(void* inp) {
   printf("QUITTING!!!!\t\n");
   app->exit();
 
-  return (void*)false;
+  return (void*)NULL;
 }
 
 static void* movedCallback(void* inp) {
@@ -27,7 +27,7 @@ static void* movedCallback(void* inp) {
 
   printf("MOVED TO %ld, %ld\n", params->horz, params->vert);
 
-  return (void*)true;
+  return (void*)NULL;
 }
 
 static void* closedCallback(void* inp) {
@@ -37,7 +37,7 @@ static void* closedCallback(void* inp) {
   printf("CLOSING!!!!\t\n");
   win->close();
 
-  return (void*)false;
+  return (void*)NULL;
 }
 
 static void* resizedCallback(void* inp) {
@@ -45,7 +45,7 @@ static void* resizedCallback(void* inp) {
 
   printf("RESIZED TO %ld, %ld\n", params->horz, params->vert);
 
-  return (void*)true;
+  return (void*)NULL;
 }
 
 
