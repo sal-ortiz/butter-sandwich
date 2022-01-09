@@ -51,6 +51,10 @@
             retVal = handleWindowMovedEvent(evt, params);
             break;
 
+          case SDL_WINDOWEVENT_RESIZED:
+            retVal = handleWindowResizedEvent(evt, params);
+            break;
+
         }
 
         return retVal;
@@ -76,6 +80,21 @@
 
         if (_callbacks.has("MOVED")) {
           CallbackRecord callbackRec = _callbacks.get("MOVED");
+
+          void*(*callback)(void*) = callbackRec.method;
+
+          params.user = callbackRec.input;
+          retVal = callback((void*)&params);
+        }
+
+        return retVal;
+      }
+
+      static void* handleWindowResizedEvent(SDL_WindowEvent evt, WindowEventParams params) {
+        void* retVal = (void*)true;
+
+        if (_callbacks.has("RESIZED")) {
+          CallbackRecord callbackRec = _callbacks.get("RESIZED");
 
           void*(*callback)(void*) = callbackRec.method;
 
