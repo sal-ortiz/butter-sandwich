@@ -13,18 +13,7 @@
 
 
   class EventBase {
-
-
+    // blank!
   };
-
-
-
-
-
-
-
-
-
-
 
 #endif
