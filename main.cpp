@@ -10,27 +10,22 @@
 #include "./src/core/dict.hpp"
 
 
-class AppInput {
-  public:
-    unsigned long int val;
-};
-
 
 Window* win = new Window();
 Application* app = new Application();
 
 static void* quitCallback(void* inp) {
-  WindowEventParams* params = (WindowEventParams*)inp;
+  WindowEventParams* params = reinterpret_cast<WindowEventParams*>(inp);
 
-  printf("QUITTING!!!!\t%ld\n", params->user);
+  printf("QUITTING!!!!\t%ld\n", (unsigned long int)params->user);
 
   return (void*)false;
 }
 
 static void* movedCallback(void* inp) {
-  WindowEventParams* params = (WindowEventParams*)inp;
+  WindowEventParams* params = reinterpret_cast<WindowEventParams*>(inp);
 
-  printf("MOVED TO %d, %d\n", params->horz, params->vert);
+  printf("MOVED TO %ld, %ld\n", params->horz, params->vert);
 
   return (void*)true;
 }
@@ -41,15 +36,9 @@ static void* movedCallback(void* inp) {
 int main(int argc, char *argv[]) {
   bool isRunning = true;
 
-  AppInput* inp = new AppInput();
-
-  inp->val = 0;
-
   app->on("CLOSED", quitCallback, (unsigned long int*)666);
-  //app->on("QUIT", quitCallback, inp);
-  app->on("MOVED", movedCallback, inp);
-
-  inp->val = 666;
+  //app->on("QUIT", quitCallback, (unsigned long int*(666);
+  app->on("MOVED", movedCallback, (unsigned long int*)666);
 
   Sprite* sprite = new Sprite();
 
