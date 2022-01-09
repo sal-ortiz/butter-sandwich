@@ -21,9 +21,8 @@ Application* app = new Application();
 
 static void* quitCallback(void* inp) {
   WindowEventParams* params = (WindowEventParams*)inp;
-  AppInput* appInp = (AppInput*)params->user;
 
-  printf("QUITTING!!!!\t%ld\n", appInp->val);
+  printf("QUITTING!!!!\t%ld\n", params->user);
 
   return (void*)false;
 }
@@ -46,8 +45,8 @@ int main(int argc, char *argv[]) {
 
   inp->val = 0;
 
-  app->on("CLOSED", quitCallback, inp);
-  app->on("QUIT", quitCallback, inp);
+  app->on("CLOSED", quitCallback, (unsigned long int*)666);
+  //app->on("QUIT", quitCallback, inp);
   app->on("MOVED", movedCallback, inp);
 
   inp->val = 666;
