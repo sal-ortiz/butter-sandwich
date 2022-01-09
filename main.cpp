@@ -28,6 +28,16 @@ static void* quitCallback(void* inp) {
   return (void*)false;
 }
 
+static void* movedCallback(void* inp) {
+  WindowEventParams* params = (WindowEventParams*)inp;
+
+  printf("MOVED TO %d, %d\n", params->horz, params->vert);
+
+  return (void*)true;
+}
+
+
+
 
 int main(int argc, char *argv[]) {
   bool isRunning = true;
@@ -36,8 +46,9 @@ int main(int argc, char *argv[]) {
 
   inp->val = 0;
 
-  app->on("CLOSE", quitCallback, inp);
+  app->on("CLOSED", quitCallback, inp);
   app->on("QUIT", quitCallback, inp);
+  app->on("MOVED", movedCallback, inp);
 
   inp->val = 666;
 
