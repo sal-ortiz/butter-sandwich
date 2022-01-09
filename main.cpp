@@ -30,6 +30,23 @@ static void* movedCallback(void* inp) {
   return (void*)true;
 }
 
+static void* closedCallback(void* inp) {
+  WindowEventParams* params = reinterpret_cast<WindowEventParams*>(inp);
+  Window* win = (Window*)params->user;
+
+  printf("CLOSING!!!!\t\n");
+  win->close();
+
+  return (void*)false;
+}
+
+static void* resizedCallback(void* inp) {
+  WindowEventParams* params = reinterpret_cast<WindowEventParams*>(inp);
+
+  printf("RESIZED TO %ld, %ld\n", params->horz, params->vert);
+
+  return (void*)true;
+}
 
 
 
@@ -39,6 +56,7 @@ int main(int argc, char *argv[]) {
   app->on("CLOSED", closedCallback, win);
   app->on("QUIT", quitCallback, app);
   app->on("MOVED", movedCallback, (unsigned long int*)666);
+  app->on("RESIZED", resizedCallback, (unsigned long int*)666);
 
   Sprite* sprite = new Sprite();
 
