@@ -8,16 +8,7 @@
 
   class Application {
 
-    private:
-
-      Event* events;
-
-
     public:
-
-      Application() {
-        this->events = new Event();
-      }
 
       bool evaluate() {
         return Event::poll();
