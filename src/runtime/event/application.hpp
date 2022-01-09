@@ -33,14 +33,14 @@
       static void* parse(SDL_QuitEvent evt) {
         ApplicationEventParams params = ApplicationEvent::parseEventParams(evt);
 
-        return ApplicationEvent::handleApplicationQuitEvent(evt, params);
+        return ApplicationEvent::handleEvent("QUIT", evt, params);
       }
 
-      static void* handleApplicationQuitEvent(SDL_QuitEvent evt, ApplicationEventParams params) {
+      static void* handleEvent(const char* name, SDL_QuitEvent evt, ApplicationEventParams params) {
         void* retVal = (void*)true;
 
-        if (_callbacks.has("QUIT")) {
-          CallbackRecord callbackRec = _callbacks.get("QUIT");
+        if (_callbacks.has(name)) {
+          CallbackRecord callbackRec = _callbacks.get(name);
 
           void*(*callback)(void*) = callbackRec.method;
 

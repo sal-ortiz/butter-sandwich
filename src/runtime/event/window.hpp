@@ -44,15 +44,15 @@
         switch (evt.event) {
 
           case SDL_WINDOWEVENT_CLOSE:
-            retVal = handleWindowClosedEvent(evt, params);
+            retVal = handleEvent("CLOSED", evt, params);
             break;
 
           case SDL_WINDOWEVENT_MOVED:
-            retVal = handleWindowMovedEvent(evt, params);
+            retVal = handleEvent("MOVED", evt, params);
             break;
 
           case SDL_WINDOWEVENT_RESIZED:
-            retVal = handleWindowResizedEvent(evt, params);
+            retVal = handleEvent("RESIZED", evt, params);
             break;
 
         }
@@ -60,41 +60,11 @@
         return retVal;
       }
 
-      static void* handleWindowClosedEvent(SDL_WindowEvent evt, WindowEventParams params) {
+      static void* handleEvent(const char* name, SDL_WindowEvent evt, WindowEventParams params) {
         void* retVal = (void*)true;
 
-        if (_callbacks.has("CLOSED")) {
-          CallbackRecord callbackRec = _callbacks.get("CLOSED");
-
-          void*(*callback)(void*) = callbackRec.method;
-
-          params.user = callbackRec.input;
-          retVal = callback((void*)&params);
-        }
-
-        return retVal;
-      }
-
-      static void* handleWindowMovedEvent(SDL_WindowEvent evt, WindowEventParams params) {
-        void* retVal = (void*)true;
-
-        if (_callbacks.has("MOVED")) {
-          CallbackRecord callbackRec = _callbacks.get("MOVED");
-
-          void*(*callback)(void*) = callbackRec.method;
-
-          params.user = callbackRec.input;
-          retVal = callback((void*)&params);
-        }
-
-        return retVal;
-      }
-
-      static void* handleWindowResizedEvent(SDL_WindowEvent evt, WindowEventParams params) {
-        void* retVal = (void*)true;
-
-        if (_callbacks.has("RESIZED")) {
-          CallbackRecord callbackRec = _callbacks.get("RESIZED");
+        if (_callbacks.has(name)) {
+          CallbackRecord callbackRec = _callbacks.get(name);
 
           void*(*callback)(void*) = callbackRec.method;
 
