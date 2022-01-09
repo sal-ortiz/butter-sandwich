@@ -11,7 +11,7 @@
     public:
 
       bool evaluate() {
-        return Event::poll();
+        return Event::evaluate();
       }
 
       static void on(const char* id, void*(*callback)(void*), void* inp) {
