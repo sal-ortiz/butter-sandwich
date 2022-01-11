@@ -3,7 +3,7 @@
 
   #define _APPLICATION_HPP
 
-  #include "./event.hpp"
+  #include "../core/event.hpp"
 
 
   class Application {

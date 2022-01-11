@@ -6,7 +6,7 @@
   #include <SDL2/SDL.h>
 
   #include "./image.hpp"
-  #include "./event.hpp"
+  #include "../core/event.hpp"
 
 
   class Window {
