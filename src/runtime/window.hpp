@@ -20,9 +20,9 @@
     public:
 
       Window() {
-        Event::on("CLOSED", Window::closedCallback, this);
-        Event::on("MOVED", Window::movedCallback, this);
-        Event::on("RESIZED", Window::resizedCallback, this);
+        Event::on("WindowEvent.CLOSED", Window::closedCallback, this);
+        Event::on("WindowEvent.MOVED", Window::movedCallback, this);
+        Event::on("WindowEvent.RESIZED", Window::resizedCallback, this);
       }
 
       ~Window() {

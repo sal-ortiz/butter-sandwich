@@ -30,7 +30,7 @@
       static void* parse(SDL_QuitEvent evt) {
         ApplicationEventParams params = ApplicationEvent::parseEventParams(evt);
 
-        return ApplicationEvent::handleEvent("QUIT", evt, params);
+        return ApplicationEvent::handleEvent("SystemEvent.QUIT", evt, params);
       }
 
       static void* handleEvent(const char* name, SDL_QuitEvent evt, ApplicationEventParams params) {

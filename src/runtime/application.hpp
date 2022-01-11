@@ -13,7 +13,7 @@
       bool isActive;
 
       Application() {
-        Event::on("QUIT", Application::quitCallback, this);
+        Event::on("SystemEvent.QUIT", Application::quitCallback, this);
       }
 
       void start() {

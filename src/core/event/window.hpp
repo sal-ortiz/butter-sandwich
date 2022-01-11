@@ -42,15 +42,15 @@
         switch (evt.event) {
 
           case SDL_WINDOWEVENT_CLOSE:
-            retVal = handleEvent("CLOSED", evt, params);
+            retVal = handleEvent("WindowEvent.CLOSED", evt, params);
             break;
 
           case SDL_WINDOWEVENT_MOVED:
-            retVal = handleEvent("MOVED", evt, params);
+            retVal = handleEvent("WindowEvent.MOVED", evt, params);
             break;
 
           case SDL_WINDOWEVENT_RESIZED:
-            retVal = handleEvent("RESIZED", evt, params);
+            retVal = handleEvent("WindowEvent.RESIZED", evt, params);
             break;
 
         }
