@@ -6,7 +6,7 @@
   #include "../core/event.hpp"
 
 
-  class Application {
+  class Application: public Event {
 
     public:
 
@@ -22,10 +22,6 @@
 
       void exit() {
         this->isActive = false;
-      }
-
-      bool evaluate() {
-        return Event::evaluate();
       }
 
       static void* quitCallback(void* inp) {

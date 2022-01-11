@@ -9,7 +9,7 @@
   #include "../core/event.hpp"
 
 
-  class Window {
+  class Window: public Event {
 
     private:
 
