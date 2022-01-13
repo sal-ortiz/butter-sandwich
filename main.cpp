@@ -5,17 +5,43 @@
 #include "./src/runtime/window.hpp"
 #include "./src/runtime/application.hpp"
 #include "./src/runtime/image.hpp"
-#include "./src/runtime/event.hpp"
 #include "./src/scene/sprite.hpp"
-#include "./src/core/dict.hpp"
 
 
 Window* win = new Window();
 Application* app = new Application();
 
+void* quitCallback(void*) {
+  printf("\n\nCALLED QUIT CALLBACK!!!!!!!!!\n\n");
+
+  return (void*)NULL;
+}
+
+void* closedCallback(void*) {
+  printf("\n\nCALLED WINDOW CLOSED CALLBACK!!!!!!!!!\n\n");
+
+  return (void*)NULL;
+}
+void* movedCallback(void*) {
+  printf("CALLED WINDOW MOVED CALLBACK!!");
+
+  return (void*)NULL;
+}
+
+void* resizedCallback(void*) {
+  printf("CALLED WINDOW RESIZED CALLBACK!!");
+
+  return (void*)NULL;
+}
+
 
 int main(int argc, char *argv[]) {
   bool isRunning = true;
+
+  app->on("QUIT", quitCallback, (void*)NULL);
+  win->on("CLOSED", closedCallback, (void*)NULL);
+  win->on("MOVED", movedCallback, (void*)NULL);
+  win->on("RESIZED", resizedCallback, (void*)NULL);
 
   Sprite* sprite = new Sprite();
 
@@ -36,7 +62,7 @@ int main(int argc, char *argv[]) {
   app->start();
 
   while (app->isActive) {
-    app->evaluate();
+    Event::evaluate();
 
     sprite->render(win->getRenderer(), 0, 0);
 

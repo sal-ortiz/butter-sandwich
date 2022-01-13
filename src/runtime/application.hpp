@@ -3,10 +3,11 @@
 
   #define _APPLICATION_HPP
 
+  #include "./base.hpp"
   #include "../core/event.hpp"
 
 
-  class Application: public Event {
+  class Application: public RuntimeBase {
 
     public:
 
@@ -24,11 +25,16 @@
         this->isActive = false;
       }
 
+      void on(const char* id, void*(*callback)(void*), void* inp) {
+        Hook::setCallback(id, callback, inp);
+      }
+
       static void* quitCallback(void* inp) {
         WindowEventParams* params = reinterpret_cast<WindowEventParams*>(inp);
         Application* app = (Application*)params->data;
 
-        printf("QUITTING!!!!\t\n");
+        RuntimeBase::executeCallback("QUIT", inp);
+
         app->exit();
 
         return (void*)NULL;

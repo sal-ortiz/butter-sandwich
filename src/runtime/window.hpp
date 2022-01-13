@@ -5,11 +5,12 @@
 
   #include <SDL2/SDL.h>
 
+  #include "./base.hpp"
   #include "./image.hpp"
   #include "../core/event.hpp"
 
 
-  class Window: public Event {
+  class Window: public RuntimeBase {
 
     private:
 
@@ -58,7 +59,8 @@
         WindowEventParams* params = reinterpret_cast<WindowEventParams*>(inp);
         Window* win = (Window*)params->data;
 
-        printf("CLOSING!!!!\t\n");
+        RuntimeBase::executeCallback("CLOSED", inp);
+
         win->close();
 
         return (void*)NULL;
@@ -66,6 +68,7 @@
 
       static void* movedCallback(void* inp) {
         WindowEventParams* params = reinterpret_cast<WindowEventParams*>(inp);
+        RuntimeBase::executeCallback("MOVED", inp);
 
         printf("MOVED TO %ld, %ld\n", params->horz, params->vert);
 
@@ -75,6 +78,7 @@
       static void* resizedCallback(void* inp) {
         WindowEventParams* params = reinterpret_cast<WindowEventParams*>(inp);
 
+        RuntimeBase::executeCallback("RESIZED", inp);
         printf("RESIZED TO %ld, %ld\n", params->horz, params->vert);
 
         return (void*)NULL;
