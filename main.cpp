@@ -5,6 +5,7 @@
 #include "./src/runtime/window.hpp"
 #include "./src/runtime/application.hpp"
 #include "./src/runtime/image.hpp"
+#include "./src/runtime/state.hpp"
 #include "./src/scene/sprite.hpp"
 
 
