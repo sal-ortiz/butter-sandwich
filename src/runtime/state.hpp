@@ -1,7 +1,7 @@
 
-#ifndef _WINDOW_HPP
+#ifndef _STATE_HPP
 
-  #define _WINDOW_HPP
+  #define _STATE_HPP
 
   #include <SDL2/SDL.h>
 
