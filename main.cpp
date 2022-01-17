@@ -12,37 +12,63 @@
 Window* win = new Window();
 Application* app = new Application();
 
-void* quitCallback(void*) {
-  printf("\n\nCALLED QUIT CALLBACK!!!!!!!!!\n\n");
+State* state = new State();
 
-  return (void*)NULL;
+//void* quitCallback(void*) {
+////  printf("\n\nCALLED QUIT CALLBACK!!!!!!!!!\n\n");
+//
+//  return (void*)NULL;
+//}
+
+//void* closedCallback(void*) {
+////  printf("\n\nCALLED WINDOW CLOSED CALLBACK!!!!!!!!!\n\n");
+//
+//  return (void*)NULL;
+//}
+
+//void* movedCallback(void*) {
+////  printf("CALLED WINDOW MOVED CALLBACK!!");
+//
+//  return (void*)NULL;
+//}
+
+//void* resizedCallback(void*) {
+////  printf("CALLED WINDOW RESIZED CALLBACK!!");
+//
+//  return (void*)NULL;
+//}
+
+void* getter(void* inp) {
+  unsigned long int* val = reinterpret_cast<unsigned long int*>(inp);
+
+  printf("\n\n\nit got GOT\t:::%lu:::\n", val);
+
+  return (void*)777;
 }
 
-void* closedCallback(void*) {
-  printf("\n\nCALLED WINDOW CLOSED CALLBACK!!!!!!!!!\n\n");
+void* setter(void* inp) {
+  unsigned long int* val = reinterpret_cast<unsigned long int*>(inp);
 
-  return (void*)NULL;
+  printf("\n\n\nit got SET\t:::%lu:::\n", val);
+
+  return (void*)888;
 }
-void* movedCallback(void*) {
-  printf("CALLED WINDOW MOVED CALLBACK!!");
-
-  return (void*)NULL;
-}
-
-void* resizedCallback(void*) {
-  printf("CALLED WINDOW RESIZED CALLBACK!!");
-
-  return (void*)NULL;
-}
-
 
 int main(int argc, char *argv[]) {
-  bool isRunning = true;
+  unsigned long int* dummyVal;
 
-  app->on("QUIT", quitCallback, (void*)NULL);
-  win->on("CLOSED", closedCallback, (void*)NULL);
-  win->on("MOVED", movedCallback, (void*)NULL);
-  win->on("RESIZED", resizedCallback, (void*)NULL);
+//  app->on("QUIT", quitCallback, (void*)NULL);
+//  win->on("CLOSED", closedCallback, (void*)NULL);
+//  win->on("MOVED", movedCallback, (void*)NULL);
+//  win->on("RESIZED", resizedCallback, (void*)NULL);
+
+  state->onGet("CRAP", getter, (void*)NULL);
+  state->onSet("CRAP", setter, (void*)NULL);
+
+  state->set("CRAP", (void*)666);
+  dummyVal = (unsigned long int*)state->get("CRAP");
+
+  printf("\n\n%lu\n\n", (unsigned long int*)dummyVal);
 
   Sprite* sprite = new Sprite();
 
