@@ -18,11 +18,10 @@
 
       void generateIdentifier() {
         time_t timestamp = time(NULL);
-        unsigned long int num;
 
         srand(timestamp);
 
-        this->identifier = timestamp % rand();
+        this->identifier = timestamp % (rand() * rand() * rand());
       }
 
 
@@ -30,6 +29,10 @@
 
       RuntimeBase() {
         this->generateIdentifier();
+      }
+
+      unsigned  long int getIdentifier() {
+        return this->identifier;
       }
 
       void on(const char* id, void*(*callback)(void*), void* inp) {
