@@ -9,76 +9,57 @@
   #include "../core/dict.hpp"
 
 
-  union StateEntry {
-    unsigned long int intVal;
-    char* strVal;
-    void* ptrVal;
-  };
-
-
   class State: public RuntimeBase {
 
     private:
 
-      Dict<StateEntry> data;
+      Dict<void*> data;
 
-      const char* generateHookIdentifier(const char* key, const char* action) {
-        char* id;
-        sprintf(id, "State.%s.%d.%s", action, this->identifier, key);
+      char* generateHookIdentifier(const char* key, const char* action) {
+        char* hookId = new char[64];
+        unsigned long int instIdentifier = this->getIdentifier();
 
-        return id;
+        sprintf(hookId, "State.%s.%ld.%s", action, instIdentifier, key);
+
+        return hookId;
       }
 
 
     public:
 
-      unsigned long int get(const char* key) {
-        StateEntry entry = data.get(key);
-
-        return entry.intVal;
-      }
-
-      char* get(const char* key) {
-        StateEntry entry = data.get(key);
-
-        return entry.strVal;
-      }
-
       void* get(const char* key) {
-        StateEntry entry = data.get(key);
+        char* identifier = this->generateHookIdentifier(key, "get");
+        void* val;
 
-        return entry.ptrVal;
-      }
+        if (this->data.has(key)) {
+          val = this->data.get(key);
+        }
 
-      void set(const char* key, unsigned long int val) {
-        StateEntry entry;
-        entry.intVal = val;
+        val = RuntimeBase::executeCallback(identifier, val);
 
-        data.set(key, val);
-      }
-
-      void set(const char* key, char* val) {
-        StateEntry entry;
-        entry.strVal = val;
-
-        data.set(key, val);
+        return val;
       }
 
       void set(const char* key, void* val) {
-        StateEntry entry;
-        entry.ptrVal = val;
+        char* identifier = this->generateHookIdentifier(key, "set");
 
-        data.set(key, val);
+        if (this->data.has(key)) {
+          val = this->data.get(key);
+        }
+
+        val = RuntimeBase::executeCallback(identifier, val);
+
+        this->data.set(key, val);
       }
 
-      void onGet(const char* key, void*(*callback)(void*)) {
+      void onGet(const char* key, void*(*callback)(void*), void* inp) {
         char* id = this->generateHookIdentifier(key, "get");
 
         RuntimeBase::on(id, callback, (void*)NULL);
       }
 
-      void onSet(const char* key, void*(*callback)(void*)) {
-        char* id = this->generateHookIdentifier(key, "set");
+      void onSet(const char* key, void*(*callback)(void*), void* inp) {
+        const char* id = this->generateHookIdentifier(key, "set");
 
         RuntimeBase::on(id, callback, (void*)NULL);
       }
