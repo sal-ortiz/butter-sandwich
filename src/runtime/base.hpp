@@ -39,14 +39,16 @@
         Hook::setCallback(id, callback, inp);
       }
 
-      static void executeCallback(const char* id, void* inp) {
+      static void* executeCallback(const char* id, void* inp) {
 
         if (Hook::hasCallback(id)) {
           void*(*callback)(void*) = Hook::getCallback(id);
 
-          callback(inp);
+
+          return callback(inp);
         }
 
+        return (void*)inp;
       }
 
   };
