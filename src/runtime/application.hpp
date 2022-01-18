@@ -26,10 +26,6 @@
         this->isActive = false;
       }
 
-      void on(const char* id, void*(*callback)(void*), void* inp) {
-        Hook::setCallback(id, callback, inp);
-      }
-
       static void* quitCallback(void* inp) {
         WindowEventParams* params = reinterpret_cast<WindowEventParams*>(inp);
         Application* app = (Application*)params->data;
