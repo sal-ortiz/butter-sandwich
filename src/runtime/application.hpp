@@ -15,6 +15,7 @@
 
       Application() {
         Event::on("SystemEvent.QUIT", Application::quitCallback, this);
+        Event::on("SystemEvent.KEYBOARD", Application::keyboardCallback, this);
       }
 
       void start() {
@@ -36,6 +37,14 @@
         RuntimeBase::executeCallback("QUIT", inp);
 
         app->exit();
+
+        return (void*)NULL;
+      }
+
+      static void* keyboardCallback(void* inp) {
+        KeyboardEventParams* params = reinterpret_cast<KeyboardEventParams*>(inp);
+
+        RuntimeBase::executeCallback("KEYBOARD", inp);
 
         return (void*)NULL;
       }

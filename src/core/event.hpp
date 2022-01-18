@@ -8,6 +8,7 @@
   #include "../core/dict.hpp"
   #include "./event/window.hpp"
   #include "./event/application.hpp"
+  #include "./event/keyboard.hpp"
 
 
   class Event {
@@ -30,6 +31,8 @@
           retVal = ApplicationEvent::parse(evt.quit);
         } else if (evt.type == SDL_WINDOWEVENT) {
           retVal = WindowEvent::parse(evt.window);
+        } else if ((evt.type == SDL_KEYDOWN) || (evt.type == SDL_KEYUP))  {
+          retVal = KeyboardEvent::parse(evt.key);
         }
 
         return retVal;
