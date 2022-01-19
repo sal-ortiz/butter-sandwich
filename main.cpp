@@ -48,7 +48,7 @@ void* resizedCallback(void* inp) {
 
 void* keyboardCallback(void* inp) {
   KeyboardEventParams* parsedInp = reinterpret_cast<KeyboardEventParams*>(inp);
-  char* action;
+  const char* action;
 
   if (parsedInp->state == SDL_PRESSED) {
     action = "pressed";
@@ -64,7 +64,7 @@ void* keyboardCallback(void* inp) {
 void* getter(void* inp) {
   unsigned long int* parsedInp = reinterpret_cast<unsigned long int*>(inp);
 
-  printf("value %lu gotten\n", parsedInp);
+  printf("value %lu gotten\n", (unsigned long int)parsedInp);
 
   return (void*)777;
 }
@@ -72,7 +72,7 @@ void* getter(void* inp) {
 void* setter(void* inp) {
   unsigned long int* parsedInp = reinterpret_cast<unsigned long int*>(inp);
 
-  printf("value %lu set\n", parsedInp);
+  printf("value %lu set\n", (unsigned long int)parsedInp);
 
   return (void*)888;
 }
@@ -92,7 +92,7 @@ int main(int argc, char *argv[]) {
   state->set("CRAP", (void*)666);
   dummyVal = (unsigned long int*)state->get("CRAP");
 
-  printf("\n\n%lu\n\n", (unsigned long int*)dummyVal);
+  printf("\ndummyVal: %lu\n\n", (unsigned long int)dummyVal);
 
   Sprite* sprite = new Sprite();
 
