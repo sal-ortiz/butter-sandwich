@@ -96,7 +96,7 @@ int main(int argc, char *argv[]) {
 
   Sprite* sprite = new Sprite();
 
-  win->open("The window!", 50, 50, 480, 360);
+  win->open("The window!", 150, 150, 480, 360);
 
   Image* imgOne = new Image();
   Image* imgTwo = new Image();
