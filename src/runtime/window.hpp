@@ -59,29 +59,29 @@
         WindowEventParams* params = reinterpret_cast<WindowEventParams*>(inp);
         Window* win = (Window*)params->data;
 
-        RuntimeBase::executeCallback("CLOSED", inp);
+        void* retVal = RuntimeBase::executeCallback("CLOSED", inp);
 
         win->close();
 
-        return (void*)NULL;
+        return retVal;
       }
 
       static void* movedCallback(void* inp) {
         WindowEventParams* params = reinterpret_cast<WindowEventParams*>(inp);
-        RuntimeBase::executeCallback("MOVED", inp);
+        void* retVal = RuntimeBase::executeCallback("MOVED", inp);
 
         //printf("MOVED TO %ld, %ld\n", params->horz, params->vert);
 
-        return (void*)NULL;
+        return retVal;
       }
 
       static void* resizedCallback(void* inp) {
         WindowEventParams* params = reinterpret_cast<WindowEventParams*>(inp);
-        RuntimeBase::executeCallback("RESIZED", inp);
+        void* retVal = RuntimeBase::executeCallback("RESIZED", inp);
 
         //printf("RESIZED TO %ld, %ld\n", params->horz, params->vert);
 
-        return (void*)NULL;
+        return retVal;
       }
 
   };

@@ -30,19 +30,19 @@
         WindowEventParams* params = reinterpret_cast<WindowEventParams*>(inp);
         Application* app = (Application*)params->data;
 
-        RuntimeBase::executeCallback("QUIT", inp);
+        void* retVal = RuntimeBase::executeCallback("QUIT", inp);
 
         app->exit();
 
-        return (void*)NULL;
+        return retVal;
       }
 
       static void* keyboardCallback(void* inp) {
         KeyboardEventParams* params = reinterpret_cast<KeyboardEventParams*>(inp);
 
-        RuntimeBase::executeCallback("KEYBOARD", inp);
+        void* retVal = RuntimeBase::executeCallback("KEYBOARD", inp);
 
-        return (void*)NULL;
+        return retVal;
       }
 
   };
