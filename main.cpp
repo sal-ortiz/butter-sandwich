@@ -61,6 +61,38 @@ void* keyboardCallback(void* inp) {
   return (void*)NULL;
 }
 
+void* mouseMotionCallback(void* inp) {
+  MouseMotionEventParams* parsedInp = reinterpret_cast<MouseMotionEventParams*>(inp);
+
+  printf("mouse moved to (%ld, %ld). (%ld, %ld) from it's previous location\n", parsedInp->absoluteHorzPos, parsedInp->absoluteVertPos, parsedInp->relativeHorzPos, parsedInp->relativeVertPos);
+
+  return (void*)NULL;
+}
+
+void* mouseButtonCallback(void* inp) {
+  MouseButtonEventParams* parsedInp = reinterpret_cast<MouseButtonEventParams*>(inp);
+  const char* button;
+  const char* action;
+
+  if (parsedInp->state == SDL_PRESSED) {
+    action = "pressed";
+  } else if (parsedInp->state == SDL_RELEASED) {
+    action = "released";
+  }
+
+  if (parsedInp->button == SDL_BUTTON_LEFT) {
+    button = "left";
+  } else if (parsedInp->button == SDL_BUTTON_MIDDLE) {
+    button = "middle";
+
+  } else if (parsedInp->button == SDL_BUTTON_RIGHT) {
+    button = "right";
+  }
+
+  printf("%s mouse button %s %d times\n", button, action, parsedInp->clicks);
+
+  return (void*)NULL;
+}
 void* getter(void* inp) {
   unsigned long int* parsedInp = reinterpret_cast<unsigned long int*>(inp);
 
@@ -81,10 +113,12 @@ int main(int argc, char *argv[]) {
   unsigned long int* dummyVal;
 
   app->on("QUIT", quitCallback, (void*)NULL);
+  app->on("KEYBOARD", keyboardCallback, (void*)NULL);
+  app->on("MOUSEMOTION", mouseMotionCallback, (void*)NULL);
+  app->on("MOUSEBUTTON", mouseButtonCallback, (void*)NULL);
   win->on("CLOSED", closedCallback, (void*)NULL);
   win->on("MOVED", movedCallback, (void*)NULL);
   win->on("RESIZED", resizedCallback, (void*)NULL);
-  app->on("KEYBOARD", keyboardCallback, (void*)NULL);
 
   state->onGet("CRAP", getter, (void*)NULL);
   state->onSet("CRAP", setter, (void*)NULL);
