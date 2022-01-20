@@ -27,7 +27,7 @@
       }
 
       static void* quitCallback(void* inp) {
-        WindowEventParams* params = reinterpret_cast<WindowEventParams*>(inp);
+        ApplicationEventParams* params = reinterpret_cast<ApplicationEventParams*>(inp);
         Application* app = (Application*)params->data;
 
         void* retVal = RuntimeBase::executeCallback("QUIT", inp);
