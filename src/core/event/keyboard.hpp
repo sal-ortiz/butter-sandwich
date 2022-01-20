@@ -1,7 +1,10 @@
 
+
 #ifndef _KEYBOARD_EVENT_HPP
 
   #define _KEYBOARD_EVENT_HPP
+
+  #include "./base.hpp"
 
 
   struct KeyboardEventParams: EventParamsBase {
@@ -40,7 +43,6 @@
 
     public:
 
-
       static void* parse(SDL_KeyboardEvent evt) {
         KeyboardEventParams params = KeyboardEvent::parseEventParams(evt);
 
@@ -63,6 +65,5 @@
       }
 
   };
-
 
 #endif
