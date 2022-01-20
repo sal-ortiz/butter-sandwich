@@ -16,6 +16,8 @@
       Application() {
         Event::on("SystemEvent.QUIT", Application::quitCallback, this);
         Event::on("SystemEvent.KEYBOARD", Application::keyboardCallback, this);
+        Event::on("SystemEvent.MOUSEMOTION", Application::mouseMotionCallback, this);
+        Event::on("SystemEvent.MOUSEBUTTON", Application::mouseButtonCallback, this);
       }
 
       void start() {
@@ -38,9 +40,25 @@
       }
 
       static void* keyboardCallback(void* inp) {
-        KeyboardEventParams* params = reinterpret_cast<KeyboardEventParams*>(inp);
+        //KeyboardEventParams* params = reinterpret_cast<KeyboardEventParams*>(inp);
 
         void* retVal = RuntimeBase::executeCallback("KEYBOARD", inp);
+
+        return retVal;
+      }
+
+      static void* mouseMotionCallback(void* inp) {
+        //MouseMotionEventParams* params = reinterpret_cast<MouseMotionEventParams*>(inp);
+
+        void* retVal = RuntimeBase::executeCallback("MOUSEMOTION", inp);
+
+        return retVal;
+      }
+
+      static void* mouseButtonCallback(void* inp) {
+        //MouseButtonEventParams* params = reinterpret_cast<MouseButtonEventParams*>(inp);
+
+        void* retVal = RuntimeBase::executeCallback("MOUSEBUTTON", inp);
 
         return retVal;
       }

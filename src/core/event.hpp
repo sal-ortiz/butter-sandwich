@@ -9,6 +9,8 @@
   #include "./event/window.hpp"
   #include "./event/application.hpp"
   #include "./event/keyboard.hpp"
+  #include "./event/mouse_motion.hpp"
+  #include "./event/mouse_button.hpp"
 
 
   class Event {
@@ -33,6 +35,10 @@
           retVal = WindowEvent::parse(evt.window);
         } else if ((evt.type == SDL_KEYDOWN) || (evt.type == SDL_KEYUP))  {
           retVal = KeyboardEvent::parse(evt.key);
+        } else if (evt.type == SDL_MOUSEMOTION) {
+          retVal = MouseMotionEvent::parse(evt.motion);
+        } else if ((evt.type == SDL_MOUSEBUTTONDOWN) || (evt.type == SDL_MOUSEBUTTONUP))  {
+          retVal = MouseButtonEvent::parse(evt.button);
         }
 
         return retVal;
