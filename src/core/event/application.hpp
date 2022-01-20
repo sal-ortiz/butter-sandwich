@@ -18,6 +18,7 @@
       static ApplicationEventParams parseEventParams(SDL_QuitEvent evt) {
         ApplicationEventParams params = {
           evt.timestamp,
+          (unsigned long int)NULL,
           NULL
         };
 

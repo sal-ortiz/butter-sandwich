@@ -8,7 +8,6 @@
 
 
   struct MouseMotionEventParams: EventParamsBase {
-    unsigned long int windowId;
     unsigned long int mouseId;
     unsigned long int state;
 
@@ -27,9 +26,9 @@
       static MouseMotionEventParams parseEventParams(SDL_MouseMotionEvent evt) {
         MouseMotionEventParams params = {
           evt.timestamp,
+          evt.windowID,
           NULL,
 
-          evt.windowID,
           evt.which,
           evt.state,
 

@@ -8,7 +8,6 @@
 
 
   struct MouseButtonEventParams: EventParamsBase {
-    unsigned long int windowId;
     unsigned long int mouseId;
     unsigned char state;
 
@@ -27,9 +26,9 @@
       static MouseButtonEventParams parseEventParams(SDL_MouseButtonEvent evt) {
         MouseButtonEventParams params = {
           evt.timestamp,
+          evt.windowID,
           NULL,
 
-          evt.windowID,
           evt.which,
           evt.state,
 

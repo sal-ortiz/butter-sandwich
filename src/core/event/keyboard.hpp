@@ -8,7 +8,6 @@
 
 
   struct KeyboardEventParams: EventParamsBase {
-    unsigned long int windowId;
     unsigned char state;  // SDL_PRESSED or SDL_RELEASED
     unsigned char repeat;
 
@@ -26,9 +25,9 @@
       static KeyboardEventParams parseEventParams(SDL_KeyboardEvent evt) {
         KeyboardEventParams params = {
           evt.timestamp,
+          evt.windowID,
           NULL,
 
-          evt.windowID,
           evt.state,
           evt.repeat,
 

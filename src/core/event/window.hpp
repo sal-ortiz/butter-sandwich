@@ -7,8 +7,6 @@
 
 
   struct WindowEventParams: EventParamsBase {
-    unsigned long int id;
-
     signed long int horz;
     signed long int vert;
 
@@ -22,9 +20,9 @@
       static WindowEventParams parseEventParams(SDL_WindowEvent evt) {
         WindowEventParams params = {
           evt.timestamp,
+          evt.windowID,
           NULL,
 
-          evt.windowID,
           evt.data1,
           evt.data2,
         };
