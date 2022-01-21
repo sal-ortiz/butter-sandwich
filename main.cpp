@@ -146,12 +146,27 @@ int main(int argc, char *argv[]) {
 
   app->start();
 
+
+  unsigned long int numLoops = 0;
+  unsigned long int elapsed = 0;
+
+  unsigned long start = 0;
+
   while (app->isActive) {
+    start = SDL_GetTicks();
+
     Event::evaluate();
 
     sprite->render(win->getRenderer(), 0, 0);
 
     win->render();
+
+    elapsed += SDL_GetTicks() - start;
+
+    if ((++numLoops % 100) == 0) {
+      printf("\naverage frame time: %lums\n\n", elapsed / ++numLoops);
+    }
+
   }
 
   //SDL_Delay(5000);
