@@ -93,20 +93,21 @@ void* mouseButtonCallback(void* inp) {
 
   return (void*)NULL;
 }
+
 void* getter(void* inp) {
-  unsigned long int* parsedInp = reinterpret_cast<unsigned long int*>(inp);
+  HookCallbackParams* parsedInp = reinterpret_cast<HookCallbackParams*>(inp);
 
-  printf("value %lu gotten\n", (unsigned long int)parsedInp);
+  printf("value %lu gotten\n", (unsigned long int)parsedInp->oldValue);
 
-  return (void*)777;
+  return (void*)parsedInp->oldValue;
 }
 
 void* setter(void* inp) {
-  unsigned long int* parsedInp = reinterpret_cast<unsigned long int*>(inp);
+  HookCallbackParams* parsedInp = reinterpret_cast<HookCallbackParams*>(inp);
 
-  printf("value %lu set\n", (unsigned long int)parsedInp);
+  printf("value %lu set\n", (unsigned long int)parsedInp->newValue);
 
-  return (void*)888;
+  return (void*)parsedInp->newValue;
 }
 
 int main(int argc, char *argv[]) {

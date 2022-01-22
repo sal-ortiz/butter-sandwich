@@ -9,6 +9,13 @@
   #include "../core/dict.hpp"
 
 
+  struct HookCallbackParams {
+    void* target;
+    void* newValue;
+    void* oldValue;
+  };
+
+
   class State: public RuntimeBase {
 
     private:
@@ -29,25 +36,33 @@
 
       void* get(const char* key) {
         char* identifier = this->generateHookIdentifier(key, "get");
-        void* val;
+        void* val = (void*)55;
+
 
         if (this->data.has(key)) {
           val = this->data.get(key);
         }
 
-        val = RuntimeBase::executeCallback(identifier, val);
+        HookCallbackParams params = { (void*)this, (void*)NULL, val };
+
+        val = RuntimeBase::executeCallback(identifier, (void*)&params);
 
         return val;
       }
 
       void set(const char* key, void* val) {
         char* identifier = this->generateHookIdentifier(key, "set");
+        void* oldVal;
 
         if (this->data.has(key)) {
-          val = this->data.get(key);
+          oldVal = this->data.get(key);
+        } else {
+          oldVal = NULL;
         }
 
-        val = RuntimeBase::executeCallback(identifier, val);
+        HookCallbackParams params = { (void*)this, val, oldVal };
+
+        val = RuntimeBase::executeCallback(identifier, (void*)&params);
 
         this->data.set(key, val);
       }
