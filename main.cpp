@@ -148,23 +148,21 @@ int main(int argc, char *argv[]) {
 
 
   unsigned long int numLoops = 0;
-  unsigned long int elapsed = 0;
-
-  unsigned long start = 0;
+  float start = 0.0;
+  float elapsed = 0.0;
 
   while (app->isActive) {
-    start = SDL_GetTicks();
+    start = (float)SDL_GetTicks();
 
     Event::evaluate();
 
     sprite->render(win->getRenderer(), 0, 0);
-
     win->render();
 
-    elapsed += SDL_GetTicks() - start;
+    elapsed += (float)SDL_GetTicks() - start;
 
-    if ((++numLoops % 100) == 0) {
-      printf("\naverage frame time: %lums\n\n", elapsed / ++numLoops);
+    if ((++numLoops % 500) == 0) {
+      printf("\naverage frame time: %fms\n\n", elapsed / ++numLoops);
     }
 
   }
