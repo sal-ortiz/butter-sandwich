@@ -3,7 +3,7 @@
 
   #define _SPRITE_FRAME_HPP
 
-  #include "../../runtime/image.hpp"
+  #include "../../core/image.hpp"
 
 
   class SpriteFrame {

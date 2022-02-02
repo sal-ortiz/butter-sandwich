@@ -4,6 +4,7 @@
   #define _SPRITE_HPP
 
   #include "./sprite/frame.hpp"
+  #include "../core/image.hpp"
   #include "../core/list.hpp"
 
 

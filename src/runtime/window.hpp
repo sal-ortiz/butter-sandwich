@@ -6,7 +6,6 @@
   #include <SDL2/SDL.h>
 
   #include "./base.hpp"
-  #include "./image.hpp"
   #include "../core/event.hpp"
 
 
