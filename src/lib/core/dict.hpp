@@ -1,11 +1,9 @@
 
-
-
 #ifndef _DICT_ENTRY_HPP
 
   #define _DICT_ENTRY_HPP
 
-  #include "./list.hpp"
+  #include "./list.hpp" // https://gist.github.com/sal-ortiz/74a414860a7525f3cdce493d039c4d30
   #include <string.h>
 
 

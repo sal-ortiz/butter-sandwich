@@ -18,8 +18,8 @@
     public:
 
       ListEntry() {
-        this->next = NULL;
-        this->prev = NULL;
+        this->next = (ListEntry<class_type>*)NULL;
+        this->prev = (ListEntry<class_type>*)NULL;
 
         //this->value = NULL;
       }
