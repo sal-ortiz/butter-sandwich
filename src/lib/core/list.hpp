@@ -69,7 +69,7 @@
 
         for (unsigned long int idx = 0; idx < targIndex + 1; idx++) {
 
-          if (node->getNext() != NULL) {
+          if (node->getNext() != (ListEntry<class_type>*)NULL) {
             node = node->getNext();
           } else {
             break;
@@ -85,7 +85,7 @@
 
         for (unsigned long int idx = 0; idx <= targIndex; idx++) {
 
-          if (node->getNext() == NULL) {
+          if (node->getNext() == (ListEntry<class_type>*)NULL) {
             ListEntry<class_type>* newEntry = new ListEntry<class_type>();
 
             newEntry->setPrev(node);
@@ -115,7 +115,7 @@
 
         ListEntry<class_type>* node = this->root;
 
-        while (node->getNext() != NULL) {
+        while (node->getNext() != (ListEntry<class_type>*)NULL) {
           length++;
 
           node = node->getNext();
@@ -161,7 +161,7 @@
 
         newEntry->setPrev(root);
 
-        if (next != NULL) {
+        if (next != (ListEntry<class_type>*)NULL) {
           newEntry->setNext(next);
 
           next->setPrev(newEntry);
@@ -177,10 +177,10 @@
         ListEntry<class_type>* node = this->getEntry(length - 1);
         ListEntry<class_type>* prev = this->getEntry(length - 2);
 
-        prev->setNext(NULL);
+        prev->setNext((ListEntry<class_type>*)NULL);
 
-        node->setNext(NULL);
-        node->setPrev(NULL);
+        node->setNext((ListEntry<class_type>*)NULL);
+        node->setPrev((ListEntry<class_type>*)NULL);
 
         class_type outpValue = node->getValue();
 
@@ -193,7 +193,7 @@
         ListEntry<class_type>* root = this->getRoot();
         ListEntry<class_type>* next = root->getNext();
 
-        if (next != NULL) {
+        if (next != (ListEntry<class_type>*)NULL) {
           ListEntry<class_type>* further = next->getNext();
 
 
@@ -202,8 +202,8 @@
             further->setPrev(root);
           }
 
-          next->setPrev(NULL);
-          next->setNext(NULL);
+          next->setPrev((ListEntry<class_type>*)NULL);
+          next->setNext((ListEntry<class_type>*)NULL);
         }
 
         class_type outpValue = next->getValue();
