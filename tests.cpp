@@ -20,4 +20,9 @@ int main(int argc, char* argv[]) {
   assert( ListTest::fill_fillsTheExpectedAmountOfEntries() );
   assert( ListTest::fill_fillsTheWholeListOfNoIndicesAreGiven() );
 
+  assert( DictEntryTest::setKey_storesTheGivenKey() );
+  assert( DictEntryTest::setValue_canStorePrimitiveTypes() );
+  assert( DictEntryTest::setValue_canStoreComplexTypes() );
+
+  assert( DictTest::set_addsANewEntryAtTheGivenKey() );
 }
