@@ -2,11 +2,11 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 
-#include "./src/runtime/window.hpp"
-#include "./src/runtime/application.hpp"
-#include "./src/core/image.hpp"
-#include "./src/runtime/state.hpp"
-#include "./src/runtime/sprite.hpp"
+#include "./src/lib/runtime/window.hpp"
+#include "./src/lib/runtime/application.hpp"
+#include "./src/lib/core/image.hpp"
+#include "./src/lib/runtime/state.hpp"
+#include "./src/lib/runtime/sprite.hpp"
 
 
 Window* win = new Window();
@@ -163,7 +163,7 @@ int main(int argc, char *argv[]) {
     elapsed += (float)SDL_GetTicks() - start;
 
     if ((++numLoops % 500) == 0) {
-      printf("\naverage frame time: %fms\n\n", elapsed / ++numLoops);
+      printf("\naverage frame time: %fms\n\n", elapsed / numLoops);
     }
 
   }
