@@ -213,7 +213,7 @@
         return outpValue;
       }
 
-      void fill(class_type value, unsigned long int start=0, unsigned long int end=0) {
+      void fill(class_type value, unsigned long int end=0, unsigned long int start=0) {
         unsigned long int endIdx;
 
         if (end == 0) {
