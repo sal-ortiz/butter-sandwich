@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+rm ./tests; g++ ./tests.cpp -o ./tests -lSDL2 && ./tests
