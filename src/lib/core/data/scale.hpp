@@ -5,9 +5,9 @@
 
 
   struct Scale {
-    unsigned long int horz;
-    unsigned long int vert;
-    unsigned long int depth;
+    float horz;
+    float vert;
+    float depth;
   };
 
 #endif
