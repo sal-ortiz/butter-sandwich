@@ -79,7 +79,7 @@
         this->normalizeFramesList();
       }
 
-      void render(SDL_Renderer* renderer, uint32_t dstX, uint32_t dstY, float dstAngle=0, uint32_t centerX=0, uint32_t centerY=0) {
+      void render(SDL_Renderer* renderer, uint32_t dstX, uint32_t dstY, float dstAngle=0.0, uint32_t centerX=0, uint32_t centerY=0) {
         SpriteFrame* frame = this->nextFrame();
 
         Position pos = { dstX, dstY };
