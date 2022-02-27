@@ -6,7 +6,6 @@
   #include "./sprite/frame.hpp"
   #include "../core/image.hpp"
   #include "../core/list.hpp"
-
   #include "../core/data/position.hpp"
   #include "../core/data/angle.hpp"
 
