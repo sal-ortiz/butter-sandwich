@@ -5,14 +5,17 @@
 #include "./src/lib/runtime/window.hpp"
 #include "./src/lib/runtime/application.hpp"
 #include "./src/lib/core/image.hpp"
-#include "./src/lib/runtime/state.hpp"
 #include "./src/lib/runtime/sprite.hpp"
+
+#include "./src/lib/scene/character.hpp"
 
 
 Window* win = new Window();
 Application* app = new Application();
 
-State* state = new State();
+SceneCharacter* character = new SceneCharacter();
+
+
 
 void* quitCallback(void* inp) {
   ApplicationEventParams* parsedInp = reinterpret_cast<ApplicationEventParams*>(inp);
@@ -30,104 +33,11 @@ void* closedCallback(void* inp) {
   return (void*)NULL;
 }
 
-void* movedCallback(void* inp) {
-  WindowEventParams* parsedInp = reinterpret_cast<WindowEventParams*>(inp);
-
-  printf("Window moved to (%ld, %ld) at %lums\n", parsedInp->horz, parsedInp->vert, parsedInp->timestamp);
-
-  return (void*)NULL;
-}
-
-void* resizedCallback(void* inp) {
-  WindowEventParams* parsedInp = reinterpret_cast<WindowEventParams*>(inp);
-
-  printf("Window resized to (%ld, %ld) at %lums\n", parsedInp->horz, parsedInp->vert, parsedInp->timestamp);
-
-  return (void*)NULL;
-}
-
-void* keyboardCallback(void* inp) {
-  KeyboardEventParams* parsedInp = reinterpret_cast<KeyboardEventParams*>(inp);
-  const char* action;
-
-  if (parsedInp->state == SDL_PRESSED) {
-    action = "pressed";
-  } else if (parsedInp->state == SDL_RELEASED) {
-    action = "released";
-  }
-
-  printf("Key %lu key %s at %lums\n", parsedInp->scancode, action, parsedInp->timestamp);
-
-  return (void*)NULL;
-}
-
-void* mouseMotionCallback(void* inp) {
-  MouseMotionEventParams* parsedInp = reinterpret_cast<MouseMotionEventParams*>(inp);
-
-  printf("mouse moved to (%ld, %ld). (%ld, %ld) from it's previous location\n", parsedInp->absoluteHorzPos, parsedInp->absoluteVertPos, parsedInp->relativeHorzPos, parsedInp->relativeVertPos);
-
-  return (void*)NULL;
-}
-
-void* mouseButtonCallback(void* inp) {
-  MouseButtonEventParams* parsedInp = reinterpret_cast<MouseButtonEventParams*>(inp);
-  const char* button;
-  const char* action;
-
-  if (parsedInp->state == SDL_PRESSED) {
-    action = "pressed";
-  } else if (parsedInp->state == SDL_RELEASED) {
-    action = "released";
-  }
-
-  if (parsedInp->button == SDL_BUTTON_LEFT) {
-    button = "left";
-  } else if (parsedInp->button == SDL_BUTTON_MIDDLE) {
-    button = "middle";
-
-  } else if (parsedInp->button == SDL_BUTTON_RIGHT) {
-    button = "right";
-  }
-
-  printf("%s mouse button %s %d times\n", button, action, parsedInp->clicks);
-
-  return (void*)NULL;
-}
-
-void* getter(void* inp) {
-  HookCallbackParams* parsedInp = reinterpret_cast<HookCallbackParams*>(inp);
-
-  printf("value %lu gotten\n", (unsigned long int)parsedInp->oldValue);
-
-  return (void*)parsedInp->oldValue;
-}
-
-void* setter(void* inp) {
-  HookCallbackParams* parsedInp = reinterpret_cast<HookCallbackParams*>(inp);
-
-  printf("value %lu set\n", (unsigned long int)parsedInp->newValue);
-
-  return (void*)parsedInp->newValue;
-}
-
 int main(int argc, char *argv[]) {
   unsigned long int* dummyVal;
 
   app->on("QUIT", quitCallback, (void*)NULL);
-  app->on("KEYBOARD", keyboardCallback, (void*)NULL);
-  app->on("MOUSEMOTION", mouseMotionCallback, (void*)NULL);
-  app->on("MOUSEBUTTON", mouseButtonCallback, (void*)NULL);
   win->on("CLOSED", closedCallback, (void*)NULL);
-  win->on("MOVED", movedCallback, (void*)NULL);
-  win->on("RESIZED", resizedCallback, (void*)NULL);
-
-  state->onGet("CRAP", getter, (void*)NULL);
-  state->onSet("CRAP", setter, (void*)NULL);
-
-  state->set("CRAP", (void*)666);
-  dummyVal = (unsigned long int*)state->get("CRAP");
-
-  printf("\ndummyVal: %lu\n\n", (unsigned long int)dummyVal);
 
   Sprite* sprite = new Sprite();
 
@@ -145,8 +55,9 @@ int main(int argc, char *argv[]) {
   sprite->addFrame(imgTwo, 150);
   sprite->addFrame(200);
 
-  app->start();
+  character->addSprite("standing", sprite);
 
+  app->start();
 
   unsigned long int numLoops = 0;
   float start = 0.0;
@@ -157,7 +68,8 @@ int main(int argc, char *argv[]) {
 
     Event::evaluate();
 
-    sprite->render(win->getRenderer(), 0, 0);
+    character->render("standing", win->getRenderer());
+
     win->render();
 
     elapsed += (float)SDL_GetTicks() - start;
