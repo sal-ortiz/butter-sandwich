@@ -4,6 +4,8 @@
   #define _SPRITE_FRAME_HPP
 
   #include "../../core/image.hpp"
+  #include "../../core/data/position.hpp"
+  #include "../../core/data/angle.hpp"
 
 
   class SpriteFrame {
@@ -19,11 +21,17 @@
         this->image = NULL;
       }
 
-      void render(SDL_Renderer* renderer, uint16_t dstX, uint16_t dstY) {
-        SDL_Rect dstRect = { dstX, dstY, 0, 0 };
+      void render(SDL_Renderer* renderer, Position dstPos, Angle angle) {
+        SDL_Rect dstRect = { (uint16_t)dstPos.horz, (uint16_t)dstPos.vert, 0, 0 };
+        SDL_Point center = { (int16_t)angle.center.horz, (uint16_t)angle.center.vert };
 
         if (this->image) {
-          this->image->render(renderer, dstRect);
+          this->image->render(
+            renderer,
+            dstRect,
+            angle.pitch,
+            center
+          );
         }
 
       }

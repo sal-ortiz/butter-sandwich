@@ -7,12 +7,8 @@
   #include "../core/image.hpp"
   #include "../core/list.hpp"
 
-
-  struct Position {
-    uint32_t horz;
-    uint32_t vert;
-    float scale;
-  };
+  #include "../core/data/position.hpp"
+  #include "../core/data/angle.hpp"
 
 
   class Sprite {
@@ -84,10 +80,16 @@
         this->normalizeFramesList();
       }
 
-      void render(SDL_Renderer* renderer, uint32_t dstX, uint32_t dstY) {
+      void render(SDL_Renderer* renderer, uint32_t dstX, uint32_t dstY, float dstAngle=0, uint32_t centerX=0, uint32_t centerY=0) {
         SpriteFrame* frame = this->nextFrame();
 
-        frame->render(renderer, dstX, dstY);
+        Position pos = { dstX, dstY };
+        Angle angle = {
+          dstAngle,
+          { centerX, centerY }
+        };
+
+        frame->render(renderer, pos, angle);
       }
 
       SpriteFrame* nextFrame() {

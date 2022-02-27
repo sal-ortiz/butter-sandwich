@@ -32,7 +32,7 @@
         this->view = { viewX, viewY, viewW, viewH };
       }
 
-      void render(SDL_Renderer* renderer, SDL_Rect dstRect) {
+      void render(SDL_Renderer* renderer, SDL_Rect dstRect, double angle, SDL_Point center) {
         int imgWidth, imgHeight;
 
         SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, this->surface);
@@ -48,11 +48,12 @@
         dstRect.w = dstRect.w ? dstRect.w : srcRect.w;
         dstRect.h = dstRect.h ? dstRect.h : srcRect.h;
 
-        SDL_RenderCopy(renderer, texture, &srcRect, &dstRect);
+        SDL_RenderCopyEx(renderer, texture, &srcRect, &dstRect, angle, &center, SDL_FLIP_NONE);
 
         SDL_DestroyTexture(texture);
       }
 
   };
+
 
 #endif
