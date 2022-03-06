@@ -18,16 +18,18 @@
       State state;
       Dict<Sprite*> sprites;
 
+      Position* position;
+      Angle* angle;
+      Scale* scale;
+
       SceneCharacter() {
-        Position* position = new Position(0, 0, 0);
+        this->position = new Position(0, 0, 0);
+        this->angle = new Angle(0.0, 0.0, 0.0, 0, 0, 0);
+        this->scale = scale = new Scale(0.0, 0.0, 0.0);
 
-        Scale* scale = new Scale(0.0, 0.0, 0.0);
-
-        Angle* angle = new Angle(0.0, 0.0, 0.0, 0, 0, 0);
-
-        state.set("position", (void*)position);
-        state.set("scale", (void*)scale);
-        state.set("angle", (void*)angle);
+        state.set("position", (void*)this->position);
+        state.set("scale", (void*)this->scale);
+        state.set("angle", (void*)this->angle);
       }
 
       void addSprite(const char* actionId, Sprite* sprite) {
@@ -37,13 +39,23 @@
       void render(const char* actionId, SDL_Renderer* renderer) {
         Sprite* sprite = sprites.get(actionId);
 
-        sprite->render(renderer, 0, 0);
+        Position* pos = this->position;
+        Angle* angle = this->angle;
+        Scale* scale = this->scale;
+
+        sprite->render(
+          renderer,
+          pos->horz,
+          pos->vert,
+          angle->pitch,
+          angle->center.horz,
+          angle->center.vert
+        );
       }
 
       void evaluate() {
 
       }
-
 
   };
 

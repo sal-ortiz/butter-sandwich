@@ -82,13 +82,10 @@
       void render(SDL_Renderer* renderer, uint32_t dstX, uint32_t dstY, float dstAngle=0.0, uint32_t centerX=0, uint32_t centerY=0) {
         SpriteFrame* frame = this->nextFrame();
 
-        Position pos;
-        pos.horz = dstX;
-        pos.vert = dstY;
+        Position* pos = new Position(dstX, dstY, 0);
+        Angle* angle = new Angle(dstAngle, 0.0, 0.0, centerX, centerY, 0);
 
-        Angle* angle = new Angle(0.0, 0.0, 0.0, 0, 0, 0);
-
-        frame->render(renderer, pos, *angle);
+        frame->render(renderer, *pos, *angle);
       }
 
       SpriteFrame* nextFrame() {
