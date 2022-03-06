@@ -19,23 +19,15 @@
       Dict<Sprite*> sprites;
 
       SceneCharacter() {
-        Position position;
-        position.horz = 0;
-        position.vert = 0;
+        Position* position = new Position(0, 0, 0);
 
-        Scale scale;
-        scale.horz = 0;
-        scale.vert = 0;
+        Scale* scale = new Scale(0.0, 0.0, 0.0);
 
-        Angle angle;
-        angle.pitch = 0.0;
-        angle.center.horz = 0;
-        angle.center.vert = 0;
-        angle.center.depth = 0;
+        Angle* angle = new Angle(0.0, 0.0, 0.0, 0, 0, 0);
 
-        state.set("position", (void*)&position);
-        state.set("scale", (void*)&scale);
-        state.set("angle", (void*)&angle);
+        state.set("position", (void*)position);
+        state.set("scale", (void*)scale);
+        state.set("angle", (void*)angle);
       }
 
       void addSprite(const char* actionId, Sprite* sprite) {

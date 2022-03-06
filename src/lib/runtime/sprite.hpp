@@ -86,12 +86,9 @@
         pos.horz = dstX;
         pos.vert = dstY;
 
-        Angle angle;
-        angle.pitch = dstAngle;
-        angle.center.horz = centerX;
-        angle.center.vert = centerY;
+        Angle* angle = new Angle(0.0, 0.0, 0.0, 0, 0, 0);
 
-        frame->render(renderer, pos, angle);
+        frame->render(renderer, pos, *angle);
       }
 
       SpriteFrame* nextFrame() {
