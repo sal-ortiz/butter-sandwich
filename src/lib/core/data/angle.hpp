@@ -29,8 +29,9 @@
         this->roll = roll;
         this->yaw = yaw;
 
-        center.horz = centerX;
-        center.vert = centerY;
+        this->center.horz = centerX;
+        this->center.vert = centerY;
+        this->center.depth = centerZ;
       }
 
   };
