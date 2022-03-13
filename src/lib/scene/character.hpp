@@ -37,6 +37,7 @@
 
         this->angle->center.horz = 0;
         this->angle->center.vert = 0;
+        this->angle->center.depth; = 0;
 
       }
 
