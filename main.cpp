@@ -9,11 +9,14 @@
 
 #include "./lib/scene/character.hpp"
 
+#include "./src/main.hpp"
+
 
 Window* win = new Window();
 Application* app = new Application();
 
-SceneCharacter* character = new SceneCharacter();
+//SceneCharacter* character = new SceneCharacter();
+PlayerOne* playerOne = new PlayerOne();
 
 
 
@@ -55,7 +58,7 @@ int main(int argc, char *argv[]) {
   sprite->addFrame(imgTwo, 150);
   sprite->addFrame(200);
 
-  character->addSprite("standing", sprite);
+  playerOne->addSprite("standing", sprite);
 
   app->start();
 
@@ -68,7 +71,7 @@ int main(int argc, char *argv[]) {
 
     Event::evaluate();
 
-    character->render("standing", win->getRenderer());
+    playerOne->render("standing", win->getRenderer());
 
     win->render();
 
