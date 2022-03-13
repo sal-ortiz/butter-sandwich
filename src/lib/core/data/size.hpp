@@ -23,7 +23,6 @@
         this->depth = depth;
       }
 
-
   };
 
 #endif

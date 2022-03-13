@@ -23,9 +23,6 @@
         this->depth = zScale;
       }
 
-
-
-
   };
 
 #endif
