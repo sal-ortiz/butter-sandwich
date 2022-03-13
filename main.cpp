@@ -2,12 +2,12 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 
-#include "./src/lib/runtime/window.hpp"
-#include "./src/lib/runtime/application.hpp"
-#include "./src/lib/core/image.hpp"
-#include "./src/lib/runtime/sprite.hpp"
+#include "./lib/runtime/window.hpp"
+#include "./lib/runtime/application.hpp"
+#include "./lib/core/image.hpp"
+#include "./lib/runtime/sprite.hpp"
 
-#include "./src/lib/scene/character.hpp"
+#include "./lib/scene/character.hpp"
 
 
 Window* win = new Window();
