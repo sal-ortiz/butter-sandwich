@@ -48,7 +48,7 @@
           return callback(inp);
         }
 
-        return (void*)inp;
+        return inp;
       }
 
   };

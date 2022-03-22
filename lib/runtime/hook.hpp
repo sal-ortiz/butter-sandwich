@@ -20,12 +20,6 @@
 
     public:
 
-      static void on(const char* id, void*(*callback)(void*), void* inp) {
-        HookCallbackRecord entry = { callback, inp };
-
-        _hookCallbacks.set(id, entry);
-      }
-
       static bool hasCallback(const char* id) {
         bool retVal = _hookCallbacks.has(id);
 

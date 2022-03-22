@@ -48,7 +48,7 @@
         return KeyboardEvent::handleEvent("SystemEvent.KEYBOARD", evt, params);
       }
 
-      static void* handleEvent(const char* name, SDL_KeyboardEvent, KeyboardEventParams params) {
+      static void* handleEvent(const char* name, SDL_KeyboardEvent evt, KeyboardEventParams params) {
         void* retVal = (void*)true;
 
         if (_callbacks.has(name)) {
@@ -57,6 +57,7 @@
           void*(*callback)(void*) = callbackRec.method;
 
           params.data = callbackRec.input;
+
           retVal = callback((void*)&params);
         }
 
