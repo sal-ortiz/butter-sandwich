@@ -34,11 +34,6 @@
         state.set("scale", (void*)this->scale);
         state.set("angle", (void*)this->angle);
         state.set("size", (void*)this->size);
-
-        this->angle->center.horz = 0;
-        this->angle->center.vert = 0;
-        this->angle->center.depth = 0;
-
       }
 
       void addSprite(const char* actionId, Sprite* sprite) {
