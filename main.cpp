@@ -20,7 +20,7 @@ PlayerOne* playerOne = new PlayerOne();
 
 
 
-void* quitCallback(void* inp) {
+void* quitCallback(void* inp, void* data) {
   ApplicationEventParams* parsedInp = reinterpret_cast<ApplicationEventParams*>(inp);
 
   printf("Quitting application at %lums\n", parsedInp->timestamp);
@@ -28,7 +28,7 @@ void* quitCallback(void* inp) {
   return (void*)NULL;
 }
 
-void* closedCallback(void* inp) {
+void* closedCallback(void* inp, void* data) {
   WindowEventParams* parsedInp = reinterpret_cast<WindowEventParams*>(inp);
 
   printf("Window closed at %ldms\n", parsedInp->timestamp);
@@ -36,9 +36,27 @@ void* closedCallback(void* inp) {
   return (void*)NULL;
 }
 
-int main(int argc, char *argv[]) {
-  unsigned long int* dummyVal;
+void* keyboardCallback(void* inp, void* data) {
+  const char* action;
 
+  KeyboardEventParams* parsedInp = reinterpret_cast<KeyboardEventParams*>(inp);
+
+  if (parsedInp->state == SDL_PRESSED) {
+    action = "pressed";
+  } else if (parsedInp->state == SDL_RELEASED) {
+    action = "released";
+  }
+
+  printf("\n\n\n%lu\n\n\n", (unsigned long int*)data);
+  printf("Key %lu key %s at %lums\n", parsedInp->scancode, action, parsedInp->timestamp);
+
+  return (void*)NULL;
+}
+
+
+
+int main(int argc, char *argv[]) {
+  app->on("KEYBOARD", keyboardCallback, (void*)(unsigned long int)667);
   app->on("QUIT", quitCallback, (void*)NULL);
   win->on("CLOSED", closedCallback, (void*)NULL);
 

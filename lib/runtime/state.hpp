@@ -67,13 +67,13 @@
         this->data.set(key, val);
       }
 
-      void onGet(const char* key, void*(*callback)(void*), void* inp) {
+      void onGet(const char* key, void*(*callback)(void*, void*), void* inp) {
         char* id = this->generateHookIdentifier(key, "get");
 
         RuntimeBase::on(id, callback, (void*)NULL);
       }
 
-      void onSet(const char* key, void*(*callback)(void*), void* inp) {
+      void onSet(const char* key, void*(*callback)(void*, void*), void* inp) {
         const char* id = this->generateHookIdentifier(key, "set");
 
         RuntimeBase::on(id, callback, (void*)NULL);

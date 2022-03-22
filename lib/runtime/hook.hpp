@@ -8,7 +8,7 @@
 
 
   struct HookCallbackRecord {
-    void*(*method)(void*);
+    void*(*method)(void*, void*);
     void* input;
   };
 
@@ -26,13 +26,19 @@
         return retVal;
       }
 
-      static void*(*getCallback(const char* id))(void*) {
+      static void*(*getCallback(const char* id))(void*, void*) {
         HookCallbackRecord rec = _hookCallbacks.get(id);
 
         return rec.method;
       }
 
-      static void setCallback(const char* id, void*(*callback)(void*), void* inp) {
+      static void* getInput(const char* id) {
+        HookCallbackRecord rec = _hookCallbacks.get(id);
+
+        return rec.input;
+      }
+
+      static void setCallback(const char* id, void*(*callback)(void*, void*), void* inp) {
         HookCallbackRecord rec = { callback, inp };
 
         _hookCallbacks.set(id, rec);
