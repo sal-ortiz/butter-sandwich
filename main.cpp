@@ -40,6 +40,7 @@ void* keyboardCallback(void* inp, void* data) {
   const char* action;
 
   KeyboardEventParams* parsedInp = reinterpret_cast<KeyboardEventParams*>(inp);
+  PlayerOne* player = reinterpret_cast<PlayerOne*>(data);
 
   if (parsedInp->state == SDL_PRESSED) {
     action = "pressed";
@@ -47,33 +48,37 @@ void* keyboardCallback(void* inp, void* data) {
     action = "released";
   }
 
-  printf("\n\n\n%lu\n\n\n", (unsigned long int*)data);
+  player->angle->center.horz = 43;
+  player->angle->center.vert = 43;
+  player->angle->pitch += 1;
+
   printf("Key %lu key %s at %lums\n", parsedInp->scancode, action, parsedInp->timestamp);
 
   return (void*)NULL;
 }
 
-
-
 int main(int argc, char *argv[]) {
-  app->on("KEYBOARD", keyboardCallback, (void*)(unsigned long int)667);
+  app->on("KEYBOARD", keyboardCallback, (void*)playerOne);
   app->on("QUIT", quitCallback, (void*)NULL);
   win->on("CLOSED", closedCallback, (void*)NULL);
 
   Sprite* sprite = new Sprite();
 
-  win->open("The window!", 150, 150, 480, 360);
+  win->open("The window!", 150, 150, 640, 480);
 
-  Image* imgOne = Image::load("./img1.bmp", 0, 0);
-  Image* imgTwo = Image::load("./img2.bmp", 0, 0);
+  Image* shipMovingForward = Image::load("./ship_sheet.bmp", 90, 50, 75, 75);
+  Image* shipStandingStill = Image::load("./ship_sheet.bmp", 390, 150, 75, 75);
 
-//  sprite->setLoop(false);
-
-  sprite->addFrame(imgOne, 0);
-  sprite->addFrame(imgTwo, 150);
+  sprite->addFrame(shipStandingStill, 0);
+  //sprite->addFrame(imgOne, 0);
+  //sprite->addFrame(imgTwo, 150);
   sprite->addFrame(200);
 
-  playerOne->addSprite("standing", sprite);
+  sprite->setLoop(false);
+
+  playerOne->addSprite("standing_still", sprite);
+  playerOne->setAction("standing_still");
+
 
   app->start();
 
@@ -84,9 +89,11 @@ int main(int argc, char *argv[]) {
   while (app->isActive) {
     start = (float)SDL_GetTicks();
 
+    win->clear();
+
     Event::evaluate();
 
-    playerOne->render("standing", win->getRenderer());
+    playerOne->render(win->getRenderer());
 
     win->render();
 
