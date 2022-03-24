@@ -64,11 +64,8 @@ int main(int argc, char *argv[]) {
 
   win->open("The window!", 150, 150, 480, 360);
 
-  Image* imgOne = new Image();
-  Image* imgTwo = new Image();
-
-  imgOne->load("./img1.bmp", 0, 0);
-  imgTwo->load("./img2.bmp", 0, 0);
+  Image* imgOne = Image::load("./img1.bmp", 0, 0);
+  Image* imgTwo = Image::load("./img2.bmp", 0, 0);
 
 //  sprite->setLoop(false);
 

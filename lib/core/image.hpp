@@ -27,9 +27,13 @@
         SDL_FreeSurface(surface);
       }
 
-      void load(const char* filename, uint16_t viewX, uint16_t viewY, uint16_t viewW=0, uint16_t viewH=0) {
-        this->surface = SDL_LoadBMP(filename);
-        this->view = { viewX, viewY, viewW, viewH };
+      static Image* load(const char* filename, uint16_t viewX, uint16_t viewY, uint16_t viewW=0, uint16_t viewH=0) {
+        Image* img = new Image();
+
+        img->surface = SDL_LoadBMP(filename);
+        img->view = { viewX, viewY, viewW, viewH };
+
+        return img;
       }
 
       void render(SDL_Renderer* renderer, SDL_Rect dstRect, double angle, SDL_Point center) {
