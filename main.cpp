@@ -48,8 +48,6 @@ void* keyboardCallback(void* inp, void* data) {
     action = "released";
   }
 
-  player->angle->center.horz = 43;
-  player->angle->center.vert = 43;
   player->angle->pitch += 1;
 
   printf("Key %lu key %s at %lums\n", parsedInp->scancode, action, parsedInp->timestamp);
@@ -79,6 +77,8 @@ int main(int argc, char *argv[]) {
   playerOne->addSprite("standing_still", sprite);
   playerOne->setAction("standing_still");
 
+  player->angle->center.horz = 43;
+  player->angle->center.vert = 43;
 
   app->start();
 
