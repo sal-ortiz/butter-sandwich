@@ -16,7 +16,7 @@ Window* win = new Window();
 Application* app = new Application();
 
 //SceneCharacter* character = new SceneCharacter();
-PlayerOne* playerOne = new PlayerOne();
+PlayerOne* player = new PlayerOne();
 
 
 
@@ -56,7 +56,7 @@ void* keyboardCallback(void* inp, void* data) {
 }
 
 int main(int argc, char *argv[]) {
-  app->on("KEYBOARD", keyboardCallback, (void*)playerOne);
+  app->on("KEYBOARD", keyboardCallback, (void*)player);
   app->on("QUIT", quitCallback, (void*)NULL);
   win->on("CLOSED", closedCallback, (void*)NULL);
 
@@ -74,8 +74,8 @@ int main(int argc, char *argv[]) {
 
   sprite->setLoop(false);
 
-  playerOne->addSprite("standing_still", sprite);
-  playerOne->setAction("standing_still");
+  player->addSprite("standing_still", sprite);
+  player->setAction("standing_still");
 
   player->angle->center.horz = 43;
   player->angle->center.vert = 43;
@@ -93,7 +93,7 @@ int main(int argc, char *argv[]) {
 
     Event::evaluate();
 
-    playerOne->render(win->getRenderer());
+    player->render(win->getRenderer());
 
     win->render();
 
