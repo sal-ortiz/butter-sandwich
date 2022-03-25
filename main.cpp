@@ -37,20 +37,24 @@ void* closedCallback(void* inp, void* data) {
 }
 
 void* keyboardCallback(void* inp, void* data) {
-  const char* action;
-
   KeyboardEventParams* parsedInp = reinterpret_cast<KeyboardEventParams*>(inp);
   PlayerOne* player = reinterpret_cast<PlayerOne*>(data);
 
-  if (parsedInp->state == SDL_PRESSED) {
-    action = "pressed";
-  } else if (parsedInp->state == SDL_RELEASED) {
-    action = "released";
+  if ((parsedInp->scanCode == 80) && (parsedInp->state == SDL_PRESSED)) {
+    // turn left
+    player->angle->pitch -= 1;
+  } else if ((parsedInp->scanCode == 79) && (parsedInp->state == SDL_PRESSED)) {
+    // turn right
+    player->angle->pitch += 1;
+  } else if ((parsedInp->scanCode == 81) && (parsedInp->state == SDL_PRESSED)) {
+    // move forward
   }
 
-  player->angle->pitch += 1;
-
-  printf("Key %lu key %s at %lums\n", parsedInp->scancode, action, parsedInp->timestamp);
+  if (parsedInp->state == SDL_PRESSED) {
+    printf("Key %lu key %s at %lums\n", parsedInp->scanCode, "pressed", parsedInp->timestamp);
+  } else if (parsedInp->state == SDL_RELEASED) {
+    printf("Key %lu key %s at %lums\n", parsedInp->scanCode, "released", parsedInp->timestamp);
+  }
 
   return (void*)NULL;
 }

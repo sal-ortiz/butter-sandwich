@@ -11,7 +11,7 @@
     unsigned char state;  // SDL_PRESSED or SDL_RELEASED
     unsigned char repeat;
 
-    unsigned long int scancode;
+    unsigned long int scanCode;
     //unsigned long int keycode;
 
     unsigned int modifier;
