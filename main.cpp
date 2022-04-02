@@ -43,14 +43,14 @@ void* keyboardCallback(void* inp, void* data) {
   if ((parsedInp->scanCode == 80) && (parsedInp->state == SDL_PRESSED)) {
     // turn left
     //player->angle->pitch -= 1;
-    player->trajectory->angle.pitch -= 5;
+    player->trajectory->angle.pitch -= 1;
   } else if ((parsedInp->scanCode == 79) && (parsedInp->state == SDL_PRESSED)) {
     // turn right
     //player->angle->pitch += 1;
-    player->trajectory->angle.pitch += 5;
+    player->trajectory->angle.pitch += 1;
   } else if ((parsedInp->scanCode == 81) && (parsedInp->state == SDL_PRESSED)) {
     // move forward
-    player->trajectory->position.horz += 5;
+    player->trajectory->position.horz += 1;
   }
 
   //if (parsedInp->state == SDL_PRESSED) {
