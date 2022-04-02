@@ -49,9 +49,13 @@ void* keyboardCallback(void* inp, void* data) {
     //player->angle->pitch += 1;
     player->trajectory->angle.pitch += 1;
   } else if ((parsedInp->scanCode == 81) && (parsedInp->state == SDL_PRESSED)) {
+    // move backward.
+    player->trajectory->position.horz -= 1;
+  } else if ((parsedInp->scanCode == 82) && (parsedInp->state == SDL_PRESSED)) {
     // move forward
     player->trajectory->position.horz += 1;
   }
+
 
   //if (parsedInp->state == SDL_PRESSED) {
   //  printf("Key %lu key %s at %lums\n", parsedInp->scanCode, "pressed", parsedInp->timestamp);
