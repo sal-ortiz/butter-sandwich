@@ -8,14 +8,14 @@
 
     public:
 
-      unsigned long int horz;
-      unsigned long int vert;
-      unsigned long int depth;
+      float horz;
+      float vert;
+      float depth;
 
       Position(
-        unsigned long int xPos=0,
-        unsigned long int yPos=0,
-        unsigned long int zPos=0
+        float xPos=0.0,
+        float yPos=0.0,
+        float zPos=0.0
       ) {
 
         this->horz = xPos;

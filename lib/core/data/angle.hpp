@@ -20,9 +20,10 @@
         float pitch=0.0,
         float roll=9.0,
         float yaw=0.0,
-        unsigned long int centerX=0,
-        unsigned long int centerY=0,
-        unsigned long int centerZ=0
+
+        float centerX=0.0,
+        float centerY=0.0,
+        float centerZ=0.0
       ) {
 
         this->pitch = pitch;

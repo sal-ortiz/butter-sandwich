@@ -42,19 +42,22 @@ void* keyboardCallback(void* inp, void* data) {
 
   if ((parsedInp->scanCode == 80) && (parsedInp->state == SDL_PRESSED)) {
     // turn left
-    player->angle->pitch -= 1;
+    //player->angle->pitch -= 1;
+    player->trajectory->angle.pitch -= 5;
   } else if ((parsedInp->scanCode == 79) && (parsedInp->state == SDL_PRESSED)) {
     // turn right
-    player->angle->pitch += 1;
+    //player->angle->pitch += 1;
+    player->trajectory->angle.pitch += 5;
   } else if ((parsedInp->scanCode == 81) && (parsedInp->state == SDL_PRESSED)) {
     // move forward
+    player->trajectory->position.horz += 5;
   }
 
-  if (parsedInp->state == SDL_PRESSED) {
-    printf("Key %lu key %s at %lums\n", parsedInp->scanCode, "pressed", parsedInp->timestamp);
-  } else if (parsedInp->state == SDL_RELEASED) {
-    printf("Key %lu key %s at %lums\n", parsedInp->scanCode, "released", parsedInp->timestamp);
-  }
+  //if (parsedInp->state == SDL_PRESSED) {
+  //  printf("Key %lu key %s at %lums\n", parsedInp->scanCode, "pressed", parsedInp->timestamp);
+  //} else if (parsedInp->state == SDL_RELEASED) {
+  //  printf("Key %lu key %s at %lums\n", parsedInp->scanCode, "released", parsedInp->timestamp);
+  //}
 
   return (void*)NULL;
 }
@@ -98,12 +101,13 @@ int main(int argc, char *argv[]) {
     Event::evaluate();
 
     player->render(win->getRenderer());
+    player->evaluate();
 
     win->render();
 
     elapsed += (float)SDL_GetTicks() - start;
 
-    if ((++numLoops % 500) == 0) {
+    if ((++numLoops % 1000) == 0) {
       printf("\naverage frame time: %fms\n\n", elapsed / numLoops);
     }
 
