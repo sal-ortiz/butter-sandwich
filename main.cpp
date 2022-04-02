@@ -42,20 +42,25 @@ void* keyboardCallback(void* inp, void* data) {
 
   if ((parsedInp->scanCode == 80) && (parsedInp->state == SDL_PRESSED)) {
     // turn left
-    //player->angle->pitch -= 1;
+    player->setAction("turning_left");
     player->trajectory->angle.pitch -= 1;
   } else if ((parsedInp->scanCode == 79) && (parsedInp->state == SDL_PRESSED)) {
     // turn right
-    //player->angle->pitch += 1;
+    player->setAction("turning_right");
     player->trajectory->angle.pitch += 1;
   } else if ((parsedInp->scanCode == 81) && (parsedInp->state == SDL_PRESSED)) {
     // move backward.
-    player->trajectory->position.horz -= 1;
+    //player->setAction("moving_backward");
+    //player->trajectory->position.horz -= 1;
   } else if ((parsedInp->scanCode == 82) && (parsedInp->state == SDL_PRESSED)) {
     // move forward
+    player->setAction("moving_forward");
     player->trajectory->position.horz += 1;
   }
 
+  if (parsedInp->state == SDL_RELEASED) {
+    player->setAction("standing_still");
+  }
 
   //if (parsedInp->state == SDL_PRESSED) {
   //  printf("Key %lu key %s at %lums\n", parsedInp->scanCode, "pressed", parsedInp->timestamp);
@@ -71,21 +76,38 @@ int main(int argc, char *argv[]) {
   app->on("QUIT", quitCallback, (void*)NULL);
   win->on("CLOSED", closedCallback, (void*)NULL);
 
-  Sprite* sprite = new Sprite();
+  Sprite* standingStillSprite = new Sprite();
+  Sprite* movingForwardSprite = new Sprite();
+  Sprite* turningLeftSprite = new Sprite();
+  Sprite* turningRightSprite = new Sprite();
 
   win->open("The window!", 150, 150, 640, 480);
 
-  Image* shipMovingForward = Image::load("./ship_sheet.bmp", 90, 50, 75, 75);
   Image* shipStandingStill = Image::load("./ship_sheet.bmp", 390, 150, 75, 75);
+  Image* shipTurningLeft = Image::load("./ship_sheet.bmp", 490, 50, 75, 75);
+  Image* shipTurningRight = Image::load("./ship_sheet.bmp", 190, 50, 75, 75);
+  Image* shipMovingForward = Image::load("./ship_sheet.bmp", 90, 50, 75, 75);
 
-  sprite->addFrame(shipStandingStill, 0);
+  standingStillSprite->addFrame(shipStandingStill, 0);
+  movingForwardSprite->addFrame(shipMovingForward, 0);
+  turningLeftSprite->addFrame(shipTurningLeft, 0);
+  turningRightSprite->addFrame(shipTurningRight, 0);
   //sprite->addFrame(imgOne, 0);
   //sprite->addFrame(imgTwo, 150);
-  sprite->addFrame(200);
+  standingStillSprite->addFrame(200);
+  movingForwardSprite->addFrame(200);
+  turningLeftSprite->addFrame(200);
+  turningRightSprite->addFrame(200);
 
-  sprite->setLoop(false);
+  standingStillSprite->setLoop(false);
+  movingForwardSprite->setLoop(false);
+  turningLeftSprite->setLoop(false);
+  turningRightSprite->setLoop(false);
 
-  player->addSprite("standing_still", sprite);
+  player->addSprite("standing_still", standingStillSprite);
+  player->addSprite("moving_forward", movingForwardSprite);
+  player->addSprite("turning_left", turningLeftSprite);
+  player->addSprite("turning_right", turningRightSprite);
   player->setAction("standing_still");
 
   player->angle->center.horz = 43;
