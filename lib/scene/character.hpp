@@ -113,11 +113,6 @@
         this->scale->depth += this->trajectory->scale.depth;
 
 
-        if (this->trajectory->position.horz > 0) {
-          printf("\n\n\n%f\n\n\n", this->trajectory->position.horz);
-        }
-
-
         this->trajectory->position.horz *= (this->trajectory->positionRate.horz);
         this->trajectory->position.vert *= (this->trajectory->positionRate.vert);
         this->trajectory->position.depth *= (this->trajectory->positionRate.depth);
