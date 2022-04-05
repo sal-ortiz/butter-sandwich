@@ -7,15 +7,12 @@
 #include "./lib/core/image.hpp"
 #include "./lib/runtime/sprite.hpp"
 
-#include "./lib/scene/character.hpp"
-
-#include "./src/main.hpp"
+#include "./src/lib/player_one.hpp"
 
 
 Window* win = new Window();
 Application* app = new Application();
 
-//SceneCharacter* character = new SceneCharacter();
 PlayerOne* player = new PlayerOne();
 
 
@@ -40,6 +37,25 @@ void* keyboardCallback(void* inp, void* data) {
   KeyboardEventParams* parsedInp = reinterpret_cast<KeyboardEventParams*>(inp);
   PlayerOne* player = reinterpret_cast<PlayerOne*>(data);
 
+  float horzRatio = 1.0;
+  float vertRatio = 0.0;
+
+
+  if (player->angle->pitch >= 180) {
+    horzRatio = -(((270 - player->angle->pitch) / 90));
+  } else {
+    horzRatio = ((90 - player->angle->pitch) / 90);
+  }
+
+  if (player->angle->pitch <= 90) {
+    vertRatio = (player->angle->pitch) / 90;
+  } else if (player->angle->pitch > 270) {
+    vertRatio = -(360 - player->angle->pitch) / 90;
+  } else {
+    vertRatio = (180 - player->angle->pitch) / 90;
+  }
+
+
   if ((parsedInp->scanCode == 80) && (parsedInp->state == SDL_PRESSED)) {
     // turn left
     player->setAction("turning_left");
@@ -55,10 +71,20 @@ void* keyboardCallback(void* inp, void* data) {
   } else if ((parsedInp->scanCode == 82) && (parsedInp->state == SDL_PRESSED)) {
     // move forward
     player->setAction("moving_forward");
-    player->trajectory->position.horz += 1;
+    player->trajectory->position.horz += 1 * horzRatio;
+    player->trajectory->position.vert += 1 * vertRatio;
   }
 
+  // keep angle within 360 degrees
+  //player->angle->pitch = (float)((unsigned int)player->angle->pitch % 360);
+  player->angle->pitch = player->angle->pitch < 0 ? 360 - abs(player->angle->pitch) : player->angle->pitch;
+  player->angle->pitch = player->angle->pitch >= 360 ? player->angle->pitch / 360 : player->angle->pitch;
+
   if (parsedInp->state == SDL_RELEASED) {
+    //printf("\n\n");
+    //printf("%f\n", player->angle->pitch);
+    //printf("\n\n");
+
     player->setAction("standing_still");
   }
 
