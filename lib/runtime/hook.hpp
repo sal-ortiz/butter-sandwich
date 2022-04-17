@@ -20,6 +20,14 @@
 
     public:
 
+      static char* generateIdentifier(unsigned long int objId, const char* key) {
+        char* identifier = new char[64];
+
+        sprintf(identifier, "hook-%ld-%s", objId, key);
+
+        return identifier;
+      }
+
       static bool hasCallback(const char* id) {
         bool retVal = _hookCallbacks.has(id);
 

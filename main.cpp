@@ -82,7 +82,7 @@ void* closedCallback(void* inp, void* data) {
 //  return (void*)NULL;
 //}
 
-void* evaluateCallback(void* inp) {
+void* evaluateCallback(void* inp, void* data) {
   PlayerOne* player = reinterpret_cast<PlayerOne*>(inp);
 
   float horzRatio = 1.0;

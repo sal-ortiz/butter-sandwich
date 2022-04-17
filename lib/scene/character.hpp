@@ -137,16 +137,18 @@
         //  printf("%lu\n\n\n", this->trajectory->angle.pitch );
         //}
 
-        void*(*callback)(void*) = this->evalCallback;
 
-        if (callback != NULL) {
-          callback((void*)this);
-        }
+        unsigned long int charId = this->identifier;
+        const char* hookId = Hook::generateIdentifier(charId, "onEvaluate");
 
+        this->executeCallback(hookId, (void*)this);
       }
 
-      void onEvaluate(void*(*callback)(void*)) {
-        this->evalCallback = callback;
+      void onEvaluate(void*(*callback)(void*, void*)) {
+        unsigned long int charId = this->identifier;
+        const char* hookId = Hook::generateIdentifier(charId, "onEvaluate");
+
+        this->on(hookId, callback, NULL);
       }
 
   };
