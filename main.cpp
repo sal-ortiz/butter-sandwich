@@ -118,8 +118,8 @@ void* evaluateCallback(void* inp, void* data) {
   if (KeyboardInput::isPressed(82)) {
     // move forward.
     player->setAction("moving_forward");
-    player->trajectory->position.horz += 1 * horzRatio;
-    player->trajectory->position.vert += 1 * vertRatio;
+    player->trajectory->position.horz += 2 * horzRatio;
+    player->trajectory->position.vert += 2 * vertRatio;
   }
 
   // keep angle within 360 degrees
