@@ -11,6 +11,7 @@
 
 #include "./src/lib/player_one.hpp"
 
+const unsigned char FRAMERATE = 60; // fps
 
 Window* win = new Window();
 Application* app = new Application();
@@ -175,28 +176,31 @@ int main(int argc, char *argv[]) {
 
   app->start();
 
-  unsigned long int numLoops = 0;
   float start = 0.0;
   float elapsed = 0.0;
+
+  const unsigned int frameDelay = 1000 / FRAMERATE;
 
   while (app->isActive) {
     start = (float)SDL_GetTicks();
 
-    win->clear();
-
     Event::evaluate();
 
-    player->render(win->getRenderer());
-    player->evaluate();
+    if (elapsed > frameDelay) {
 
-    win->render();
+      win->clear();
 
-    elapsed += (float)SDL_GetTicks() - start;
 
-    if ((++numLoops % 1000) == 0) {
-      printf("\naverage frame time: %fms\n\n", elapsed / numLoops);
+      player->render(win->getRenderer());
+      player->evaluate();
+
+      win->render();
+
+      start = (float)SDL_GetTicks();
+      elapsed = 0.0;
     }
 
+    elapsed += (float)SDL_GetTicks() - start;
   }
 
   //SDL_Delay(5000);
