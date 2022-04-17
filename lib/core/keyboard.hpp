@@ -30,6 +30,17 @@ class KeyboardInput {
       return false;
     }
 
+    static bool isHeld(unsigned long int scanCode) {
+      const unsigned char* state = KeyboardInput::getState();
+
+
+      if (KeyboardInput::isPressed(scanCode) && !(_prevKeyboardState[scanCode])) {
+        return true;
+      }
+
+      return false;
+    }
+
     static bool isReleased(unsigned char scanCode) {
       const unsigned char* state = KeyboardInput::getState();
 
@@ -37,6 +48,7 @@ class KeyboardInput {
         return true;
       }
 
+      return false;
     }
 
     static bool isPressed(unsigned char* scanCodes) {
