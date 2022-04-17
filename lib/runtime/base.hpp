@@ -12,23 +12,24 @@
 
   class RuntimeBase {
 
-    private:
+    protected:
 
       unsigned long int identifier;
 
-      void generateIdentifier() {
+      unsigned long int generateIdentifier() {
         time_t timestamp = time(NULL);
 
         srand(timestamp);
 
-        this->identifier = timestamp % (rand() * rand() * rand());
+        return timestamp % (rand() * rand() * rand());
       }
+
 
 
     public:
 
       RuntimeBase() {
-        this->generateIdentifier();
+        this->identifier = this->generateIdentifier();
       }
 
       unsigned  long int getIdentifier() {

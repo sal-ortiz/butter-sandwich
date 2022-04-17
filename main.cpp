@@ -2,9 +2,11 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 
+#include "./lib/core/image.hpp"
+#include "./lib/core/keyboard.hpp"
+
 #include "./lib/runtime/window.hpp"
 #include "./lib/runtime/application.hpp"
-#include "./lib/core/image.hpp"
 #include "./lib/runtime/sprite.hpp"
 
 #include "./src/lib/player_one.hpp"
@@ -33,13 +35,58 @@ void* closedCallback(void* inp, void* data) {
   return (void*)NULL;
 }
 
-void* keyboardCallback(void* inp, void* data) {
-  KeyboardEventParams* parsedInp = reinterpret_cast<KeyboardEventParams*>(inp);
-  PlayerOne* player = reinterpret_cast<PlayerOne*>(data);
+//void* keyboardCallback(void* inp, void* data) {
+//  PlayerOne* player = reinterpret_cast<PlayerOne*>(data);
+//  const unsigned char* keyboardState = SDL_GetKeyboardState(NULL);
+//
+//  //float horzRatio = 1.0;
+//  //float vertRatio = 0.0;
+//
+//  //if (player->angle->pitch >= 180) {
+//  //  horzRatio = -(((270 - player->angle->pitch) / 90));
+//  //} else {
+//  //  horzRatio = ((90 - player->angle->pitch) / 90);
+//  //}
+//
+//  //if (player->angle->pitch <= 90) {
+//  //  vertRatio = (player->angle->pitch) / 90;
+//  //} else if (player->angle->pitch > 270) {
+//  //  vertRatio = -(360 - player->angle->pitch) / 90;
+//  //} else {
+//  //  vertRatio = (180 - player->angle->pitch) / 90;
+//  //}
+//
+//  //if (keyboardState[80]) {
+//  //  // turn left.
+//  //  player->setAction("turning_left");
+//  //  player->trajectory->angle.pitch -= 1;
+//  //}
+//
+//  //if (keyboardState[79]) {
+//  //  // turn right.
+//  //  player->setAction("turning_right");
+//  //  player->trajectory->angle.pitch += 1;
+//  //}
+//
+//  //if (keyboardState[82]) {
+//  //  // move forward.
+//  //  player->setAction("moving_forward");
+//  //  player->trajectory->position.horz += 1 * horzRatio;
+//  //  player->trajectory->position.vert += 1 * vertRatio;
+//  //}
+//
+//  //// keep angle within 360 degrees
+//  //player->angle->pitch = player->angle->pitch < 0 ? 360 - abs(player->angle->pitch) : player->angle->pitch;
+//  //player->angle->pitch = player->angle->pitch >= 360 ? player->angle->pitch / 360 : player->angle->pitch;
+//
+//  return (void*)NULL;
+//}
+
+void* evaluateCallback(void* inp) {
+  PlayerOne* player = reinterpret_cast<PlayerOne*>(inp);
 
   float horzRatio = 1.0;
   float vertRatio = 0.0;
-
 
   if (player->angle->pitch >= 180) {
     horzRatio = -(((270 - player->angle->pitch) / 90));
@@ -55,52 +102,39 @@ void* keyboardCallback(void* inp, void* data) {
     vertRatio = (180 - player->angle->pitch) / 90;
   }
 
-
-  if ((parsedInp->scanCode == 80) && (parsedInp->state == SDL_PRESSED)) {
-    // turn left
+  if (KeyboardInput::isPressed(80)) {
+    // turn left.
     player->setAction("turning_left");
     player->trajectory->angle.pitch -= 1;
-  } else if ((parsedInp->scanCode == 79) && (parsedInp->state == SDL_PRESSED)) {
-    // turn right
+  }
+
+  if (KeyboardInput::isPressed(79)) {
+    // turn right.
     player->setAction("turning_right");
     player->trajectory->angle.pitch += 1;
-  } else if ((parsedInp->scanCode == 81) && (parsedInp->state == SDL_PRESSED)) {
-    // move backward.
-    //player->setAction("moving_backward");
-    //player->trajectory->position.horz -= 1;
-  } else if ((parsedInp->scanCode == 82) && (parsedInp->state == SDL_PRESSED)) {
-    // move forward
+  }
+
+  if (KeyboardInput::isPressed(82)) {
+    // move forward.
     player->setAction("moving_forward");
     player->trajectory->position.horz += 1 * horzRatio;
     player->trajectory->position.vert += 1 * vertRatio;
   }
 
   // keep angle within 360 degrees
-  //player->angle->pitch = (float)((unsigned int)player->angle->pitch % 360);
   player->angle->pitch = player->angle->pitch < 0 ? 360 - abs(player->angle->pitch) : player->angle->pitch;
   player->angle->pitch = player->angle->pitch >= 360 ? player->angle->pitch / 360 : player->angle->pitch;
-
-  if (parsedInp->state == SDL_RELEASED) {
-    //printf("\n\n");
-    //printf("%f\n", player->angle->pitch);
-    //printf("\n\n");
-
-    player->setAction("standing_still");
-  }
-
-  //if (parsedInp->state == SDL_PRESSED) {
-  //  printf("Key %lu key %s at %lums\n", parsedInp->scanCode, "pressed", parsedInp->timestamp);
-  //} else if (parsedInp->state == SDL_RELEASED) {
-  //  printf("Key %lu key %s at %lums\n", parsedInp->scanCode, "released", parsedInp->timestamp);
-  //}
 
   return (void*)NULL;
 }
 
+
 int main(int argc, char *argv[]) {
-  app->on("KEYBOARD", keyboardCallback, (void*)player);
+  //app->on("KEYBOARD", keyboardCallback, (void*)player);
   app->on("QUIT", quitCallback, (void*)NULL);
   win->on("CLOSED", closedCallback, (void*)NULL);
+
+  player->onEvaluate(evaluateCallback);
 
   Sprite* standingStillSprite = new Sprite();
   Sprite* movingForwardSprite = new Sprite();

@@ -4,17 +4,19 @@
   #define _SCENE_CHARACTER_HPP
 
   #include "../core/dict.hpp"
-  #include "../runtime/state.hpp"
-  #include "../runtime/sprite.hpp"
-
   #include "../core/data/position.hpp"
   #include "../core/data/angle.hpp"
   #include "../core/data/scale.hpp"
   #include "../core/data/size.hpp"
   #include "../core/data/trajectory.hpp"
 
+  #include "../runtime/state.hpp"
+  #include "../runtime/sprite.hpp"
 
-  class SceneCharacter {
+  #include "../scene/base.hpp"
+
+
+  class SceneCharacter: public SceneBase {
 
     public:
 
@@ -30,7 +32,13 @@
 
       const char* action;
 
+      void*(*evalCallback)(void*);
+
+
       SceneCharacter() {
+        this->evalCallback = NULL;
+        this->identifier = SceneCharacter::generateIdentifier();
+
         this->position = new Position(0, 0, 0);
         this->angle = new Angle(0.0, 0.0, 0.0, 0, 0, 0);
         this->scale = new Scale(0.0, 0.0, 0.0);
@@ -129,7 +137,16 @@
         //  printf("%lu\n\n\n", this->trajectory->angle.pitch );
         //}
 
+        void*(*callback)(void*) = this->evalCallback;
 
+        if (callback != NULL) {
+          callback((void*)this);
+        }
+
+      }
+
+      void onEvaluate(void*(*callback)(void*)) {
+        this->evalCallback = callback;
       }
 
   };
