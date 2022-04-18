@@ -1,84 +1,105 @@
 
 
-#include <SDL2/SDL.h>
+#ifndef _KEYBOARD_INPUT_H_
+
+  #define _KEYBOARD_INPUT_H_
+
+  #include <SDL2/SDL.h>
+
+  const unsigned char* _prevKeyboardState;
+  const unsigned char* _curKeyboardState;
 
 
-const unsigned char* _prevKeyboardState;
-const unsigned char* _curKeyboardState;
+  class KeyboardInput {
+    // TODO: _prevKeyboardState doesn't actually work so we isReleqased() doesn't work.
 
+    public:
 
-class KeyboardInput {
-  // TODO: Add functions for wasPressed()? isHeld()? wasReleased?
+      static void updateState() {
+        int numKeys = 256;
 
-
-  public:
-
-    static const unsigned char* getState() {
-      _prevKeyboardState = _curKeyboardState;
-      _curKeyboardState = SDL_GetKeyboardState(NULL);
-
-      return _curKeyboardState;
-    }
-
-    static bool isPressed(unsigned char scanCode) {
-      const unsigned char* state = KeyboardInput::getState();
-
-      if (state[scanCode] != 0) {
-        return true;
+        _prevKeyboardState = _curKeyboardState;
+        _curKeyboardState = SDL_GetKeyboardState(&numKeys);
       }
 
-      return false;
-    }
-
-    static bool isHeld(unsigned long int scanCode) {
-      const unsigned char* state = KeyboardInput::getState();
-
-
-      if (KeyboardInput::isPressed(scanCode) && !(_prevKeyboardState[scanCode])) {
-        return true;
+      static const unsigned char* getCurrentState() {
+        return _curKeyboardState;
       }
 
-      return false;
-    }
-
-    static bool isReleased(unsigned char scanCode) {
-      const unsigned char* state = KeyboardInput::getState();
-
-      if (KeyboardInput::isPressed(scanCode) && !(_prevKeyboardState[scanCode])) {
-        return true;
+      static const unsigned char* getPreviousState() {
+        return _prevKeyboardState;
       }
 
-      return false;
-    }
+      static bool isPressed(unsigned char scanCode) {
+        const unsigned char* state = KeyboardInput::getCurrentState();
 
-    static bool isPressed(unsigned char* scanCodes) {
-      unsigned char aryLen = sizeof(scanCodes) / sizeof(unsigned char);
-
-      for (unsigned char idx = 0; idx < aryLen; idx++) {
-        unsigned char scanCode = scanCodes[idx];
-
-        if (!KeyboardInput::isPressed(scanCode)) {
-          return false;
+        if (state[scanCode] != 0) {
+          return true;
         }
 
-        return true;
+        return false;
       }
+
+      static bool wasPressed(unsigned char scanCode) {
+        const unsigned char* state = KeyboardInput::getPreviousState();
+
+        if (state[scanCode] != 0) {
+          return true;
+        }
+
+        return false;
+      }
+
+      static bool isHeld(unsigned char scanCode) {
+
+        if (KeyboardInput::isPressed(scanCode) && !KeyboardInput::wasPressed(scanCode)) {
+          return true;
+        }
+
+        return false;
+      }
+
+      static bool isReleased(unsigned char scanCode) {
+
+        if (!KeyboardInput::isPressed(scanCode) && KeyboardInput::wasPressed(scanCode)) {
+          printf("SADFASDFSA");
+          return true;
+        }
+
+
+        return false;
+      }
+
+      static bool isPressed(unsigned char* scanCodes) {
+        unsigned char aryLen = sizeof(scanCodes) / sizeof(unsigned char);
+
+        for (unsigned char idx = 0; idx < aryLen; idx++) {
+          unsigned char scanCode = scanCodes[idx];
+
+          if (!KeyboardInput::isPressed(scanCode)) {
+            return false;
+          }
+
+          return true;
+        }
+
+      }
+
+      static bool isReleased(unsigned char* scanCodes) {
+        unsigned char aryLen = sizeof(scanCodes) / sizeof(unsigned char);
+
+        for (unsigned char idx = 0; idx < aryLen; idx++) {
+          unsigned char scanCode = scanCodes[idx];
+
+          if (!KeyboardInput::isReleased(scanCode)) {
+            return false;
+          }
+
+          return true;
+        }
 
     }
 
-    static bool isReleased(unsigned char* scanCodes) {
-      unsigned char aryLen = sizeof(scanCodes) / sizeof(unsigned char);
+  };
 
-      for (unsigned char idx = 0; idx < aryLen; idx++) {
-        unsigned char scanCode = scanCodes[idx];
-
-        if (!KeyboardInput::isReleased(scanCode)) {
-          return false;
-        }
-
-        return true;
-      }
-
-  }
-
-};
+#endif
