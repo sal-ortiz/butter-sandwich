@@ -14,6 +14,8 @@
 
 
 const unsigned char FRAMERATE = 60; // fps
+const unsigned int SCREEN_WIDTH = 1024;
+const unsigned int SCREEN_HEIGHT = 769;
 
 Window* win = new Window();
 Application* app = new Application();
@@ -133,6 +135,26 @@ void* evaluateCallback(void* inp, void* data) {
   player->angle->pitch = player->angle->pitch < 0 ? 360 - abs(player->angle->pitch) : player->angle->pitch;
   player->angle->pitch = player->angle->pitch >= 360 ? player->angle->pitch / 360 : player->angle->pitch;
 
+  // enforce our LEFT screen boundaries.
+  if (player->position->horz < 0) {
+    player->position->horz = 0;
+  }
+
+  // enforce our UPPER screen boundaries.
+  if (player->position->vert < 0) {
+    player->position->vert = 0;
+  }
+
+  // enforce our RIGHT screen boundaries.
+  if (player->position->horz > SCREEN_WIDTH - 75) {
+    player->position->horz = SCREEN_WIDTH - 75;
+  }
+
+  // enforce our LOWER screen boundaries.
+  if (player->position->vert > SCREEN_HEIGHT - 75) {
+    player->position->vert = SCREEN_HEIGHT - 75;
+  }
+
   return (void*)NULL;
 }
 
@@ -150,7 +172,7 @@ int main(int argc, char *argv[]) {
   Sprite* turningRightSprite = new Sprite();
   Sprite* backgroundSprite = new Sprite();
 
-  win->open("The window!", 150, 150, 1024, 768);
+  win->open("The window!", 150, 150, SCREEN_WIDTH, SCREEN_HEIGHT);
 
   Image* shipStandingStill = Image::load("./ship_sheet.bmp", 390, 150, 75, 75);
   Image* shipTurningLeft = Image::load("./ship_sheet.bmp", 490, 50, 75, 75);
