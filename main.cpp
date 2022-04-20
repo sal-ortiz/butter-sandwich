@@ -10,6 +10,8 @@
 #include "./lib/runtime/sprite.hpp"
 
 #include "./src/lib/player_one.hpp"
+#include "./lib/scene/background.hpp"
+
 
 const unsigned char FRAMERATE = 60; // fps
 
@@ -17,7 +19,7 @@ Window* win = new Window();
 Application* app = new Application();
 
 PlayerOne* player = new PlayerOne();
-
+SceneBackground* background = new SceneBackground();
 
 
 void* quitCallback(void* inp, void* data) {
@@ -103,6 +105,11 @@ void* evaluateCallback(void* inp, void* data) {
     vertRatio = (180 - player->angle->pitch) / 90;
   }
 
+  if (KeyboardInput::isReleased(82)) {
+    printf("stopping\n");
+    player->setAction("standing_still");
+  }
+
   if (KeyboardInput::isPressed(80)) {
     // turn left.
     player->setAction("turning_left");
@@ -141,35 +148,42 @@ int main(int argc, char *argv[]) {
   Sprite* movingForwardSprite = new Sprite();
   Sprite* turningLeftSprite = new Sprite();
   Sprite* turningRightSprite = new Sprite();
+  Sprite* backgroundSprite = new Sprite();
 
-  win->open("The window!", 150, 150, 640, 480);
+  win->open("The window!", 150, 150, 1024, 768);
 
   Image* shipStandingStill = Image::load("./ship_sheet.bmp", 390, 150, 75, 75);
   Image* shipTurningLeft = Image::load("./ship_sheet.bmp", 490, 50, 75, 75);
   Image* shipTurningRight = Image::load("./ship_sheet.bmp", 190, 50, 75, 75);
   Image* shipMovingForward = Image::load("./ship_sheet.bmp", 90, 50, 75, 75);
+  Image* backgroundImage = Image::load("./background.bmp", 0, 0, 1024, 768);
 
   standingStillSprite->addFrame(shipStandingStill, 0);
   movingForwardSprite->addFrame(shipMovingForward, 0);
   turningLeftSprite->addFrame(shipTurningLeft, 0);
   turningRightSprite->addFrame(shipTurningRight, 0);
+  backgroundSprite->addFrame(backgroundImage, 0);
   //sprite->addFrame(imgOne, 0);
   //sprite->addFrame(imgTwo, 150);
   standingStillSprite->addFrame(200);
   movingForwardSprite->addFrame(200);
   turningLeftSprite->addFrame(200);
   turningRightSprite->addFrame(200);
+  backgroundSprite->addFrame(200);
 
   standingStillSprite->setLoop(false);
   movingForwardSprite->setLoop(false);
   turningLeftSprite->setLoop(false);
   turningRightSprite->setLoop(false);
+  backgroundSprite->setLoop(false);
 
   player->addSprite("standing_still", standingStillSprite);
   player->addSprite("moving_forward", movingForwardSprite);
   player->addSprite("turning_left", turningLeftSprite);
   player->addSprite("turning_right", turningRightSprite);
   player->setAction("standing_still");
+  background->addSprite("background", backgroundSprite);
+  background->setAction("background");
 
   player->angle->center.horz = 43;
   player->angle->center.vert = 43;
@@ -185,10 +199,18 @@ int main(int argc, char *argv[]) {
     start = (float)SDL_GetTicks();
 
     Event::evaluate();
+    KeyboardInput::updateState();
 
     if (elapsed > frameDelay) {
 
       win->clear();
+
+
+
+
+      background->render(win->getRenderer());
+
+
 
 
       player->render(win->getRenderer());
