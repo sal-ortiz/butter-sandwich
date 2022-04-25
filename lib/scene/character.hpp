@@ -43,8 +43,8 @@
         this->position = new Position(0, 0, 0);
         this->angle = new Angle(0.0, 0.0, 0.0, 0, 0, 0);
         this->scale = new Scale(0.0, 0.0, 0.0);
-        this->trajectory = new Trajectory();
         this->view = new View(0, 0, 0, 0, 0, 0);
+        this->trajectory = new Trajectory();
 
         this->trajectory->position.horz = 0;
         this->trajectory->position.vert = 0;
