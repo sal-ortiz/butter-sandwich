@@ -37,20 +37,41 @@
       }
 
       void render(SDL_Renderer* renderer, SDL_Rect dstRect, double angle, SDL_Point center) {
-        int imgWidth, imgHeight;
-
-        SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, this->surface);
-        SDL_QueryTexture(texture, NULL, NULL, &imgWidth, &imgHeight);
 
         SDL_Rect srcRect = {
           this->view.x,
           this->view.y,
-          this->view.w ? this->view.w : imgWidth,
-          this->view.h ? this->view.h : imgHeight
+          this->view.w,
+          this->view.h
         };
 
-        dstRect.w = dstRect.w ? dstRect.w : srcRect.w;
-        dstRect.h = dstRect.h ? dstRect.h : srcRect.h;
+        this->render(renderer, dstRect, srcRect, angle, center);
+      }
+
+      void render(SDL_Renderer* renderer, SDL_Rect dstRect, SDL_Rect srcRect, double angle, SDL_Point center) {
+        //int imgWidth, imgHeight;
+
+        SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, this->surface);
+        //SDL_QueryTexture(texture, NULL, NULL, &imgWidth, &imgHeight);
+
+        if (srcRect.x == 0) {
+          srcRect.x = this->view.x;
+        }
+
+        if (srcRect.y == 0) {
+          srcRect.y = this->view.y;
+        }
+
+        if (srcRect.w == 0) {
+          srcRect.w = this->view.w;
+        }
+
+        if (srcRect.h == 0) {
+          srcRect.h = this->view.h;
+        }
+
+        dstRect.w = srcRect.w;
+        dstRect.h = srcRect.h;
 
         SDL_RenderCopyEx(renderer, texture, &srcRect, &dstRect, angle, &center, SDL_FLIP_NONE);
 

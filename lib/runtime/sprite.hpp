@@ -8,6 +8,7 @@
   #include "../core/list.hpp"
   #include "../core/data/position.hpp"
   #include "../core/data/angle.hpp"
+  #include "../core/data/view.hpp"
 
 
   class Sprite {
@@ -79,13 +80,25 @@
         this->normalizeFramesList();
       }
 
-      void render(SDL_Renderer* renderer, uint32_t dstX, uint32_t dstY, float dstAngle=0.0, uint32_t centerX=0, uint32_t centerY=0) {
+      void render(
+        SDL_Renderer* renderer,
+        uint32_t dstX,
+        uint32_t dstY,
+        uint32_t srcX,
+        uint32_t srcY,
+        uint32_t srcWidth,
+        uint32_t srcHeight,
+        float dstAngle=0.0,
+        uint32_t centerX=0,
+        uint32_t centerY=0
+      ) {
         SpriteFrame* frame = this->nextFrame();
 
-        Position* pos = new Position(dstX, dstY, 0);
         Angle* angle = new Angle(dstAngle, 0.0, 0.0, centerX, centerY, 0);
+        Position* dstPos = new Position(dstX, dstY, 0);
+        View* srcView = new View(srcX, srcY, 0, srcWidth, srcHeight, 0);
 
-        frame->render(renderer, *pos, *angle);
+        frame->render(renderer, *dstPos, *srcView, *angle);
       }
 
       SpriteFrame* nextFrame() {

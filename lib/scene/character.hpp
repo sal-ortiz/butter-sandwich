@@ -8,6 +8,7 @@
   #include "../core/data/angle.hpp"
   #include "../core/data/scale.hpp"
   #include "../core/data/size.hpp"
+  #include "../core/data/view.hpp"
   #include "../core/data/trajectory.hpp"
 
   #include "../runtime/state.hpp"
@@ -26,7 +27,7 @@
       Position* position;
       Angle* angle;
       Scale* scale;
-      Size* size;
+      View* view;
 
       Trajectory* trajectory;
 
@@ -42,8 +43,8 @@
         this->position = new Position(0, 0, 0);
         this->angle = new Angle(0.0, 0.0, 0.0, 0, 0, 0);
         this->scale = new Scale(0.0, 0.0, 0.0);
-        this->size = new Size(0, 0, 0);
         this->trajectory = new Trajectory();
+        this->view = new View(0, 0, 0, 0, 0, 0);
 
         this->trajectory->position.horz = 0;
         this->trajectory->position.vert = 0;
@@ -72,7 +73,6 @@
 
 
 
-        //state.set("position", (void*)this->position);
         //state.set("scale", (void*)this->scale);
         //state.set("angle", (void*)this->angle);
         //state.set("size", (void*)this->size);
@@ -90,17 +90,21 @@
       void render(SDL_Renderer* renderer) {
         const char* actionId = this->action;
 
-        Position* pos = this->position;
+        Position* position = this->position;
         Angle* angle = this->angle;
         Scale* scale = this->scale;
-        //Size* size = this->size;
+        View* view = this->view;
 
         Sprite* sprite = sprites.get(actionId);
 
         sprite->render(
           renderer,
-          pos->horz,
-          pos->vert,
+          position->horz,
+          position->vert,
+          view->position.horz,
+          view->position.vert,
+          view->size.horz,
+          view->size.vert,
           angle->pitch,
           angle->center.horz,
           angle->center.vert
@@ -132,11 +136,6 @@
         this->trajectory->scale.horz *= (this->trajectory->scaleRate.horz);
         this->trajectory->scale.vert *= (this->trajectory->scaleRate.vert);
         this->trajectory->scale.depth *= (this->trajectory->scaleRate.depth);
-
-        //if (this->trajectory->angle.pitch > 0) {
-        //  printf("%lu\n\n\n", this->trajectory->angle.pitch );
-        //}
-
 
         unsigned long int charId = this->identifier;
         const char* hookId = Hook::generateIdentifier(charId, "onEvaluate");
