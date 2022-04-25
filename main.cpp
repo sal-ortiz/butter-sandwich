@@ -210,6 +210,12 @@ int main(int argc, char *argv[]) {
   player->angle->center.horz = 43;
   player->angle->center.vert = 43;
 
+  background->view->position.horz = 0;
+  background->view->position.vert = 0;
+  background->view->size.horz = SCREEN_WIDTH;
+  background->view->size.vert = SCREEN_HEIGHT;
+
+
   app->start();
 
   float start = 0.0;
@@ -225,15 +231,9 @@ int main(int argc, char *argv[]) {
 
     if (elapsed > frameDelay) {
 
-      win->clear();
-
-
-
+      //win->clear();
 
       background->render(win->getRenderer());
-
-
-
 
       player->render(win->getRenderer());
       player->evaluate();
