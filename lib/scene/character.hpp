@@ -137,17 +137,18 @@
         this->trajectory->scale.vert *= (this->trajectory->scaleRate.vert);
         this->trajectory->scale.depth *= (this->trajectory->scaleRate.depth);
 
+
         unsigned long int charId = this->identifier;
         const char* hookId = Hook::generateIdentifier(charId, "onEvaluate");
 
         this->executeCallback(hookId, (void*)this);
       }
 
-      void onEvaluate(void*(*callback)(void*, void*)) {
+      void onEvaluate(void*(*callback)(void*, void*), void* data) {
         unsigned long int charId = this->identifier;
         const char* hookId = Hook::generateIdentifier(charId, "onEvaluate");
 
-        this->on(hookId, callback, NULL);
+        this->on(hookId, callback, data);
       }
 
   };

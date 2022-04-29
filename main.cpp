@@ -89,6 +89,7 @@ void* closedCallback(void* inp, void* data) {
 
 void* evaluateCallback(void* inp, void* data) {
   PlayerOne* player = reinterpret_cast<PlayerOne*>(inp);
+  SceneBackground* background = reinterpret_cast<SceneBackground*>(data);
 
   float horzRatio = 1.0;
   float vertRatio = 0.0;
@@ -122,13 +123,17 @@ void* evaluateCallback(void* inp, void* data) {
     // turn right.
     player->setAction("turning_right");
     player->trajectory->angle.pitch += 1;
+
   }
 
   if (KeyboardInput::isPressed(82)) {
     // move forward.
     player->setAction("moving_forward");
-    player->trajectory->position.horz += 2 * horzRatio;
-    player->trajectory->position.vert += 2 * vertRatio;
+    //player->trajectory->position.horz += 2 * horzRatio;
+    //player->trajectory->position.vert += 2 * vertRatio;
+
+    background->trajectory->position.horz += 1 * horzRatio;
+    background->trajectory->position.vert += 1 * vertRatio;
   }
 
   // keep angle within 360 degrees
@@ -136,23 +141,47 @@ void* evaluateCallback(void* inp, void* data) {
   player->angle->pitch = player->angle->pitch >= 360 ? player->angle->pitch / 360 : player->angle->pitch;
 
   // enforce our LEFT screen boundaries.
-  if (player->position->horz < 0) {
-    player->position->horz = 0;
+  //if (player->position->horz < 0) {
+  //  player->position->horz = 0;
+  //}
+
+  //// enforce our UPPER screen boundaries.
+  //if (player->position->vert < 0) {
+  //  player->position->vert = 0;
+  //}
+
+  //// enforce our RIGHT screen boundaries.
+  //if (player->position->horz > SCREEN_WIDTH - 75) {
+  //  player->position->horz = SCREEN_WIDTH - 75;
+  //}
+
+  //// enforce our LOWER screen boundaries.
+  //if (player->position->vert > SCREEN_HEIGHT - 75) {
+  //  player->position->vert = SCREEN_HEIGHT - 75;
+  //}
+
+
+  if (background->view->position.horz < 0) {
+    background->view->position.horz = 0;
+    background->trajectory->position.horz = 0;
   }
 
-  // enforce our UPPER screen boundaries.
-  if (player->position->vert < 0) {
-    player->position->vert = 0;
+  if (background->view->position.vert < 0) {
+    background->view->position.vert = 0;
+    background->trajectory->position.vert = 0;
   }
 
-  // enforce our RIGHT screen boundaries.
-  if (player->position->horz > SCREEN_WIDTH - 75) {
-    player->position->horz = SCREEN_WIDTH - 75;
+
+  if (background->view->position.horz > background->view->size.horz - player->position->horz) {
+    background->view->position.horz = background->view->size.horz - player->position->horz;
+    background->trajectory->position.horz = 0;
   }
 
-  // enforce our LOWER screen boundaries.
-  if (player->position->vert > SCREEN_HEIGHT - 75) {
-    player->position->vert = SCREEN_HEIGHT - 75;
+  if (background->view->position.vert > background->view->size.vert - player->position->vert) {
+    printf("\n%f\t%f\n", background->view->size.vert, player->position->vert);
+
+    background->view->position.vert = background->view->size.vert - player->position->vert;
+    background->trajectory->position.vert = 0;
   }
 
   return (void*)NULL;
@@ -164,7 +193,7 @@ int main(int argc, char *argv[]) {
   app->on("QUIT", quitCallback, (void*)NULL);
   win->on("CLOSED", closedCallback, (void*)NULL);
 
-  player->onEvaluate(evaluateCallback);
+  player->onEvaluate(evaluateCallback, (void*)background);
 
   Sprite* standingStillSprite = new Sprite();
   Sprite* movingForwardSprite = new Sprite();
@@ -207,6 +236,9 @@ int main(int argc, char *argv[]) {
   background->addSprite("background", backgroundSprite);
   background->setAction("background");
 
+  player->position->horz = (SCREEN_WIDTH / 2) - (75 / 2);
+  player->position->vert = (SCREEN_HEIGHT / 2) - (75 / 2);
+
   player->angle->center.horz = 43;
   player->angle->center.vert = 43;
 
@@ -234,6 +266,7 @@ int main(int argc, char *argv[]) {
       //win->clear();
 
       background->render(win->getRenderer());
+      background->evaluate();
 
       player->render(win->getRenderer());
       player->evaluate();
