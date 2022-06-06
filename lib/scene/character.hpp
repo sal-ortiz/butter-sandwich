@@ -31,6 +31,10 @@
 
       Trajectory* trajectory;
 
+      // TODO: hack: find a better way to serve these values.
+      float width;
+      float height;
+
       const char* action;
 
       void*(*evalCallback)(void*);
@@ -45,6 +49,10 @@
         this->scale = new Scale(0.0, 0.0, 0.0);
         this->view = new View(0, 0, 0, 0, 0, 0);
         this->trajectory = new Trajectory();
+
+        //this->trajectory->positionRate.horz = 0.9;
+        //this->trajectory->positionRate.vert = 0.9;
+        //this->trajectory->positionRate.depth = 0.0;
 
         this->trajectory->position.horz = 0;
         this->trajectory->position.vert = 0;
@@ -97,6 +105,10 @@
 
         Sprite* sprite = sprites.get(actionId);
 
+        // TODO: hack: find a better place to set these values.
+        this->width = sprite->width;
+        this->height = sprite->height;
+
         sprite->render(
           renderer,
           position->horz,
@@ -109,6 +121,7 @@
           angle->center.horz,
           angle->center.vert
         );
+
       }
 
       void evaluate() {

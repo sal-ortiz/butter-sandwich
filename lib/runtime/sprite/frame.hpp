@@ -18,6 +18,10 @@
 
     public:
 
+      float width;
+      float height;
+
+
       SpriteFrame() {
         this->image = NULL;
       }
@@ -52,6 +56,9 @@
 
       void setImage(Image* img) {
         this->image = img;
+
+        this->width = img->view.w;
+        this->height = img->view.h;
       }
 
       Image* getImage() {

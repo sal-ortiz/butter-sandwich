@@ -14,10 +14,12 @@
     private:
 
       SDL_Surface* surface;
-      SDL_Rect view;
 
 
     public:
+
+      SDL_Rect view;
+
 
       Image() {
         this->surface = NULL;

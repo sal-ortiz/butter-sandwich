@@ -28,6 +28,10 @@
 
       Trajectory* trajectory;
 
+      // TODO: hack: find a better way to serve these values.
+      float width;
+      float height;
+
       const char* action;
 
       void*(*evalCallback)(void*);
@@ -43,6 +47,10 @@
         this->view = new View(0, 0, 0, 0, 0, 0);
         this->trajectory = new Trajectory();
 
+        // TODO: This belongs in this class' instance.
+        this->trajectory->positionRate.horz = 0.9;
+        this->trajectory->positionRate.vert = 0.9;
+        this->trajectory->positionRate.depth = 0.9;
 
         this->trajectory->position.horz = 0;
         this->trajectory->position.vert = 0;
@@ -71,6 +79,10 @@
         Scale* scale = this->scale;
 
         Sprite* sprite = sprites.get(actionId);
+
+        // TODO: hack: find a better place to set these values.
+        this->width = sprite->width;
+        this->height = sprite->height;
 
         sprite->render(
           renderer,
@@ -108,7 +120,6 @@
         //this->trajectory->scale.horz *= (this->trajectory->scaleRate.horz);
         //this->trajectory->scale.vert *= (this->trajectory->scaleRate.vert);
         //this->trajectory->scale.depth *= (this->trajectory->scaleRate.depth);
-
 
 
 

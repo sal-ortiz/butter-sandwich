@@ -23,6 +23,7 @@
 
       bool loop;
 
+
       void normalizeFramesList() {
         uint32_t lastRenderedFrame = -1;
         uint32_t framesListLen = this->framesList->getLength();
@@ -42,6 +43,10 @@
 
     public:
 
+      float width;
+      float height;
+
+
       Sprite() {
         this->frames = new List<SpriteFrame*>();
         this->framesList = new List<uint32_t>();
@@ -52,15 +57,18 @@
         this->position.vert = 0;
 
         this->loop = true;
+
+        this->width = 0;
+        this->height = 0;
       }
 
       void setLoop(bool value) {
         this->loop = value;
       }
 
-      void jumpToFrame(uint32_t frameNum) {
-        this->currentFrame = frameNum;
-      }
+      //void jumpToFrame(uint32_t frameNum) {
+      //  this->currentFrame = frameNum;
+      //}
 
       void addFrame(unsigned int frameNum) {
         framesList->set(frameNum, frames->getLength() - 1);
@@ -114,6 +122,9 @@
           this->currentFrame = this->currentFrame % (this->framesList->getLength() - 1);
 
         }
+
+        this->width = frame->width;
+        this->height = frame->height;
 
         return frame;
       }
