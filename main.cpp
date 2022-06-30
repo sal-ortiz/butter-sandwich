@@ -126,104 +126,67 @@ void* evaluateCallback(void* inp, void* data) {
 
   }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   if (KeyboardInput::isPressed(82)) {
     // move forward.
     player->setAction("moving_forward");
-    //player->trajectory->position.horz += 2 * horzRatio;
-    //player->trajectory->position.vert += 2 * vertRatio;
-
-
-
-    //if (background->view->position.vert < background->view->size.vert) {
-    //  //player->trajectory->position.vert = background->trajectory->position.vert;
-
-    //  player->trajectory->position.vert += 4 * vertRatio;
-    //} else {
-    //  background->trajectory->position.vert += 4 * vertRatio;
-    //}
-
-
 
 
     if ((background->view->position.horz <= 0)
-      && (player->position->horz < background->view->size.horz / 2)
+      && (player->position->horz <= (background->view->size.horz / 2) - (player->width / 2))
     ) {
       player->trajectory->position.horz += 4 * horzRatio;
 
-      background->view->position.horz = 0;
-
-      //printf("\n/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\\n");
-      //printf("TOUCHING LEFT HAND BORDER\n");
-      //printf("\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\n\n");
-
+      background->trajectory->position.horz = 0;
     } else {
       background->trajectory->position.horz += 4 * horzRatio;
 
-      player->position->horz = (background->view->size.horz / 2) - player->width;
-
-      //printf("\n/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\\n");
-      //printf("CENTER OF THE UNIVERSE!\n");
-      //printf("\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\n\n");
     }
 
-    //background->trajectory->position.horz += 4 * horzRatio;
-    //player->trajectory->position.horz += 4 * horzRatio;
-
-
-    printf("\n======================================================\n");
-    //printf("BACKGROUND SIZE: [%f, %f]\n", background->width, background->height);
-    printf("SHIP POS [%f, %f] ANGLE %f\n", player->position->horz, player->position->vert, player->angle->pitch);
-    //printf("SHIP SIZE: [%f, %f]\n", player->width, player->height);
-    printf("BACKGROUND VIEW SIZE: [%f, %f]\n", background->view->size.horz, background->view->size.vert);
-    printf("BACKGROUND VIEW POSITION: [%f, %f]\n", background->view->position.horz, background->view->position.vert);
-
-    //printf("\n");
-
-    //printf("BORDER WIDTH: %f\n", (float)background->width - (float)(background->view->size.horz / 2));
-    printf("======================================================\n\n");
-
-
-
-
-  //if (player->position->horz < 0) {
-  //  player->position->horz = 0;
-  //  player->trajectory->position.horz = 0;
-  //}
-
-  //if (player->position->horz >= background->view->size.horz - player->width) {
-  //  player->position->horz = background->view->size.horz - player->width;
-  //  player->trajectory->position.horz = 0;
-  //}
-
-
-  if (background->view->position.horz <= 0) {
-    background->view->position.horz = 0;
   }
 
 
+  if ((background->view->position.horz <= 0) //{
+    && (player->position->horz > (background->view->size.horz / 2) - (player->width / 2))
+  ) {
 
-}
+    if (horzRatio < 0) {
+      player->trajectory->position.horz = background->trajectory->position.horz;
+      background->trajectory->position.horz = 0;
+    } else {
+      background->trajectory->position.horz = player->trajectory->position.horz;
+      player->trajectory->position.horz = 0;
+    }
 
-
-
-
-// keep angle within 360 degrees
-player->angle->pitch = player->angle->pitch < 0 ? 360 - abs(player->angle->pitch) : player->angle->pitch;
-player->angle->pitch = player->angle->pitch >= 360 ? player->angle->pitch / 360 : player->angle->pitch;
-
-
-
-
-
-
+  }
 
 
+  if (background->view->position.horz < 0) {
+    background->view->position = 0;
+  }
+
+  if (player->position->horz < 0) {
+    player->position->horz = 0;
+  }
 
 
-
-
-
-  //printf("\n%f / %f\n", background->view->position.horz, background->view->position.vert);
+  // keep angle within 360 degrees
+  player->angle->pitch = player->angle->pitch < 0 ? 360 - abs(player->angle->pitch) : player->angle->pitch;
+  player->angle->pitch = player->angle->pitch >= 360 ? player->angle->pitch / 360 : player->angle->pitch;
 
   return (void*)NULL;
 }
