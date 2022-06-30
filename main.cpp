@@ -127,52 +127,64 @@ void* evaluateCallback(void* inp, void* data) {
   }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   if (KeyboardInput::isPressed(82)) {
     // move forward.
     player->setAction("moving_forward");
 
 
-    if ((background->view->position.horz <= 0)
-      && (player->position->horz <= (background->view->size.horz / 2) - (player->width / 2))
-    ) {
-      player->trajectory->position.horz += 4 * horzRatio;
+    //if ((background->view->position.horz <= 0)
+    //  && (player->position->horz <= (background->view->size.horz / 2) - (player->width / 2))
+    //) {
+    //  player->trajectory->position.horz += 4 * horzRatio;
 
-      background->trajectory->position.horz = 0;
+    //  background->trajectory->position.horz = 0;
+    //} else {
+    //  background->trajectory->position.horz += 4 * horzRatio;
+
+    //}
+
+    if ((background->view->position.vert <= 0)
+      && (player->position->vert <= (background->view->size.vert /2) - (player->height / 2))
+    ) {
+      player->trajectory->position.vert+= 4 * vertRatio;
     } else {
-      background->trajectory->position.horz += 4 * horzRatio;
+      background->trajectory->position.vert += 4 * vertRatio;
 
     }
 
   }
 
 
-  if ((background->view->position.horz <= 0) //{
-    && (player->position->horz > (background->view->size.horz / 2) - (player->width / 2))
+  //if ((background->view->position.horz <= 0)
+  //  && (player->position->horz > (background->view->size.horz / 2) - (player->width / 2))
+  //) {
+
+  //  if (horzRatio < 0) {
+  //    player->trajectory->position.horz = background->trajectory->position.horz;
+  //    background->trajectory->position.horz = 0;
+  //  } else {
+  //    background->trajectory->position.horz = player->trajectory->position.horz;
+  //    player->trajectory->position.horz = 0;
+  //  }
+
+  //}
+
+  if ((background->view->position.vert <= 0)
+    && (player->position->vert > (background->view->size.vert / 2) - (player->width / 2))
   ) {
 
-    if (horzRatio < 0) {
-      player->trajectory->position.horz = background->trajectory->position.horz;
-      background->trajectory->position.horz = 0;
+    if (vertRatio < 0.5) {
+      player->trajectory->position.vert = background->trajectory->position.vert;
+      background->trajectory->position.vert = 0;
     } else {
-      background->trajectory->position.horz = player->trajectory->position.horz;
-      player->trajectory->position.horz = 0;
+      background->trajectory->position.vert = player->trajectory->position.vert;
+      player->trajectory->position.vert = 0;
     }
 
+
+
   }
+
 
 
   if (background->view->position.horz < 0) {
@@ -242,6 +254,7 @@ int main(int argc, char *argv[]) {
 
   player->position->horz = (SCREEN_WIDTH / 2) - (75 / 2);
   player->position->vert = (SCREEN_HEIGHT / 2) - (75 / 2);
+
 
   player->angle->center.horz = 43;
   player->angle->center.vert = 43;
