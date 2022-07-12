@@ -124,6 +124,12 @@
 
 
 
+        if (this->view->position.horz >= 0) {
+          this->view->position.horz;
+        }
+
+
+
 
         unsigned long int charId = this->identifier;
         const char* hookId = Hook::generateIdentifier(charId, "onEvaluate");
