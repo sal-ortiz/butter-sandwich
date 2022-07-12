@@ -132,32 +132,29 @@ void* evaluateCallback(void* inp, void* data) {
     player->setAction("moving_forward");
 
 
-    //if ((background->view->position.horz <= 0)
-    //  && (player->position->horz <= (background->view->size.horz / 2) - (player->width / 2))
-    //) {
-    //  player->trajectory->position.horz += 4 * horzRatio;
+    if (background->view->position.horz <= 0) {
 
-    //  background->trajectory->position.horz = 0;
-    //} else {
-    //  background->trajectory->position.horz += 4 * horzRatio;
+      if (player->position->horz <= (background->view->size.horz / 2) - (player->width / 2)) {
+        player->trajectory->position.horz += 4 * horzRatio;
 
-    //}
+        //background->trajectory->position.horz = 0;
+      }
 
-    if ((background->view->position.vert <= 0)
-      && (player->position->vert <= (background->view->size.vert /2) - (player->height / 2))
-    ) {
-      player->trajectory->position.vert+= 4 * vertRatio;
+    } else if (background->view->position.horz >= background->width - background->view->size.horz) {
+
+      if (player->position->horz >= (background->view->size.horz / 2)/* - (player->width / 2)*/) {
+        player->trajectory->position.horz += 4 * horzRatio;
+
+        //background->trajectory->position.horz = 0;
+      }
+
     } else {
-      background->trajectory->position.vert += 4 * vertRatio;
-
+      background->trajectory->position.horz += 4 * horzRatio;
     }
 
   }
 
 
-  //if ((background->view->position.horz <= 0)
-  //  && (player->position->horz > (background->view->size.horz / 2) - (player->width / 2))
-  //) {
 
   //  if (horzRatio < 0) {
   //    player->trajectory->position.horz = background->trajectory->position.horz;
@@ -167,21 +164,44 @@ void* evaluateCallback(void* inp, void* data) {
   //    player->trajectory->position.horz = 0;
   //  }
 
-  //}
 
-  if ((background->view->position.vert <= 0)
-    && (player->position->vert > (background->view->size.vert / 2) - (player->width / 2))
+
+
+
+
+  if ((background->view->position.horz <= 0)
+    && (player->position->horz > (background->view->size.horz / 2) - (player->width / 2))
   ) {
 
-    if (vertRatio < 0.5) {
-      player->trajectory->position.vert = background->trajectory->position.vert;
-      background->trajectory->position.vert = 0;
+    if (horzRatio < 0) {
+      printf("[LEFT] HORZ RATION: %f\n", horzRatio);
+
+      player->trajectory->position.horz = background->trajectory->position.horz;
+      //background->trajectory->position.horz = 0;
     } else {
-      background->trajectory->position.vert = player->trajectory->position.vert;
-      player->trajectory->position.vert = 0;
+      printf("[RIGHT] HORZ RATION: %f\n", horzRatio);
+
+      background->trajectory->position.horz = player->trajectory->position.horz;
+      player->trajectory->position.horz = 0;
     }
 
+  }
 
+  if ((background->view->position.horz >= background->width - background->view->size.horz)
+    && (player->position->horz < (background->view->size.horz / 2)/* - (player->width / 2)*/)
+  ) {
+
+    if (horzRatio > 0) {
+      printf("[RIGHT] HORZ RATION: %f\n", horzRatio);
+
+      player->trajectory->position.horz = background->trajectory->position.horz;
+      //background->trajectory->position.horz = 0;
+    } else {
+      printf("[LEFT] HORZ RATION: %f\n", horzRatio);
+
+      background->trajectory->position.horz = player->trajectory->position.horz;
+      player->trajectory->position.horz = 0;
+    }
 
   }
 
@@ -194,6 +214,16 @@ void* evaluateCallback(void* inp, void* data) {
   if (player->position->horz < 0) {
     player->position->horz = 0;
   }
+
+  if (background->view->position.horz > (background->width - background->view->size.horz)) {
+    background->view->position.horz = (background->width - background->view->size.horz);
+  }
+
+  if (player->position->horz >= (background->view->size.horz - player->width)) {
+    player->position->horz = background->view->size.horz - player->width;
+  }
+
+
 
 
   // keep angle within 360 degrees
