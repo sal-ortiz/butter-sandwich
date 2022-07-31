@@ -124,9 +124,9 @@
 
 
 
-        if (this->view->position.horz >= 0) {
-          this->view->position.horz;
-        }
+        //if (this->view->position.horz >= 0) {
+        //  this->view->position.horz;
+        //}
 
 
 

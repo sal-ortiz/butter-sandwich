@@ -125,6 +125,8 @@
       }
 
       void evaluate() {
+
+
         this->position->horz += this->trajectory->position.horz;
         this->position->vert += this->trajectory->position.vert;
         this->position->depth += this->trajectory->position.depth;
@@ -133,9 +135,9 @@
         this->angle->roll += this->trajectory->angle.roll;
         this->angle->yaw += this->trajectory->angle.yaw;
 
-        this->scale->horz += this->trajectory->scale.horz;
-        this->scale->vert += this->trajectory->scale.vert;
-        this->scale->depth += this->trajectory->scale.depth;
+        //this->scale->horz += this->trajectory->scale.horz;
+        //this->scale->vert += this->trajectory->scale.vert;
+        //this->scale->depth += this->trajectory->scale.depth;
 
 
         this->trajectory->position.horz *= (this->trajectory->positionRate.horz);
@@ -146,15 +148,21 @@
         this->trajectory->angle.roll *= (this->trajectory->angleRate.roll);
         this->trajectory->angle.yaw *= (this->trajectory->angleRate.yaw);
 
-        this->trajectory->scale.horz *= (this->trajectory->scaleRate.horz);
-        this->trajectory->scale.vert *= (this->trajectory->scaleRate.vert);
-        this->trajectory->scale.depth *= (this->trajectory->scaleRate.depth);
+        //this->trajectory->scale.horz *= (this->trajectory->scaleRate.horz);
+        //this->trajectory->scale.vert *= (this->trajectory->scaleRate.vert);
+        //this->trajectory->scale.depth *= (this->trajectory->scaleRate.depth);
+
+
 
 
         unsigned long int charId = this->identifier;
         const char* hookId = Hook::generateIdentifier(charId, "onEvaluate");
 
         this->executeCallback(hookId, (void*)this);
+
+
+
+
       }
 
       void onEvaluate(void*(*callback)(void*, void*), void* data) {

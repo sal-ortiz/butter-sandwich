@@ -1,4 +1,6 @@
 
+#include <math.h>
+
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 
@@ -116,15 +118,29 @@ void* evaluateCallback(void* inp, void* data) {
   if (KeyboardInput::isPressed(80)) {
     // turn left.
     player->setAction("turning_left");
-    player->trajectory->angle.pitch -= 1;
+    player->trajectory->angle.pitch -= 2;
   }
 
   if (KeyboardInput::isPressed(79)) {
     // turn right.
     player->setAction("turning_right");
-    player->trajectory->angle.pitch += 1;
+    player->trajectory->angle.pitch += 2;
 
   }
+
+
+
+
+  unsigned long int horzLowerBorder = round((background->view->size.horz / 2) - (player->width / 2));
+
+  if (background->view->position.horz < 0) {
+    background->view->position.horz = 0;
+  }
+
+  if (background->view->position.vert < 0) {
+    background->view->position.vert = 0;
+  }
+
 
 
   if (KeyboardInput::isPressed(82)) {
@@ -134,94 +150,77 @@ void* evaluateCallback(void* inp, void* data) {
 
     if (background->view->position.horz <= 0) {
 
-      if (player->position->horz <= (background->view->size.horz / 2) - (player->width / 2)) {
+      if (player->position->horz <= horzLowerBorder) {
         player->trajectory->position.horz += 4 * horzRatio;
 
-        //background->trajectory->position.horz = 0;
-      }
+        printf("\n===========================\n");
+        printf("MOVING SHIP!\n");
+        printf("===========================\n\n");
 
-    } else if (background->view->position.horz >= background->width - background->view->size.horz) {
+      } else {
+        background->trajectory->position.horz += 4 * horzRatio;
 
-      if (player->position->horz >= (background->view->size.horz / 2)/* - (player->width / 2)*/) {
-        player->trajectory->position.horz += 4 * horzRatio;
+        printf("\n===========================\n");
+        printf("MOVING BACKGROUND\n");
+        printf("===========================\n\n");
 
-        //background->trajectory->position.horz = 0;
       }
 
     } else {
       background->trajectory->position.horz += 4 * horzRatio;
+
+      printf("\n===========================\n");
+      printf("MOVING BACKGROUND\n");
+      printf("===========================\n\n");
+
     }
 
   }
 
-
-
-  //  if (horzRatio < 0) {
-  //    player->trajectory->position.horz = background->trajectory->position.horz;
-  //    background->trajectory->position.horz = 0;
-  //  } else {
-  //    background->trajectory->position.horz = player->trajectory->position.horz;
-  //    player->trajectory->position.horz = 0;
-  //  }
-
-
-
+  printf("\n===========================\n");
+  printf("%d\n", SDL_GetTicks());
+  printf("\n");
+  printf("BORDER: %d\n", horzLowerBorder);
+  printf("SHIP POS: %f\n", player->position->horz);
+  printf("\n");
+  printf("BACKGROUND VIEW SIZE: %f\n", background->view->size.horz);
+  printf("BACKGROUND VIEW POS: %f\n", background->view->position.horz);
+  printf("===========================\n\n");
 
 
 
-  if ((background->view->position.horz <= 0)
-    && (player->position->horz > (background->view->size.horz / 2) - (player->width / 2))
-  ) {
-
-    if (horzRatio < 0) {
-      printf("[LEFT] HORZ RATION: %f\n", horzRatio);
-
-      player->trajectory->position.horz = background->trajectory->position.horz;
-      //background->trajectory->position.horz = 0;
-    } else {
-      printf("[RIGHT] HORZ RATION: %f\n", horzRatio);
-
-      background->trajectory->position.horz = player->trajectory->position.horz;
-      player->trajectory->position.horz = 0;
-    }
-
-  }
-
-  if ((background->view->position.horz >= background->width - background->view->size.horz)
-    && (player->position->horz < (background->view->size.horz / 2)/* - (player->width / 2)*/)
-  ) {
-
-    if (horzRatio > 0) {
-      printf("[RIGHT] HORZ RATION: %f\n", horzRatio);
-
-      player->trajectory->position.horz = background->trajectory->position.horz;
-      //background->trajectory->position.horz = 0;
-    } else {
-      printf("[LEFT] HORZ RATION: %f\n", horzRatio);
-
-      background->trajectory->position.horz = player->trajectory->position.horz;
-      player->trajectory->position.horz = 0;
-    }
-
-  }
-
+//  if (player->position->horz <= horzLowerBorder) {
+//    player->trajectory->position.horz = background->trajectory->position.horz;
+//    //background->trajectory->position.horz = 0;
+//
+//  } else {
+//    background->trajectory->position.horz = player->trajectory->position.horz;
+//    //player->trajectory->position.horz = 0;
+//
+//  }
 
 
   if (background->view->position.horz < 0) {
-    background->view->position = 0;
+    background->view->position.horz = 0;
   }
 
   if (player->position->horz < 0) {
     player->position->horz = 0;
   }
 
-  if (background->view->position.horz > (background->width - background->view->size.horz)) {
-    background->view->position.horz = (background->width - background->view->size.horz);
-  }
 
-  if (player->position->horz >= (background->view->size.horz - player->width)) {
-    player->position->horz = background->view->size.horz - player->width;
-  }
+//  if (background->view->position.vert > (background->height - background->view->size.vert)) {
+//    background->view->position.vert = (background->height - background->view->size.vert);
+//  }
+//
+//  if (player->position->vert >= (background->view->size.vert - player->height)) {
+//    player->position->vert = background->view->size.vert - player->height;
+//  }
+
+
+
+
+
 
 
 
