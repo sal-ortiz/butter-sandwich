@@ -148,7 +148,6 @@ void* evaluateCallback(void* inp, void* data) {
     // move forward.
     player->setAction("moving_forward");
 
-
     if ((background->view->position.horz <= 0)
       || (background->view->position.horz >= (background->width - background->view->size.horz))
     ) {
@@ -158,70 +157,54 @@ void* evaluateCallback(void* inp, void* data) {
       ) {
         player->trajectory->position.horz += 4 * horzRatio;
 
-        printf("\n===========================\n");
-        printf("MOVING SHIP!\n");
-        printf("===========================\n\n");
+        //printf("\n===========================\n");
+        //printf("[%d] MOVING SHIP!\n", SDL_GetTicks());
+        //printf("===========================\n\n");
 
       } else {
         background->trajectory->position.horz += 4 * horzRatio;
+        player->trajectory->position.horz += 4 * horzRatio;
 
-        printf("\n===========================\n");
-        printf("MOVING BACKGROUND\n");
-        printf("===========================\n\n");
+        //printf("\n===========================\n");
+        //printf("[%d] MOVING BACKGROUND\n", SDL_GetTicks());
+        //printf("===========================\n\n");
 
       }
 
     } else {
       background->trajectory->position.horz += 4 * horzRatio;
 
-      printf("\n===========================\n");
-      printf("MOVING BACKGROUND\n");
-      printf("===========================\n\n");
+      //printf("\n===========================\n");
+      //printf("[%d] MOVING BACKGROUND\n", SDL_GetTicks());
+      //printf("===========================\n\n");
 
     }
 
-    //if (background->view->position.horz >= (background->width - background->view->size.horz)) {
-
-
-    //  if (player->position->horz > horzUpperBorder) {
-    //    player->trajectory->position.horz += 4 * horzRatio;
-
-    //  } else {
-    //    background->trajectory->position.horz += 4 * horzRatio;
-    //  }
-
-    //} else {
-    //  background->trajectory->position.horz += 4 * horzRatio;
-
-    //}
-
-
-
-
+    printf("\n===========================\n");
+    printf("%d\n", SDL_GetTicks());
+    printf("\n");
+    printf("BORDER: %d\n", horzLowerBorder);
+    printf("SHIP POS: %f\n", player->position->horz);
+    printf("\n");
+    printf("BACKGROUND VIEW SIZE: %f\n", background->view->size.horz);
+    printf("BACKGROUND VIEW POS: %f\n", background->view->position.horz);
+    printf("===========================\n\n");
 
   }
 
-  printf("\n===========================\n");
-  printf("%d\n", SDL_GetTicks());
-  printf("\n");
-  printf("BORDER: %d\n", horzLowerBorder);
-  printf("SHIP POS: %f\n", player->position->horz);
-  printf("\n");
-  printf("BACKGROUND VIEW SIZE: %f\n", background->view->size.horz);
-  printf("BACKGROUND VIEW POS: %f\n", background->view->position.horz);
-  printf("===========================\n\n");
 
 
+  if (player->position->horz <= horzLowerBorder) {
+    //player->trajectory->position.horz = background->trajectory->position.horz;
+    //background->trajectory->position.horz = 0;
 
-//  if (player->position->horz <= horzLowerBorder) {
-//    player->trajectory->position.horz = background->trajectory->position.horz;
-//    //background->trajectory->position.horz = 0;
-//
-//  } else {
-//    background->trajectory->position.horz = player->trajectory->position.horz;
-//    //player->trajectory->position.horz = 0;
-//
-//  }
+  }
+
+  if (player->position->horz >= horzUpperBorder) {
+    //background->trajectory->position.horz = player->trajectory->position.horz;
+    //player->trajectory->position.horz = 0;
+
+  }
 
 
   if (background->view->position.horz < 0) {
@@ -240,15 +223,6 @@ void* evaluateCallback(void* inp, void* data) {
     player->position->horz = background->view->size.horz;
   }
 
-
-
-//  if (background->view->position.vert > (background->height - background->view->size.vert)) {
-//    background->view->position.vert = (background->height - background->view->size.vert);
-//  }
-//
-//  if (player->position->vert >= (background->view->size.vert - player->height)) {
-//    player->position->vert = background->view->size.vert - player->height;
-//  }
 
 
 
