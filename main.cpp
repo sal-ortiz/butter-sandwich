@@ -132,6 +132,7 @@ void* evaluateCallback(void* inp, void* data) {
 
 
   unsigned long int horzLowerBorder = round((background->view->size.horz / 2) - (player->width / 2));
+  unsigned long int horzUpperBorder = round(background->width - horzLowerBorder);
 
   if (background->view->position.horz < 0) {
     background->view->position.horz = 0;
@@ -148,9 +149,13 @@ void* evaluateCallback(void* inp, void* data) {
     player->setAction("moving_forward");
 
 
-    if (background->view->position.horz <= 0) {
+    if ((background->view->position.horz <= 0)
+      || (background->view->position.horz >= (background->width - background->view->size.horz))
+    ) {
 
-      if (player->position->horz <= horzLowerBorder) {
+      if ((player->position->horz < horzLowerBorder)
+        || (player->position->horz > horzUpperBorder)
+      ) {
         player->trajectory->position.horz += 4 * horzRatio;
 
         printf("\n===========================\n");
@@ -174,6 +179,25 @@ void* evaluateCallback(void* inp, void* data) {
       printf("===========================\n\n");
 
     }
+
+    //if (background->view->position.horz >= (background->width - background->view->size.horz)) {
+
+
+    //  if (player->position->horz > horzUpperBorder) {
+    //    player->trajectory->position.horz += 4 * horzRatio;
+
+    //  } else {
+    //    background->trajectory->position.horz += 4 * horzRatio;
+    //  }
+
+    //} else {
+    //  background->trajectory->position.horz += 4 * horzRatio;
+
+    //}
+
+
+
+
 
   }
 
@@ -207,6 +231,15 @@ void* evaluateCallback(void* inp, void* data) {
   if (player->position->horz < 0) {
     player->position->horz = 0;
   }
+
+  if (background->view->position.horz > (background->width - background->view->size.horz)) {
+    if (background->view->position.horz = (background->width - background->view->size.horz));
+  }
+
+  if (player->position->horz > background->view->size.horz) {
+    player->position->horz = background->view->size.horz;
+  }
+
 
 
 //  if (background->view->position.vert > (background->height - background->view->size.vert)) {
