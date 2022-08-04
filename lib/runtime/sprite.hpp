@@ -79,6 +79,13 @@
       void addFrame(Image* img, unsigned int frameNum) {
         // NOTE: The first frasme *must* begin at index 0.
 
+        if (frames->getLength() == 0) {
+          // HACK: We don't actually know our width and height
+          // until we pull our first frame when rendering.
+          this->width = img->view.w;
+          this->height = img->view.h;
+        }
+
         SpriteFrame* newFrame = new SpriteFrame();
 
         newFrame->setImage(img);

@@ -148,8 +148,10 @@ void* evaluateCallback(void* inp, void* data) {
     // move forward.
     player->setAction("moving_forward");
 
-    if ((background->view->position.horz <= 0)
-      || (background->view->position.horz >= (background->width - background->view->size.horz))
+
+
+    if ((background->view->position.horz == 0)
+      || (background->view->position.horz == (background->width - background->view->size.horz))
     ) {
 
       if ((player->position->horz < horzLowerBorder)
@@ -157,13 +159,12 @@ void* evaluateCallback(void* inp, void* data) {
       ) {
         player->trajectory->position.horz += 4 * horzRatio;
 
-        //printf("\n===========================\n");
-        //printf("[%d] MOVING SHIP!\n", SDL_GetTicks());
-        //printf("===========================\n\n");
+        printf("\n===========================\n");
+        printf("[%d] MOVING SHIP!\n", SDL_GetTicks());
+        printf("===========================\n\n");
 
       } else {
         background->trajectory->position.horz += 4 * horzRatio;
-        player->trajectory->position.horz += 4 * horzRatio;
 
         //printf("\n===========================\n");
         //printf("[%d] MOVING BACKGROUND\n", SDL_GetTicks());
@@ -194,17 +195,18 @@ void* evaluateCallback(void* inp, void* data) {
 
 
 
-  if (player->position->horz <= horzLowerBorder) {
-    //player->trajectory->position.horz = background->trajectory->position.horz;
-    //background->trajectory->position.horz = 0;
 
-  }
+  //if (player->position->horz < horzLowerBorder) {
+  //  player->trajectory->position.horz = background->trajectory->position.horz;
+  //  //background->trajectory->position.horz = 0;
+  //
+  //}
 
-  if (player->position->horz >= horzUpperBorder) {
-    //background->trajectory->position.horz = player->trajectory->position.horz;
-    //player->trajectory->position.horz = 0;
-
-  }
+  //if (player->position->horz > horzUpperBorder) {
+  //  background->trajectory->position.horz = player->trajectory->position.horz;
+  //  //player->trajectory->position.horz = 0;
+  //
+  //}
 
 
   if (background->view->position.horz < 0) {
@@ -215,9 +217,12 @@ void* evaluateCallback(void* inp, void* data) {
     player->position->horz = 0;
   }
 
+  // TODO: Scene elements' width and height properties are only
+  //       populated after they are rendered. FIX THIS bug!!
   if (background->view->position.horz > (background->width - background->view->size.horz)) {
-    if (background->view->position.horz = (background->width - background->view->size.horz));
+    background->view->position.horz = background->width - background->view->size.horz;
   }
+
 
   if (player->position->horz > background->view->size.horz) {
     player->position->horz = background->view->size.horz;
@@ -288,17 +293,22 @@ int main(int argc, char *argv[]) {
   background->addSprite("background", backgroundSprite);
   background->setAction("background");
 
-  player->position->horz = (SCREEN_WIDTH / 2) - (75 / 2);
-  player->position->vert = (SCREEN_HEIGHT / 2) - (75 / 2);
+  player->position->horz = round((SCREEN_WIDTH / 2) - (player->width / 2));
+  player->position->vert = round((SCREEN_HEIGHT / 2) - (player->height / 2));
 
 
   player->angle->center.horz = 43;
   player->angle->center.vert = 43;
 
-  background->view->position.horz = 0;
-  background->view->position.vert = 0;
+  // TODO: Scene elements' width and height properties are only
+  //       populated after they are rendered. FIX THIS bug!!
+  //background->view->position.horz = 0;
+  //background->view->position.vert = 0;
   background->view->size.horz = SCREEN_WIDTH;
   background->view->size.vert = SCREEN_HEIGHT;
+  background->view->position.horz = round((3080 / 2) - (SCREEN_WIDTH / 2));
+  background->view->position.vert = round((2080 / 2) - (SCREEN_HEIGHT / 2));
+
 
 
   app->start();
