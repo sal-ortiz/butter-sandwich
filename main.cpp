@@ -300,14 +300,10 @@ int main(int argc, char *argv[]) {
   player->angle->center.horz = 43;
   player->angle->center.vert = 43;
 
-  // TODO: Scene elements' width and height properties are only
-  //       populated after they are rendered. FIX THIS bug!!
-  //background->view->position.horz = 0;
-  //background->view->position.vert = 0;
   background->view->size.horz = SCREEN_WIDTH;
   background->view->size.vert = SCREEN_HEIGHT;
-  background->view->position.horz = round((3080 / 2) - (SCREEN_WIDTH / 2));
-  background->view->position.vert = round((2080 / 2) - (SCREEN_HEIGHT / 2));
+  background->view->position.horz = round((background->width / 2) - (SCREEN_WIDTH / 2));
+  background->view->position.vert = round((background->height / 2) - (SCREEN_HEIGHT / 2));
 
 
 

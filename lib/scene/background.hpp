@@ -66,7 +66,11 @@
       }
 
       void setAction(const char* curAction) {
+        Sprite* curSprite = sprites.get(curAction);
+
         this->action = curAction;
+        this->width = curSprite->width;
+        this->height = curSprite->height;
       }
 
       void addSprite(const char* actionId, Sprite* sprite) {
