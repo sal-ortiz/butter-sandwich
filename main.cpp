@@ -150,13 +150,9 @@ void* evaluateCallback(void* inp, void* data) {
 
 
 
-    if ((background->view->position.horz == 0)
-      || (background->view->position.horz == (background->width - background->view->size.horz))
-    ) {
+    if (background->view->position.horz == 0) {
 
-      if ((player->position->horz < horzLowerBorder)
-        || (player->position->horz > horzUpperBorder)
-      ) {
+      if (player->position->horz < horzLowerBorder) {
         player->trajectory->position.horz += 4 * horzRatio;
 
         printf("\n===========================\n");
@@ -165,10 +161,11 @@ void* evaluateCallback(void* inp, void* data) {
 
       } else {
         background->trajectory->position.horz += 4 * horzRatio;
+        //player->trajectory->position.horz += 4 * horzRatio;
 
-        //printf("\n===========================\n");
-        //printf("[%d] MOVING BACKGROUND\n", SDL_GetTicks());
-        //printf("===========================\n\n");
+        printf("\n===========================\n");
+        printf("[%d] MOVING BACKGROUND\n", SDL_GetTicks());
+        printf("===========================\n\n");
 
       }
 
@@ -195,18 +192,23 @@ void* evaluateCallback(void* inp, void* data) {
 
 
 
+  if (background->view->position.horz == 0) {
+    player->trajectory->position.horz = background->trajectory->position.horz;
+    //background->trajectory->position.horz = 0;
+  }
 
   //if (player->position->horz < horzLowerBorder) {
   //  player->trajectory->position.horz = background->trajectory->position.horz;
   //  //background->trajectory->position.horz = 0;
-  //
   //}
 
   //if (player->position->horz > horzUpperBorder) {
   //  background->trajectory->position.horz = player->trajectory->position.horz;
   //  //player->trajectory->position.horz = 0;
-  //
   //}
+
+
+
 
 
   if (background->view->position.horz < 0) {
