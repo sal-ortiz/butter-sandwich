@@ -1,4 +1,9 @@
 
+#if __cplusplus < 201703L
+  #error expects C++17 standard.
+#endif
+
+
 #include <math.h>
 
 #include <SDL2/SDL.h>
