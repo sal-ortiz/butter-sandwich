@@ -24,7 +24,7 @@
           NULL,
 
           evt.data1,
-          evt.data2,
+          evt.data2
         };
 
         return params;
