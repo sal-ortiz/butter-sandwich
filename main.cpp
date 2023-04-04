@@ -138,14 +138,18 @@ void* evaluateCallback(void* inp, void* data) {
 
   unsigned long int horzLowerBorder = round((background->view->size.horz / 2) - (player->width / 2));
   unsigned long int horzUpperBorder = round(background->width - horzLowerBorder);
+  unsigned long int vertLowerBorder = round((background->view->size.vert / 2) - (player->height / 2));
+  unsigned long int vertUpperBorder = round(background->height - vertLowerBorder);
 
   if (background->view->position.horz < 0) {
+    // keep us from moving beyond our left limit.
     background->view->position.horz = 0;
   }
 
-  if (background->view->position.vert < 0) {
-    background->view->position.vert = 0;
-  }
+  //if (background->view->position.vert < 0) {
+  //  // keep us from moving beyond our upper limit.
+  //  background->view->position.vert = 0;
+  //}
 
 
 
@@ -153,87 +157,109 @@ void* evaluateCallback(void* inp, void* data) {
     // move forward.
     player->setAction("moving_forward");
 
+    if (background->view->position.horz <= 0) {
+      // move our player sprite horizontally along our borders.
+      player->trajectory->position.horz += 4 * horzRatio;
+      background->view->position.horz = 0;
 
-
-    if (background->view->position.horz == 0) {
-
-      if (player->position->horz < horzLowerBorder) {
-        player->trajectory->position.horz += 4 * horzRatio;
-
-        printf("\n===========================\n");
-        printf("[%d] MOVING SHIP!\n", SDL_GetTicks());
-        printf("===========================\n\n");
-
-      } else {
-        background->trajectory->position.horz += 4 * horzRatio;
-        //player->trajectory->position.horz += 4 * horzRatio;
-
-        printf("\n===========================\n");
-        printf("[%d] MOVING BACKGROUND\n", SDL_GetTicks());
-        printf("===========================\n\n");
-
+      if (player->position->horz >= horzLowerBorder && player->trajectory->position.horz > 0) {
+        background->trajectory->position.horz = player->trajectory->position.horz;
+        player->position->horz = horzLowerBorder;
+        player->trajectory->position.horz = 0;
       }
 
     } else {
+      // move our background horizontally around our player.
       background->trajectory->position.horz += 4 * horzRatio;
-
-      //printf("\n===========================\n");
-      //printf("[%d] MOVING BACKGROUND\n", SDL_GetTicks());
-      //printf("===========================\n\n");
-
     }
 
-    printf("\n===========================\n");
-    printf("%d\n", SDL_GetTicks());
-    printf("\n");
-    printf("BORDER: %d\n", horzLowerBorder);
-    printf("SHIP POS: %f\n", player->position->horz);
-    printf("\n");
-    printf("BACKGROUND VIEW SIZE: %f\n", background->view->size.horz);
-    printf("BACKGROUND VIEW POS: %f\n", background->view->position.horz);
-    printf("===========================\n\n");
+
+    if (background->view->position.vert <= 0) {
+      // move our player sprite vertically along our borders.
+      player->trajectory->position.vert += 4 * vertRatio;
+      background->view->position.vert = 0;
+
+      if (player->position->vert >= vertLowerBorder && player->trajectory->position.vert > 0) {
+        background->trajectory->position.vert = player->trajectory->position.vert;
+        player->position->vert = vertLowerBorder;
+        player->trajectory->position.vert = 0;
+      }
+
+    } else {
+      // move our background vertically around our player.
+      background->trajectory->position.vert += 4 * vertRatio;
+    }
+
+
+
+
+
+
+
+    if (background->view->position.horz == 0
+      && player->position->horz == horzLowerBorder
+      && player->trajectory->position.horz < 0
+    ) {
+      // transfer our background horizontal trajectory to our player.
+      player->trajectory->position.horz = background->trajectory->position.horz;
+      background->view->position.horz = 0;
+      background->trajectory->position.horz = 0;
+    }
+
+
+    if (background->view->position.vert == 0
+      && player->position->vert == vertLowerBorder
+      && player->trajectory->position.vert < 0
+    ) {
+      // transfer our background vertical trajectory to our player.
+      player->trajectory->position.vert = background->trajectory->position.vert;
+      background->view->position.vert = 0;
+      background->trajectory->position.vert = 0;
+    }
+
+
+
+
+    //printf("\n===========================\n");
+    //printf("CLOCK: %d\n", SDL_GetTicks());
+    //printf("\n");
+    //printf("BORDER: %d\n", horzLowerBorder);
+    //printf("SHIP HORZ POS: %f\n", player->position->horz);
+    //printf("SHIP VERT POS: %f\n", player->position->vert);
+    //printf("SHIP HORZ TRAJ: %f\n", player->trajectory->position.horz);
+    //printf("SHIP VERT TRAJ: %f\n", player->trajectory->position.vert);
+    //printf("\n");
+    //printf("BACKGROUND VIEW HORZ SIZE: %f\n", background->view->size.horz);
+    //printf("BACKGROUND VIEW VERT SIZE: %f\n", background->view->size.vert);
+    //printf("BACKGROUND VIEW HORZ POS: %f\n", background->view->position.horz);
+    //printf("BACKGROUND VIEW VERT POS: %f\n", background->view->position.vert);
+    //printf("BACKGROUND VIEW HORZ TRAJ: %f\n", background->trajectory->position.horz);
+    //printf("BACKGROUND VIEW VERT TRAJ: %f\n", background->trajectory->position.vert);
+    //printf("===========================\n\n");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   }
 
 
 
-  if (background->view->position.horz == 0) {
-    player->trajectory->position.horz = background->trajectory->position.horz;
-    //background->trajectory->position.horz = 0;
-  }
-
-  //if (player->position->horz < horzLowerBorder) {
-  //  player->trajectory->position.horz = background->trajectory->position.horz;
-  //  //background->trajectory->position.horz = 0;
-  //}
-
-  //if (player->position->horz > horzUpperBorder) {
-  //  background->trajectory->position.horz = player->trajectory->position.horz;
-  //  //player->trajectory->position.horz = 0;
-  //}
-
-
-
-
-
-  if (background->view->position.horz < 0) {
-    background->view->position.horz = 0;
-  }
-
-  if (player->position->horz < 0) {
-    player->position->horz = 0;
-  }
-
-  // TODO: Scene elements' width and height properties are only
-  //       populated after they are rendered. FIX THIS bug!!
-  if (background->view->position.horz > (background->width - background->view->size.horz)) {
-    background->view->position.horz = background->width - background->view->size.horz;
-  }
-
-
-  if (player->position->horz > background->view->size.horz) {
-    player->position->horz = background->view->size.horz;
-  }
 
 
 
