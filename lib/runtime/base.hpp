@@ -32,7 +32,7 @@
         this->identifier = this->generateIdentifier();
       }
 
-      unsigned  long int getIdentifier() {
+      unsigned long int getIdentifier() {
         return this->identifier;
       }
 
