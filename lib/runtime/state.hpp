@@ -36,18 +36,22 @@
 
       void* get(const char* key) {
         char* identifier = this->generateHookIdentifier(key, "get");
-        void* val = (void*)55;
-
+        void* val;
 
         if (this->data.has(key)) {
           val = this->data.get(key);
         }
 
-        HookCallbackParams params = { (void*)this, (void*)NULL, val };
+        HookCallbackParams inp = { (void*)this, (void*)NULL, val };
+        void* outp = RuntimeBase::executeCallback(identifier, (void*)&inp);
 
-        val = RuntimeBase::executeCallback(identifier, (void*)&params);
+        HookCallbackParams retVal = *(HookCallbackParams*)outp;
 
-        return val;
+        if (retVal.newValue != NULL) {
+          return retVal.newValue;
+        }
+
+        return retVal.oldValue;
       }
 
       void set(const char* key, void* val) {
@@ -60,20 +64,25 @@
           oldVal = NULL;
         }
 
-        HookCallbackParams params = { (void*)this, val, oldVal };
+        HookCallbackParams inp = { (void*)this, val, oldVal };
+        void* outp = RuntimeBase::executeCallback(identifier, (void*)&inp);
 
-        val = RuntimeBase::executeCallback(identifier, (void*)&params);
+        HookCallbackParams retVal = *(HookCallbackParams*)outp;
 
-        this->data.set(key, val);
+        if (retVal.newValue != NULL) {
+          this->data.set(key, retVal.oldValue);
+        }
+
+        this->data.set(key, retVal.newValue);
       }
 
-      void onGet(const char* key, void*(*callback)(void*, void*), void* inp) {
+      void onGet(const char* key, void*(*callback)(void*, void*)) {
         char* id = this->generateHookIdentifier(key, "get");
 
         RuntimeBase::on(id, callback, (void*)NULL);
       }
 
-      void onSet(const char* key, void*(*callback)(void*, void*), void* inp) {
+      void onSet(const char* key, void*(*callback)(void*, void*)) {
         const char* id = this->generateHookIdentifier(key, "set");
 
         RuntimeBase::on(id, callback, (void*)NULL);
