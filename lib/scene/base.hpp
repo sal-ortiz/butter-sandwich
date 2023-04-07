@@ -5,17 +5,21 @@
   #define _SCENE_BASE_HPP_
 
   #include "../runtime/base.hpp"
+  #include "../runtime/state.hpp"
+  #include "../core/dict.hpp"
+  #include "../core/data/position.hpp"
+  #include "../core/data/angle.hpp"
+  #include "../core/data/scale.hpp"
+  #include "../core/data/size.hpp"
+  #include "../core/data/view.hpp"
+  #include "../core/data/trajectory.hpp"
 
 
   class SceneBase: public RuntimeBase {
 
-
-    private:
+    protected:
 
       void*(*evalCallback)(void*);
-
-
-    protected:
 
       const char* action;
       Dict<Sprite*> sprites;
@@ -25,13 +29,14 @@
 
       State* state;
 
+      // TODO: hack: find a better way to serve these values.
       unsigned long int width;
       unsigned long int height;
 
       SceneBase() {
-        this->generateIdentifier();
-
+        this->identifier = RuntimeBase::generateIdentifier();
         this->evalCallback = NULL;
+
         this->state = new State();
 
         this->state->set("position", new Position());
@@ -42,7 +47,15 @@
       }
 
       void addSprite(const char* actionId, Sprite* sprite) {
-        sprites.set(actionId, sprite);
+        this->sprites.set(actionId, sprite);
+      }
+
+      void setAction(const char* curAction) {
+        Sprite* curSprite = this->sprites.get(curAction);
+
+        this->action = curAction;
+        this->width = curSprite->width;
+        this->height = curSprite->height;
       }
 
       void onEvaluate(void*(*callback)(void*, void*), void* data) {
@@ -56,9 +69,8 @@
         const char* actionId = this->action;
 
         Position* position = (Position*)this->state->get("position");
-
         Angle* angle = (Angle*)this->state->get("angle");
-        Scale* scale = (Scale*)this->state->get("scale");
+        //Scale* scale = (Scale*)this->state->get("scale");
         View* view = (View*)this->state->get("view");
 
         Sprite* sprite = this->sprites.get(actionId);
@@ -83,7 +95,5 @@
       }
 
   };
-
-
 
 #endif

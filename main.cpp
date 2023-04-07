@@ -105,6 +105,7 @@ void* evaluateCallback(void* inp, void* data) {
   Angle* playerAngle = (Angle*)player->state->get("angle");
   Trajectory* playerTraj = (Trajectory*)player->state->get("trajectory");
   Trajectory* backgroundTraj = (Trajectory*)background->state->get("trajectory");
+  View* backgroundView = (View*)background->state->get("view");
 
   if (playerAngle->pitch >= 180) {
     horzRatio = -(((270 - playerAngle->pitch) / 90));
@@ -144,10 +145,10 @@ void* evaluateCallback(void* inp, void* data) {
     // move forward.
     player->setAction("moving_forward");
 
-    if (background->view->position.horz <= 0) {
+    if (backgroundView->position.horz <= 0) {
       // move our player sprite horizontally along our left borders.
       playerTraj->position.horz += 4 * horzRatio;
-      background->view->position.horz = 0;
+      backgroundView->position.horz = 0;
 
     } else {
       // move our background horizontally around our player.
@@ -156,8 +157,8 @@ void* evaluateCallback(void* inp, void* data) {
 
   }
 
-  unsigned long int horzBorder = round((background->view->size.horz / 2) - (player->width / 2));
-  unsigned long int vertBorder = round((background->view->size.vert / 2) - (player->height / 2));
+  unsigned long int horzBorder = round((backgroundView->size.horz / 2) - (player->width / 2));
+  unsigned long int vertBorder = round((backgroundView->size.vert / 2) - (player->height / 2));
 
   Position* playerPos = (Position*)player->state->get("position");
 
@@ -165,9 +166,9 @@ void* evaluateCallback(void* inp, void* data) {
     backgroundTraj->position.horz = playerTraj->position.horz;
     playerPos->horz = horzBorder;
     playerTraj->position.horz = 0;
-  } else if (background->view->position.horz <= 0 && backgroundTraj->position.horz < 0) {
+  } else if (backgroundView->position.horz <= 0 && backgroundTraj->position.horz < 0) {
     playerTraj->position.horz = backgroundTraj->position.horz;
-    background->view->position.horz = 0;
+    backgroundView->position.horz = 0;
     backgroundTraj->position.horz = 0;
 
   }
@@ -291,6 +292,7 @@ int main(int argc, char *argv[]) {
 
   Position* playerPos = (Position*)player->state->get("position");
   Angle* playerAngle = (Angle*)player->state->get("angle");
+  View* backgroundView = (View*)background->state->get("view");
 
   playerPos->horz = round((SCREEN_WIDTH / 2) - (player->width / 2));
   playerPos->vert = round((SCREEN_HEIGHT / 2) - (player->height / 2));
@@ -298,13 +300,10 @@ int main(int argc, char *argv[]) {
   playerAngle->center.horz = 43;
   playerAngle->center.vert = 43;
 
-  background->view->size.horz = SCREEN_WIDTH;
-  background->view->size.vert = SCREEN_HEIGHT;
-  background->view->position.horz = round((background->width / 2) - (SCREEN_WIDTH / 2));
-  background->view->position.vert = round((background->height / 2) - (SCREEN_HEIGHT / 2));
-
-
-
+  backgroundView->size.horz = SCREEN_WIDTH;
+  backgroundView->size.vert = SCREEN_HEIGHT;
+  backgroundView->position.horz = round((background->width / 2) - (SCREEN_WIDTH / 2));
+  backgroundView->position.vert = round((background->height / 2) - (SCREEN_HEIGHT / 2));
 
   app->start();
 

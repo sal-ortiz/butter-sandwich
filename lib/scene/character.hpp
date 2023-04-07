@@ -4,16 +4,7 @@
   #define _SCENE_CHARACTER_HPP
 
   #include "../core/dict.hpp"
-  #include "../core/data/position.hpp"
-  #include "../core/data/angle.hpp"
-  #include "../core/data/scale.hpp"
-  #include "../core/data/size.hpp"
-  #include "../core/data/view.hpp"
-  #include "../core/data/trajectory.hpp"
-
-  #include "../runtime/state.hpp"
   #include "../runtime/sprite.hpp"
-
   #include "../scene/base.hpp"
 
 
@@ -21,12 +12,7 @@
 
     public:
 
-      SceneCharacter() {
-        this->identifier = SceneCharacter::generateIdentifier();
-      }
-
       void evaluate() {
-
         Position* position = (Position*)this->state->get("position");
         Angle* angle = (Angle*)this->state->get("angle");
         Trajectory* trajectory = (Trajectory*)this->state->get("trajectory");
@@ -47,26 +33,10 @@
         trajectory->angle.roll *= (trajectory->angleRate.roll);
         trajectory->angle.yaw *= (trajectory->angleRate.yaw);
 
-
-
-
-
         unsigned long int charId = this->identifier;
         const char* hookId = Hook::generateIdentifier(charId, "onEvaluate");
 
         this->executeCallback(hookId, (void*)this);
-
-
-
-
-      }
-
-      void setAction(const char* curAction) {
-        Sprite* curSprite = sprites.get(curAction);
-
-        this->action = curAction;
-        this->width = curSprite->width;
-        this->height = curSprite->height;
       }
 
   };
