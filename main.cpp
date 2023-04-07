@@ -71,14 +71,18 @@ void* closedCallback(void* inp, void* data) {
 //
 //  //if (keyboardState[80]) {
 //  //  // turn left.
+//  //  Trajectory* playerTraj = (Trajectory*)player->state->get("trajectory");
+//
 //  //  player->setAction("turning_left");
-//  //  player->trajectory->angle.pitch -= 1;
+//  //  playerTraj->angle.pitch -= 2;
 //  //}
 //
 //  //if (keyboardState[79]) {
 //  //  // turn right.
+//  //  Trajectory* playerTraj = (Trajectory*)player->state->get("trajectory");
+//
 //  //  player->setAction("turning_right");
-//  //  player->trajectory->angle.pitch += 1;
+//  //  playerTraj->angle.pitch += 2;
 //  //}
 //
 //  //if (keyboardState[82]) {
@@ -102,6 +106,7 @@ void* evaluateCallback(void* inp, void* data) {
   float horzRatio = 1.0;
   float vertRatio = 0.0;
 
+  Position* playerPos = (Position*)player->state->get("position");
   Angle* playerAngle = (Angle*)player->state->get("angle");
   Trajectory* playerTraj = (Trajectory*)player->state->get("trajectory");
   Trajectory* backgroundTraj = (Trajectory*)background->state->get("trajectory");
@@ -138,7 +143,6 @@ void* evaluateCallback(void* inp, void* data) {
     player->setAction("turning_right");
 
     playerTraj->angle.pitch += 2;
-
   }
 
   if (KeyboardInput::isPressed(82)) {
@@ -155,14 +159,25 @@ void* evaluateCallback(void* inp, void* data) {
       backgroundTraj->position.horz += 4 * horzRatio;
     }
 
+    if (backgroundView->position.vert <= 0) {
+      // move our player sprite verticall along our left borders.
+      playerTraj->position.vert += 4 * vertRatio;
+      backgroundView->position.vert = 0;
+
+    } else {
+      // move our background vertically around our player.
+      backgroundTraj->position.vert += 4 * vertRatio;
+    }
+
   }
 
   unsigned long int horzBorder = round((backgroundView->size.horz / 2) - (player->width / 2));
   unsigned long int vertBorder = round((backgroundView->size.vert / 2) - (player->height / 2));
 
-  Position* playerPos = (Position*)player->state->get("position");
-
-  if (playerPos->horz >= horzBorder && playerTraj->position.horz > 0) {
+  if (backgroundView->position.horz <= 0
+    && playerPos->horz >= horzBorder
+    && playerTraj->position.horz > 0
+  ) {
     backgroundTraj->position.horz = playerTraj->position.horz;
     playerPos->horz = horzBorder;
     playerTraj->position.horz = 0;
@@ -170,10 +185,20 @@ void* evaluateCallback(void* inp, void* data) {
     playerTraj->position.horz = backgroundTraj->position.horz;
     backgroundView->position.horz = 0;
     backgroundTraj->position.horz = 0;
-
   }
 
-
+  if (backgroundView->position.vert <= 0
+    && playerPos->vert >= vertBorder
+    && playerTraj->position.vert > 0
+  ) {
+    backgroundTraj->position.vert = playerTraj->position.vert;
+    playerPos->vert = vertBorder;
+    playerTraj->position.vert = 0;
+  } else if (backgroundView->position.vert <= 0 && backgroundTraj->position.vert < 0) {
+    playerTraj->position.vert = backgroundTraj->position.vert;
+    backgroundView->position.vert = 0;
+    backgroundTraj->position.vert = 0;
+  }
 
 
 
@@ -209,18 +234,17 @@ void* evaluateCallback(void* inp, void* data) {
     playerPos->horz = 0;
   }
 
-
   if (playerPos->vert < 0) {
     playerPos->vert = 0;
   }
 
-  //if (background->view->position.horz >= background->width - background->view->size.horz) {
-  //  background->view->position.horz = background->width - background->view->size.horz;
-  //}
+  if (backgroundView->position.horz >= background->width - backgroundView->size.horz) {
+    backgroundView->position.horz = background->width - backgroundView->size.horz;
+  }
 
-  //if (background->view->position.vert >= background->height - background->view->size.vert) {
-  //  background->view->position.vert = background->height - background->view->size.vert;
-  //}
+  if (backgroundView->position.vert >= background->height - backgroundView->size.vert) {
+    backgroundView->position.vert = background->height - backgroundView->size.vert;
+  }
 
 
 
