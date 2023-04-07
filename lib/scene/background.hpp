@@ -18,15 +18,10 @@
 
     public:
 
-      State state;
       Dict<Sprite*> sprites;
 
-      Position* position;
-      Angle* angle;
-      Scale* scale;
       View* view;
 
-      Trajectory* trajectory;
 
       // TODO: hack: find a better way to serve these values.
       float width;
@@ -41,28 +36,9 @@
         this->evalCallback = NULL;
         this->identifier = SceneBackground::generateIdentifier();
 
-        this->position = new Position(0, 0, 0);
-        this->angle = new Angle(0.0, 0.0, 0.0, 0, 0, 0);
-        this->scale = new Scale(0.0, 0.0, 0.0);
+        Trajectory* trajectory = (Trajectory*)this->state->get("trajectory");
+
         this->view = new View(0, 0, 0, 0, 0, 0);
-        this->trajectory = new Trajectory();
-
-        // TODO: This belongs in this class' instance.
-        this->trajectory->positionRate.horz = 0.9;
-        this->trajectory->positionRate.vert = 0.9;
-        this->trajectory->positionRate.depth = 0.9;
-
-        this->trajectory->position.horz = 0;
-        this->trajectory->position.vert = 0;
-        this->trajectory->position.depth = 0;
-
-        this->trajectory->scale.horz = 0;
-        this->trajectory->scale.vert = 0;
-        this->trajectory->scale.depth = 0;
-
-        this->trajectory->angle.pitch = 0;
-        this->trajectory->angle.roll = 0;
-        this->trajectory->angle.yaw = 0;
       }
 
       void setAction(const char* curAction) {
@@ -80,7 +56,11 @@
       void render(SDL_Renderer* renderer) {
         const char* actionId = this->action;
 
-        Scale* scale = this->scale;
+        Angle* angle = (Angle*)this->state->get("angle");
+        Scale* scale = (Scale*)this->state->get("scale");
+        View* view = this->view;
+        Position* position = (Position*)this->state->get("position");
+
 
         Sprite* sprite = sprites.get(actionId);
 
@@ -90,50 +70,25 @@
 
         sprite->render(
           renderer,
-          this->position->horz,
-          this->position->vert,
-          this->view->position.horz,
-          this->view->position.vert,
-          this->view->size.horz,
-          this->view->size.vert
+          position->horz,
+          position->vert,
+          view->position.horz,
+          view->position.vert,
+          view->size.horz,
+          view->size.vert
         );
       }
 
       void evaluate() {
-        this->view->position.horz += this->trajectory->position.horz;
-        this->view->position.vert += this->trajectory->position.vert;
-        this->view->position.depth += this->trajectory->position.depth;
+        Trajectory* trajectory = (Trajectory*)this->state->get("trajectory");
 
-        //this->angle->pitch += this->trajectory->angle.pitch;
-        //this->angle->roll += this->trajectory->angle.roll;
-        //this->angle->yaw += this->trajectory->angle.yaw;
+        this->view->position.horz += trajectory->position.horz;
+        this->view->position.vert += trajectory->position.vert;
+        this->view->position.depth += trajectory->position.depth;
 
-        //this->scale->horz += this->trajectory->scale.horz;
-        //this->scale->vert += this->trajectory->scale.vert;
-        //this->scale->depth += this->trajectory->scale.depth;
-
-
-        this->trajectory->position.horz *= (this->trajectory->positionRate.horz);
-        this->trajectory->position.vert *= (this->trajectory->positionRate.vert);
-        this->trajectory->position.depth *= (this->trajectory->positionRate.depth);
-
-        //this->trajectory->angle.pitch *= (this->trajectory->angleRate.pitch);
-        //this->trajectory->angle.roll *= (this->trajectory->angleRate.roll);
-        //this->trajectory->angle.yaw *= (this->trajectory->angleRate.yaw);
-
-        //this->trajectory->scale.horz *= (this->trajectory->scaleRate.horz);
-        //this->trajectory->scale.vert *= (this->trajectory->scaleRate.vert);
-        //this->trajectory->scale.depth *= (this->trajectory->scaleRate.depth);
-
-
-
-
-        //if (this->view->position.horz >= 0) {
-        //  this->view->position.horz;
-        //}
-
-
-
+        trajectory->position.horz *= trajectory->positionRate.horz;
+        trajectory->position.vert *= trajectory->positionRate.vert;
+        trajectory->position.depth *= trajectory->positionRate.depth;
 
         unsigned long int charId = this->identifier;
         const char* hookId = Hook::generateIdentifier(charId, "onEvaluate");

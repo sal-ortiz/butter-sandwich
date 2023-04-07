@@ -17,7 +17,8 @@
 #include "./lib/runtime/sprite.hpp"
 
 #include "./src/lib/player_one.hpp"
-#include "./lib/scene/background.hpp"
+#include "./src/lib/background.hpp"
+//#include "./lib/scene/background.hpp"
 
 
 const unsigned char FRAMERATE = 60; // fps
@@ -28,7 +29,7 @@ Window* win = new Window();
 Application* app = new Application();
 
 PlayerOne* player = new PlayerOne();
-SceneBackground* background = new SceneBackground();
+Background* background = new Background();
 
 
 void* quitCallback(void* inp, void* data) {
@@ -101,18 +102,22 @@ void* evaluateCallback(void* inp, void* data) {
   float horzRatio = 1.0;
   float vertRatio = 0.0;
 
-  if (player->angle->pitch >= 180) {
-    horzRatio = -(((270 - player->angle->pitch) / 90));
+  Angle* playerAngle = (Angle*)player->state->get("angle");
+  Trajectory* playerTraj = (Trajectory*)player->state->get("trajectory");
+  Trajectory* backgroundTraj = (Trajectory*)background->state->get("trajectory");
+
+  if (playerAngle->pitch >= 180) {
+    horzRatio = -(((270 - playerAngle->pitch) / 90));
   } else {
-    horzRatio = ((90 - player->angle->pitch) / 90);
+    horzRatio = ((90 - playerAngle->pitch) / 90);
   }
 
-  if (player->angle->pitch <= 90) {
-    vertRatio = (player->angle->pitch) / 90;
-  } else if (player->angle->pitch > 270) {
-    vertRatio = -(360 - player->angle->pitch) / 90;
+  if (playerAngle->pitch <= 90) {
+    vertRatio = (playerAngle->pitch) / 90;
+  } else if (playerAngle->pitch > 270) {
+    vertRatio = -(360 - playerAngle->pitch) / 90;
   } else {
-    vertRatio = (180 - player->angle->pitch) / 90;
+    vertRatio = (180 - playerAngle->pitch) / 90;
   }
 
   if (KeyboardInput::isReleased(82)) {
@@ -123,17 +128,17 @@ void* evaluateCallback(void* inp, void* data) {
   if (KeyboardInput::isPressed(80)) {
     // turn left.
     player->setAction("turning_left");
-    player->trajectory->angle.pitch -= 2;
+
+    playerTraj->angle.pitch -= 2;
   }
 
   if (KeyboardInput::isPressed(79)) {
     // turn right.
     player->setAction("turning_right");
-    player->trajectory->angle.pitch += 2;
+
+    playerTraj->angle.pitch += 2;
 
   }
-
-
 
   if (KeyboardInput::isPressed(82)) {
     // move forward.
@@ -141,12 +146,12 @@ void* evaluateCallback(void* inp, void* data) {
 
     if (background->view->position.horz <= 0) {
       // move our player sprite horizontally along our left borders.
-      player->trajectory->position.horz += 4 * horzRatio;
+      playerTraj->position.horz += 4 * horzRatio;
       background->view->position.horz = 0;
 
     } else {
       // move our background horizontally around our player.
-      background->trajectory->position.horz += 4 * horzRatio;
+      backgroundTraj->position.horz += 4 * horzRatio;
     }
 
   }
@@ -154,18 +159,18 @@ void* evaluateCallback(void* inp, void* data) {
   unsigned long int horzBorder = round((background->view->size.horz / 2) - (player->width / 2));
   unsigned long int vertBorder = round((background->view->size.vert / 2) - (player->height / 2));
 
-  if (player->position->horz >= horzBorder && player->trajectory->position.horz > 0) {
-    background->trajectory->position.horz = player->trajectory->position.horz;
-    player->position->horz = horzBorder;
-    player->trajectory->position.horz = 0;
+  Position* playerPos = (Position*)player->state->get("position");
 
-  } else if (background->view->position.horz <= 0 && background->trajectory->position.horz < 0) {
-    player->trajectory->position.horz = background->trajectory->position.horz;
+  if (playerPos->horz >= horzBorder && playerTraj->position.horz > 0) {
+    backgroundTraj->position.horz = playerTraj->position.horz;
+    playerPos->horz = horzBorder;
+    playerTraj->position.horz = 0;
+  } else if (background->view->position.horz <= 0 && backgroundTraj->position.horz < 0) {
+    playerTraj->position.horz = backgroundTraj->position.horz;
     background->view->position.horz = 0;
-    background->trajectory->position.horz = 0;
+    backgroundTraj->position.horz = 0;
 
   }
-
 
 
 
@@ -199,13 +204,14 @@ void* evaluateCallback(void* inp, void* data) {
 
 
 
-  if (player->position->horz < 0) {
-    player->position->horz = 0;
+  if (playerPos->horz < 0) {
+    playerPos->horz = 0;
   }
 
-  //if (player->position->vert < 0) {
-  //  player->position->vert = 0;
-  //}
+
+  if (playerPos->vert < 0) {
+    playerPos->vert = 0;
+  }
 
   //if (background->view->position.horz >= background->width - background->view->size.horz) {
   //  background->view->position.horz = background->width - background->view->size.horz;
@@ -225,10 +231,10 @@ void* evaluateCallback(void* inp, void* data) {
 
 
 
-
   // keep angle within 360 degrees
-  player->angle->pitch = player->angle->pitch < 0 ? 360 - abs(player->angle->pitch) : player->angle->pitch;
-  player->angle->pitch = player->angle->pitch >= 360 ? player->angle->pitch / 360 : player->angle->pitch;
+  // TODO: enforce this from a state callback.
+  playerAngle->pitch = playerAngle->pitch < 0 ? 360 - abs(playerAngle->pitch) : playerAngle->pitch;
+  playerAngle->pitch = playerAngle->pitch >= 360 ? playerAngle->pitch / 360 : playerAngle->pitch;
 
   return (void*)NULL;
 }
@@ -282,16 +288,21 @@ int main(int argc, char *argv[]) {
   background->addSprite("background", backgroundSprite);
   background->setAction("background");
 
-  player->position->horz = round((SCREEN_WIDTH / 2) - (player->width / 2));
-  player->position->vert = round((SCREEN_HEIGHT / 2) - (player->height / 2));
 
-  player->angle->center.horz = 43;
-  player->angle->center.vert = 43;
+  Position* playerPos = (Position*)player->state->get("position");
+  Angle* playerAngle = (Angle*)player->state->get("angle");
+
+  playerPos->horz = round((SCREEN_WIDTH / 2) - (player->width / 2));
+  playerPos->vert = round((SCREEN_HEIGHT / 2) - (player->height / 2));
+
+  playerAngle->center.horz = 43;
+  playerAngle->center.vert = 43;
 
   background->view->size.horz = SCREEN_WIDTH;
   background->view->size.vert = SCREEN_HEIGHT;
   background->view->position.horz = round((background->width / 2) - (SCREEN_WIDTH / 2));
   background->view->position.vert = round((background->height / 2) - (SCREEN_HEIGHT / 2));
+
 
 
 
