@@ -21,7 +21,7 @@
 //#include "./lib/scene/background.hpp"
 
 
-const unsigned char FRAMERATE = 60; // fps
+const unsigned char FRAMERATE = 120; // fps
 const unsigned int SCREEN_WIDTH = 1024;
 const unsigned int SCREEN_HEIGHT = 769;
 
@@ -285,6 +285,7 @@ int main(int argc, char *argv[]) {
   Image* shipTurningRight = Image::load("./ship_sheet.bmp", 190, 50, 75, 75);
   Image* shipMovingForward = Image::load("./ship_sheet.bmp", 90, 50, 75, 75);
   Image* backgroundImage = Image::load("./background.bmp", 0, 0, 3008, 2000);
+  //Image* backgroundImage = Image::load("./background2.bmp", 0, 0, 3840, 1264);
 
   standingStillSprite->addFrame(shipStandingStill, 0);
   movingForwardSprite->addFrame(shipMovingForward, 0);
@@ -334,6 +335,9 @@ int main(int argc, char *argv[]) {
   float start = 0.0;
   float elapsed = 0.0;
 
+  unsigned long int totalElapsed = 0;
+  unsigned long int numPasses = 0;
+
   const unsigned int frameDelay = 1000 / FRAMERATE;
 
   while (app->isActive) {
@@ -359,6 +363,14 @@ int main(int argc, char *argv[]) {
     }
 
     elapsed += (float)SDL_GetTicks() - start;
+
+    totalElapsed += elapsed;
+    numPasses++;
+
+    if (numPasses % 5000 == 0) {
+      printf("\n[%u] AVG FRAME TIME: %ldms", SDL_GetTicks(), (totalElapsed / numPasses));
+    }
+
   }
 
   //SDL_Delay(5000);
