@@ -5,6 +5,7 @@
 
 
 #include <math.h>
+#include <time.h>
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
@@ -112,6 +113,82 @@ void* evaluateCallback(void* inp, void* data) {
   Trajectory* backgroundTraj = (Trajectory*)background->state->get("trajectory");
   View* backgroundView = (View*)background->state->get("view");
 
+  Position* playerAbsolutePos = (Position*)player->state->get("absolute_position");
+
+
+
+
+
+
+
+
+
+  unsigned long int horzLowerLimit = round(backgroundView->size.horz / 2);
+  unsigned long int horzUpperLimit = background->width - round(backgroundView->size.horz / 2);
+
+  unsigned long int vertLowerLimit = round(backgroundView->size.vert / 2);
+  unsigned long int vertUpperLimit = background->height - round(backgroundView->size.vert / 2);
+
+
+
+  if (playerAbsolutePos->horz <= (horzLowerLimit - (player->width / 2))) {
+    // handle the left horizontal edge of our background.
+    playerPos->horz = playerAbsolutePos->horz;
+
+  } else if (playerAbsolutePos->horz > (horzUpperLimit - (backgroundView->size.horz / 2)) - (player->width / 2)) {
+    // handle the right horizontal edge of our background.
+    playerPos->horz = ((background->width - horzUpperLimit) - (horzUpperLimit - playerAbsolutePos->horz)) + (backgroundView->size.horz / 2);
+
+  } else {
+    backgroundView->position.horz = playerAbsolutePos->horz;
+
+    playerPos->horz = (backgroundView->size.horz / 2) - (player->width / 2);
+
+  }
+
+
+  if (playerAbsolutePos->vert < (vertLowerLimit - (player->height / 2))) {
+    playerPos->vert = playerAbsolutePos->vert;
+  } else if (playerAbsolutePos->vert > (vertUpperLimit - (backgroundView->size.vert / 2)) - (player->height / 2)) {
+    playerPos->vert = ((background->height - vertUpperLimit) - (vertUpperLimit - playerAbsolutePos->vert)) + (backgroundView->size.vert / 2);
+
+  } else {
+    backgroundView->position.vert = playerAbsolutePos->vert;
+
+    playerPos->vert = (backgroundView->size.vert / 2) - (player->height / 2);
+
+  }
+
+
+
+
+
+
+
+  if (playerAbsolutePos->horz < 0) {
+    // enforce our lower horizontal limit.
+    playerAbsolutePos->horz = 0;
+  }
+
+  if (playerAbsolutePos->vert < 0) {
+    // enforce our lower vertical limit.
+    playerAbsolutePos->vert = 0;
+  }
+
+  if (playerAbsolutePos->horz > horzUpperLimit - player->width) {
+    // enforce our upper horizontal limit.
+    playerAbsolutePos->horz = horzUpperLimit - player->width;
+  }
+
+  if (playerAbsolutePos->vert > vertUpperLimit - player->width) {
+    // enforce our upper vertical limit.
+    playerAbsolutePos->vert = vertUpperLimit - player->width;
+  }
+
+
+
+
+
   if (playerAngle->pitch >= 180) {
     horzRatio = -(((270 - playerAngle->pitch) / 90));
   } else {
@@ -134,14 +211,12 @@ void* evaluateCallback(void* inp, void* data) {
   if (KeyboardInput::isPressed(80)) {
     // turn left.
     player->setAction("turning_left");
-
     playerTraj->angle.pitch -= 2;
   }
 
   if (KeyboardInput::isPressed(79)) {
     // turn right.
     player->setAction("turning_right");
-
     playerTraj->angle.pitch += 2;
   }
 
@@ -149,102 +224,33 @@ void* evaluateCallback(void* inp, void* data) {
     // move forward.
     player->setAction("moving_forward");
 
-    if (backgroundView->position.horz <= 0) {
-      // move our player sprite horizontally along our left borders.
-      playerTraj->position.horz += 4 * horzRatio;
-      backgroundView->position.horz = 0;
 
-    } else {
-      // move our background horizontally around our player.
-      backgroundTraj->position.horz += 4 * horzRatio;
-    }
 
-    if (backgroundView->position.vert <= 0) {
-      // move our player sprite verticall along our left borders.
-      playerTraj->position.vert += 4 * vertRatio;
-      backgroundView->position.vert = 0;
 
-    } else {
-      // move our background vertically around our player.
-      backgroundTraj->position.vert += 4 * vertRatio;
-    }
+
+
+
+
+
+
+    playerTraj->position.horz += 4 * horzRatio;
+    playerTraj->position.vert += 4 * vertRatio;
+
+
+
 
   }
 
-  unsigned long int horzBorder = round((backgroundView->size.horz / 2) - (player->width / 2));
-  unsigned long int vertBorder = round((backgroundView->size.vert / 2) - (player->height / 2));
+    //printf("\n\n\n\n\n==========================================================");
+    //printf("\n[%lu] PLAYER ABSOLUTE POS: (%f, %f)", SDL_GetTicks(), playerAbsolutePos->horz, playerAbsolutePos->vert);
+    //printf("\n[%lu] PLAYER RELATIVE POS: (%f, %f)", SDL_GetTicks(), playerPos->horz, playerPos->vert);
+    //printf("\n[%lu] PLAYER SIZE: (%lu, %lu)", SDL_GetTicks(), player->width, player->height);
+    //printf("\n[%lu] BACKGROUND VIEW SIZE: (%f, %f)", SDL_GetTicks(), backgroundView->size.horz, backgroundView->size.vert);
+    //printf("\n[%lu] BACKGROUND ABSOLUTE SIZE: (%lu, %lu)", SDL_GetTicks(), background->width, background->height);
+    //printf("\n[%lu] HORIZONTAL UPPER LIMIT: %lu", SDL_GetTicks(), horzUpperLimit);
+    //printf("\n[%lu] VERTICAL UPPER LIMIT: %lu", SDL_GetTicks(), vertUpperLimit);
+    //printf("\n==========================================================\n\n\n\n\n");
 
-  if (backgroundView->position.horz <= 0
-    && playerPos->horz >= horzBorder
-    && playerTraj->position.horz > 0
-  ) {
-    backgroundTraj->position.horz = playerTraj->position.horz;
-    playerPos->horz = horzBorder;
-    playerTraj->position.horz = 0;
-  } else if (backgroundView->position.horz <= 0 && backgroundTraj->position.horz < 0) {
-    playerTraj->position.horz = backgroundTraj->position.horz;
-    backgroundView->position.horz = 0;
-    backgroundTraj->position.horz = 0;
-  }
-
-  if (backgroundView->position.vert <= 0
-    && playerPos->vert >= vertBorder
-    && playerTraj->position.vert > 0
-  ) {
-    backgroundTraj->position.vert = playerTraj->position.vert;
-    playerPos->vert = vertBorder;
-    playerTraj->position.vert = 0;
-  } else if (backgroundView->position.vert <= 0 && backgroundTraj->position.vert < 0) {
-    playerTraj->position.vert = backgroundTraj->position.vert;
-    backgroundView->position.vert = 0;
-    backgroundTraj->position.vert = 0;
-  }
-
-
-
-
-
-
-
-
-
-
-  //printf("\n===========================\n");
-  //printf("CLOCK: %d\n", SDL_GetTicks());
-  //printf("\n");
-  //printf("SHIP HORZ POS: %f\n", player->position->horz);
-  //printf("SHIP VERT POS: %f\n", player->position->vert);
-  //printf("SHIP HORZ TRAJ: %f\n", player->trajectory->position.horz);
-  //printf("SHIP VERT TRAJ: %f\n", player->trajectory->position.vert);
-  //printf("\n");
-  //printf("BACKGROUND VIEW HORZ SIZE: %f\n", background->view->size.horz);
-  //printf("BACKGROUND VIEW VERT SIZE: %f\n", background->view->size.vert);
-  //printf("BACKGROUND VIEW HORZ POS: %f\n", background->view->position.horz);
-  //printf("BACKGROUND VIEW VERT POS: %f\n", background->view->position.vert);
-  //printf("BACKGROUND VIEW HORZ TRAJ: %f\n", background->trajectory->position.horz);
-  //printf("BACKGROUND VIEW VERT TRAJ: %f\n", background->trajectory->position.vert);
-  //printf("BACKGROUND HORZ SIZE: %f\n", background->width);
-  //printf("BACKGROUND VERT SIZE: %f\n", background->height);
-  //printf("===========================\n\n");
-
-
-
-
-  if (playerPos->horz < 0) {
-    playerPos->horz = 0;
-  }
-
-  if (playerPos->vert < 0) {
-    playerPos->vert = 0;
-  }
-
-  if (backgroundView->position.horz >= background->width - backgroundView->size.horz) {
-    backgroundView->position.horz = background->width - backgroundView->size.horz;
-  }
-
-  if (backgroundView->position.vert >= background->height - backgroundView->size.vert) {
-    backgroundView->position.vert = background->height - backgroundView->size.vert;
-  }
 
 
 
@@ -262,6 +268,8 @@ void* evaluateCallback(void* inp, void* data) {
   playerAngle->pitch = playerAngle->pitch >= 360 ? playerAngle->pitch / 360 : playerAngle->pitch;
 
   return (void*)NULL;
+
+
 }
 
 
@@ -319,8 +327,8 @@ int main(int argc, char *argv[]) {
   Angle* playerAngle = (Angle*)player->state->get("angle");
   View* backgroundView = (View*)background->state->get("view");
 
-  playerPos->horz = round((SCREEN_WIDTH / 2) - (player->width / 2));
-  playerPos->vert = round((SCREEN_HEIGHT / 2) - (player->height / 2));
+  //playerPos->horz = round((SCREEN_WIDTH / 2) - (player->width / 2));
+  //playerPos->vert = round((SCREEN_HEIGHT / 2) - (player->height / 2));
 
   playerAngle->center.horz = 43;
   playerAngle->center.vert = 43;
@@ -329,6 +337,22 @@ int main(int argc, char *argv[]) {
   backgroundView->size.vert = SCREEN_HEIGHT;
   backgroundView->position.horz = round((background->width / 2) - (SCREEN_WIDTH / 2));
   backgroundView->position.vert = round((background->height / 2) - (SCREEN_HEIGHT / 2));
+
+  player->state->set("absolute_position", new Position(
+    (background->width / 2) - (backgroundView->size.horz / 2),
+    (background->height / 2) - (backgroundView->size.vert / 2)
+  ));
+
+  Position* playerAbsolutePos = (Position*)player->state->get("absolute_position");
+
+  //playerPos->horz = (backgroundView->size.horz / 2) - (player->width / 2);
+  //playerPos->vert = (backgroundView->size.vert / 2) - (player->height / 2);
+
+  //backgroundView->position.horz = background->width - (backgroundView->position.horz + (backgroundView->size.horz / 2));
+  //backgroundView->position.vert = background->height - (backgroundView->position.vert + (backgroundView->size.vert / 2));
+
+
+
 
   app->start();
 

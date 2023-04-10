@@ -17,9 +17,16 @@
         Angle* angle = (Angle*)this->state->get("angle");
         Trajectory* trajectory = (Trajectory*)this->state->get("trajectory");
 
-        position->horz += trajectory->position.horz;
-        position->vert += trajectory->position.vert;
-        position->depth += trajectory->position.depth;
+
+
+        Position* absolutePosition = (Position*)this->state->get("absolute_position");
+
+        absolutePosition->horz += trajectory->position.horz;
+        absolutePosition->vert += trajectory->position.vert;
+        absolutePosition->depth += trajectory->position.depth;
+
+
+
 
         angle->pitch += trajectory->angle.pitch;
         angle->roll += trajectory->angle.roll;
