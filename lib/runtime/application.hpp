@@ -3,6 +3,8 @@
 
   #define _APPLICATION_HPP
 
+  #include <SDL2/SDL.h>
+
   #include "./base.hpp"
   #include "../core/event.hpp"
 
@@ -18,6 +20,12 @@
         Event::on("SystemEvent.KEYBOARD", Application::keyboardCallback, this);
         Event::on("SystemEvent.MOUSEMOTION", Application::mouseMotionCallback, this);
         Event::on("SystemEvent.MOUSEBUTTON", Application::mouseButtonCallback, this);
+      }
+
+      ~Application() {
+        this->exit();
+
+        SDL_Quit();
       }
 
       void start() {

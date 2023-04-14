@@ -383,8 +383,6 @@ int main(int argc, char *argv[]) {
     elapsed = SDL_GetTicks() - frameStart;
   }
 
-  delete app;
   delete win;
-
-  SDL_Quit();
+  delete app;
 }
