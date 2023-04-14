@@ -4,7 +4,7 @@
 
   #define _LIST_ENTRY_HPP
 
-  #define NULL 0x0000
+  #include <stddef.h>
 
 
   template <class class_type>
