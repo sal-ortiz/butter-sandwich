@@ -22,7 +22,6 @@
 //#include "./lib/scene/background.hpp"
 
 
-const unsigned char FRAMERATE = 120; // fps
 const unsigned int SCREEN_WIDTH = 1024;
 const unsigned int SCREEN_HEIGHT = 769;
 
@@ -203,10 +202,10 @@ void* evaluateCallback(void* inp, void* data) {
     vertRatio = (180 - playerAngle->pitch) / 90;
   }
 
-  if (KeyboardInput::isReleased(82)) {
-    printf("stopping\n");
-    player->setAction("standing_still");
-  }
+//  if (KeyboardInput::isReleased(82)) {
+//    printf("stopping\n");
+//    player->setAction("standing_still");
+//  }
 
   if (KeyboardInput::isPressed(80)) {
     // turn left.
@@ -286,7 +285,6 @@ int main(int argc, char *argv[]) {
   Sprite* turningRightSprite = new Sprite();
   Sprite* backgroundSprite = new Sprite();
 
-  win->open("The window!", 150, 150, SCREEN_WIDTH, SCREEN_HEIGHT);
 
   Image* shipStandingStill = Image::load("./ship_sheet.bmp", 390, 150, 75, 75);
   Image* shipTurningLeft = Image::load("./ship_sheet.bmp", 490, 50, 75, 75);
@@ -351,53 +349,26 @@ int main(int argc, char *argv[]) {
   //backgroundView->position.horz = background->width - (backgroundView->position.horz + (backgroundView->size.horz / 2));
   //backgroundView->position.vert = background->height - (backgroundView->position.vert + (backgroundView->size.vert / 2));
 
+  win->open("The window!", 150, 150, SCREEN_WIDTH, SCREEN_HEIGHT);
 
-
+  SDL_Renderer* renderer = win->getRenderer();
 
   app->start();
 
-  float start = 0.0;
-  float elapsed = 0.0;
-
-  unsigned long int totalElapsed = 0;
-  unsigned long int numPasses = 0;
-
-  const unsigned int frameDelay = 1000 / FRAMERATE;
-
   while (app->isActive) {
-    start = (float)SDL_GetTicks();
-
     Event::evaluate();
     KeyboardInput::updateState();
 
-    if (elapsed > frameDelay) {
+    //win->clear();
 
-      //win->clear();
+    background->evaluate();
+    background->render(renderer);
 
-      background->render(win->getRenderer());
-      background->evaluate();
+    player->evaluate();
+    player->render(renderer);
 
-      player->render(win->getRenderer());
-      player->evaluate();
-
-      win->render();
-
-      start = (float)SDL_GetTicks();
-      elapsed = 0.0;
-    }
-
-    elapsed += (float)SDL_GetTicks() - start;
-
-    totalElapsed += elapsed;
-    numPasses++;
-
-    if (numPasses % 5000 == 0) {
-      printf("\n[%u] AVG FRAME TIME: %ldms", SDL_GetTicks(), (totalElapsed / numPasses));
-    }
-
+    win->render();
   }
-
-  //SDL_Delay(5000);
 
   delete app;
   delete win;
