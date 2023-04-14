@@ -22,8 +22,9 @@
 //#include "./lib/scene/background.hpp"
 
 
-const unsigned int SCREEN_WIDTH = 1024;
-const unsigned int SCREEN_HEIGHT = 769;
+const unsigned long int FRAMERATE = 120; // fps
+const unsigned long int SCREEN_WIDTH = 1024;
+const unsigned long int SCREEN_HEIGHT = 769;
 
 Window* win = new Window();
 Application* app = new Application();
@@ -355,19 +356,31 @@ int main(int argc, char *argv[]) {
 
   app->start();
 
+  unsigned long int elapsed = 0;
+  unsigned long int frameDelay = 1000 / FRAMERATE;
+
+
   while (app->isActive) {
-    Event::evaluate();
-    KeyboardInput::updateState();
+    unsigned long int frameStart = SDL_GetTicks();
 
-    //win->clear();
+    if (elapsed == 0 || elapsed > frameDelay) {
+      //win->clear();
 
-    background->evaluate();
-    background->render(renderer);
+      Event::evaluate();
+      KeyboardInput::updateState();
 
-    player->evaluate();
-    player->render(renderer);
+      background->evaluate();
+      background->render(renderer);
 
-    win->render();
+      player->evaluate();
+      player->render(renderer);
+
+      win->render();
+
+      elapsed = 0;
+    }
+
+    elapsed = SDL_GetTicks() - frameStart;
   }
 
   delete app;
