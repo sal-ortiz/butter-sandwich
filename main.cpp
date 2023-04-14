@@ -26,6 +26,9 @@ const unsigned long int FRAMERATE = 120; // fps
 const unsigned long int SCREEN_WIDTH = 1024;
 const unsigned long int SCREEN_HEIGHT = 769;
 
+float horzRatio = 1.0;
+float vertRatio = 0.0;
+
 Window* win = new Window();
 Application* app = new Application();
 
@@ -49,9 +52,11 @@ void* closedCallback(void* inp, void* data) {
   return (void*)NULL;
 }
 
-//void* keyboardCallback(void* inp, void* data) {
-//  PlayerOne* player = reinterpret_cast<PlayerOne*>(data);
-//  const unsigned char* keyboardState = SDL_GetKeyboardState(NULL);
+void* keyboardCallback(void* inp, void* data) {
+  //PlayerOne* player = reinterpret_cast<PlayerOne*>(data);
+  const unsigned char* keyboardState = SDL_GetKeyboardState(NULL);
+
+  Trajectory* playerTraj = (Trajectory*)player->state->get("trajectory");
 //
 //  //float horzRatio = 1.0;
 //  //float vertRatio = 0.0;
@@ -86,26 +91,24 @@ void* closedCallback(void* inp, void* data) {
 //  //  playerTraj->angle.pitch += 2;
 //  //}
 //
-//  //if (keyboardState[82]) {
-//  //  // move forward.
-//  //  player->setAction("moving_forward");
-//  //  player->trajectory->position.horz += 1 * horzRatio;
-//  //  player->trajectory->position.vert += 1 * vertRatio;
-//  //}
+  if (keyboardState[82]) {
+    //// move forward.
+    //player->setAction("moving_forward");
+    //playerTraj->position.horz += 1 * horzRatio;
+    //playerTraj->position.vert += 1 * vertRatio;
+  }
 //
 //  //// keep angle within 360 degrees
 //  //player->angle->pitch = player->angle->pitch < 0 ? 360 - abs(player->angle->pitch) : player->angle->pitch;
 //  //player->angle->pitch = player->angle->pitch >= 360 ? player->angle->pitch / 360 : player->angle->pitch;
 //
-//  return (void*)NULL;
-//}
+
+  return (void*)NULL;
+}
 
 void* evaluateCallback(void* inp, void* data) {
   PlayerOne* player = reinterpret_cast<PlayerOne*>(inp);
   SceneBackground* background = reinterpret_cast<SceneBackground*>(data);
-
-  float horzRatio = 1.0;
-  float vertRatio = 0.0;
 
   Position* playerPos = (Position*)player->state->get("position");
   Angle* playerAngle = (Angle*)player->state->get("angle");
@@ -115,20 +118,11 @@ void* evaluateCallback(void* inp, void* data) {
 
   Position* playerAbsolutePos = (Position*)player->state->get("absolute_position");
 
-
-
-
-
-
-
-
-
   unsigned long int horzLowerLimit = round(backgroundView->size.horz / 2);
   unsigned long int horzUpperLimit = background->width - round(backgroundView->size.horz / 2);
 
   unsigned long int vertLowerLimit = round(backgroundView->size.vert / 2);
   unsigned long int vertUpperLimit = background->height - round(backgroundView->size.vert / 2);
-
 
 
   if (playerAbsolutePos->horz <= (horzLowerLimit - (player->width / 2))) {
@@ -156,14 +150,7 @@ void* evaluateCallback(void* inp, void* data) {
     backgroundView->position.vert = playerAbsolutePos->vert;
 
     playerPos->vert = (backgroundView->size.vert / 2) - (player->height / 2);
-
   }
-
-
-
-
-
-
 
   if (playerAbsolutePos->horz < 0) {
     // enforce our lower horizontal limit.
@@ -184,10 +171,6 @@ void* evaluateCallback(void* inp, void* data) {
     // enforce our upper vertical limit.
     playerAbsolutePos->vert = vertUpperLimit - player->width;
   }
-
-
-
-
 
   if (playerAngle->pitch >= 180) {
     horzRatio = -(((270 - playerAngle->pitch) / 90));
@@ -224,42 +207,9 @@ void* evaluateCallback(void* inp, void* data) {
     // move forward.
     player->setAction("moving_forward");
 
-
-
-
-
-
-
-
-
-
     playerTraj->position.horz += 4 * horzRatio;
     playerTraj->position.vert += 4 * vertRatio;
-
-
-
-
   }
-
-    //printf("\n\n\n\n\n==========================================================");
-    //printf("\n[%lu] PLAYER ABSOLUTE POS: (%f, %f)", SDL_GetTicks(), playerAbsolutePos->horz, playerAbsolutePos->vert);
-    //printf("\n[%lu] PLAYER RELATIVE POS: (%f, %f)", SDL_GetTicks(), playerPos->horz, playerPos->vert);
-    //printf("\n[%lu] PLAYER SIZE: (%lu, %lu)", SDL_GetTicks(), player->width, player->height);
-    //printf("\n[%lu] BACKGROUND VIEW SIZE: (%f, %f)", SDL_GetTicks(), backgroundView->size.horz, backgroundView->size.vert);
-    //printf("\n[%lu] BACKGROUND ABSOLUTE SIZE: (%lu, %lu)", SDL_GetTicks(), background->width, background->height);
-    //printf("\n[%lu] HORIZONTAL UPPER LIMIT: %lu", SDL_GetTicks(), horzUpperLimit);
-    //printf("\n[%lu] VERTICAL UPPER LIMIT: %lu", SDL_GetTicks(), vertUpperLimit);
-    //printf("\n==========================================================\n\n\n\n\n");
-
-
-
-
-
-
-
-
-
-
 
 
   // keep angle within 360 degrees
@@ -268,13 +218,11 @@ void* evaluateCallback(void* inp, void* data) {
   playerAngle->pitch = playerAngle->pitch >= 360 ? playerAngle->pitch / 360 : playerAngle->pitch;
 
   return (void*)NULL;
-
-
 }
 
 
 int main(int argc, char *argv[]) {
-  //app->on("KEYBOARD", keyboardCallback, (void*)player);
+  app->on("KEYBOARD", keyboardCallback, (void*)player);
   app->on("QUIT", quitCallback, (void*)NULL);
   win->on("CLOSED", closedCallback, (void*)NULL);
 
@@ -326,9 +274,6 @@ int main(int argc, char *argv[]) {
   Angle* playerAngle = (Angle*)player->state->get("angle");
   View* backgroundView = (View*)background->state->get("view");
 
-  //playerPos->horz = round((SCREEN_WIDTH / 2) - (player->width / 2));
-  //playerPos->vert = round((SCREEN_HEIGHT / 2) - (player->height / 2));
-
   playerAngle->center.horz = 43;
   playerAngle->center.vert = 43;
 
@@ -341,14 +286,6 @@ int main(int argc, char *argv[]) {
     (background->width / 2) - (backgroundView->size.horz / 2),
     (background->height / 2) - (backgroundView->size.vert / 2)
   ));
-
-  Position* playerAbsolutePos = (Position*)player->state->get("absolute_position");
-
-  //playerPos->horz = (backgroundView->size.horz / 2) - (player->width / 2);
-  //playerPos->vert = (backgroundView->size.vert / 2) - (player->height / 2);
-
-  //backgroundView->position.horz = background->width - (backgroundView->position.horz + (backgroundView->size.horz / 2));
-  //backgroundView->position.vert = background->height - (backgroundView->position.vert + (backgroundView->size.vert / 2));
 
   win->open("The window!", 150, 150, SCREEN_WIDTH, SCREEN_HEIGHT);
 
