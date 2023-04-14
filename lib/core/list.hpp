@@ -4,6 +4,9 @@
 
   #define _LIST_ENTRY_HPP
 
+  #define NULL 0x0000
+
+
   template <class class_type>
   class ListEntry {
 

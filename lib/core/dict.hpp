@@ -6,6 +6,8 @@
   #include "./list.hpp" // https://gist.github.com/sal-ortiz/74a414860a7525f3cdce493d039c4d30
   #include <string.h>
 
+  #define NULL 0x0000
+
 
   template <class class_type>
   class DictEntry {
