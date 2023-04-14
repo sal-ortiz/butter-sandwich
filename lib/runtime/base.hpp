@@ -19,7 +19,7 @@
       unsigned long int generateIdentifier() {
         time_t timestamp = time(NULL);
 
-        srand(timestamp);
+        srand(timestamp * rand());
 
         return timestamp % (rand() * rand() * rand());
       }
@@ -42,7 +42,7 @@
 
       static void* executeCallback(const char* id, void* inp) {
 
-        if (Hook::hasCallback(id)) {
+        if (Hook::hasCallback(id) == true) {
           void*(*callback)(void*, void*) = Hook::getCallback(id);
           void* data = Hook::getInput(id);
 

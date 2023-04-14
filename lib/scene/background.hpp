@@ -27,7 +27,7 @@
         unsigned long int charId = this->identifier;
         const char* hookId = Hook::generateIdentifier(charId, "onEvaluate");
 
-        //this->executeCallback(hookId, (void*)this);
+        this->executeCallback(hookId, (void*)this);
       }
 
   };
