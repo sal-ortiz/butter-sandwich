@@ -26,7 +26,7 @@
         char* hookId = new char[64];
         unsigned long int instIdentifier = this->getIdentifier();
 
-        sprintf(hookId, "State.%s.%ld.%s", action, instIdentifier, key);
+        sprintf(hookId, "state.%s.%ld.%s", action, instIdentifier, key);
 
         return hookId;
       }
