@@ -307,14 +307,18 @@ int main(int argc, char *argv[]) {
     if (frameElapsed == 0 || frameElapsed > frameDelay) {
       frameStart = SDL_GetTicks();
 
-      Event::evaluate();
       KeyboardInput::updateState();
+      Event::evaluate();
 
       background->evaluate();
-      background->render(renderer);
-
       player->evaluate();
+      bullet->evaluate();
+
+      //win->clear();
+
+      background->render(renderer);
       player->render(renderer);
+      bullet->render(renderer);
 
       win->render();
 
