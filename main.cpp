@@ -155,21 +155,23 @@ void* evaluateCallback(void* inp, void* data) {
   if (playerAbsolutePos->horz < 0) {
     // enforce our lower horizontal limit.
     playerAbsolutePos->horz = 0;
+    playerTraj->position.horz = 0;
   }
 
   if (playerAbsolutePos->vert < 0) {
     // enforce our lower vertical limit.
     playerAbsolutePos->vert = 0;
+    playerTraj->position.vert = 0;
   }
 
-  if (playerAbsolutePos->horz > horzUpperLimit - player->width) {
-    // enforce our upper horizontal limit.
-    playerAbsolutePos->horz = horzUpperLimit - player->width;
+  if (playerAbsolutePos->horz > background->width) {
+    playerAbsolutePos->horz = background->width;
+    playerTraj->position.horz = 0;
   }
 
-  if (playerAbsolutePos->vert > vertUpperLimit - player->width) {
-    // enforce our upper vertical limit.
-    playerAbsolutePos->vert = vertUpperLimit - player->width;
+  if (playerAbsolutePos->vert > background->height) {
+    playerAbsolutePos->vert = background->height;
+    playerTraj->position.vert = 0;
   }
 
   if (playerAngle->pitch >= 180) {
