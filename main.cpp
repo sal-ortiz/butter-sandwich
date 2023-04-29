@@ -295,15 +295,17 @@ int main(int argc, char *argv[]) {
 
   app->start();
 
-  unsigned long int elapsed = 0;
+  unsigned long int frameElapsed = 0;
   unsigned long int frameDelay = 1000 / FRAMERATE;
 
+  unsigned long int frameStart = 0;
+  unsigned long int framePasses = 0;
+  unsigned long int frameEvalDelay = 100;
 
   while (app->isActive) {
-    unsigned long int frameStart = SDL_GetTicks();
 
-    if (elapsed == 0 || elapsed > frameDelay) {
-      //win->clear();
+    if (frameElapsed == 0 || frameElapsed > frameDelay) {
+      frameStart = SDL_GetTicks();
 
       Event::evaluate();
       KeyboardInput::updateState();
@@ -316,10 +318,21 @@ int main(int argc, char *argv[]) {
 
       win->render();
 
-      elapsed = 0;
+      frameElapsed += SDL_GetTicks() - frameStart;
+      framePasses++;
+
+      if (framePasses % frameEvalDelay == 0) {
+        float avgFrameTime = frameElapsed / framePasses;
+
+        printf("\n[%u] AVG FRAME TIME: %f per %lu frames", SDL_GetTicks(), avgFrameTime, frameEvalDelay);
+
+        frameElapsed = 0;
+        framePasses = 0;
+      }
+
+
     }
 
-    elapsed = SDL_GetTicks() - frameStart;
   }
 
   delete win;
