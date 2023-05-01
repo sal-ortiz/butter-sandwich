@@ -31,10 +31,6 @@ float playerVertRatio = 0.0;
 float bulletHorzRatio = playerHorzRatio;
 float bulletVertRatio = playerVertRatio;
 
-
-Window* win = new Window();
-Application* app = new Application();
-
 PlayerOne* player = new PlayerOne();
 Background* background = new Background();
 Bullet* bullet = new Bullet();
@@ -278,6 +274,9 @@ void* bulletEvaluateCallback(void* inp, void* data) {
 
 
 int main(int argc, char *argv[]) {
+  Window* win = new Window();
+  Application* app = new Application();
+
   app->on("KEYBOARD", keyboardCallback, (void*)player);
   app->on("QUIT", quitCallback, (void*)NULL);
   win->on("CLOSED", closedCallback, (void*)NULL);
