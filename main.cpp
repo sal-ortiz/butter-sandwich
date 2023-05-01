@@ -150,8 +150,8 @@ void* playerEvaluateCallback(void* inp, void* data) {
     playerTraj->position.vert = 0;
   }
 
-  if (playerAbsolutePos->horz > background->width) {
-    playerAbsolutePos->horz = background->width;
+  if (playerAbsolutePos->horz > (background->width - player->width)) {
+    playerAbsolutePos->horz = background->width - player->width;
     playerTraj->position.horz = 0;
   }
 
