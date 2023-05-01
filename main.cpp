@@ -28,8 +28,8 @@ const unsigned long int SCREEN_HEIGHT = 769;
 
 float playerHorzRatio = 1.0;
 float playerVertRatio = 0.0;
-float bulletHorzRatio = 1.0;
-float bulletVertRatio = 0.0;
+float bulletHorzRatio = playerHorzRatio;
+float bulletVertRatio = playerVertRatio;
 
 
 Window* win = new Window();
