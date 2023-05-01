@@ -17,6 +17,11 @@
 
   class SceneBase: public RuntimeBase {
 
+    private:
+
+      bool isVisible;
+
+
     protected:
 
       void*(*evalCallback)(void*);
@@ -33,9 +38,11 @@
       unsigned long int width;
       unsigned long int height;
 
+
       SceneBase() {
         this->identifier = RuntimeBase::generateIdentifier();
         this->evalCallback = NULL;
+        this->isVisible = true;
 
         this->state = new State();
 
@@ -44,6 +51,14 @@
         this->state->set("scale", new Scale());
         this->state->set("view", new View());
         this->state->set("trajectory", new Trajectory());
+      }
+
+      void setVisibility(bool visibility) {
+        this->isVisible = visibility;
+      }
+
+      bool getVisibility() {
+        return this->isVisible;
       }
 
       void addSprite(const char* actionId, Sprite* sprite) {
@@ -67,6 +82,10 @@
 
       void render(SDL_Renderer* renderer) {
         const char* actionId = this->action;
+
+        if (!this->isVisible) {
+          return;
+        }
 
         Position* position = (Position*)this->state->get("position");
         Angle* angle = (Angle*)this->state->get("angle");
