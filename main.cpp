@@ -62,55 +62,24 @@ void* keyboardCallback(void* inp, void* data) {
   const unsigned char* keyboardState = SDL_GetKeyboardState(NULL);
 
   Trajectory* playerTraj = (Trajectory*)player->state->get("trajectory");
-//
-//  //float playerHorzRatio = 1.0;
-//  //float playerVertRatio = 0.0;
-//
-//  //if (player->angle->pitch >= 180) {
-//  //  playerHorzRatio = -(((270 - player->angle->pitch) / 90));
-//  //} else {
-//  //  playerHorzRatio = ((90 - player->angle->pitch) / 90);
-//  //}
-//
-//  //if (player->angle->pitch <= 90) {
-//  //  playerVertRatio = (player->angle->pitch) / 90;
-//  //} else if (player->angle->pitch > 270) {
-//  //  playerVertRatio = -(360 - player->angle->pitch) / 90;
-//  //} else {
-//  //  playerVertRatio = (180 - player->angle->pitch) / 90;
-//  //}
-//
-//  //if (keyboardState[80]) {
-//  //  // turn left.
-//  //  Trajectory* playerTraj = (Trajectory*)player->state->get("trajectory");
-//
-//  //  player->setAction("turning_left");
-//  //  playerTraj->angle.pitch -= 2;
-//  //}
-//
-//  //if (keyboardState[79]) {
-//  //  // turn right.
-//  //  Trajectory* playerTraj = (Trajectory*)player->state->get("trajectory");
-//
-//  //  player->setAction("turning_right");
-//  //  playerTraj->angle.pitch += 2;
-//  //}
-//
-  if (keyboardState[82]) {
-    //// move forward.
-    //player->setAction("moving_forward");
-    //playerTraj->position.horz += 1 * playerHorzRatio;
-    //playerTraj->position.vert += 1 * playerVertRatio;
+
+  if (keyboardState[80]) {
+    // turn left.
+    printf("\n[%u] TURNING LEFT", SDL_GetTicks());
   }
-//
-//  //// keep angle within 360 degrees
-//  //player->angle->pitch = player->angle->pitch < 0 ? 360 - abs(player->angle->pitch) : player->angle->pitch;
-//  //player->angle->pitch = player->angle->pitch >= 360 ? player->angle->pitch / 360 : player->angle->pitch;
-//
+
+  if (keyboardState[79]) {
+    // turn right.
+    printf("\n[%u] TURNING RIGHT", SDL_GetTicks());
+  }
+
+  if (keyboardState[82]) {
+    // move forward.
+    printf("\n[%u] MOVING FORWARD", SDL_GetTicks());
+  }
+
   return (void*)NULL;
 }
-
-
 
 //void* backgroundEvaluateCallback(void* inp, void* data) {
 //  PlayerOne* player = reinterpret_cast<PlayerOne*>(inp);
