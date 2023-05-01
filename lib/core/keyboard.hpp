@@ -31,6 +31,8 @@
       }
 
       static bool isPressed(unsigned char scanCode) {
+        KeyboardInput::updateState();
+
         const unsigned char* state = KeyboardInput::getCurrentState();
 
         if (state[scanCode] != 0) {
@@ -41,6 +43,8 @@
       }
 
       static bool wasPressed(unsigned char scanCode) {
+        KeyboardInput::updateState();
+
         const unsigned char* prevState = KeyboardInput::getPreviousState();
 
         if (prevState && prevState[scanCode] != 0) {
@@ -51,6 +55,7 @@
       }
 
       static bool isHeld(unsigned char scanCode) {
+        KeyboardInput::updateState();
 
         if (KeyboardInput::isPressed(scanCode) && !KeyboardInput::wasPressed(scanCode)) {
           return true;
@@ -60,6 +65,7 @@
       }
 
       static bool isReleased(unsigned char scanCode) {
+        KeyboardInput::updateState();
 
         if (!KeyboardInput::isPressed(scanCode) && KeyboardInput::wasPressed(scanCode)) {
           printf("SADFASDFSA");
