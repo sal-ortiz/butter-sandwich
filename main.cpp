@@ -63,17 +63,17 @@ void* keyboardCallback(void* inp, void* data) {
 
   Trajectory* playerTraj = (Trajectory*)player->state->get("trajectory");
 
-  //if (keyboardState[80]) {
+  //if (KeyboardInput::isPressed(80)) {
   //  // turn left.
   //  printf("\n[%u] TURNING LEFT", SDL_GetTicks());
   //}
 
-  //if (keyboardState[79]) {
+  //if (KeyboardInput::isPressed(79)) {
   //  // turn right.
   //  printf("\n[%u] TURNING RIGHT", SDL_GetTicks());
   //}
 
-  //if (keyboardState[82]) {
+  //if (KeyboardInput::isPressed(82)) {
   //  // move forward.
   //  printf("\n[%u] MOVING FORWARD", SDL_GetTicks());
   //}
