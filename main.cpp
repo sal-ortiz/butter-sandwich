@@ -112,21 +112,21 @@ void* keyboardCallback(void* inp, void* data) {
 
 
 
-void* backgroundEvaluateCallback(void* inp, void* data) {
-  PlayerOne* player = reinterpret_cast<PlayerOne*>(inp);
-  SceneBackground* background = reinterpret_cast<SceneBackground*>(data);
-
-  Position* playerPos = (Position*)player->state->get("position");
-  Position* bulletPos = (Position*)bullet->state->get("position");
-  Angle* playerAngle = (Angle*)player->state->get("angle");
-  Trajectory* playerTraj = (Trajectory*)player->state->get("trajectory");
-  Trajectory* backgroundTraj = (Trajectory*)background->state->get("trajectory");
-  View* backgroundView = (View*)background->state->get("view");
-
-  Position* playerAbsolutePos = (Position*)player->state->get("absolute_position");
-
-  return (void*)NULL;
-}
+//void* backgroundEvaluateCallback(void* inp, void* data) {
+//  PlayerOne* player = reinterpret_cast<PlayerOne*>(inp);
+//  SceneBackground* background = reinterpret_cast<SceneBackground*>(data);
+//
+//  Position* playerPos = (Position*)player->state->get("position");
+//  Position* bulletPos = (Position*)bullet->state->get("position");
+//  Angle* playerAngle = (Angle*)player->state->get("angle");
+//  Trajectory* playerTraj = (Trajectory*)player->state->get("trajectory");
+//  Trajectory* backgroundTraj = (Trajectory*)background->state->get("trajectory");
+//  View* backgroundView = (View*)background->state->get("view");
+//
+//  Position* playerAbsolutePos = (Position*)player->state->get("absolute_position");
+//
+//  return (void*)NULL;
+//}
 
 
 void* playerEvaluateCallback(void* inp, void* data) {
@@ -315,7 +315,7 @@ int main(int argc, char *argv[]) {
 
   player->onEvaluate(playerEvaluateCallback, (void*)background);
   bullet->onEvaluate(bulletEvaluateCallback, (void*)player);
-  background->onEvaluate(backgroundEvaluateCallback, (void*)player);
+  //background->onEvaluate(backgroundEvaluateCallback, (void*)player);
 
   Sprite* bulletSprite = new Sprite();
   Sprite* standingStillSprite = new Sprite();
