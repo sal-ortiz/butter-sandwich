@@ -192,8 +192,8 @@ void* playerEvaluateCallback(void* inp, void* data) {
     // move forward.
     player->setAction("moving_forward");
 
-    playerTraj->position.horz += 4 * playerHorzRatio;
-    playerTraj->position.vert += 4 * playerVertRatio;
+    playerTraj->position.horz += 3 * playerHorzRatio;
+    playerTraj->position.vert += 3 * playerVertRatio;
   }
 
   // keep angle within 360 degrees
