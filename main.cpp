@@ -58,21 +58,21 @@ void* keyboardCallback(void* inp, void* data) {
 
   Trajectory* playerTraj = (Trajectory*)player->state->get("trajectory");
 //
-//  //float horzRatio = 1.0;
-//  //float vertRatio = 0.0;
+//  //float playerHorzRatio = 1.0;
+//  //float playerVertRatio = 0.0;
 //
 //  //if (player->angle->pitch >= 180) {
-//  //  horzRatio = -(((270 - player->angle->pitch) / 90));
+//  //  playerHorzRatio = -(((270 - player->angle->pitch) / 90));
 //  //} else {
-//  //  horzRatio = ((90 - player->angle->pitch) / 90);
+//  //  playerHorzRatio = ((90 - player->angle->pitch) / 90);
 //  //}
 //
 //  //if (player->angle->pitch <= 90) {
-//  //  vertRatio = (player->angle->pitch) / 90;
+//  //  playerVertRatio = (player->angle->pitch) / 90;
 //  //} else if (player->angle->pitch > 270) {
-//  //  vertRatio = -(360 - player->angle->pitch) / 90;
+//  //  playerVertRatio = -(360 - player->angle->pitch) / 90;
 //  //} else {
-//  //  vertRatio = (180 - player->angle->pitch) / 90;
+//  //  playerVertRatio = (180 - player->angle->pitch) / 90;
 //  //}
 //
 //  //if (keyboardState[80]) {
@@ -94,8 +94,8 @@ void* keyboardCallback(void* inp, void* data) {
   if (keyboardState[82]) {
     //// move forward.
     //player->setAction("moving_forward");
-    //playerTraj->position.horz += 1 * horzRatio;
-    //playerTraj->position.vert += 1 * vertRatio;
+    //playerTraj->position.horz += 1 * playerHorzRatio;
+    //playerTraj->position.vert += 1 * playerVertRatio;
   }
 //
 //  //// keep angle within 360 degrees
@@ -175,17 +175,17 @@ void* evaluateCallback(void* inp, void* data) {
   }
 
   if (playerAngle->pitch >= 180) {
-    horzRatio = -(((270 - playerAngle->pitch) / 90));
+    playerHorzRatio = -(((270 - playerAngle->pitch) / 90));
   } else {
-    horzRatio = ((90 - playerAngle->pitch) / 90);
+    playerHorzRatio = ((90 - playerAngle->pitch) / 90);
   }
 
   if (playerAngle->pitch <= 90) {
-    vertRatio = (playerAngle->pitch) / 90;
+    playerVertRatio = (playerAngle->pitch) / 90;
   } else if (playerAngle->pitch > 270) {
-    vertRatio = -(360 - playerAngle->pitch) / 90;
+    playerVertRatio = -(360 - playerAngle->pitch) / 90;
   } else {
-    vertRatio = (180 - playerAngle->pitch) / 90;
+    playerVertRatio = (180 - playerAngle->pitch) / 90;
   }
 
 //  if (KeyboardInput::isReleased(82)) {
@@ -209,8 +209,8 @@ void* evaluateCallback(void* inp, void* data) {
     // move forward.
     player->setAction("moving_forward");
 
-    playerTraj->position.horz += 4 * horzRatio;
-    playerTraj->position.vert += 4 * vertRatio;
+    playerTraj->position.horz += 4 * playerHorzRatio;
+    playerTraj->position.vert += 4 * playerVertRatio;
   }
 
 
