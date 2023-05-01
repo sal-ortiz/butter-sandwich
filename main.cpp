@@ -455,6 +455,10 @@ int main(int argc, char *argv[]) {
 
   }
 
+  delete background;
+  delete player;
+  delete bullet;
+
   delete win;
   delete app;
 }
