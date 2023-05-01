@@ -413,7 +413,7 @@ int main(int argc, char *argv[]) {
       if (framePasses % frameEvalDelay == 0) {
         float avgFrameTime = (float)frameElapsed / (float)framePasses;
 
-        printf("\n[%u] AVG FRAME TIME: %.2fms per %lu frames", SDL_GetTicks(), avgFrameTime, frameEvalDelay);
+        printf("\n[%u] AVG FRAME TIME: %.2fms", SDL_GetTicks(), avgFrameTime);
 
         frameElapsed = 0;
         framePasses = 0;
