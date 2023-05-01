@@ -41,9 +41,9 @@
       }
 
       static bool wasPressed(unsigned char scanCode) {
-        const unsigned char* state = KeyboardInput::getPreviousState();
+        const unsigned char* prevState = KeyboardInput::getPreviousState();
 
-        if (state[scanCode] != 0) {
+        if (prevState && prevState[scanCode] != 0) {
           return true;
         }
 
