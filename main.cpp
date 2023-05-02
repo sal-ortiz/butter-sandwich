@@ -298,9 +298,7 @@ int main(int argc, char *argv[]) {
   Image* shipTurningLeft = Image::load("./ship_sheet.bmp", 490, 50, 75, 75);
   Image* shipTurningRight = Image::load("./ship_sheet.bmp", 190, 50, 75, 75);
   Image* shipMovingForward = Image::load("./ship_sheet.bmp", 90, 50, 75, 75);
-  //Image* backgroundImage = Image::load("./background.bmp", 0, 0, 3008, 2000);
-  //Image* backgroundImage = Image::load("./background2.bmp", 0, 0, 3840, 1264);
-  Image* backgroundImage = Image::load("./background3.bmp", 0, 0, 3000, 1688);
+  Image* backgroundImage = Image::load("./background.bmp", 0, 0, 3000, 1688);
 
   bulletSprite->addFrame(bulletImage, 0);
   standingStillSprite->addFrame(shipStandingStill, 0);
