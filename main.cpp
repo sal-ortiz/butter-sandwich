@@ -26,7 +26,7 @@ const unsigned long int FRAMERATE = 60; // fps
 const unsigned long int SCREEN_WIDTH = 1024;
 const unsigned long int SCREEN_HEIGHT = 769;
 
-const unsigned int NUM_BULLETS = 12;
+const unsigned int NUM_BULLETS = 18;
 const unsigned int BULLET_DELAY = 200; // ms (TODO: this should be in frames, not time)
 
 float playerHorzRatio = 1.0;
