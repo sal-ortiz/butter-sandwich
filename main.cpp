@@ -26,6 +26,9 @@ const unsigned long int FRAMERATE = 60; // fps
 const unsigned long int SCREEN_WIDTH = 1024;
 const unsigned long int SCREEN_HEIGHT = 769;
 
+const unsigned int NUM_BULLETS = 12;
+const unsigned int BULLET_DELAY = 200; // ms (TODO: this should be in frames, not time)
+
 float playerHorzRatio = 1.0;
 float playerVertRatio = 0.0;
 float bulletHorzRatio = playerHorzRatio;
@@ -33,8 +36,10 @@ float bulletVertRatio = playerVertRatio;
 
 PlayerOne* player = new PlayerOne();
 Background* background = new Background();
-Bullet* bullet = new Bullet();
 
+List<Bullet*>* bullets = new List<Bullet*>();
+
+unsigned int lastBulletTimestamp = 0;
 
 
 void* quitCallback(void* inp, void* data) {
@@ -197,6 +202,42 @@ void* playerEvaluateCallback(void* inp, void* data) {
     playerTraj->position.vert += 3 * playerVertRatio;
   }
 
+  if (KeyboardInput::isPressed(44) && (SDL_GetTicks() - lastBulletTimestamp) > BULLET_DELAY) {
+    // fire a pellet
+
+    for (unsigned int bulletIdx = 0; bulletIdx < bullets->getLength(); bulletIdx++) {
+      Bullet* bullet = bullets->get(bulletIdx);
+
+      if (bullet->getVisibility()) {
+        continue;
+      }
+
+      Position* bulletPos = (Position*)bullet->state->get("position");
+      Position* bulletAbsolutePos = (Position*)bullet->state->get("absolute_position");
+      Angle* bulletAngle = (Angle*)bullet->state->get("angle");
+      Trajectory* bulletTraj = (Trajectory*)bullet->state->get("trajectory");
+
+      bulletHorzRatio = playerHorzRatio;
+      bulletVertRatio = playerVertRatio;
+
+      bulletTraj->position.horz = 28 * bulletHorzRatio;
+      bulletTraj->position.vert = 28 * bulletVertRatio;
+
+      bulletAbsolutePos->horz = playerAbsolutePos->horz + 20;
+      bulletAbsolutePos->vert = playerAbsolutePos->vert + 20;
+
+      bulletAngle->pitch = playerAngle->pitch + 132;
+
+      bullet->setVisibility(true);
+
+      lastBulletTimestamp = SDL_GetTicks();
+
+      break;
+
+    }
+
+  }
+
   // keep angle within 360 degrees
   // TODO: enforce this from a state callback.
   playerAngle->pitch = playerAngle->pitch < 0 ? 360 - abs(playerAngle->pitch) : playerAngle->pitch;
@@ -222,23 +263,6 @@ void* bulletEvaluateCallback(void* inp, void* data) {
 
   View* backgroundView = (View*)background->state->get("view");
 
-
-  if (KeyboardInput::isPressed(44) && bullet->getVisibility() == false) {
-    // fire a pellet
-
-    bulletHorzRatio = playerHorzRatio;
-    bulletVertRatio = playerVertRatio;
-
-    bulletTraj->position.horz = 28 * bulletHorzRatio;
-    bulletTraj->position.vert = 28 * bulletVertRatio;
-
-    bulletAbsolutePos->horz = playerAbsolutePos->horz + 20;
-    bulletAbsolutePos->vert = playerAbsolutePos->vert + 20;
-
-    bulletAngle->pitch = playerAngle->pitch + 132;
-
-    bullet->setVisibility(true);
-  }
 
   if (bulletAbsolutePos->horz > backgroundView->position.horz
     && bulletAbsolutePos->horz < (backgroundView->position.horz + backgroundView->size.horz)
@@ -283,7 +307,6 @@ int main(int argc, char *argv[]) {
   win->on("CLOSED", closedCallback, (void*)NULL);
 
   player->onEvaluate(playerEvaluateCallback, (void*)background);
-  bullet->onEvaluate(bulletEvaluateCallback, (void*)player);
   //background->onEvaluate(backgroundEvaluateCallback, (void*)player);
 
   Sprite* bulletSprite = new Sprite();
@@ -322,23 +345,18 @@ int main(int argc, char *argv[]) {
   turningRightSprite->setLoop(false);
   backgroundSprite->setLoop(false);
 
-  bullet->addSprite("bullet", bulletSprite);
   player->addSprite("standing_still", standingStillSprite);
   player->addSprite("moving_forward", movingForwardSprite);
   player->addSprite("turning_left", turningLeftSprite);
   player->addSprite("turning_right", turningRightSprite);
   background->addSprite("background", backgroundSprite);
 
-  bullet->setAction("bullet");
   player->setAction("standing_still");
   background->setAction("background");
 
   Position* playerPos = (Position*)player->state->get("position");
   Angle* playerAngle = (Angle*)player->state->get("angle");
   View* backgroundView = (View*)background->state->get("view");
-
-  Position* bulletPos = (Position*)bullet->state->get("position");
-  Angle* bulletAngle = (Angle*)bullet->state->get("angle");
 
   playerAngle->center.horz = 43;
   playerAngle->center.vert = 43;
@@ -348,28 +366,41 @@ int main(int argc, char *argv[]) {
   backgroundView->position.horz = round((background->width / 2) - (SCREEN_WIDTH / 2));
   backgroundView->position.vert = round((background->height / 2) - (SCREEN_HEIGHT / 2));
 
+  for (unsigned int bulletIdx = 0; bulletIdx < NUM_BULLETS; bulletIdx++) {
+    Bullet* bullet = new Bullet();
 
+    bullet->onEvaluate(bulletEvaluateCallback, (void*)player);
+
+    bullet->state->set("absolute_position", new Position(
+      (background->width / 2) - (backgroundView->size.horz / 2) - (player->width / 2) + 20,
+      (background->height / 2) - (backgroundView->size.vert / 2) - (player->width / 2) + 20
+    ));
+
+    Position* bulletAbsolutePos = (Position*)bullet->state->get("absolute_position");
+    Position* bulletPos = (Position*)bullet->state->get("position");
+    Angle* bulletAngle = (Angle*)bullet->state->get("angle");
+
+
+    bullet->addSprite("bullet", bulletSprite);
+    bullet->setAction("bullet");
+
+    bullet->setVisibility(false);
+
+    bulletAngle->center.horz = playerAngle->center.horz - 20;
+    bulletAngle->center.vert = playerAngle->center.vert - 20;
+
+    bullets->set(bulletIdx, bullet);
+  }
 
   player->state->set("absolute_position", new Position(
     (background->width / 2) - (backgroundView->size.horz / 2) - (player->width / 2),
     (background->height / 2) - (backgroundView->size.vert / 2) - (player->width / 2)
   ));
 
-  bullet->state->set("absolute_position", new Position(
-    (background->width / 2) - (backgroundView->size.horz / 2) - (player->width / 2) + 20,
-    (background->height / 2) - (backgroundView->size.vert / 2) - (player->width / 2) + 20
-  ));
-
   Position* playerAbsolutePos = (Position*)player->state->get("absolute_position");
-  Position* bulletAbsolutePos = (Position*)bullet->state->get("absolute_position");
 
   backgroundView->position.horz = playerAbsolutePos->horz - round(backgroundView->size.horz / 2);
   backgroundView->position.vert = playerAbsolutePos->vert - round(backgroundView->size.vert / 2);
-
-  bullet->setVisibility(false);
-
-  bulletAngle->center.horz = playerAngle->center.horz - 20;
-  bulletAngle->center.vert = playerAngle->center.vert - 20;
 
 
   win->open("blasteroids", 600, 150, SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -394,13 +425,18 @@ int main(int argc, char *argv[]) {
 
       background->evaluate();
       player->evaluate();
-      bullet->evaluate();
-
-      //win->clear();
 
       background->render(renderer);
       player->render(renderer);
-      bullet->render(renderer);
+
+      for (unsigned int bulletIdx = 0; bulletIdx < bullets->getLength(); bulletIdx++) {
+        Bullet* bullet = bullets->get(bulletIdx);
+
+        bullet->evaluate();
+        bullet->render(renderer);
+      }
+
+      //win->clear();
 
       win->render();
 
@@ -416,14 +452,18 @@ int main(int argc, char *argv[]) {
         framePasses = 0;
       }
 
-
     }
 
   }
 
   delete background;
   delete player;
-  delete bullet;
+
+  for (unsigned int bulletIdx = 0; bulletIdx < bullets->getLength(); bulletIdx++) {
+    Bullet* bullet = bullets->get(bulletIdx);
+
+    delete bullet;
+  }
 
   delete win;
   delete app;
