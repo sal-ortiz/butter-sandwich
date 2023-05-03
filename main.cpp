@@ -54,7 +54,8 @@ void* closedCallback(void* inp, void* data) {
 }
 
 void* keyboardCallback(void* inp, void* data) {
-  //PlayerOne* player = reinterpret_cast<PlayerOne*>(data);
+  PlayerOne* player = reinterpret_cast<PlayerOne*>(data);
+
   const unsigned char* keyboardState = SDL_GetKeyboardState(NULL);
 
   Trajectory* playerTraj = (Trajectory*)player->state->get("trajectory");
@@ -206,7 +207,7 @@ void* playerEvaluateCallback(void* inp, void* data) {
 
 void* bulletEvaluateCallback(void* inp, void* data) {
   Bullet* bullet = reinterpret_cast<Bullet*>(inp);
-  //PlayerOne* player = reinterpret_cast<PlayerOne*>(data);
+  PlayerOne* player = reinterpret_cast<PlayerOne*>(data);
 
   Position* playerPos = (Position*)player->state->get("position");
   Angle* playerAngle = (Angle*)player->state->get("angle");
