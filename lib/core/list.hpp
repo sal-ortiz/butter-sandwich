@@ -110,8 +110,13 @@
         ListEntry<class_type>* prev = node->getPrev();
         ListEntry<class_type>* next = node->getNext();
 
-        prev->setNext(next);
-        next->setPrev(prev);
+        if (prev) {
+          prev->setNext(next);
+        }
+
+        if (next) {
+          next->setPrev(prev);
+        }
 
         delete node;
       }
