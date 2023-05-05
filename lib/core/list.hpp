@@ -176,8 +176,6 @@
       class_type pop() {
         unsigned long int length = this->getLength();
 
-        ListEntry<class_type>* newEntry = new ListEntry<class_type>();
-
         ListEntry<class_type>* node = this->getEntry(length - 1);
         ListEntry<class_type>* prev = this->getEntry(length - 2);
 
