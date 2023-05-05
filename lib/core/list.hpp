@@ -102,6 +102,20 @@
         node->setValue(value);
       }
 
+      void deleteEntry(unsigned long int targIndex) {
+        unsigned long int length = this->getLength();
+
+        ListEntry<class_type>* node = this->getEntry(targIndex);
+
+        ListEntry<class_type>* prev = node->getPrev();
+        ListEntry<class_type>* next = node->getNext();
+
+        prev->setNext(next);
+        next->setPrev(prev);
+
+        delete node;
+      }
+
 
     public:
 
@@ -140,6 +154,15 @@
 
       void set(unsigned long int targIndex, class_type value) {
         this->setEntry(targIndex, value);
+      }
+
+      void remove(unsigned long int targIndex) {
+
+        if (targIndex > (this->getLength() - 1)) {
+          throw;
+        }
+
+        this->deleteEntry(targIndex);
       }
 
       void push(class_type value) {
