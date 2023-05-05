@@ -4,15 +4,15 @@
 
   #define _SCENE_BASE_HPP_
 
+  #include "../core/dict.hpp"
   #include "../runtime/base.hpp"
   #include "../runtime/state.hpp"
-  #include "../core/dict.hpp"
-  #include "../core/data/position.hpp"
-  #include "../core/data/angle.hpp"
-  #include "../core/data/scale.hpp"
-  #include "../core/data/size.hpp"
-  #include "../core/data/view.hpp"
-  #include "../core/data/trajectory.hpp"
+  #include "../runtime/data/position.hpp"
+  #include "../runtime/data/angle.hpp"
+  #include "../runtime/data/scale.hpp"
+  #include "../runtime/data/size.hpp"
+  #include "../runtime/data/view.hpp"
+  #include "../runtime/data/trajectory.hpp"
 
 
   class SceneBase: public RuntimeBase {

@@ -5,6 +5,8 @@
 
   #include "../core/dict.hpp"
   #include "../runtime/sprite.hpp"
+  #include "../runtime/data/angle.hpp"
+  #include "../runtime/data/position.hpp"
   #include "../scene/base.hpp"
 
 

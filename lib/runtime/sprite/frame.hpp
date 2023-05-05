@@ -4,9 +4,9 @@
   #define _SPRITE_FRAME_HPP
 
   #include "../../core/image.hpp"
-  #include "../../core/data/position.hpp"
-  #include "../../core/data/angle.hpp"
-  #include "../../core/data/view.hpp"
+  #include "../data/position.hpp"
+  #include "../data/angle.hpp"
+  #include "../data/view.hpp"
 
 
   class SpriteFrame {
