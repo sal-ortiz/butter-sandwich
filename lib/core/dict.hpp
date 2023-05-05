@@ -123,6 +123,37 @@
         list.unshift(*newEntry);
       }
 
+      void remove(const char* key) {
+        unsigned long int aryIdx = this->hashCode(key) % DICT_LIST_ARRAY_LEN;
+
+        List<DictEntry<class_type>> list = data[aryIdx];
+        DictEntry<class_type> entry;
+
+        unsigned long int listLen = list.getLength();
+
+        bool found = false;
+
+        for (unsigned long int idx = 0; idx < listLen; idx++) {
+          entry = list.get(idx);
+
+          unsigned int cmp = strcmp(entry.getKey(), key);
+
+          if (cmp == 0) {
+            found = true;
+
+            list.remove(idx);
+
+            break;
+          }
+
+        }
+
+        if (!found) {
+          throw (void*)NULL;
+        }
+
+      }
+
       bool has(const char* key) {
 
         try {
