@@ -150,6 +150,7 @@
 
         newEntry->setValue(value);
 
+        newEntry->setPrev(node);
         node->setNext(newEntry);
       }
 
