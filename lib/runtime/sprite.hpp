@@ -103,25 +103,10 @@
         this->normalizeFramesList();
       }
 
-      void render(
-        SDL_Renderer* renderer,
-        uint32_t dstX,
-        uint32_t dstY,
-        uint32_t srcX,
-        uint32_t srcY,
-        uint32_t srcWidth,
-        uint32_t srcHeight,
-        float dstAngle=0.0,
-        uint32_t centerX=0,
-        uint32_t centerY=0
-      ) {
+      void render(SDL_Renderer *renderer, Position* dstPos, View* srcView, Angle* angle) {
         SpriteFrame* frame = this->nextFrame();
 
-        Angle* angle = new Angle(dstAngle, 0.0, 0.0, centerX, centerY, 0);
-        Position* dstPos = new Position(dstX, dstY, 0);
-        View* srcView = new View(srcX, srcY, 0, srcWidth, srcHeight, 0);
-
-        frame->render(renderer, *dstPos, *srcView, *angle);
+        frame->render(renderer, dstPos, srcView, angle);
       }
 
       SpriteFrame* nextFrame() {

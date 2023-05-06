@@ -98,19 +98,7 @@
         this->width = sprite->width;
         this->height = sprite->height;
 
-        sprite->render(
-          renderer,
-          position->horz,
-          position->vert,
-          view->position.horz,
-          view->position.vert,
-          view->size.horz,
-          view->size.vert,
-          angle->pitch,
-          angle->center.horz,
-          angle->center.vert
-        );
-
+        sprite->render(renderer, position, view, angle);
       }
 
   };

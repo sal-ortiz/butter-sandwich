@@ -27,6 +27,7 @@
       }
 
       void render(SDL_Renderer* renderer, Position dstPos, View srcView, Angle angle) {
+
         SDL_Rect dstRect = {
           (uint16_t)dstPos.horz,
           (uint16_t)dstPos.vert,
@@ -45,11 +46,17 @@
 
           this->image->render(
             renderer,
-            dstRect,
-            srcRect,
+            dstPos.horz,
+            dstPos.vert,
+            srcView.position.horz,
+            srcView.position.vert,
+            srcView.size.horz,
+            srcView.size.vert,
             angle.pitch,
-            center
+            angle.center.horz,
+            angle.center.vert
           );
+
         }
 
       }
