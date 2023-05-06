@@ -106,7 +106,7 @@
       void render(SDL_Renderer *renderer, Position* dstPos, View* srcView, Angle* angle) {
         SpriteFrame* frame = this->nextFrame();
 
-        frame->render(renderer, dstPos, srcView, angle);
+        frame->render(renderer, *dstPos, *srcView, *angle);
       }
 
       SpriteFrame* nextFrame() {
