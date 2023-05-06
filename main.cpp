@@ -65,6 +65,8 @@ void* keyboardCallback(void* inp, void* data) {
 
   Trajectory* playerTraj = (Trajectory*)player->state->get("trajectory");
 
+  KeyboardInput::updateState();
+
   //if (KeyboardInput::isPressed(80)) {
   //  // turn left.
   //  printf("\n[%u] TURNING LEFT", SDL_GetTicks());
