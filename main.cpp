@@ -294,8 +294,8 @@ void* playerEvaluateCallback(void* inp, void* data) {
     bulletHorzRatio = playerHorzRatio;
     bulletVertRatio = playerVertRatio;
 
-    bulletTraj->position.horz = 28 * bulletHorzRatio;
-    bulletTraj->position.vert = 28 * bulletVertRatio;
+    bulletTraj->position.horz = 36 * bulletHorzRatio;
+    bulletTraj->position.vert = 36 * bulletVertRatio;
 
     bulletAbsolutePos->horz = playerAbsolutePos->horz + 20;
     bulletAbsolutePos->vert = playerAbsolutePos->vert + 20;
