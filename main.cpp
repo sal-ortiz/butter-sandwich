@@ -302,8 +302,6 @@ void* playerEvaluateCallback(void* inp, void* data) {
 
     bulletAngle->pitch = playerAngle->pitch + 132;
 
-    bullet->setVisibility(true);
-
     lastBulletTimestamp = SDL_GetTicks();
 
     char* bulletIdentifier;
