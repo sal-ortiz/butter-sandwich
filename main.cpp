@@ -184,6 +184,26 @@ void* playerEvaluateCallback(void* inp, void* data) {
 
   Position* playerAbsolutePos = (Position*)player->state->get("absolute_position");
 
+  if (playerAbsolutePos->horz < 0) {
+    playerAbsolutePos->horz = 0;
+    playerTraj->position.horz = 0;
+  }
+
+  if (playerAbsolutePos->vert < 0) {
+    playerAbsolutePos->vert = 0;
+    playerTraj->position.vert = 0;
+  }
+
+  if (playerAbsolutePos->horz > (background->width - player->width)) {
+    playerAbsolutePos->horz = background->width - player->width;
+    playerTraj->position.horz = 0;
+  }
+
+  if (playerAbsolutePos->vert > background->height) {
+    playerAbsolutePos->vert = background->height;
+    playerTraj->position.vert = 0;
+  }
+
   if (playerAbsolutePos->horz < round(backgroundView->size.horz / 2)) {
     // move along our left border.
     playerPos->horz = playerAbsolutePos->horz;
@@ -213,27 +233,6 @@ void* playerEvaluateCallback(void* inp, void* data) {
 
     playerPos->vert = round(backgroundView->size.vert / 2);
   }
-
-  if (playerAbsolutePos->horz < 0) {
-    playerAbsolutePos->horz = 0;
-    playerTraj->position.horz = 0;
-  }
-
-  if (playerAbsolutePos->vert < 0) {
-    playerAbsolutePos->vert = 0;
-    playerTraj->position.vert = 0;
-  }
-
-  if (playerAbsolutePos->horz > (background->width - player->width)) {
-    playerAbsolutePos->horz = background->width - player->width;
-    playerTraj->position.horz = 0;
-  }
-
-  if (playerAbsolutePos->vert > background->height) {
-    playerAbsolutePos->vert = background->height;
-    playerTraj->position.vert = 0;
-  }
-
 
   if (playerAngle->pitch >= 180) {
     playerHorzRatio = -(((270 - playerAngle->pitch) / 90));
