@@ -18,7 +18,7 @@
 
       Angle(
         float pitch=0.0,
-        float roll=9.0,
+        float roll=0.0,
         float yaw=0.0,
 
         float centerX=0.0,
