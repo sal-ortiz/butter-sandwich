@@ -393,6 +393,8 @@ int main(int argc, char *argv[]) {
 
   app->start();
 
+  KeyboardInput::updateState();
+
   unsigned long int frameElapsed = 0;
   unsigned long int frameDelay = 1000 / FRAMERATE;
 
