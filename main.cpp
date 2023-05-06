@@ -17,6 +17,11 @@
 #include "./lib/runtime/application.hpp"
 #include "./lib/runtime/sprite.hpp"
 
+#include "./lib/runtime/data/trajectory.hpp"
+#include "./lib/runtime/data/view.hpp"
+#include "./lib/runtime/data/angle.hpp"
+#include "./lib/runtime/data/position.hpp"
+
 #include "./src/lib/player_one.hpp"
 #include "./src/lib/background.hpp"
 #include "./src/lib/bullet.hpp"
