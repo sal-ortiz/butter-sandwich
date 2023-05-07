@@ -34,10 +34,6 @@ const unsigned long int SCREEN_HEIGHT = 769;
 const unsigned int NUM_BULLETS = 18;
 const unsigned int BULLET_DELAY = 200; // ms (TODO: this should be in frames, not time)
 
-Sprite* bulletSprite = new Sprite();
-
-Image* bulletImage = Image::load("./bullet.bmp", 0, 0, 6, 6);
-
 float playerHorzRatio = 1.0;
 float playerVertRatio = 0.0;
 float bulletHorzRatio = playerHorzRatio;
@@ -281,9 +277,6 @@ void* playerEvaluateCallback(void* inp, void* data) {
     Angle* bulletAngle = (Angle*)bullet->state->get("angle");
     Trajectory* bulletTraj = (Trajectory*)bullet->state->get("trajectory");
 
-    bullet->addSprite("bullet", bulletSprite);
-    bullet->setAction("bullet");
-
     bulletAngle->center.horz = playerAngle->center.horz - 20;
     bulletAngle->center.vert = playerAngle->center.vert - 20;
 
@@ -326,10 +319,6 @@ int main(int argc, char *argv[]) {
 
   player->onEvaluate(playerEvaluateCallback, (void*)background);
   background->onEvaluate(backgroundEvaluateCallback, (void*)player);
-
-  bulletSprite->addFrame(bulletImage, 0);
-
-  bulletSprite->setLoop(false);
 
   Position* playerPos = (Position*)player->state->get("position");
   Angle* playerAngle = (Angle*)player->state->get("angle");
