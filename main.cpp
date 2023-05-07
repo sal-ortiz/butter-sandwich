@@ -83,44 +83,29 @@ void* keyboardCallback(void* inp, void* data) {
 
   //const unsigned char* keyboardState = SDL_GetKeyboardState(NULL);
 
-  //Trajectory* playerTraj = (Trajectory*)player->state->get("trajectory");
-
   KeyboardInput::updateState();
-
-  //if (KeyboardInput::isPressed(80)) {
-  //  // turn left.
-  //  printf("\n[%u] TURNING LEFT", SDL_GetTicks());
-  //}
-
-  //if (KeyboardInput::isPressed(79)) {
-  //  // turn right.
-  //  printf("\n[%u] TURNING RIGHT", SDL_GetTicks());
-  //}
-
-  //if (KeyboardInput::isPressed(82)) {
-  //  // move forward.
-  //  printf("\n[%u] MOVING FORWARD", SDL_GetTicks());
-  //}
 
   return (void*)NULL;
 }
 
-//void* backgroundEvaluateCallback(void* inp, void* data) {
-//  PlayerOne* player = reinterpret_cast<PlayerOne*>(inp);
-//  SceneBackground* background = reinterpret_cast<SceneBackground*>(data);
-//
-//  Position* playerPos = (Position*)player->state->get("position");
-//  Position* bulletPos = (Position*)bullet->state->get("position");
-//  Angle* playerAngle = (Angle*)player->state->get("angle");
-//  Trajectory* playerTraj = (Trajectory*)player->state->get("trajectory");
-//  Trajectory* backgroundTraj = (Trajectory*)background->state->get("trajectory");
-//  View* backgroundView = (View*)background->state->get("view");
-//
-//  Position* playerAbsolutePos = (Position*)player->state->get("absolute_position");
-//
-//  return (void*)NULL;
-//}
+void* backgroundEvaluateCallback(void* inp, void* data) {
+  Background* background = reinterpret_cast<Background*>(inp);
+  PlayerOne* player = reinterpret_cast<PlayerOne*>(data);
 
+
+  Trajectory* backgroundTraj = (Trajectory*)background->state->get("trajectory");
+  View* backgroundView = (View*)background->state->get("view");
+
+  backgroundView->position.horz += backgroundTraj->position.horz;
+  backgroundView->position.vert += backgroundTraj->position.vert;
+  backgroundView->position.depth += backgroundTraj->position.depth;
+
+  backgroundTraj->position.horz *= backgroundTraj->positionRate.horz;
+  backgroundTraj->position.vert *= backgroundTraj->positionRate.vert;
+  backgroundTraj->position.depth *= backgroundTraj->positionRate.depth;
+
+  return (void*)NULL;
+}
 
 void* bulletEvaluateCallback(void* inp, void* data) {
   Bullet* bullet = reinterpret_cast<Bullet*>(inp);
@@ -139,6 +124,9 @@ void* bulletEvaluateCallback(void* inp, void* data) {
 
   View* backgroundView = (View*)background->state->get("view");
 
+  bulletAbsolutePos->horz += bulletTraj->position.horz;
+  bulletAbsolutePos->vert += bulletTraj->position.vert;
+  bulletAbsolutePos->depth += bulletTraj->position.depth;
 
   if (bulletAbsolutePos->horz > backgroundView->position.horz
     && bulletAbsolutePos->horz < (backgroundView->position.horz + backgroundView->size.horz)
@@ -171,7 +159,6 @@ void* bulletEvaluateCallback(void* inp, void* data) {
   return (void*)NULL;
 }
 
-
 void* playerEvaluateCallback(void* inp, void* data) {
   PlayerOne* player = reinterpret_cast<PlayerOne*>(inp);
   SceneBackground* background = reinterpret_cast<SceneBackground*>(data);
@@ -183,6 +170,22 @@ void* playerEvaluateCallback(void* inp, void* data) {
   View* backgroundView = (View*)background->state->get("view");
 
   Position* playerAbsolutePos = (Position*)player->state->get("absolute_position");
+
+  playerAbsolutePos->horz += playerTraj->position.horz;
+  playerAbsolutePos->vert += playerTraj->position.vert;
+  playerAbsolutePos->depth += playerTraj->position.depth;
+
+  playerAngle->pitch += playerTraj->angle.pitch;
+  playerAngle->roll += playerTraj->angle.roll;
+  playerAngle->yaw += playerTraj->angle.yaw;
+
+  playerTraj->position.horz *= (playerTraj->positionRate.horz);
+  playerTraj->position.vert *= (playerTraj->positionRate.vert);
+  playerTraj->position.depth *= (playerTraj->positionRate.depth);
+
+  playerTraj->angle.pitch *= (playerTraj->angleRate.pitch);
+  playerTraj->angle.roll *= (playerTraj->angleRate.roll);
+  playerTraj->angle.yaw *= (playerTraj->angleRate.yaw);
 
   if (playerAbsolutePos->horz < 0) {
     playerAbsolutePos->horz = 0;
@@ -324,7 +327,6 @@ void* playerEvaluateCallback(void* inp, void* data) {
 }
 
 
-
 int main(int argc, char *argv[]) {
   Window* win = new Window();
   Application* app = new Application();
@@ -334,7 +336,7 @@ int main(int argc, char *argv[]) {
   win->on("CLOSED", closedCallback, (void*)NULL);
 
   player->onEvaluate(playerEvaluateCallback, (void*)background);
-  //background->onEvaluate(backgroundEvaluateCallback, (void*)player);
+  background->onEvaluate(backgroundEvaluateCallback, (void*)player);
 
   bulletSprite->addFrame(bulletImage, 0);
   standingStillSprite->addFrame(shipStandingStill, 0);

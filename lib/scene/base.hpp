@@ -83,6 +83,13 @@
         sprite->render(renderer, position, view, angle);
       }
 
+      void evaluate() {
+        unsigned long int charId = this->identifier;
+        const char* hookId = Hook::generateIdentifier(charId, "onEvaluate");
+
+        this->executeCallback(hookId, (void*)this);
+      }
+
   };
 
 #endif
