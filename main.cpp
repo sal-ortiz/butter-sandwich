@@ -34,11 +34,6 @@ const unsigned long int SCREEN_HEIGHT = 769;
 const unsigned int NUM_BULLETS = 18;
 const unsigned int BULLET_DELAY = 200; // ms (TODO: this should be in frames, not time)
 
-float playerHorzRatio = 1.0;
-float playerVertRatio = 0.0;
-float bulletHorzRatio = playerHorzRatio;
-float bulletVertRatio = playerVertRatio;
-
 Dict<Bullet*>* bullets = new Dict<Bullet*>();
 Dict<SceneBase*>* sceneElements = new Dict<SceneBase*>();
 
@@ -226,6 +221,9 @@ void* playerEvaluateCallback(void* inp, void* data) {
     playerPos->vert = round(backgroundView->size.vert / 2);
   }
 
+  float playerHorzRatio = 0.0;
+  float playerVertRatio = 0.0;
+
   if (playerAngle->pitch >= 180) {
     playerHorzRatio = -(((270 - playerAngle->pitch) / 90));
   } else {
@@ -284,11 +282,8 @@ void* playerEvaluateCallback(void* inp, void* data) {
     bulletAngle->center.horz = playerAngle->center.horz - 20;
     bulletAngle->center.vert = playerAngle->center.vert - 20;
 
-    bulletHorzRatio = playerHorzRatio;
-    bulletVertRatio = playerVertRatio;
-
-    bulletTraj->position.horz = 36 * bulletHorzRatio;
-    bulletTraj->position.vert = 36 * bulletVertRatio;
+    bulletTraj->position.horz = 36 * playerHorzRatio;
+    bulletTraj->position.vert = 36 * playerVertRatio;
 
     bulletAbsolutePos->horz = playerAbsolutePos->horz + 20;
     bulletAbsolutePos->vert = playerAbsolutePos->vert + 20;
