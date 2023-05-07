@@ -39,15 +39,12 @@ Sprite* standingStillSprite = new Sprite();
 Sprite* movingForwardSprite = new Sprite();
 Sprite* turningLeftSprite = new Sprite();
 Sprite* turningRightSprite = new Sprite();
-Sprite* backgroundSprite = new Sprite();
-
 
 Image* bulletImage = Image::load("./bullet.bmp", 0, 0, 6, 6);
 Image* shipStandingStill = Image::load("./ship_sheet.bmp", 390, 150, 75, 75);
 Image* shipTurningLeft = Image::load("./ship_sheet.bmp", 490, 50, 75, 75);
 Image* shipTurningRight = Image::load("./ship_sheet.bmp", 190, 50, 75, 75);
 Image* shipMovingForward = Image::load("./ship_sheet.bmp", 90, 50, 75, 75);
-Image* backgroundImage = Image::load("./background.bmp", 0, 0, 3000, 1688);
 
 float playerHorzRatio = 1.0;
 float playerVertRatio = 0.0;
@@ -343,30 +340,24 @@ int main(int argc, char *argv[]) {
   movingForwardSprite->addFrame(shipMovingForward, 0);
   turningLeftSprite->addFrame(shipTurningLeft, 0);
   turningRightSprite->addFrame(shipTurningRight, 0);
-  backgroundSprite->addFrame(backgroundImage, 0);
-  //sprite->addFrame(imgOne, 0);
-  //sprite->addFrame(imgTwo, 150);
+
   standingStillSprite->addFrame(200);
   movingForwardSprite->addFrame(200);
   turningLeftSprite->addFrame(200);
   turningRightSprite->addFrame(200);
-  backgroundSprite->addFrame(200);
 
   bulletSprite->setLoop(false);
   standingStillSprite->setLoop(false);
   movingForwardSprite->setLoop(false);
   turningLeftSprite->setLoop(false);
   turningRightSprite->setLoop(false);
-  backgroundSprite->setLoop(false);
 
   player->addSprite("standing_still", standingStillSprite);
   player->addSprite("moving_forward", movingForwardSprite);
   player->addSprite("turning_left", turningLeftSprite);
   player->addSprite("turning_right", turningRightSprite);
-  background->addSprite("background", backgroundSprite);
 
   player->setAction("standing_still");
-  background->setAction("background");
 
   Position* playerPos = (Position*)player->state->get("position");
   Angle* playerAngle = (Angle*)player->state->get("angle");
