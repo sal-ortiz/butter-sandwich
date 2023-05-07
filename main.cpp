@@ -39,10 +39,8 @@ float playerVertRatio = 0.0;
 float bulletHorzRatio = playerHorzRatio;
 float bulletVertRatio = playerVertRatio;
 
-PlayerOne* player = new PlayerOne();
-Background* background = new Background();
-
 Dict<Bullet*>* bullets = new Dict<Bullet*>();
+Dict<SceneBase*>* sceneElements = new Dict<SceneBase*>();
 
 unsigned int lastBulletTimestamp = 0;
 
@@ -75,8 +73,9 @@ void* keyboardCallback(void* inp, void* data) {
 
 void* backgroundEvaluateCallback(void* inp, void* data) {
   Background* background = reinterpret_cast<Background*>(inp);
-  PlayerOne* player = reinterpret_cast<PlayerOne*>(data);
+  Dict<SceneBase*>* sceneElements = reinterpret_cast<Dict<SceneBase*>*>(data);
 
+  PlayerOne* player = (PlayerOne*)sceneElements->get("player");
 
   Trajectory* backgroundTraj = (Trajectory*)background->state->get("trajectory");
   View* backgroundView = (View*)background->state->get("view");
@@ -94,7 +93,10 @@ void* backgroundEvaluateCallback(void* inp, void* data) {
 
 void* bulletEvaluateCallback(void* inp, void* data) {
   Bullet* bullet = reinterpret_cast<Bullet*>(inp);
-  PlayerOne* player = reinterpret_cast<PlayerOne*>(data);
+  Dict<SceneBase*>* sceneElements = reinterpret_cast<Dict<SceneBase*>*>(data);
+
+  PlayerOne* player = (PlayerOne*)sceneElements->get("player");
+  Background* background = (Background*)sceneElements->get("background");
 
   Position* playerPos = (Position*)player->state->get("position");
   Angle* playerAngle = (Angle*)player->state->get("angle");
@@ -146,7 +148,9 @@ void* bulletEvaluateCallback(void* inp, void* data) {
 
 void* playerEvaluateCallback(void* inp, void* data) {
   PlayerOne* player = reinterpret_cast<PlayerOne*>(inp);
-  SceneBackground* background = reinterpret_cast<SceneBackground*>(data);
+  Dict<SceneBase*>* sceneElements = reinterpret_cast<Dict<SceneBase*>*>(data);
+
+  Background* background = (Background*)sceneElements->get("background");
 
   Position* playerPos = (Position*)player->state->get("position");
   Angle* playerAngle = (Angle*)player->state->get("angle");
@@ -265,7 +269,7 @@ void* playerEvaluateCallback(void* inp, void* data) {
     // fire a pellet
     Bullet* bullet = new Bullet();
 
-    bullet->onEvaluate(bulletEvaluateCallback, (void*)player);
+    bullet->onEvaluate(bulletEvaluateCallback, (void*)sceneElements);
 
     bullet->state->set("absolute_position", new Position(
       (background->width / 2) - (backgroundView->size.horz / 2) - (player->width / 2) + 20,
@@ -313,12 +317,18 @@ int main(int argc, char *argv[]) {
   Window* win = new Window();
   Application* app = new Application();
 
+  PlayerOne* player = new PlayerOne();
+  Background* background = new Background();
+
+  sceneElements->set("player", player);
+  sceneElements->set("background", background);
+
   app->on("KEYBOARD", keyboardCallback, (void*)player);
   app->on("QUIT", quitCallback, (void*)NULL);
   win->on("CLOSED", closedCallback, (void*)NULL);
 
-  player->onEvaluate(playerEvaluateCallback, (void*)background);
-  background->onEvaluate(backgroundEvaluateCallback, (void*)player);
+  player->onEvaluate(playerEvaluateCallback, (void*)sceneElements);
+  background->onEvaluate(backgroundEvaluateCallback, (void*)sceneElements);
 
   Position* playerPos = (Position*)player->state->get("position");
   Angle* playerAngle = (Angle*)player->state->get("angle");
