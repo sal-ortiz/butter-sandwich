@@ -22,11 +22,6 @@ class PlayerOne: public SceneCharacter {
       turningLeftSprite->addFrame(shipTurningLeft, 0);
       turningRightSprite->addFrame(shipTurningRight, 0);
 
-      standingStillSprite->addFrame(1);
-      movingForwardSprite->addFrame(1);
-      turningLeftSprite->addFrame(1);
-      turningRightSprite->addFrame(1);
-
       standingStillSprite->setLoop(false);
       movingForwardSprite->setLoop(false);
       turningLeftSprite->setLoop(false);

@@ -11,7 +11,6 @@ class Background: public SceneBackground {
       Image* backgroundImage = Image::load("./background.bmp", 0, 0, 3000, 1688);
 
       backgroundSprite->addFrame(backgroundImage, 0);
-      backgroundSprite->addFrame(1);
       backgroundSprite->setLoop(false);
 
       this->addSprite("background", backgroundSprite);
