@@ -6,6 +6,7 @@
 
   #include <SDL2/SDL.h>
 
+
   const unsigned char* _prevKeyboardState;
   const unsigned char* _curKeyboardState;
 

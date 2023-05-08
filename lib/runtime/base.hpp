@@ -5,7 +5,7 @@
   #define _RUNTIME_BASE_HPP
 
   #include <time.h>
-  #include <math.h>
+  #include <stdlib.h>
 
   #include "./hook.hpp"
 

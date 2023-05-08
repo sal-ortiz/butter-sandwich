@@ -5,7 +5,6 @@
 
   #include <SDL2/SDL.h>
 
-  #include "../core/dict.hpp"
   #include "./event/window.hpp"
   #include "./event/application.hpp"
   #include "./event/keyboard.hpp"

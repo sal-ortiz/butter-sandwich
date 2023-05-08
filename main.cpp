@@ -7,15 +7,10 @@
 #include <math.h>
 #include <time.h>
 
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
-
-#include "./lib/core/image.hpp"
 #include "./lib/core/keyboard.hpp"
 
 #include "./lib/runtime/window.hpp"
 #include "./lib/runtime/application.hpp"
-#include "./lib/runtime/sprite.hpp"
 
 #include "./lib/runtime/data/trajectory.hpp"
 #include "./lib/runtime/data/view.hpp"

@@ -1,61 +1,15 @@
 
-#ifndef _DICT_ENTRY_HPP
-
-  #define _DICT_ENTRY_HPP
-
-  #include <string.h>
-  #include <stddef.h>
-
-  #include "./list.hpp" // https://gist.github.com/sal-ortiz/74a414860a7525f3cdce493d039c4d30
-
-
-  template <class class_type>
-  class DictEntry {
-
-    private:
-
-      const char* key;
-      class_type value;
-
-
-    public:
-
-      DictEntry() {
-        this->key = (const char*)NULL;
-        //this->value = (class_type)NULL;
-      }
-
-      DictEntry(const char* key, class_type value) {
-        this->key = key;
-        this->value = value;
-      }
-
-      const char* getKey() {
-        return this->key;
-      }
-
-      void setKey(const char* newKey) {
-        this->key = newKey;
-      }
-
-      class_type getValue() {
-        return this->value;
-      }
-
-      void setValue(class_type newValue) {
-        this->value = newValue;
-      }
-
-  };
-
-#endif
-
-
 #ifndef _DICT_HPP
 
   #define _DICT_HPP
 
+  #include <string.h>
+
+  #include "./list.hpp"
+  #include "./dict/entry.hpp"
+
   #define DICT_LIST_ARRAY_LEN   256
+
 
   template <class class_type>
   class Dict {

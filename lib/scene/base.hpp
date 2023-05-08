@@ -10,7 +10,6 @@
   #include "../runtime/data/position.hpp"
   #include "../runtime/data/angle.hpp"
   #include "../runtime/data/scale.hpp"
-  #include "../runtime/data/size.hpp"
   #include "../runtime/data/view.hpp"
   #include "../runtime/data/trajectory.hpp"
 

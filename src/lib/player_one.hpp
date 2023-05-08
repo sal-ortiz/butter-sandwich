@@ -1,4 +1,8 @@
 
+#include "../../lib/core/image.hpp"
+
+#include "../../lib/runtime/sprite.hpp"
+
 #include "../../lib/scene/character.hpp"
 
 
