@@ -6,11 +6,11 @@
 #include "../../lib/scene/character.hpp"
 
 
-class PlayerOne: public SceneCharacter {
+class Player: public SceneCharacter {
 
   public:
 
-    PlayerOne() {
+    Player() {
       Sprite* standingStillSprite = new Sprite();
       Sprite* movingForwardSprite = new Sprite();
       Sprite* turningLeftSprite = new Sprite();

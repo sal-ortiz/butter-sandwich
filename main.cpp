@@ -17,7 +17,7 @@
 #include "./lib/runtime/data/angle.hpp"
 #include "./lib/runtime/data/position.hpp"
 
-#include "./src/lib/player_one.hpp"
+#include "./src/lib/player.hpp"
 #include "./src/lib/background.hpp"
 #include "./src/lib/bullet.hpp"
 
@@ -53,7 +53,7 @@ void* closedCallback(void* inp, void* data) {
 
 void* keyboardCallback(void* inp, void* data) {
   KeyboardEventParams* parsedInp = reinterpret_cast<KeyboardEventParams*>(inp);
-  PlayerOne* player = reinterpret_cast<PlayerOne*>(data);
+  Player* player = reinterpret_cast<Player*>(data);
 
   //const unsigned char* keyboardState = SDL_GetKeyboardState(NULL);
 
@@ -76,7 +76,7 @@ void* backgroundEvaluateCallback(void* inp, void* data) {
   Background* background = reinterpret_cast<Background*>(inp);
   Dict<SceneBase*>* sceneElements = reinterpret_cast<Dict<SceneBase*>*>(data);
 
-  PlayerOne* player = (PlayerOne*)sceneElements->get("player");
+  Player* player = (Player*)sceneElements->get("player");
 
   Trajectory* backgroundTraj = (Trajectory*)background->state->get("trajectory");
   View* backgroundView = (View*)background->state->get("view");
@@ -96,7 +96,7 @@ void* bulletEvaluateCallback(void* inp, void* data) {
   Bullet* bullet = reinterpret_cast<Bullet*>(inp);
   Dict<SceneBase*>* sceneElements = reinterpret_cast<Dict<SceneBase*>*>(data);
 
-  PlayerOne* player = (PlayerOne*)sceneElements->get("player");
+  Player* player = (Player*)sceneElements->get("player");
   Background* background = (Background*)sceneElements->get("background");
 
   Position* playerPos = (Position*)player->state->get("position");
@@ -148,7 +148,7 @@ void* bulletEvaluateCallback(void* inp, void* data) {
 }
 
 void* playerEvaluateCallback(void* inp, void* data) {
-  PlayerOne* player = reinterpret_cast<PlayerOne*>(inp);
+  Player* player = reinterpret_cast<Player*>(inp);
   Dict<SceneBase*>* sceneElements = reinterpret_cast<Dict<SceneBase*>*>(data);
 
   Background* background = (Background*)sceneElements->get("background");
@@ -318,7 +318,7 @@ int main(int argc, char *argv[]) {
   Window* win = new Window();
   Application* app = new Application();
 
-  PlayerOne* player = new PlayerOne();
+  Player* player = new Player();
   Background* background = new Background();
 
   sceneElements->set("player", player);
