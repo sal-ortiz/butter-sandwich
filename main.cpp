@@ -446,6 +446,8 @@ int main(int argc, char *argv[]) {
     background->evaluate();
     player->evaluate();
 
+    //win->clear();
+
     background->render(renderer);
     player->render(renderer);
 
@@ -459,8 +461,6 @@ int main(int argc, char *argv[]) {
       bullet->evaluate();
       bullet->render(renderer);
     }
-
-    //win->clear();
 
     frameElapsed += SDL_GetTicks() - frameStart;
     framePasses++;
