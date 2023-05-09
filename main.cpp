@@ -313,21 +313,21 @@ void* playerEvaluateCallback(void* inp, void* data) {
   if (KeyboardInput::isPressed(80)) {
     // turn left.
     player->setAction("turning_left");
-    playerTraj->angle.pitch -= 2;
+    playerTraj->angle.pitch -= 1;
   }
 
   if (KeyboardInput::isPressed(79)) {
     // turn right.
     player->setAction("turning_right");
-    playerTraj->angle.pitch += 2;
+    playerTraj->angle.pitch += 1;
   }
 
   if (KeyboardInput::isPressed(82)) {
     // move forward.
     player->setAction("moving_forward");
 
-    playerTraj->position.horz += 3 * playerHorzRatio;
-    playerTraj->position.vert += 3 * playerVertRatio;
+    playerTraj->position.horz += 2 * playerHorzRatio;
+    playerTraj->position.vert += 2 * playerVertRatio;
   }
 
   if (KeyboardInput::isPressed(44) && (SDL_GetTicks() - lastBulletTimestamp) > BULLET_DELAY) {
@@ -349,8 +349,8 @@ void* playerEvaluateCallback(void* inp, void* data) {
     bulletAngle->center.horz = playerAngle->center.horz - 20;
     bulletAngle->center.vert = playerAngle->center.vert - 20;
 
-    bulletTraj->position.horz = 36 * playerHorzRatio;
-    bulletTraj->position.vert = 36 * playerVertRatio;
+    bulletTraj->position.horz = 24 * playerHorzRatio;
+    bulletTraj->position.vert = 24 * playerVertRatio;
 
     bulletAbsolutePos->horz = playerAbsolutePos->horz + 20;
     bulletAbsolutePos->vert = playerAbsolutePos->vert + 20;
