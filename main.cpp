@@ -35,6 +35,69 @@ Dict<SceneBase*>* sceneElements = new Dict<SceneBase*>();
 unsigned int lastBulletTimestamp = 0;
 
 
+Background* loadBackgroundAssets() {
+  Background* background = new Background();
+
+  Sprite* backgroundSprite = new Sprite();
+  Image* backgroundImage = Image::load("./background.bmp", 0, 0, 3000, 1688);
+
+  backgroundSprite->addFrame(backgroundImage, 0);
+  backgroundSprite->setLoop(false);
+
+  background->addSprite("background", backgroundSprite);
+  background->setAction("background");
+
+  return background;
+}
+
+Player* loadPlayerAssets() {
+  Player* player = new Player();
+
+  Sprite* standingStillSprite = new Sprite();
+  Sprite* movingForwardSprite = new Sprite();
+  Sprite* turningLeftSprite = new Sprite();
+  Sprite* turningRightSprite = new Sprite();
+
+  Image* shipStandingStill = Image::load("./ship_sheet.bmp", 390, 150, 75, 75);
+  Image* shipTurningLeft = Image::load("./ship_sheet.bmp", 490, 50, 75, 75);
+  Image* shipTurningRight = Image::load("./ship_sheet.bmp", 190, 50, 75, 75);
+  Image* shipMovingForward = Image::load("./ship_sheet.bmp", 90, 50, 75, 75);
+
+  standingStillSprite->addFrame(shipStandingStill, 0);
+  movingForwardSprite->addFrame(shipMovingForward, 0);
+  turningLeftSprite->addFrame(shipTurningLeft, 0);
+  turningRightSprite->addFrame(shipTurningRight, 0);
+
+  standingStillSprite->setLoop(false);
+  movingForwardSprite->setLoop(false);
+  turningLeftSprite->setLoop(false);
+  turningRightSprite->setLoop(false);
+
+  player->addSprite("standing_still", standingStillSprite);
+  player->addSprite("moving_forward", movingForwardSprite);
+  player->addSprite("turning_left", turningLeftSprite);
+  player->addSprite("turning_right", turningRightSprite);
+
+  player->setAction("standing_still");
+
+  return player;
+}
+
+Bullet* loadBulletAssets() {
+  Bullet* bullet = new Bullet();
+
+  Sprite* bulletSprite = new Sprite();
+  Image* bulletImage = Image::load("./bullet.bmp", 0, 0, 6, 6);
+
+  bulletSprite->addFrame(bulletImage, 0);
+  bulletSprite->setLoop(false);
+
+  bullet->addSprite("bullet", bulletSprite);
+  bullet->setAction("bullet");
+
+  return bullet;
+}
+
 void* quitCallback(void* inp, void* data) {
   ApplicationEventParams* parsedInp = reinterpret_cast<ApplicationEventParams*>(inp);
 
@@ -271,7 +334,7 @@ void* playerEvaluateCallback(void* inp, void* data) {
 
   if (KeyboardInput::isPressed(44) && (SDL_GetTicks() - lastBulletTimestamp) > BULLET_DELAY) {
     // fire a pellet
-    Bullet* bullet = new Bullet();
+    Bullet* bullet = loadBulletAssets();
 
     bullet->onEvaluate(bulletEvaluateCallback, (void*)sceneElements);
 
@@ -318,8 +381,8 @@ int main(int argc, char *argv[]) {
   Window* win = new Window();
   Application* app = new Application();
 
-  Player* player = new Player();
-  Background* background = new Background();
+  Player* player = loadPlayerAssets();
+  Background* background = loadBackgroundAssets();
 
   sceneElements->set("player", player);
   sceneElements->set("background", background);
