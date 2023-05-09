@@ -455,10 +455,10 @@ int main(int argc, char *argv[]) {
 
     //win->clear();
 
-    win->render();
-
     frameElapsed += SDL_GetTicks() - frameStart;
     framePasses++;
+
+    win->render();
 
     if (framePasses % frameEvalDelay == 0) {
       float avgFrameTime = (float)frameElapsed / (float)framePasses;
