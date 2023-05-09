@@ -9,7 +9,6 @@
   struct WindowEventParams: EventParamsBase {
     signed long int horz;
     signed long int vert;
-
   };
 
 
@@ -35,6 +34,7 @@
 
       static void* parse(SDL_WindowEvent evt) {
         void* retVal = (void*)true;
+
         WindowEventParams params = WindowEvent::parseEventParams(evt);
 
         switch (evt.event) {

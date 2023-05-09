@@ -52,6 +52,7 @@ void* closedCallback(void* inp, void* data) {
 }
 
 void* keyboardCallback(void* inp, void* data) {
+  KeyboardEventParams* parsedInp = reinterpret_cast<KeyboardEventParams*>(inp);
   PlayerOne* player = reinterpret_cast<PlayerOne*>(data);
 
   //const unsigned char* keyboardState = SDL_GetKeyboardState(NULL);
@@ -60,6 +61,16 @@ void* keyboardCallback(void* inp, void* data) {
 
   return (void*)NULL;
 }
+
+//void* windowPresentCallback(void* inp, void* data) {
+//  UserEventParams* parsedInp = reinterpret_cast<UserEventParams*>(inp);
+//  Window* win = reinterpret_cast<Window*>(data);
+//
+//  SDL_RenderPresent(win->getRenderer());
+//  //printf("\n[%u] RENDERING!!!!", SDL_GetTicks());
+//
+//  return (void*)NULL;
+//}
 
 void* backgroundEvaluateCallback(void* inp, void* data) {
   Background* background = reinterpret_cast<Background*>(inp);
@@ -316,6 +327,7 @@ int main(int argc, char *argv[]) {
   app->on("KEYBOARD", keyboardCallback, (void*)player);
   app->on("QUIT", quitCallback, (void*)NULL);
   win->on("CLOSED", closedCallback, (void*)NULL);
+  //win->on("PRESENT", windowPresentCallback, (void*)win);
 
   player->onEvaluate(playerEvaluateCallback, (void*)sceneElements);
   background->onEvaluate(backgroundEvaluateCallback, (void*)sceneElements);

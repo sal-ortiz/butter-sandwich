@@ -23,6 +23,7 @@
         Event::on("WindowEvent.CLOSED", Window::closedCallback, this);
         Event::on("WindowEvent.MOVED", Window::movedCallback, this);
         Event::on("WindowEvent.RESIZED", Window::resizedCallback, this);
+        Event::on("UserEvent.WINDOWPRESENT", Window::presentCallback, this);
       }
 
       ~Window() {
@@ -47,6 +48,8 @@
       }
 
       void render() {
+        //Event::pushEvent(PRESENT_WINDOW);
+
         SDL_RenderPresent(this->renderer);
       }
 
@@ -79,6 +82,15 @@
         void* retVal = RuntimeBase::executeCallback("RESIZED", inp);
 
         //printf("RESIZED TO %ld, %ld\n", params->horz, params->vert);
+
+        return retVal;
+      }
+
+      static void* presentCallback(void* inp) {
+        UserEventParams* params = reinterpret_cast<UserEventParams*>(inp);
+        void* retVal = RuntimeBase::executeCallback("PRESENT", inp);
+
+        //printf("RENDERING WINDOW\n");
 
         return retVal;
       }

@@ -10,6 +10,7 @@
   #include "./event/keyboard.hpp"
   #include "./event/mouse_motion.hpp"
   #include "./event/mouse_button.hpp"
+  #include "./event/user.hpp"
 
 
   class Event {
@@ -26,21 +27,56 @@
         SDL_Event evt;
         void* retVal = (void*)true;
 
-        SDL_PollEvent(&evt);
+        int res = SDL_PollEvent(&evt);
 
-        if (evt.type == SDL_QUIT) {
-          retVal = ApplicationEvent::parse(evt.quit);
-        } else if (evt.type == SDL_WINDOWEVENT) {
-          retVal = WindowEvent::parse(evt.window);
-        } else if ((evt.type == SDL_KEYDOWN) || (evt.type == SDL_KEYUP))  {
-          retVal = KeyboardEvent::parse(evt.key);
-        } else if (evt.type == SDL_MOUSEMOTION) {
-          retVal = MouseMotionEvent::parse(evt.motion);
-        } else if ((evt.type == SDL_MOUSEBUTTONDOWN) || (evt.type == SDL_MOUSEBUTTONUP))  {
-          retVal = MouseButtonEvent::parse(evt.button);
+        if (res == 0) {
+          // no events to pull.
+          return (void*)NULL;
+        }
+
+        switch(evt.type) {
+
+          case SDL_QUIT:
+            retVal = ApplicationEvent::parse(evt.quit);
+            break;
+
+          case SDL_WINDOWEVENT:
+            retVal = WindowEvent::parse(evt.window);
+            break;
+
+          case SDL_KEYDOWN:
+          case SDL_KEYUP:
+            retVal = KeyboardEvent::parse(evt.key);
+            break;
+
+          case SDL_MOUSEMOTION:
+            retVal = MouseMotionEvent::parse(evt.motion);
+            break;
+
+          case SDL_MOUSEBUTTONDOWN:
+          case SDL_MOUSEBUTTONUP:
+            retVal = MouseButtonEvent::parse(evt.button);
+            break;
+
+          case SDL_USEREVENT:
+            retVal = UserEvent::parse(evt.user);
+            break;
+
         }
 
         return retVal;
+      }
+
+      static void pushEvent(signed long int code, void* dataOne=(void*)NULL, void* dataTwo=(void*)NULL) {
+
+        SDL_Event* event = new SDL_Event();
+
+        event->type = SDL_USEREVENT;
+        event->user.code = code;
+        event->user.data1 = dataOne;
+        event->user.data2 = dataTwo;
+
+        SDL_PushEvent(event);
       }
 
   };
