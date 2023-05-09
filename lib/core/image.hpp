@@ -12,19 +12,23 @@
     private:
 
       SDL_Surface* surface;
-
+      SDL_Texture* texture;
 
     public:
 
       SDL_Rect view;
 
+      int width;
+      int height;
 
       Image() {
         this->surface = NULL;
+        this->texture = NULL;
       }
 
       ~Image() {
-        SDL_FreeSurface(surface);
+        SDL_FreeSurface(this->surface);
+        SDL_DestroyTexture(this->texture);
       }
 
       static Image* load(const char* filename, uint16_t viewX, uint16_t viewY, uint16_t viewW=0, uint16_t viewH=0) {
@@ -48,10 +52,24 @@
         uint32_t centerX=0,
         uint32_t centerY=0
       ) {
-        //int imgWidth, imgHeight;
 
-        SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, this->surface);
-        //SDL_QueryTexture(texture, NULL, NULL, &imgWidth, &imgHeight);
+        int imgWidth;
+        int imgHeight;
+
+        SDL_Texture* texture = NULL;
+
+        if (this->texture == NULL) {
+          texture = SDL_CreateTextureFromSurface(renderer, this->surface);
+
+          SDL_QueryTexture(texture, NULL, NULL, &imgWidth, &imgHeight);
+
+          this->texture = texture;
+          this->width = imgWidth;
+          this->height = imgHeight;
+
+        } else {
+          texture = this->texture;
+        }
 
         SDL_Rect dstRect = {
           (uint16_t)dstX,
@@ -92,8 +110,6 @@
         dstRect.h = srcRect.h;
 
         SDL_RenderCopyEx(renderer, texture, &srcRect, &dstRect, dstAngle, &center, SDL_FLIP_NONE);
-
-        SDL_DestroyTexture(texture);
       }
 
   };

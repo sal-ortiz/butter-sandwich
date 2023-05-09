@@ -22,7 +22,6 @@
 #include "./src/lib/bullet.hpp"
 
 
-const unsigned long int FRAMERATE = 60; // fps
 const unsigned long int SCREEN_WIDTH = 1024;
 const unsigned long int SCREEN_HEIGHT = 769;
 
@@ -119,7 +118,6 @@ void* keyboardCallback(void* inp, void* data) {
   Player* player = reinterpret_cast<Player*>(data);
 
   //const unsigned char* keyboardState = SDL_GetKeyboardState(NULL);
-
   KeyboardInput::updateState();
 
   return (void*)NULL;
@@ -427,7 +425,6 @@ int main(int argc, char *argv[]) {
   KeyboardInput::updateState();
 
   unsigned long int frameElapsed = 0;
-  unsigned long int frameDelay = 1000 / FRAMERATE;
 
   unsigned long int frameStart = 0;
   unsigned long int framePasses = 0;
@@ -435,44 +432,41 @@ int main(int argc, char *argv[]) {
 
   while (app->isActive) {
 
-    if (frameElapsed == 0 || frameElapsed > frameDelay) {
-      frameStart = SDL_GetTicks();
+    Event::evaluate();
 
-      Event::evaluate();
+    frameStart = SDL_GetTicks();
 
-      background->evaluate();
-      player->evaluate();
+    background->evaluate();
+    player->evaluate();
 
-      background->render(renderer);
-      player->render(renderer);
+    background->render(renderer);
+    player->render(renderer);
 
-      List<Bullet*>* bulletsVals = bullets->getValues();
+    List<Bullet*>* bulletsVals = bullets->getValues();
 
-      unsigned long int bulletsValsLen = bulletsVals->getLength();
+    unsigned long int bulletsValsLen = bulletsVals->getLength();
 
-      for (unsigned long int bulletsValsIdx = 0; bulletsValsIdx < bulletsValsLen; bulletsValsIdx++) {
-        Bullet* bullet = bulletsVals->get(bulletsValsIdx);
+    for (unsigned long int bulletsValsIdx = 0; bulletsValsIdx < bulletsValsLen; bulletsValsIdx++) {
+      Bullet* bullet = bulletsVals->get(bulletsValsIdx);
 
-        bullet->evaluate();
-        bullet->render(renderer);
-      }
+      bullet->evaluate();
+      bullet->render(renderer);
+    }
 
-      //win->clear();
+    //win->clear();
 
-      win->render();
+    win->render();
 
-      frameElapsed += SDL_GetTicks() - frameStart;
-      framePasses++;
+    frameElapsed += SDL_GetTicks() - frameStart;
+    framePasses++;
 
-      if (framePasses % frameEvalDelay == 0) {
-        float avgFrameTime = (float)frameElapsed / (float)framePasses;
+    if (framePasses % frameEvalDelay == 0) {
+      float avgFrameTime = (float)frameElapsed / (float)framePasses;
 
-        printf("\n[%u] AVG FRAME TIME: %.2fms", SDL_GetTicks(), avgFrameTime);
+      printf("\n[%u] AVG FRAME TIME: %.2fms", SDL_GetTicks(), avgFrameTime);
 
-        frameElapsed = 0;
-        framePasses = 0;
-      }
-
+      frameElapsed = 0;
+      framePasses = 0;
     }
 
   }
