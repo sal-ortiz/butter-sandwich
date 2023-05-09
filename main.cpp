@@ -25,14 +25,14 @@
 const unsigned long int SCREEN_WIDTH = 1024;
 const unsigned long int SCREEN_HEIGHT = 769;
 
-const unsigned int NUM_BULLETS = 18;
+const unsigned int MAX_NUM_BULLETS = 8;
 const unsigned int BULLET_DELAY = 200; // ms (TODO: this should be in frames, not time)
 
 Dict<Bullet*>* bullets = new Dict<Bullet*>();
 Dict<SceneBase*>* sceneElements = new Dict<SceneBase*>();
 
 unsigned int lastBulletTimestamp = 0;
-
+unsigned int numBullets = 0;
 
 Background* loadBackgroundAssets() {
   Background* background = new Background();
@@ -202,6 +202,8 @@ void* bulletEvaluateCallback(void* inp, void* data) {
 
     sprintf(bulletIdentifier, "%lu", identifier);
 
+    numBullets--;
+
     bullets->remove(bulletIdentifier);
   }
 
@@ -330,7 +332,10 @@ void* playerEvaluateCallback(void* inp, void* data) {
     playerTraj->position.vert += 2 * playerVertRatio;
   }
 
-  if (KeyboardInput::isPressed(44) && (SDL_GetTicks() - lastBulletTimestamp) > BULLET_DELAY) {
+  if (KeyboardInput::isPressed(44)
+    && (SDL_GetTicks() - lastBulletTimestamp) > BULLET_DELAY
+    && numBullets < MAX_NUM_BULLETS
+  ) {
     // fire a pellet
     Bullet* bullet = loadBulletAssets();
 
@@ -362,6 +367,8 @@ void* playerEvaluateCallback(void* inp, void* data) {
     char* bulletIdentifier;
 
     sprintf(bulletIdentifier, "%lu", bullet->getIdentifier());
+
+    numBullets++;
 
     bullets->set(bulletIdentifier, bullet);
   }
