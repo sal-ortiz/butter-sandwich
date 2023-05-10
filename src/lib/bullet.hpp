@@ -10,8 +10,11 @@ class Bullet: public SceneElement {
 
   public:
 
-    Bullet() {
+    bool isActive;
 
+
+    Bullet() {
+      this->isActive = false;
     }
 
 };
