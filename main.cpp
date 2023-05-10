@@ -28,13 +28,10 @@ const unsigned long int SCREEN_HEIGHT = 769;
 const unsigned int MAX_NUM_BULLETS = 8;
 const unsigned int BULLET_DELAY = 200; // ms (TODO: this should be in frames, not time)
 
-//Dict<Bullet*>* bullets = new Dict<Bullet*>();
 List<Bullet*>* bullets = new List<Bullet*>();
 Dict<SceneBase*>* sceneElements = new Dict<SceneBase*>();
 
 unsigned int lastBulletTimestamp = 0;
-//unsigned int numBullets = 0;
-
 
 
 void* quitCallback(void* inp, void* data) {
@@ -264,10 +261,8 @@ void* playerEvaluateCallback(void* inp, void* data) {
 
   if (KeyboardInput::isPressed(44)
     && (SDL_GetTicks() - lastBulletTimestamp) > BULLET_DELAY
-    //&& numBullets < MAX_NUM_BULLETS
   ) {
     // fire a pellet
-    //Bullet* bullet = loadBulletAssets();
     Bullet* bullet = bullets->get(0);
 
     for (unsigned long int bulletIdx = 1; bulletIdx < bullets->getLength(); bulletIdx++) {
