@@ -38,7 +38,7 @@ Background* loadBackgroundAssets() {
   Background* background = new Background();
 
   Sprite* backgroundSprite = new Sprite();
-  Image* backgroundImage = Image::load("./background.bmp", 0, 0, 3000, 1688);
+  Image* backgroundImage = Image::load("./background01.png", 0, 0, 3000, 1688);
 
   backgroundSprite->addFrame(backgroundImage, 0);
   backgroundSprite->setLoop(false);
@@ -57,10 +57,10 @@ Player* loadPlayerAssets() {
   Sprite* turningLeftSprite = new Sprite();
   Sprite* turningRightSprite = new Sprite();
 
-  Image* shipStandingStill = Image::load("./ship_sheet.bmp", 390, 150, 75, 75);
-  Image* shipTurningLeft = Image::load("./ship_sheet.bmp", 490, 50, 75, 75);
-  Image* shipTurningRight = Image::load("./ship_sheet.bmp", 190, 50, 75, 75);
-  Image* shipMovingForward = Image::load("./ship_sheet.bmp", 90, 50, 75, 75);
+  Image* shipStandingStill = Image::load("./ship_sheet.png", 390, 150, 75, 75);
+  Image* shipTurningLeft = Image::load("./ship_sheet.png", 490, 50, 75, 75);
+  Image* shipTurningRight = Image::load("./ship_sheet.png", 190, 50, 75, 75);
+  Image* shipMovingForward = Image::load("./ship_sheet.png", 90, 50, 75, 75);
 
   standingStillSprite->addFrame(shipStandingStill, 0);
   movingForwardSprite->addFrame(shipMovingForward, 0);
@@ -86,7 +86,7 @@ Bullet* loadBulletAssets() {
   Bullet* bullet = new Bullet();
 
   Sprite* bulletSprite = new Sprite();
-  Image* bulletImage = Image::load("./bullet.bmp", 0, 0, 6, 6);
+  Image* bulletImage = Image::load("./bullet.png", 0, 0, 6, 6);
 
   bulletSprite->addFrame(bulletImage, 0);
   bulletSprite->setLoop(false);

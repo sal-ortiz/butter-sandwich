@@ -34,7 +34,7 @@
       static Image* load(const char* filename, uint16_t viewX, uint16_t viewY, uint16_t viewW=0, uint16_t viewH=0) {
         Image* img = new Image();
 
-        img->surface = SDL_LoadBMP(filename);
+        img->surface = IMG_Load(filename);
         img->view = { viewX, viewY, viewW, viewH };
 
         return img;
