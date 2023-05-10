@@ -70,7 +70,7 @@
 
         Position* position = (Position*)this->state->get("position");
         Angle* angle = (Angle*)this->state->get("angle");
-        //Scale* scale = (Scale*)this->state->get("scale");
+        Scale* scale = (Scale*)this->state->get("scale");
         View* view = (View*)this->state->get("view");
 
         Sprite* sprite = this->sprites.get(actionId);
@@ -79,7 +79,7 @@
         this->width = sprite->width;
         this->height = sprite->height;
 
-        sprite->render(renderer, position, view, angle);
+        sprite->render(renderer, position, view, angle, scale);
       }
 
       void evaluate() {

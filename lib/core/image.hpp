@@ -3,6 +3,8 @@
 
   #define _IMAGE_HPP
 
+  #include <math.h>
+
   #include <SDL2/SDL.h>
   #include <SDL2/SDL_image.h>
 
@@ -44,6 +46,8 @@
         SDL_Renderer* renderer,
         uint32_t dstX,
         uint32_t dstY,
+        float dstScaleHorz,
+        float dstScaleVert,
         uint32_t srcX,
         uint32_t srcY,
         uint32_t srcWidth,
@@ -71,13 +75,6 @@
           texture = this->texture;
         }
 
-        SDL_Rect dstRect = {
-          (uint16_t)dstX,
-          (uint16_t)dstY,
-          (uint16_t)srcWidth,
-          (uint16_t)srcHeight,
-        };
-
         SDL_Rect srcRect = {
           (uint16_t)srcX,
           (uint16_t)srcY,
@@ -86,8 +83,8 @@
         };
 
         SDL_Point center = {
-          (int16_t)centerX,
-          (uint16_t)centerY
+          (uint16_t)round(centerX * dstScaleHorz),
+          (uint16_t)round(centerY * dstScaleVert)
         };
 
         if (srcRect.x == 0) {
@@ -106,8 +103,12 @@
           srcRect.h = this->view.h;
         }
 
-        dstRect.w = srcRect.w;
-        dstRect.h = srcRect.h;
+        SDL_Rect dstRect = {
+          (uint16_t)dstX - center.x,
+          (uint16_t)dstY - center.y,
+          (uint16_t)round(srcRect.w * dstScaleHorz),
+          (uint16_t)round(srcRect.h * dstScaleVert),
+        };
 
         SDL_RenderCopyEx(renderer, texture, &srcRect, &dstRect, dstAngle, &center, SDL_FLIP_NONE);
       }

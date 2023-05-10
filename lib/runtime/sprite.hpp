@@ -103,10 +103,10 @@
         this->normalizeFramesList();
       }
 
-      void render(SDL_Renderer *renderer, Position* dstPos, View* srcView, Angle* angle) {
+      void render(SDL_Renderer *renderer, Position* dstPos, View* srcView, Angle* angle, Scale* scale) {
         SpriteFrame* frame = this->nextFrame();
 
-        frame->render(renderer, *dstPos, *srcView, *angle);
+        frame->render(renderer, *dstPos, *srcView, *angle, *scale);
       }
 
       SpriteFrame* nextFrame() {

@@ -145,6 +145,7 @@ void* playerEvaluateCallback(void* inp, void* data) {
 
   Position* playerPos = (Position*)player->state->get("position");
   Angle* playerAngle = (Angle*)player->state->get("angle");
+  Scale* playerScale = (Scale*)player->state->get("scale");
   Trajectory* playerTraj = (Trajectory*)player->state->get("trajectory");
   Trajectory* backgroundTraj = (Trajectory*)background->state->get("trajectory");
   View* backgroundView = (View*)background->state->get("view");
@@ -167,13 +168,13 @@ void* playerEvaluateCallback(void* inp, void* data) {
   playerTraj->angle.roll *= (playerTraj->angleRate.roll);
   playerTraj->angle.yaw *= (playerTraj->angleRate.yaw);
 
-  if (playerAbsolutePos->horz < 0) {
-    playerAbsolutePos->horz = 0;
+  if (playerAbsolutePos->horz < round(player->width / 2)) {
+    playerAbsolutePos->horz = round(player->height / 2);
     playerTraj->position.horz = 0;
   }
 
-  if (playerAbsolutePos->vert < 0) {
-    playerAbsolutePos->vert = 0;
+  if (playerAbsolutePos->vert < round(player->height / 2)) {
+    playerAbsolutePos->vert = round(player->height / 2);
     playerTraj->position.vert = 0;
   }
 
@@ -182,8 +183,8 @@ void* playerEvaluateCallback(void* inp, void* data) {
     playerTraj->position.horz = 0;
   }
 
-  if (playerAbsolutePos->vert > background->height) {
-    playerAbsolutePos->vert = background->height;
+  if (playerAbsolutePos->vert > (background->height - player->height)) {
+    playerAbsolutePos->vert = background->height - player->height;
     playerTraj->position.vert = 0;
   }
 
@@ -353,6 +354,11 @@ Player* loadPlayerAssets() {
   player->addSprite("turning_right", turningRightSprite);
 
   player->setAction("standing_still");
+
+  Scale* playerScale = (Scale*)player->state->get("scale");
+
+  playerScale->horz = 1.0;
+  playerScale->vert = 1.0;
 
   return player;
 }

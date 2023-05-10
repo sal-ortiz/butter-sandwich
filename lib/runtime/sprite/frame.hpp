@@ -26,21 +26,17 @@
         this->image = NULL;
       }
 
-      void render(SDL_Renderer* renderer, Position dstPos, View srcView, Angle angle) {
-
-        SDL_Rect dstRect = {
-          (uint16_t)dstPos.horz,
-          (uint16_t)dstPos.vert,
-          (uint16_t)srcView.size.horz,
-          (uint16_t)srcView.size.vert
-        };
+      void render(SDL_Renderer* renderer, Position dstPos, View srcView, Angle angle, Scale scale) {
 
         SDL_Rect srcRect = {
           (uint16_t)srcView.position.horz, (uint16_t)srcView.position.vert,
           (uint16_t)srcView.size.horz, (uint16_t)srcView.size.horz
         };
 
-        SDL_Point center = { (int16_t)angle.center.horz, (uint16_t)angle.center.vert };
+        SDL_Point center = {
+          (int16_t)angle.center.horz,
+          (uint16_t)angle.center.vert
+        };
 
         if (this->image) {
 
@@ -48,6 +44,8 @@
             renderer,
             dstPos.horz,
             dstPos.vert,
+            scale.horz,
+            scale.vert,
             srcView.position.horz,
             srcView.position.vert,
             srcView.size.horz,

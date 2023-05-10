@@ -13,9 +13,9 @@
       float depth;
 
       Scale(
-        float xScale=0.0,
-        float yScale=0.0,
-        float zScale=0.0
+        float xScale=1.0,
+        float yScale=1.0,
+        float zScale=1.0
       ) {
 
         this->horz = xScale;
