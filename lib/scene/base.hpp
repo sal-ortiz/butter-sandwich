@@ -1,8 +1,7 @@
 
+#ifndef _SCENE_BASE_HPP
 
-#ifndef _SCENE_BASE_HPP_
-
-  #define _SCENE_BASE_HPP_
+  #define _SCENE_BASE_HPP
 
   #include "../core/dict.hpp"
   #include "../runtime/base.hpp"

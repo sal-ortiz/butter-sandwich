@@ -1,8 +1,7 @@
 
+#ifndef _KEYBOARD_INPUT_HPP
 
-#ifndef _KEYBOARD_INPUT_H_
-
-  #define _KEYBOARD_INPUT_H_
+  #define _KEYBOARD_INPUT_HPP
 
   #include <SDL2/SDL.h>
 
