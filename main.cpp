@@ -30,7 +30,6 @@ const unsigned long int SCREEN_HEIGHT = 769;
 const unsigned int MAX_NUM_BULLETS = 8;
 const unsigned int BULLET_DELAY = 200; // ms (TODO: this should be in frames, not time)
 
-Scene* scene = new Scene();
 
 
 unsigned int lastBulletTimestamp = 0;
@@ -385,8 +384,6 @@ Bullet* loadBulletAssets() {
   bullet->addSprite("bullet", bulletSprite);
   bullet->setAction("bullet");
 
-  bullet->onEvaluate(bulletEvaluateCallback, (void*)scene);
-
   Position* absolutePos = new Position(-1, -1, -1);
   bullet->state->set("absolute_position", absolutePos);
 
@@ -397,12 +394,14 @@ Bullet* loadBulletAssets() {
 int main(int argc, char *argv[]) {
   Window* win = new Window();
   Application* app = new Application();
+  Scene* scene = new Scene();
 
   Player* player = loadPlayerAssets();
   Background* background = loadBackgroundAssets();
 
   for (unsigned long int bulletsIdx = 0; bulletsIdx < MAX_NUM_BULLETS; bulletsIdx++) {
     Bullet* bullet = loadBulletAssets();
+    bullet->onEvaluate(bulletEvaluateCallback, (void*)scene);
 
     char* name = new char();
 
