@@ -5,6 +5,7 @@
 
   #include "../core/dict.hpp"
   #include "../runtime/base.hpp"
+  #include "../runtime/sprite.hpp"
   #include "../runtime/state.hpp"
   #include "../runtime/data/position.hpp"
   #include "../runtime/data/angle.hpp"
@@ -22,6 +23,8 @@
       const char* action;
       Dict<Sprite*> sprites;
 
+      const char* name;
+      const char* type;
 
     public:
 
@@ -31,9 +34,9 @@
       unsigned long int width;
       unsigned long int height;
 
+      bool isActive;
 
       SceneBase() {
-        this->identifier = RuntimeBase::generateIdentifier();
         this->evalCallback = NULL;
 
         this->state = new State();
@@ -55,6 +58,22 @@
         this->action = curAction;
         this->width = curSprite->width;
         this->height = curSprite->height;
+      }
+
+      void setName(const char* name) {
+        this->name = name;
+      }
+
+      const char* getName() {
+        return this->name;
+      }
+
+      void setType(const char* type) {
+        this->type = type;
+      }
+
+      const char* getType() {
+        return this->type;
       }
 
       void onEvaluate(void*(*callback)(void*, void*), void* data) {

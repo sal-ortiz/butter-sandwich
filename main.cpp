@@ -4,6 +4,7 @@
 #endif
 
 
+#include <string.h>
 #include <math.h>
 #include <time.h>
 
@@ -17,6 +18,7 @@
 #include "./lib/runtime/data/angle.hpp"
 #include "./lib/runtime/data/position.hpp"
 
+#include "./lib/scene.hpp"
 #include "./src/lib/player.hpp"
 #include "./src/lib/background.hpp"
 #include "./src/lib/bullet.hpp"
@@ -28,8 +30,8 @@ const unsigned long int SCREEN_HEIGHT = 769;
 const unsigned int MAX_NUM_BULLETS = 8;
 const unsigned int BULLET_DELAY = 200; // ms (TODO: this should be in frames, not time)
 
-List<Bullet*>* bullets = new List<Bullet*>();
-Dict<SceneBase*>* sceneElements = new Dict<SceneBase*>();
+Scene* scene = new Scene();
+
 
 unsigned int lastBulletTimestamp = 0;
 
@@ -72,9 +74,9 @@ void* keyboardCallback(void* inp, void* data) {
 
 void* backgroundEvaluateCallback(void* inp, void* data) {
   Background* background = reinterpret_cast<Background*>(inp);
-  Dict<SceneBase*>* sceneElements = reinterpret_cast<Dict<SceneBase*>*>(data);
+  Scene* scene = reinterpret_cast<Scene*>(data);
 
-  Player* player = (Player*)sceneElements->get("player");
+  Player* player = (Player*)scene->getCharacter("player");
 
   Trajectory* backgroundTraj = (Trajectory*)background->state->get("trajectory");
   View* backgroundView = (View*)background->state->get("view");
@@ -92,10 +94,10 @@ void* backgroundEvaluateCallback(void* inp, void* data) {
 
 void* bulletEvaluateCallback(void* inp, void* data) {
   Bullet* bullet = reinterpret_cast<Bullet*>(inp);
-  Dict<SceneBase*>* sceneElements = reinterpret_cast<Dict<SceneBase*>*>(data);
+  Scene* scene = reinterpret_cast<Scene*>(data);
 
-  Player* player = (Player*)sceneElements->get("player");
-  Background* background = (Background*)sceneElements->get("background");
+  Player* player = (Player*)scene->getCharacter("player");
+  Background* background = (Background*)scene->getBackground("background");
 
   Position* playerPos = (Position*)player->state->get("position");
   Angle* playerAngle = (Angle*)player->state->get("angle");
@@ -131,6 +133,7 @@ void* bulletEvaluateCallback(void* inp, void* data) {
     || bulletAbsolutePos->vert > background->height
   ) {
     // our bullet has left our space.
+
     bullet->isActive = false;
   }
 
@@ -139,9 +142,9 @@ void* bulletEvaluateCallback(void* inp, void* data) {
 
 void* playerEvaluateCallback(void* inp, void* data) {
   Player* player = reinterpret_cast<Player*>(inp);
-  Dict<SceneBase*>* sceneElements = reinterpret_cast<Dict<SceneBase*>*>(data);
+  Scene* scene = reinterpret_cast<Scene*>(data);
 
-  Background* background = (Background*)sceneElements->get("background");
+  Background* background = (Background*)scene->getBackground("background");
 
   Position* playerPos = (Position*)player->state->get("position");
   Angle* playerAngle = (Angle*)player->state->get("angle");
@@ -264,11 +267,19 @@ void* playerEvaluateCallback(void* inp, void* data) {
     && (SDL_GetTicks() - lastBulletTimestamp) > BULLET_DELAY
   ) {
     // fire a pellet
-    Bullet* bullet = bullets->get(0);
 
-    for (unsigned long int bulletIdx = 1; bulletIdx < bullets->getLength(); bulletIdx++) {
+    for (unsigned long int bulletIdx = 0; bulletIdx < scene->getNumElements(); bulletIdx++) {
+      char* name = new char();
 
-      if (bullet->isActive == false) {
+      sprintf(name, "bullet-%.2lu", bulletIdx);
+
+      SceneElement* element = scene->getElement(name);
+
+      int typeCmpRes = strcmp(element->getType(), "bullet");
+
+      if (element->isActive == false && typeCmpRes == 0) {
+        Bullet* bullet = reinterpret_cast<Bullet*>(element);
+
         bullet->state->set("absolute_position", new Position(
           (background->width / 2) - (backgroundView->size.horz / 2) - (player->width / 2) + 20,
           (background->height / 2) - (backgroundView->size.vert / 2) - (player->width / 2) + 20
@@ -297,7 +308,6 @@ void* playerEvaluateCallback(void* inp, void* data) {
         break;
       }
 
-      bullet = bullets->get(bulletIdx);
     }
 
   }
@@ -375,7 +385,7 @@ Bullet* loadBulletAssets() {
   bullet->addSprite("bullet", bulletSprite);
   bullet->setAction("bullet");
 
-  bullet->onEvaluate(bulletEvaluateCallback, (void*)sceneElements);
+  bullet->onEvaluate(bulletEvaluateCallback, (void*)scene);
 
   Position* absolutePos = new Position(-1, -1, -1);
   bullet->state->set("absolute_position", absolutePos);
@@ -391,22 +401,23 @@ int main(int argc, char *argv[]) {
   Player* player = loadPlayerAssets();
   Background* background = loadBackgroundAssets();
 
-  for (int bulletsIdx = 0; bulletsIdx < MAX_NUM_BULLETS; bulletsIdx++) {
+  for (unsigned long int bulletsIdx = 0; bulletsIdx < MAX_NUM_BULLETS; bulletsIdx++) {
     Bullet* bullet = loadBulletAssets();
 
-    bullets->push(bullet);
-  }
+    char* name = new char();
 
-  sceneElements->set("player", player);
-  sceneElements->set("background", background);
+    sprintf(name, "bullet-%.2lu", bulletsIdx);
+
+    scene->addElement(name, bullet);
+  }
 
   app->on("KEYBOARD", keyboardCallback, (void*)player);
   app->on("QUIT", quitCallback, (void*)NULL);
   win->on("CLOSED", closedCallback, (void*)NULL);
   //win->on("PRESENT", windowPresentCallback, (void*)win);
 
-  player->onEvaluate(playerEvaluateCallback, (void*)sceneElements);
-  background->onEvaluate(backgroundEvaluateCallback, (void*)sceneElements);
+  player->onEvaluate(playerEvaluateCallback, (void*)scene);
+  background->onEvaluate(backgroundEvaluateCallback, (void*)scene);
 
   Position* playerPos = (Position*)player->state->get("position");
   Angle* playerAngle = (Angle*)player->state->get("angle");
@@ -430,6 +441,8 @@ int main(int argc, char *argv[]) {
   backgroundView->position.horz = playerAbsolutePos->horz - round(backgroundView->size.horz / 2);
   backgroundView->position.vert = playerAbsolutePos->vert - round(backgroundView->size.vert / 2);
 
+  scene->addCharacter("player", player);
+  scene->addBackground("background", background);
 
   win->open("blasteroids", 600, 150, SCREEN_WIDTH, SCREEN_HEIGHT);
 
@@ -451,25 +464,13 @@ int main(int argc, char *argv[]) {
 
     frameStart = SDL_GetTicks();
 
-    background->evaluate();
-    player->evaluate();
-
     //win->clear();
 
-    background->render(renderer);
-    player->render(renderer);
+    scene->evaluate();
+    scene->render(renderer);
 
-    for (unsigned long int bulletsIdx = 0; bulletsIdx < bullets->getLength(); bulletsIdx++) {
-      Bullet* bullet = bullets->get(bulletsIdx);
 
-      if (bullet->isActive) {
-        bullet->evaluate();
-        bullet->render(renderer);
-      }
-
-    }
-
-    frameElapsed += SDL_GetTicks() - frameStart;
+     frameElapsed += SDL_GetTicks() - frameStart;
     framePasses++;
 
     win->render();
@@ -485,8 +486,7 @@ int main(int argc, char *argv[]) {
 
   }
 
-  delete background;
-  delete player;
+  delete scene;
 
   delete win;
   delete app;

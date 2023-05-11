@@ -8,6 +8,12 @@
 
   class SceneBackground: public SceneBase {
 
+    public:
+
+      SceneBackground() {
+        this->type = "background";
+      }
+
   };
 
 #endif

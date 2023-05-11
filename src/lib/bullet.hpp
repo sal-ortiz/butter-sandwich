@@ -10,11 +10,9 @@ class Bullet: public SceneElement {
 
   public:
 
-    bool isActive;
-
-
     Bullet() {
       this->isActive = false;
+      this->type = "bullet";
     }
 
 };

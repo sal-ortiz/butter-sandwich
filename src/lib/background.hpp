@@ -16,6 +16,8 @@ class Background: public SceneBackground {
       traj->positionRate.horz = 0.90;
       traj->positionRate.vert = 0.90;
       traj->positionRate.depth = 0.90;
+
+      this->isActive = true;
     }
 
 };

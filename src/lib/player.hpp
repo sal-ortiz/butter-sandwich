@@ -24,6 +24,8 @@ class Player: public SceneCharacter {
       traj->scaleRate.horz = 0.90;
       traj->scaleRate.vert = 0.90;
       traj->scaleRate.depth = 0.90;
+
+      this->isActive = true;
     }
 
 };

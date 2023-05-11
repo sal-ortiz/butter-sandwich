@@ -8,6 +8,12 @@
 
   class SceneElement: public SceneBase {
 
+    public:
+
+      SceneElement() {
+        this->type = "element";
+      }
+
   };
 
 #endif

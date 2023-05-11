@@ -8,6 +8,12 @@
 
   class SceneCharacter: public SceneBase {
 
+    public:
+
+      SceneCharacter() {
+        this->type = "character";
+      }
+
   };
 
 #endif
