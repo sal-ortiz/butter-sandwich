@@ -319,7 +319,7 @@ void* playerEvaluateCallback(void* inp, void* data) {
   return (void*)NULL;
 }
 
-Background* loadBackgroundAssets() {
+Background* loadBackgroundAssets(Scene* scene) {
   Background* background = new Background();
 
   Sprite* backgroundSprite = new Sprite();
@@ -331,10 +331,12 @@ Background* loadBackgroundAssets() {
   background->addSprite("background", backgroundSprite);
   background->setAction("background");
 
+  background->onEvaluate(backgroundEvaluateCallback, (void*)scene);
+
   return background;
 }
 
-Player* loadPlayerAssets() {
+Player* loadPlayerAssets(Scene* scene) {
   Player* player = new Player();
 
   Sprite* standingStillSprite = new Sprite();
@@ -369,10 +371,12 @@ Player* loadPlayerAssets() {
   playerScale->horz = 1.0;
   playerScale->vert = 1.0;
 
+  player->onEvaluate(playerEvaluateCallback, (void*)scene);
+
   return player;
 }
 
-Bullet* loadBulletAssets() {
+Bullet* loadBulletAssets(Scene* scene) {
   Bullet* bullet = new Bullet();
 
   Sprite* bulletSprite = new Sprite();
@@ -387,6 +391,8 @@ Bullet* loadBulletAssets() {
   Position* absolutePos = new Position(-1, -1, -1);
   bullet->state->set("absolute_position", absolutePos);
 
+  bullet->onEvaluate(bulletEvaluateCallback, scene);
+
   return bullet;
 }
 
@@ -396,12 +402,11 @@ int main(int argc, char *argv[]) {
   Application* app = new Application();
   Scene* scene = new Scene();
 
-  Player* player = loadPlayerAssets();
-  Background* background = loadBackgroundAssets();
+  Player* player = loadPlayerAssets(scene);
+  Background* background = loadBackgroundAssets(scene);
 
   for (unsigned long int bulletsIdx = 0; bulletsIdx < MAX_NUM_BULLETS; bulletsIdx++) {
-    Bullet* bullet = loadBulletAssets();
-    bullet->onEvaluate(bulletEvaluateCallback, (void*)scene);
+    Bullet* bullet = loadBulletAssets(scene);
 
     char* name = new char();
 
@@ -410,13 +415,13 @@ int main(int argc, char *argv[]) {
     scene->addElement(name, bullet);
   }
 
+  scene->addCharacter("player", player);
+  scene->addBackground("background", background);
+
   app->on("KEYBOARD", keyboardCallback, (void*)player);
   app->on("QUIT", quitCallback, (void*)NULL);
   win->on("CLOSED", closedCallback, (void*)NULL);
   //win->on("PRESENT", windowPresentCallback, (void*)win);
-
-  player->onEvaluate(playerEvaluateCallback, (void*)scene);
-  background->onEvaluate(backgroundEvaluateCallback, (void*)scene);
 
   Position* playerPos = (Position*)player->state->get("position");
   Angle* playerAngle = (Angle*)player->state->get("angle");
@@ -439,9 +444,6 @@ int main(int argc, char *argv[]) {
 
   backgroundView->position.horz = playerAbsolutePos->horz - round(backgroundView->size.horz / 2);
   backgroundView->position.vert = playerAbsolutePos->vert - round(backgroundView->size.vert / 2);
-
-  scene->addCharacter("player", player);
-  scene->addBackground("background", background);
 
   win->open("blasteroids", 600, 150, SCREEN_WIDTH, SCREEN_HEIGHT);
 
@@ -469,7 +471,7 @@ int main(int argc, char *argv[]) {
     scene->render(renderer);
 
 
-     frameElapsed += SDL_GetTicks() - frameStart;
+    frameElapsed += SDL_GetTicks() - frameStart;
     framePasses++;
 
     win->render();
