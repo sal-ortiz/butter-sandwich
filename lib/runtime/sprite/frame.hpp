@@ -5,8 +5,9 @@
 
   #include "../../core/image.hpp"
   #include "../data/position.hpp"
-  #include "../data/angle.hpp"
   #include "../data/view.hpp"
+  #include "../data/angle.hpp"
+  #include "../data/scale.hpp"
 
 
   class SpriteFrame {

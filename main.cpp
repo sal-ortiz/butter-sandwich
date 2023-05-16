@@ -8,32 +8,23 @@
 #include <math.h>
 #include <time.h>
 
+#include "./src/lib/bullet.hpp"
+#include "./src/lib/background.hpp"
+#include "./src/lib/player.hpp"
+
 #include "./lib/core/keyboard.hpp"
 
 #include "./lib/runtime/window.hpp"
 #include "./lib/runtime/application.hpp"
 
-#include "./lib/runtime/data/trajectory.hpp"
 #include "./lib/runtime/data/view.hpp"
 #include "./lib/runtime/data/angle.hpp"
 #include "./lib/runtime/data/position.hpp"
 
 #include "./lib/scene.hpp"
-#include "./src/lib/player.hpp"
-#include "./src/lib/background.hpp"
-#include "./src/lib/bullet.hpp"
-
 
 const unsigned long int SCREEN_WIDTH = 1024;
 const unsigned long int SCREEN_HEIGHT = 769;
-
-const unsigned int MAX_NUM_BULLETS = 8;
-const unsigned int BULLET_DELAY = 200; // ms (TODO: this should be in frames, not time)
-
-
-
-unsigned int lastBulletTimestamp = 0;
-
 
 void* quitCallback(void* inp, void* data) {
   ApplicationEventParams* parsedInp = reinterpret_cast<ApplicationEventParams*>(inp);
@@ -70,6 +61,7 @@ void* keyboardCallback(void* inp, void* data) {
 //
 //  return (void*)NULL;
 //}
+
 
 void* backgroundEvaluateCallback(void* inp, void* data) {
   Background* background = reinterpret_cast<Background*>(inp);
@@ -263,7 +255,7 @@ void* playerEvaluateCallback(void* inp, void* data) {
   }
 
   if (KeyboardInput::isPressed(44)
-    && (SDL_GetTicks() - lastBulletTimestamp) > BULLET_DELAY
+    && (SDL_GetTicks() - lastBulletTimestamp) > Bullet::DELAY
   ) {
     // fire a pellet
 
@@ -310,7 +302,6 @@ void* playerEvaluateCallback(void* inp, void* data) {
     }
 
   }
-
   // keep angle within 360 degrees
   // TODO: enforce this from a state callback.
   playerAngle->pitch = playerAngle->pitch < 0 ? 360 - abs(playerAngle->pitch) : playerAngle->pitch;
@@ -319,94 +310,16 @@ void* playerEvaluateCallback(void* inp, void* data) {
   return (void*)NULL;
 }
 
-Background* loadBackgroundAssets(Scene* scene) {
-  Background* background = new Background();
-
-  Sprite* backgroundSprite = new Sprite();
-  Image* backgroundImage = Image::load("./background01.png", 0, 0, 3000, 1688);
-
-  backgroundSprite->addFrame(backgroundImage, 0);
-  backgroundSprite->setLoop(false);
-
-  background->addSprite("background", backgroundSprite);
-  background->setAction("background");
-
-  background->onEvaluate(backgroundEvaluateCallback, (void*)scene);
-
-  return background;
-}
-
-Player* loadPlayerAssets(Scene* scene) {
-  Player* player = new Player();
-
-  Sprite* standingStillSprite = new Sprite();
-  Sprite* movingForwardSprite = new Sprite();
-  Sprite* turningLeftSprite = new Sprite();
-  Sprite* turningRightSprite = new Sprite();
-
-  Image* shipStandingStill = Image::load("./ship_sheet.png", 390, 150, 75, 75);
-  Image* shipTurningLeft = Image::load("./ship_sheet.png", 490, 50, 75, 75);
-  Image* shipTurningRight = Image::load("./ship_sheet.png", 190, 50, 75, 75);
-  Image* shipMovingForward = Image::load("./ship_sheet.png", 90, 50, 75, 75);
-
-  standingStillSprite->addFrame(shipStandingStill, 0);
-  movingForwardSprite->addFrame(shipMovingForward, 0);
-  turningLeftSprite->addFrame(shipTurningLeft, 0);
-  turningRightSprite->addFrame(shipTurningRight, 0);
-
-  standingStillSprite->setLoop(false);
-  movingForwardSprite->setLoop(false);
-  turningLeftSprite->setLoop(false);
-  turningRightSprite->setLoop(false);
-
-  player->addSprite("standing_still", standingStillSprite);
-  player->addSprite("moving_forward", movingForwardSprite);
-  player->addSprite("turning_left", turningLeftSprite);
-  player->addSprite("turning_right", turningRightSprite);
-
-  player->setAction("standing_still");
-
-  Scale* playerScale = (Scale*)player->state->get("scale");
-
-  playerScale->horz = 1.0;
-  playerScale->vert = 1.0;
-
-  player->onEvaluate(playerEvaluateCallback, (void*)scene);
-
-  return player;
-}
-
-Bullet* loadBulletAssets(Scene* scene) {
-  Bullet* bullet = new Bullet();
-
-  Sprite* bulletSprite = new Sprite();
-  Image* bulletImage = Image::load("./bullet.png", 0, 0, 6, 6);
-
-  bulletSprite->addFrame(bulletImage, 0);
-  bulletSprite->setLoop(false);
-
-  bullet->addSprite("bullet", bulletSprite);
-  bullet->setAction("bullet");
-
-  Position* absolutePos = new Position(-1, -1, -1);
-  bullet->state->set("absolute_position", absolutePos);
-
-  bullet->onEvaluate(bulletEvaluateCallback, scene);
-
-  return bullet;
-}
-
-
 int main(int argc, char *argv[]) {
   Window* win = new Window();
   Application* app = new Application();
   Scene* scene = new Scene();
 
-  Player* player = loadPlayerAssets(scene);
-  Background* background = loadBackgroundAssets(scene);
+  Player* player = Player::loadAssets(scene, playerEvaluateCallback);
+  Background* background = Background::loadAssets(scene, backgroundEvaluateCallback);
 
-  for (unsigned long int bulletsIdx = 0; bulletsIdx < MAX_NUM_BULLETS; bulletsIdx++) {
-    Bullet* bullet = loadBulletAssets(scene);
+  for (unsigned long int bulletsIdx = 0; bulletsIdx < Bullet::MAX_COUNT; bulletsIdx++) {
+    Bullet* bullet = Bullet::loadAssets(scene, bulletEvaluateCallback);
 
     char* name = new char();
 
