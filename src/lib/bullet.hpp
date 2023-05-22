@@ -30,6 +30,8 @@
       static Bullet* loadAssets(Scene* scene, void*(*callback)(void*, void*)) {
         Bullet* bullet = new Bullet();
 
+        Scale* bulletScale = (Scale*)bullet->state->get("scale");
+
         Sprite* bulletSprite = new Sprite();
         Image* bulletImage = Image::load("./bullet.png", 0, 0, 6, 6);
 
@@ -38,6 +40,9 @@
 
         bullet->addSprite("bullet", bulletSprite);
         bullet->setAction("bullet");
+
+        bulletScale->horz = 2.0;
+        bulletScale->vert = 2.0;
 
         Position* absolutePos = new Position(-1, -1, -1);
         bullet->state->set("absolute_position", absolutePos);

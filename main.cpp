@@ -279,8 +279,8 @@ void* playerEvaluateCallback(void* inp, void* data) {
         Angle* bulletAngle = (Angle*)bullet->state->get("angle");
         Trajectory* bulletTraj = (Trajectory*)bullet->state->get("trajectory");
 
-        bulletAngle->center.horz = playerAngle->center.horz - 20;
-        bulletAngle->center.vert = playerAngle->center.vert - 20;
+        bulletAngle->center.horz = playerAngle->center.horz - 36;
+        bulletAngle->center.vert = playerAngle->center.vert - 36;
 
         bulletTraj->position.horz = 24 * playerHorzRatio;
         bulletTraj->position.vert = 24 * playerVertRatio;
