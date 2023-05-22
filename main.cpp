@@ -65,7 +65,7 @@ void* keyboardCallback(void* inp, void* data) {
 void* sceneEvaluateCallback(void* inp, void* data) {
   Scene* scene = reinterpret_cast<Scene*>(inp);
 
-  Background* background = (Background*)scene->getBackground("background");
+  Background* background = (Background*)scene->getElement("background");
   View* backgroundView = (View*)background->state->get("view");
 
   backgroundView->position.horz = scene->view->position.horz;
@@ -79,7 +79,7 @@ void* backgroundEvaluateCallback(void* inp, void* data) {
   Background* background = reinterpret_cast<Background*>(inp);
   Scene* scene = reinterpret_cast<Scene*>(data);
 
-  Player* player = (Player*)scene->getCharacter("player");
+  Player* player = (Player*)scene->getElement("player");
 
   Trajectory* backgroundTraj = (Trajectory*)background->state->get("trajectory");
 
@@ -101,8 +101,8 @@ void* bulletEvaluateCallback(void* inp, void* data) {
   Bullet* bullet = reinterpret_cast<Bullet*>(inp);
   Scene* scene = reinterpret_cast<Scene*>(data);
 
-  Player* player = (Player*)scene->getCharacter("player");
-  Background* background = (Background*)scene->getBackground("background");
+  Player* player = (Player*)scene->getElement("player");
+  Background* background = (Background*)scene->getElement("background");
 
   Position* playerPos = (Position*)player->state->get("position");
   Angle* playerAngle = (Angle*)player->state->get("angle");
@@ -147,7 +147,7 @@ void* playerEvaluateCallback(void* inp, void* data) {
   Player* player = reinterpret_cast<Player*>(inp);
   Scene* scene = reinterpret_cast<Scene*>(data);
 
-  Background* background = (Background*)scene->getBackground("background");
+  Background* background = (Background*)scene->getElement("background");
 
   Position* playerPos = (Position*)player->state->get("position");
   Angle* playerAngle = (Angle*)player->state->get("angle");
@@ -273,7 +273,7 @@ void* playerEvaluateCallback(void* inp, void* data) {
 
       sprintf(name, "bullet-%.2lu", bulletIdx);
 
-      SceneElement* element = scene->getElement(name);
+      SceneElement* element = (SceneElement*)scene->getElement(name);
 
       int typeCmpRes = strcmp(element->getType(), "bullet");
 
@@ -330,6 +330,9 @@ int main(int argc, char *argv[]) {
   scene->size->horz = 3000;
   scene->size->vert = 1688;
 
+  scene->addElement("background", background);
+  scene->addElement("player", player);
+
   for (unsigned long int bulletsIdx = 0; bulletsIdx < Bullet::MAX_COUNT; bulletsIdx++) {
     Bullet* bullet = Bullet::loadAssets(scene, bulletEvaluateCallback);
 
@@ -339,9 +342,6 @@ int main(int argc, char *argv[]) {
 
     scene->addElement(name, bullet);
   }
-
-  scene->addCharacter("player", player);
-  scene->addBackground("background", background);
 
   scene->onEvaluate(sceneEvaluateCallback, (void*)NULL);
 
