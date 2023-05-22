@@ -71,6 +71,9 @@ void* sceneEvaluateCallback(void* inp, void* data) {
   backgroundView->position.horz = scene->view->position.horz;
   backgroundView->position.vert = scene->view->position.vert;
 
+  // TODO: This only needs to be set once.
+  backgroundView->size.horz = scene->view->size.horz;
+  backgroundView->size.vert = scene->view->size.vert;
 
   return (void*)NULL;
 }
@@ -356,14 +359,10 @@ int main(int argc, char *argv[]) {
 
   Position* playerPos = (Position*)player->state->get("position");
   Angle* playerAngle = (Angle*)player->state->get("angle");
-  View* backgroundView = (View*)background->state->get("view");
 
   playerAngle->center.horz = 43;
   playerAngle->center.vert = 43;
 
-  // TODO: we shouldn't have to update both backgroundView and scene from here.
-  backgroundView->size.horz = SCREEN_WIDTH;
-  backgroundView->size.vert = SCREEN_HEIGHT;
   scene->view->size.horz = SCREEN_WIDTH;
   scene->view->size.vert = SCREEN_HEIGHT;
 
