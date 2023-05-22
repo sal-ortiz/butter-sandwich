@@ -82,12 +82,7 @@ void* backgroundEvaluateCallback(void* inp, void* data) {
   Background* background = reinterpret_cast<Background*>(inp);
   Scene* scene = reinterpret_cast<Scene*>(data);
 
-  Player* player = (Player*)scene->getElement("player");
-
   Trajectory* backgroundTraj = (Trajectory*)background->state->get("trajectory");
-
-  Position* backgroundAbsolutePos = (Position*)scene->state->get("absolute_position");
-  Position* backgroundPos = (Position*)scene->state->get("position");
 
   scene->view->position.horz += backgroundTraj->position.horz;
   scene->view->position.vert += backgroundTraj->position.vert;
@@ -104,18 +99,9 @@ void* bulletEvaluateCallback(void* inp, void* data) {
   Bullet* bullet = reinterpret_cast<Bullet*>(inp);
   Scene* scene = reinterpret_cast<Scene*>(data);
 
-  Player* player = (Player*)scene->getElement("player");
-  Background* background = (Background*)scene->getElement("background");
-
-  Position* playerPos = (Position*)player->state->get("position");
-  Angle* playerAngle = (Angle*)player->state->get("angle");
-  Trajectory* playerTraj = (Trajectory*)player->state->get("trajectory");
-
-  Position* playerAbsolutePos = (Position*)player->state->get("absolute_position");
   Position* bulletAbsolutePos = (Position*)bullet->state->get("absolute_position");
 
   Position* bulletPos = (Position*)bullet->state->get("position");
-  Angle* bulletAngle = (Angle*)bullet->state->get("angle");
   Trajectory* bulletTraj = (Trajectory*)bullet->state->get("trajectory");
 
   bulletAbsolutePos->horz += bulletTraj->position.horz;
@@ -150,13 +136,9 @@ void* playerEvaluateCallback(void* inp, void* data) {
   Player* player = reinterpret_cast<Player*>(inp);
   Scene* scene = reinterpret_cast<Scene*>(data);
 
-  Background* background = (Background*)scene->getElement("background");
-
   Position* playerPos = (Position*)player->state->get("position");
   Angle* playerAngle = (Angle*)player->state->get("angle");
-  Scale* playerScale = (Scale*)player->state->get("scale");
   Trajectory* playerTraj = (Trajectory*)player->state->get("trajectory");
-  Trajectory* backgroundTraj = (Trajectory*)background->state->get("trajectory");
 
   Position* playerAbsolutePos = (Position*)player->state->get("absolute_position");
 

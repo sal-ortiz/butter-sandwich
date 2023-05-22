@@ -37,7 +37,6 @@
         return this->elements->getLength();
       }
 
-
       void addElement(const char* name, SceneBase* element) {
         element->setName(name);
 
