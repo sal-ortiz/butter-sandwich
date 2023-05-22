@@ -8,10 +8,6 @@
 #include <math.h>
 #include <time.h>
 
-#include "./src/lib/bullet.hpp"
-#include "./src/lib/background.hpp"
-#include "./src/lib/player.hpp"
-
 #include "./lib/core/keyboard.hpp"
 
 #include "./lib/runtime/window.hpp"
@@ -22,6 +18,11 @@
 #include "./lib/runtime/data/position.hpp"
 
 #include "./lib/scene.hpp"
+
+#include "./src/lib/bullet.hpp"
+#include "./src/lib/background.hpp"
+#include "./src/lib/player.hpp"
+
 
 const unsigned long int SCREEN_WIDTH = 1024;
 const unsigned long int SCREEN_HEIGHT = 769;
@@ -78,243 +79,13 @@ void* sceneEvaluateCallback(void* inp, void* data) {
   return (void*)NULL;
 }
 
-void* backgroundEvaluateCallback(void* inp, void* data) {
-  Background* background = reinterpret_cast<Background*>(inp);
-  Scene* scene = reinterpret_cast<Scene*>(data);
-
-  Trajectory* backgroundTraj = (Trajectory*)background->state->get("trajectory");
-
-  scene->view->position.horz += backgroundTraj->position.horz;
-  scene->view->position.vert += backgroundTraj->position.vert;
-  scene->view->position.depth += backgroundTraj->position.depth;
-
-  backgroundTraj->position.horz *= backgroundTraj->positionRate.horz;
-  backgroundTraj->position.vert *= backgroundTraj->positionRate.vert;
-  backgroundTraj->position.depth *= backgroundTraj->positionRate.depth;
-
-  return (void*)NULL;
-}
-
-void* bulletEvaluateCallback(void* inp, void* data) {
-  Bullet* bullet = reinterpret_cast<Bullet*>(inp);
-  Scene* scene = reinterpret_cast<Scene*>(data);
-
-  Position* bulletAbsolutePos = (Position*)bullet->state->get("absolute_position");
-
-  Position* bulletPos = (Position*)bullet->state->get("position");
-  Trajectory* bulletTraj = (Trajectory*)bullet->state->get("trajectory");
-
-  bulletAbsolutePos->horz += bulletTraj->position.horz;
-  bulletAbsolutePos->vert += bulletTraj->position.vert;
-  bulletAbsolutePos->depth += bulletTraj->position.depth;
-
-  if (bulletAbsolutePos->horz > scene->view->position.horz
-    && bulletAbsolutePos->horz < (scene->view->position.horz + scene->view->size.horz)
-    && bulletAbsolutePos->vert > scene->view->position.vert
-    && bulletAbsolutePos->vert < (scene->view->position.vert + scene->view->size.vert)
-  ) {
-    // our bullet is visible within our screen.
-    bulletPos->horz = (bulletAbsolutePos->horz - scene->view->position.horz);
-    bulletPos->vert = (bulletAbsolutePos->vert - scene->view->position.vert);
-
-  }
-
-  if (bulletAbsolutePos->horz < 0
-    || bulletAbsolutePos->vert < 0
-    || bulletAbsolutePos->horz > scene->size->horz
-    || bulletAbsolutePos->vert > scene->size->vert
-  ) {
-    // our bullet has left our space.
-
-    bullet->isActive = false;
-  }
-
-  return (void*)NULL;
-}
-
-void* playerEvaluateCallback(void* inp, void* data) {
-  Player* player = reinterpret_cast<Player*>(inp);
-  Scene* scene = reinterpret_cast<Scene*>(data);
-
-  Position* playerPos = (Position*)player->state->get("position");
-  Angle* playerAngle = (Angle*)player->state->get("angle");
-  Trajectory* playerTraj = (Trajectory*)player->state->get("trajectory");
-
-  Position* playerAbsolutePos = (Position*)player->state->get("absolute_position");
-
-  playerAbsolutePos->horz += playerTraj->position.horz;
-  playerAbsolutePos->vert += playerTraj->position.vert;
-  playerAbsolutePos->depth += playerTraj->position.depth;
-
-  playerAngle->pitch += playerTraj->angle.pitch;
-  playerAngle->roll += playerTraj->angle.roll;
-  playerAngle->yaw += playerTraj->angle.yaw;
-
-  playerTraj->position.horz *= (playerTraj->positionRate.horz);
-  playerTraj->position.vert *= (playerTraj->positionRate.vert);
-  playerTraj->position.depth *= (playerTraj->positionRate.depth);
-
-  playerTraj->angle.pitch *= (playerTraj->angleRate.pitch);
-  playerTraj->angle.roll *= (playerTraj->angleRate.roll);
-  playerTraj->angle.yaw *= (playerTraj->angleRate.yaw);
-
-  if (playerAbsolutePos->horz < round(player->width / 2)) {
-    playerAbsolutePos->horz = round(player->height / 2);
-    playerTraj->position.horz = 0;
-  }
-
-  if (playerAbsolutePos->vert < round(player->height / 2)) {
-    playerAbsolutePos->vert = round(player->height / 2);
-    playerTraj->position.vert = 0;
-  }
-
-  if (playerAbsolutePos->horz > (scene->size->horz - round(player->width / 2))) {
-    playerAbsolutePos->horz = scene->size->horz - round(player->width / 2);
-    playerTraj->position.horz = 0;
-  }
-
-  if (playerAbsolutePos->vert > (scene->size->vert - round(player->height / 2))) {
-    playerAbsolutePos->vert = scene->size->vert - round(player->height / 2);
-    playerTraj->position.vert = 0;
-  }
-
-  if (playerAbsolutePos->horz > round(scene->view->size.horz / 2)
-    && playerAbsolutePos->horz < scene->size->horz - round(scene->view->size.horz / 2)
-  ) {
-    playerPos->horz = round(scene->view->size.horz / 2);
-    scene->view->position.horz = playerAbsolutePos->horz - round(scene->view->size.horz / 2);
-
-  } else if (playerAbsolutePos->horz < round(scene->view->size.horz / 2)) {
-    playerPos->horz = playerAbsolutePos->horz;
-
-  } else if (playerAbsolutePos->horz > scene->size->horz - round(scene->view->size.horz / 2)) {
-    playerPos->horz = scene->view->size.horz - (scene->size->horz - playerAbsolutePos->horz);
-  }
-
-
-  if (playerAbsolutePos->vert > round(scene->view->size.vert / 2)
-    && playerAbsolutePos->vert < scene->size->vert - round(scene->view->size.vert / 2)
-  ) {
-    playerPos->vert = round(scene->view->size.vert / 2);
-    scene->view->position.vert = playerAbsolutePos->vert - round(scene->view->size.vert / 2);
-
-  } else if (playerAbsolutePos->vert < round(scene->view->size.vert / 2)) {
-    playerPos->vert = playerAbsolutePos->vert;
-
-  } else if (playerAbsolutePos->vert > scene->size->vert - round(scene->view->size.vert / 2)) {
-    playerPos->vert = scene->view->size.vert - (scene->size->vert - playerAbsolutePos->vert);
-  }
-
-
-  float playerHorzRatio = 0.0;
-  float playerVertRatio = 0.0;
-
-  if (playerAngle->pitch >= 180) {
-    playerHorzRatio = -(((270 - playerAngle->pitch) / 90));
-  } else {
-    playerHorzRatio = ((90 - playerAngle->pitch) / 90);
-  }
-
-  if (playerAngle->pitch <= 90) {
-    playerVertRatio = (playerAngle->pitch) / 90;
-  } else if (playerAngle->pitch > 270) {
-    playerVertRatio = -(360 - playerAngle->pitch) / 90;
-  } else {
-    playerVertRatio = (180 - playerAngle->pitch) / 90;
-  }
-
-//  if (KeyboardInput::isReleased(82)) {
-//    printf("stopping\n");
-//    player->setAction("standing_still");
-//  }
-
-  if (KeyboardInput::isPressed(80)) {
-    // turn left.
-    player->setAction("turning_left");
-    playerTraj->angle.pitch -= 1;
-  }
-
-  if (KeyboardInput::isPressed(79)) {
-    // turn right.
-    player->setAction("turning_right");
-    playerTraj->angle.pitch += 1;
-  }
-
-  if (KeyboardInput::isPressed(82)) {
-    // move forward.
-    player->setAction("moving_forward");
-
-    playerTraj->position.horz += 2 * playerHorzRatio;
-    playerTraj->position.vert += 2 * playerVertRatio;
-  }
-
-  if (KeyboardInput::isPressed(44)
-    && (SDL_GetTicks() - lastBulletTimestamp) > Bullet::DELAY
-  ) {
-    // fire a pellet
-
-    for (unsigned long int bulletIdx = 0; bulletIdx < scene->getNumElements(); bulletIdx++) {
-      char* name = new char();
-
-      sprintf(name, "bullet-%.2lu", bulletIdx);
-
-      SceneElement* element = (SceneElement*)scene->getElement(name);
-
-      if (element == NULL) {
-        continue;
-      }
-
-      int typeCmpRes = strcmp(element->getType(), "bullet");
-
-      if (element->isActive == false && typeCmpRes == 0) {
-        Bullet* bullet = reinterpret_cast<Bullet*>(element);
-
-        bullet->state->set("absolute_position", new Position(
-          (scene->size->horz / 2) - (scene->view->size.horz / 2) - (player->width / 2) + 20,
-          (scene->size->vert / 2) - (scene->view->size.vert / 2) - (player->width / 2) + 20
-        ));
-
-        Position* bulletAbsolutePos = (Position*)bullet->state->get("absolute_position");
-        Position* bulletPos = (Position*)bullet->state->get("position");
-        Angle* bulletAngle = (Angle*)bullet->state->get("angle");
-        Trajectory* bulletTraj = (Trajectory*)bullet->state->get("trajectory");
-
-        bulletAngle->center.horz = playerAngle->center.horz - 36;
-        bulletAngle->center.vert = playerAngle->center.vert - 36;
-
-        bulletTraj->position.horz = 24 * playerHorzRatio;
-        bulletTraj->position.vert = 24 * playerVertRatio;
-
-        bulletAbsolutePos->horz = playerAbsolutePos->horz;
-        bulletAbsolutePos->vert = playerAbsolutePos->vert;
-
-        bulletAngle->pitch = playerAngle->pitch + 132;
-
-        bullet->isActive = true;
-
-        lastBulletTimestamp = SDL_GetTicks();
-
-        break;
-      }
-
-    }
-
-  }
-  // keep angle within 360 degrees
-  // TODO: enforce this from a state callback.
-  playerAngle->pitch = playerAngle->pitch < 0 ? 360 - abs(playerAngle->pitch) : playerAngle->pitch;
-  playerAngle->pitch = playerAngle->pitch >= 360 ? playerAngle->pitch / 360 : playerAngle->pitch;
-
-  return (void*)NULL;
-}
-
 int main(int argc, char *argv[]) {
   Window* win = new Window();
   Application* app = new Application();
   Scene* scene = new Scene();
 
-  Player* player = Player::loadAssets(scene, playerEvaluateCallback);
-  Background* background = Background::loadAssets(scene, backgroundEvaluateCallback);
+  Player* player = Player::loadAssets(scene);
+  Background* background = Background::loadAssets(scene);
 
   scene->size->horz = 3000;
   scene->size->vert = 1688;
@@ -323,7 +94,7 @@ int main(int argc, char *argv[]) {
   scene->addElement("player", player);
 
   for (unsigned long int bulletsIdx = 0; bulletsIdx < Bullet::MAX_COUNT; bulletsIdx++) {
-    Bullet* bullet = Bullet::loadAssets(scene, bulletEvaluateCallback);
+    Bullet* bullet = Bullet::loadAssets(scene);
 
     char* name = new char();
 

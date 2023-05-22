@@ -8,9 +8,6 @@
   #include "./runtime/data/size.hpp"
   #include "./runtime/data/view.hpp"
   #include "./scene/base.hpp"
-  #include "./scene/character.hpp"
-  #include "./scene/background.hpp"
-  #include "./scene/element.hpp"
 
 
   class Scene: public SceneBase {

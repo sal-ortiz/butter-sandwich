@@ -27,7 +27,7 @@
         this->isActive = true;
       }
 
-      static Background* loadAssets(Scene* scene, void*(*callback)(void*, void*)) {
+      static Background* loadAssets(Scene* scene) {
         Background* background = new Background();
 
         Sprite* backgroundSprite = new Sprite();
@@ -39,9 +39,26 @@
         background->addSprite("background", backgroundSprite);
         background->setAction("background");
 
-        background->onEvaluate(callback, scene);
+        background->onEvaluate(Background::evaluateCallback, scene);
 
         return background;
+      }
+
+      static void* evaluateCallback(void* inp, void* data) {
+        Background* background = reinterpret_cast<Background*>(inp);
+        Scene* scene = reinterpret_cast<Scene*>(data);
+
+        Trajectory* backgroundTraj = (Trajectory*)background->state->get("trajectory");
+
+        scene->view->position.horz += backgroundTraj->position.horz;
+        scene->view->position.vert += backgroundTraj->position.vert;
+        scene->view->position.depth += backgroundTraj->position.depth;
+
+        backgroundTraj->position.horz *= backgroundTraj->positionRate.horz;
+        backgroundTraj->position.vert *= backgroundTraj->positionRate.vert;
+        backgroundTraj->position.depth *= backgroundTraj->positionRate.depth;
+
+        return (void*)NULL;
       }
 
   };
