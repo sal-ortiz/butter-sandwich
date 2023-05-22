@@ -4,19 +4,14 @@
 #endif
 
 
-#include <string.h>
 #include <math.h>
-#include <time.h>
 
 #include "./lib/core/keyboard.hpp"
-
 #include "./lib/runtime/window.hpp"
 #include "./lib/runtime/application.hpp"
-
 #include "./lib/runtime/data/view.hpp"
 #include "./lib/runtime/data/angle.hpp"
 #include "./lib/runtime/data/position.hpp"
-
 #include "./lib/scene.hpp"
 
 #include "./src/lib/bullet.hpp"

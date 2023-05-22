@@ -3,6 +3,8 @@
 
   #define _GAME_PLAYER_HPP
 
+  #include <string.h>
+
   #include "../../lib/core/keyboard.hpp"
   #include "../../lib/core/image.hpp"
   #include "../../lib/runtime/sprite.hpp"
