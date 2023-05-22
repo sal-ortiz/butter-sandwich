@@ -16,19 +16,20 @@
 
   class SceneBase: public RuntimeBase {
 
-    protected:
+    private:
 
       void*(*evalCallback)(void*);
 
       const char* action;
       Dict<Sprite*> sprites;
 
-      const char* name;
-      const char* type;
 
     public:
 
       State* state;
+
+      const char* name;
+      const char* type;
 
       // TODO: hack: find a better way to serve these values.
       unsigned long int width;
