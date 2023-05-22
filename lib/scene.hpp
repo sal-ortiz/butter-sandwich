@@ -1,5 +1,4 @@
 
-
 #ifndef _SCENE_HPP
 
   #define _SCENE_HPP

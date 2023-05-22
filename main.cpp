@@ -339,7 +339,6 @@ int main(int argc, char *argv[]) {
   win->on("CLOSED", closedCallback, (void*)NULL);
   //win->on("PRESENT", windowPresentCallback, (void*)win);
 
-  Position* playerPos = (Position*)player->state->get("position");
   Angle* playerAngle = (Angle*)player->state->get("angle");
 
   playerAngle->center.horz = 43;
