@@ -70,11 +70,13 @@ void* backgroundEvaluateCallback(void* inp, void* data) {
   Player* player = (Player*)scene->getCharacter("player");
 
   Trajectory* backgroundTraj = (Trajectory*)background->state->get("trajectory");
-  View* backgroundView = (View*)background->state->get("view");
 
-  backgroundView->position.horz += backgroundTraj->position.horz;
-  backgroundView->position.vert += backgroundTraj->position.vert;
-  backgroundView->position.depth += backgroundTraj->position.depth;
+  Position* backgroundAbsolutePos = (Position*)scene->state->get("absolute_position");
+  Position* backgroundPos = (Position*)scene->state->get("position");
+
+  scene->view->position.horz += backgroundTraj->position.horz;
+  scene->view->position.vert += backgroundTraj->position.vert;
+  scene->view->position.depth += backgroundTraj->position.depth;
 
   backgroundTraj->position.horz *= backgroundTraj->positionRate.horz;
   backgroundTraj->position.vert *= backgroundTraj->positionRate.vert;
@@ -101,27 +103,25 @@ void* bulletEvaluateCallback(void* inp, void* data) {
   Angle* bulletAngle = (Angle*)bullet->state->get("angle");
   Trajectory* bulletTraj = (Trajectory*)bullet->state->get("trajectory");
 
-  View* backgroundView = (View*)background->state->get("view");
-
   bulletAbsolutePos->horz += bulletTraj->position.horz;
   bulletAbsolutePos->vert += bulletTraj->position.vert;
   bulletAbsolutePos->depth += bulletTraj->position.depth;
 
-  if (bulletAbsolutePos->horz > backgroundView->position.horz
-    && bulletAbsolutePos->horz < (backgroundView->position.horz + backgroundView->size.horz)
-    && bulletAbsolutePos->vert > backgroundView->position.vert
-    && bulletAbsolutePos->vert < (backgroundView->position.vert + backgroundView->size.vert)
+  if (bulletAbsolutePos->horz > scene->view->position.horz
+    && bulletAbsolutePos->horz < (scene->view->position.horz + scene->view->size.horz)
+    && bulletAbsolutePos->vert > scene->view->position.vert
+    && bulletAbsolutePos->vert < (scene->view->position.vert + scene->view->size.vert)
   ) {
     // our bullet is visible within our screen.
-    bulletPos->horz = (bulletAbsolutePos->horz - backgroundView->position.horz);
-    bulletPos->vert = (bulletAbsolutePos->vert - backgroundView->position.vert);
+    bulletPos->horz = (bulletAbsolutePos->horz - scene->view->position.horz);
+    bulletPos->vert = (bulletAbsolutePos->vert - scene->view->position.vert);
 
   }
 
   if (bulletAbsolutePos->horz < 0
     || bulletAbsolutePos->vert < 0
-    || bulletAbsolutePos->horz > background->width
-    || bulletAbsolutePos->vert > background->height
+    || bulletAbsolutePos->horz > scene->size->horz
+    || bulletAbsolutePos->vert > scene->size->vert
   ) {
     // our bullet has left our space.
 
@@ -142,7 +142,6 @@ void* playerEvaluateCallback(void* inp, void* data) {
   Scale* playerScale = (Scale*)player->state->get("scale");
   Trajectory* playerTraj = (Trajectory*)player->state->get("trajectory");
   Trajectory* backgroundTraj = (Trajectory*)background->state->get("trajectory");
-  View* backgroundView = (View*)background->state->get("view");
 
   Position* playerAbsolutePos = (Position*)player->state->get("absolute_position");
 
@@ -172,45 +171,43 @@ void* playerEvaluateCallback(void* inp, void* data) {
     playerTraj->position.vert = 0;
   }
 
-  if (playerAbsolutePos->horz > (background->width - player->width)) {
-    playerAbsolutePos->horz = background->width - player->width;
+  if (playerAbsolutePos->horz > (scene->size->horz - round(player->width / 2))) {
+    playerAbsolutePos->horz = scene->size->horz - round(player->width / 2);
     playerTraj->position.horz = 0;
   }
 
-  if (playerAbsolutePos->vert > (background->height - player->height)) {
-    playerAbsolutePos->vert = background->height - player->height;
+  if (playerAbsolutePos->vert > (scene->size->vert - round(player->height / 2))) {
+    playerAbsolutePos->vert = scene->size->vert - round(player->height / 2);
     playerTraj->position.vert = 0;
   }
 
-  if (playerAbsolutePos->horz < round(backgroundView->size.horz / 2)) {
-    // move along our left border.
+  if (playerAbsolutePos->horz > round(scene->view->size.horz / 2)
+    && playerAbsolutePos->horz < scene->size->horz - round(scene->view->size.horz / 2)
+  ) {
+    playerPos->horz = round(scene->view->size.horz / 2);
+    scene->view->position.horz = playerAbsolutePos->horz - round(scene->view->size.horz / 2);
+
+  } else if (playerAbsolutePos->horz < round(scene->view->size.horz / 2)) {
     playerPos->horz = playerAbsolutePos->horz;
 
-  } else if (playerAbsolutePos->horz > (background->width - round(backgroundView->size.horz / 2))){
-    // move along our right border.
-    playerPos->horz = (unsigned long int)playerAbsolutePos->horz % (unsigned long int)(backgroundView->size.horz - round(player->width / 2));
-
-  } else {
-    // move along the center of our map.
-    backgroundView->position.horz = playerAbsolutePos->horz - round(backgroundView->size.horz / 2);
-
-    playerPos->horz = round(backgroundView->size.horz / 2);
+  } else if (playerAbsolutePos->horz > scene->size->horz - round(scene->view->size.horz / 2)) {
+    playerPos->horz = scene->view->size.horz - (scene->size->horz - playerAbsolutePos->horz);
   }
 
-  if (playerAbsolutePos->vert < round(backgroundView->size.vert / 2)) {
-    // move along our upper border.
+
+  if (playerAbsolutePos->vert > round(scene->view->size.vert / 2)
+    && playerAbsolutePos->vert < scene->size->vert - round(scene->view->size.vert / 2)
+  ) {
+    playerPos->vert = round(scene->view->size.vert / 2);
+    scene->view->position.vert = playerAbsolutePos->vert - round(scene->view->size.vert / 2);
+
+  } else if (playerAbsolutePos->vert < round(scene->view->size.vert / 2)) {
     playerPos->vert = playerAbsolutePos->vert;
 
-  } else if (playerAbsolutePos->vert > (background->height - round(backgroundView->size.vert / 2))) {
-    // move along our lower border.
-    playerPos->vert = (unsigned long int)playerAbsolutePos->vert % (unsigned long int)(backgroundView->size.vert - round(player->height / 2));
-
-  } else {
-    // move along the center of our map.
-    backgroundView->position.vert = playerAbsolutePos->vert - round(backgroundView->size.vert / 2);
-
-    playerPos->vert = round(backgroundView->size.vert / 2);
+  } else if (playerAbsolutePos->vert > scene->size->vert - round(scene->view->size.vert / 2)) {
+    playerPos->vert = scene->view->size.vert - (scene->size->vert - playerAbsolutePos->vert);
   }
+
 
   float playerHorzRatio = 0.0;
   float playerVertRatio = 0.0;
@@ -272,8 +269,8 @@ void* playerEvaluateCallback(void* inp, void* data) {
         Bullet* bullet = reinterpret_cast<Bullet*>(element);
 
         bullet->state->set("absolute_position", new Position(
-          (background->width / 2) - (backgroundView->size.horz / 2) - (player->width / 2) + 20,
-          (background->height / 2) - (backgroundView->size.vert / 2) - (player->width / 2) + 20
+          (scene->size->horz / 2) - (scene->view->size.horz / 2) - (player->width / 2) + 20,
+          (scene->size->vert / 2) - (scene->view->size.vert / 2) - (player->width / 2) + 20
         ));
 
         Position* bulletAbsolutePos = (Position*)bullet->state->get("absolute_position");
@@ -318,6 +315,9 @@ int main(int argc, char *argv[]) {
   Player* player = Player::loadAssets(scene, playerEvaluateCallback);
   Background* background = Background::loadAssets(scene, backgroundEvaluateCallback);
 
+  scene->size->horz = 3000;
+  scene->size->vert = 1688;
+
   for (unsigned long int bulletsIdx = 0; bulletsIdx < Bullet::MAX_COUNT; bulletsIdx++) {
     Bullet* bullet = Bullet::loadAssets(scene, bulletEvaluateCallback);
 
@@ -343,20 +343,26 @@ int main(int argc, char *argv[]) {
   playerAngle->center.horz = 43;
   playerAngle->center.vert = 43;
 
+  // TODO: we shouldn't have to update both backgroundView and scene from here.
   backgroundView->size.horz = SCREEN_WIDTH;
   backgroundView->size.vert = SCREEN_HEIGHT;
-  backgroundView->position.horz = round((background->width / 2) - (SCREEN_WIDTH / 2));
-  backgroundView->position.vert = round((background->height / 2) - (SCREEN_HEIGHT / 2));
+  scene->view->size.horz = SCREEN_WIDTH;
+  scene->view->size.vert = SCREEN_HEIGHT;
+
+  scene->view->position.horz = round((scene->size->horz / 2) - (scene->view->size.horz / 2));
+  scene->view->position.vert = round((scene->size->vert / 2) - (scene->view->size.vert / 2));
 
   player->state->set("absolute_position", new Position(
-    (background->width / 2) - (backgroundView->size.horz / 2) - (player->width / 2),
-    (background->height / 2) - (backgroundView->size.vert / 2) - (player->width / 2)
+    (scene->size->horz / 2) - (scene->view->size.horz / 2) - (player->width / 2),
+    (scene->size->vert / 2) - (scene->view->size.vert / 2) - (player->width / 2)
   ));
+
+  background->state->set("absolute_position", new Position());
 
   Position* playerAbsolutePos = (Position*)player->state->get("absolute_position");
 
-  backgroundView->position.horz = playerAbsolutePos->horz - round(backgroundView->size.horz / 2);
-  backgroundView->position.vert = playerAbsolutePos->vert - round(backgroundView->size.vert / 2);
+  scene->view->position.horz = playerAbsolutePos->horz - round(scene->view->size.horz / 2);
+  scene->view->position.vert = playerAbsolutePos->vert - round(scene->view->size.vert / 2);
 
   win->open("blasteroids", 600, 150, SCREEN_WIDTH, SCREEN_HEIGHT);
 

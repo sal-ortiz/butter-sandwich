@@ -22,10 +22,16 @@
 
     public:
 
+      Size* size;
+      View* view;
+
       Scene() {
         this->characters = new List<SceneCharacter*>();
         this->backgrounds = new List<SceneBackground*>();
         this->elements = new List<SceneElement*>();
+
+        this->size = new Size();
+        this->view = new View();
       }
 
       unsigned long int getNumCharacters() {
