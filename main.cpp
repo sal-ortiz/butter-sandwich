@@ -275,9 +275,13 @@ void* playerEvaluateCallback(void* inp, void* data) {
 
       SceneElement* element = (SceneElement*)scene->getElement(name);
 
+      if (element == NULL) {
+        continue;
+      }
+
       int typeCmpRes = strcmp(element->getType(), "bullet");
 
-      if (element != (SceneBase*)NULL && element->isActive == false && typeCmpRes == 0) {
+      if (element->isActive == false && typeCmpRes == 0) {
         Bullet* bullet = reinterpret_cast<Bullet*>(element);
 
         bullet->state->set("absolute_position", new Position(
