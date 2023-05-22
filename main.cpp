@@ -62,6 +62,18 @@ void* keyboardCallback(void* inp, void* data) {
 //  return (void*)NULL;
 //}
 
+void* sceneEvaluateCallback(void* inp, void* data) {
+  Scene* scene = reinterpret_cast<Scene*>(inp);
+
+  Background* background = (Background*)scene->getBackground("background");
+  View* backgroundView = (View*)background->state->get("view");
+
+  backgroundView->position.horz = scene->view->position.horz;
+  backgroundView->position.vert = scene->view->position.vert;
+
+
+  return (void*)NULL;
+}
 
 void* backgroundEvaluateCallback(void* inp, void* data) {
   Background* background = reinterpret_cast<Background*>(inp);
@@ -330,6 +342,8 @@ int main(int argc, char *argv[]) {
 
   scene->addCharacter("player", player);
   scene->addBackground("background", background);
+
+  scene->onEvaluate(sceneEvaluateCallback, (void*)NULL);
 
   app->on("KEYBOARD", keyboardCallback, (void*)player);
   app->on("QUIT", quitCallback, (void*)NULL);

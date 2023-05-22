@@ -6,12 +6,15 @@
 
   #include <string.h>
 
+  #include "./runtime/data/size.hpp"
+  #include "./runtime/data/view.hpp"
+  #include "./scene/base.hpp"
   #include "./scene/character.hpp"
   #include "./scene/background.hpp"
   #include "./scene/element.hpp"
 
 
-  class Scene {
+  class Scene: public SceneBase {
 
     private:
 
@@ -157,6 +160,7 @@
 
         }
 
+        SceneBase::evaluate();
       }
 
       void render(SDL_Renderer* renderer) {
