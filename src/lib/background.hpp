@@ -9,8 +9,6 @@
   #include "../../lib/runtime/data/view.hpp"
   #include "../../lib/scene/background.hpp"
   #include "../../lib/scene.hpp"
-  #include "./player.hpp"
-  #include "./bullet.hpp"
 
 
   class Background: public SceneBackground {

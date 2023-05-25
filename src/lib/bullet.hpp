@@ -10,6 +10,7 @@
   #include "../../lib/runtime/data/trajectory.hpp"
   #include "../../lib/runtime/data/view.hpp"
   #include "../../lib/scene/element.hpp"
+  #include "../../lib/scene.hpp"
 
 
   class Bullet: public SceneElement {

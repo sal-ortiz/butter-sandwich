@@ -14,9 +14,6 @@
   #include "../../lib/runtime/data/scale.hpp"
   #include "../../lib/runtime/data/view.hpp"
   #include "../../lib/scene.hpp"
-  #include "../../lib/scene/character.hpp"
-  #include "./bullet.hpp"
-  #include "./background.hpp"
 
 
   unsigned long int lastBulletTimestamp = 0;
