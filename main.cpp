@@ -19,8 +19,8 @@
 #include "./src/lib/player.hpp"
 
 
-const unsigned long int SCREEN_WIDTH = 1024;
-const unsigned long int SCREEN_HEIGHT = 769;
+const unsigned long int SCREEN_WIDTH = 1200;
+const unsigned long int SCREEN_HEIGHT = 800;
 
 void* quitCallback(void* inp, void* data) {
   ApplicationEventParams* parsedInp = reinterpret_cast<ApplicationEventParams*>(inp);
@@ -62,7 +62,10 @@ void* sceneEvaluateCallback(void* inp, void* data) {
   Scene* scene = reinterpret_cast<Scene*>(inp);
 
   Background* background = (Background*)scene->getElement("background");
+
   View* backgroundView = (View*)background->state->get("view");
+  Position* backgroundAbsolutePos = (Position*)background->state->get("absolute_position");
+  Position* backgroundPos = (Position*)background->state->get("position");
 
   backgroundView->position.horz = scene->view->position.horz;
   backgroundView->position.vert = scene->view->position.vert;
@@ -70,6 +73,57 @@ void* sceneEvaluateCallback(void* inp, void* data) {
   // TODO: This only needs to be set once.
   backgroundView->size.horz = scene->view->size.horz;
   backgroundView->size.vert = scene->view->size.vert;
+
+  if (backgroundAbsolutePos->horz >= 0) {
+
+    if (backgroundView->position.horz < backgroundAbsolutePos->horz) {
+      // moving horizontally along our lefthand border
+      backgroundPos->horz = backgroundAbsolutePos->horz - backgroundView->position.horz;
+
+      backgroundView->position.horz = 0;
+
+    } else {
+      // moving horizontally along our righthand border and the center of the map
+      backgroundView->position.horz = backgroundView->position.horz - backgroundAbsolutePos->horz;
+    }
+
+  } else {
+
+    if (backgroundView->position.horz > background->width - (backgroundView->size.horz + abs(backgroundAbsolutePos->horz))) {
+      // moving horizontally along our righthand border
+      backgroundPos->horz = 0;
+
+      backgroundView->size.horz = backgroundAbsolutePos->horz + (background->width - backgroundView->position.horz);
+    }
+
+    backgroundView->position.horz = backgroundView->position.horz - backgroundAbsolutePos->horz;
+  }
+
+  if (backgroundAbsolutePos->vert >= 0) {
+
+    if (backgroundView->position.vert < backgroundAbsolutePos->vert) {
+      // moving vertically along our upper border
+      backgroundPos->vert = backgroundAbsolutePos->vert - backgroundView->position.vert;
+
+      backgroundView->position.vert = 0;
+
+    } else {
+      // moving vertically along our lower border and the center of the map
+      backgroundView->position.vert = backgroundView->position.vert - backgroundAbsolutePos->vert;
+    }
+
+  } else {
+
+    if (backgroundView->position.vert > background->height - (backgroundView->size.vert + abs(backgroundAbsolutePos->vert))) {
+      // moving around verticaly along our righthand border
+      backgroundPos->vert = 0;
+
+      backgroundView->size.vert = backgroundAbsolutePos->vert + (background->height - backgroundView->position.vert);
+
+    }
+
+    backgroundView->position.vert = backgroundView->position.vert - backgroundAbsolutePos->vert;
+  }
 
   return (void*)NULL;
 }
@@ -121,8 +175,6 @@ int main(int argc, char *argv[]) {
     (scene->size->vert / 2) - (scene->view->size.vert / 2) - (player->width / 2)
   ));
 
-  background->state->set("absolute_position", new Position());
-
   Position* playerAbsolutePos = (Position*)player->state->get("absolute_position");
 
   scene->view->position.horz = playerAbsolutePos->horz - round(scene->view->size.horz / 2);
@@ -148,7 +200,7 @@ int main(int argc, char *argv[]) {
 
     frameStart = SDL_GetTicks();
 
-    //win->clear();
+    win->clear();
 
     scene->evaluate();
     scene->render(renderer);

@@ -84,11 +84,14 @@
         Player* player = reinterpret_cast<Player*>(inp);
         Scene* scene = reinterpret_cast<Scene*>(data);
 
+        Background* background = (Background*)scene->getElement("background");
+
         Position* playerPos = (Position*)player->state->get("position");
         Angle* playerAngle = (Angle*)player->state->get("angle");
         Trajectory* playerTraj = (Trajectory*)player->state->get("trajectory");
 
         Position* playerAbsolutePos = (Position*)player->state->get("absolute_position");
+        Position* backgroundAbsolutePos = (Position*)background->state->get("absolute_position");
 
         playerAbsolutePos->horz += playerTraj->position.horz;
         playerAbsolutePos->vert += playerTraj->position.vert;
@@ -107,21 +110,25 @@
         playerTraj->angle.yaw *= (playerTraj->angleRate.yaw);
 
         if (playerAbsolutePos->horz < round(player->width / 2)) {
-          playerAbsolutePos->horz = round(player->height / 2);
+          // enforce our leftmost border
+          playerAbsolutePos->horz = round(player->width / 2);
           playerTraj->position.horz = 0;
         }
 
         if (playerAbsolutePos->vert < round(player->height / 2)) {
+          // enforce our upper border
           playerAbsolutePos->vert = round(player->height / 2);
           playerTraj->position.vert = 0;
         }
 
         if (playerAbsolutePos->horz > (scene->size->horz - round(player->width / 2))) {
+          // enforce our rightmost border
           playerAbsolutePos->horz = scene->size->horz - round(player->width / 2);
           playerTraj->position.horz = 0;
         }
 
         if (playerAbsolutePos->vert > (scene->size->vert - round(player->height / 2))) {
+          // enforce our lower border
           playerAbsolutePos->vert = scene->size->vert - round(player->height / 2);
           playerTraj->position.vert = 0;
         }
@@ -129,27 +136,32 @@
         if (playerAbsolutePos->horz > round(scene->view->size.horz / 2)
           && playerAbsolutePos->horz < scene->size->horz - round(scene->view->size.horz / 2)
         ) {
+          // moving horizontally around the center of our map
           playerPos->horz = round(scene->view->size.horz / 2);
           scene->view->position.horz = playerAbsolutePos->horz - round(scene->view->size.horz / 2);
 
         } else if (playerAbsolutePos->horz < round(scene->view->size.horz / 2)) {
+          // moving horizontally around the left border of our map
           playerPos->horz = playerAbsolutePos->horz;
 
         } else if (playerAbsolutePos->horz > scene->size->horz - round(scene->view->size.horz / 2)) {
+          // moving horizontally around the right border of our map
           playerPos->horz = scene->view->size.horz - (scene->size->horz - playerAbsolutePos->horz);
         }
-
 
         if (playerAbsolutePos->vert > round(scene->view->size.vert / 2)
           && playerAbsolutePos->vert < scene->size->vert - round(scene->view->size.vert / 2)
         ) {
+          // moving vertically around the center of our map.
           playerPos->vert = round(scene->view->size.vert / 2);
           scene->view->position.vert = playerAbsolutePos->vert - round(scene->view->size.vert / 2);
 
         } else if (playerAbsolutePos->vert < round(scene->view->size.vert / 2)) {
+          // moving vertically around the upper border of our map.
           playerPos->vert = playerAbsolutePos->vert;
 
         } else if (playerAbsolutePos->vert > scene->size->vert - round(scene->view->size.vert / 2)) {
+          // moving vertically around the lower border of our map.
           playerPos->vert = scene->view->size.vert - (scene->size->vert - playerAbsolutePos->vert);
         }
 

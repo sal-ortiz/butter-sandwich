@@ -63,8 +63,9 @@
 
       void evaluate() {
         List<SceneBase*>* elements = this->elements;
-
         unsigned long int elementsLen = elements->getLength();
+
+        SceneBase::evaluate();
 
         for (unsigned long int elementsIdx = 0; elementsIdx < elementsLen; elementsIdx++) {
           SceneBase* element = this->elements->get(elementsIdx);
@@ -75,7 +76,6 @@
 
         }
 
-        SceneBase::evaluate();
       }
 
       void render(SDL_Renderer* renderer) {

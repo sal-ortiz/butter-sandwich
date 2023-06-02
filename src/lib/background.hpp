@@ -31,6 +31,8 @@
         Sprite* backgroundSprite = new Sprite();
         Image* backgroundImage = Image::load("./background01.png", 0, 0, 3000, 1688);
 
+        background->state->set("absolute_position", new Position(0.0, 0.0, 0.0));
+
         backgroundSprite->addFrame(backgroundImage, 0);
         backgroundSprite->setLoop(false);
 
