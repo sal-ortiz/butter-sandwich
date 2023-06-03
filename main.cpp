@@ -172,7 +172,7 @@ int main(int argc, char *argv[]) {
 
   player->state->set("absolute_position", new Position(
     (scene->size->horz / 2) - (player->width / 2),
-    (scene->size->vert / 2) - (player->width / 2)
+    (scene->size->vert / 2) - (player->height / 2)
   ));
 
   Position* playerAbsolutePos = (Position*)player->state->get("absolute_position");
