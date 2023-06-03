@@ -170,10 +170,7 @@ int main(int argc, char *argv[]) {
   scene->view->position.horz = round((scene->size->horz / 2) - (scene->view->size.horz / 2));
   scene->view->position.vert = round((scene->size->vert / 2) - (scene->view->size.vert / 2));
 
-  player->state->set("absolute_position", new Position(
-    (scene->size->horz / 2) - (player->width / 2),
-    (scene->size->vert / 2) - (player->height / 2)
-  ));
+  player->state->set("absolute_position", new Position((scene->size->horz / 2), (scene->size->vert / 2)));
 
   Position* playerAbsolutePos = (Position*)player->state->get("absolute_position");
 
