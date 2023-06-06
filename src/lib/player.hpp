@@ -203,8 +203,8 @@
           // move forward.
           player->setAction("moving_forward");
 
-          playerTraj->position.horz += 2 * playerHorzRatio;
-          playerTraj->position.vert += 2 * playerVertRatio;
+          playerTraj->position.horz += 1.5 * playerHorzRatio;
+          playerTraj->position.vert += 1.5 * playerVertRatio;
         }
 
         if (KeyboardInput::isPressed(44)
