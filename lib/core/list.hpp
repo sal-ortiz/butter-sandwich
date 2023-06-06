@@ -39,6 +39,8 @@
           if (node->getNext() == (ListEntry<class_type>*)NULL) {
             ListEntry<class_type>* newEntry = new ListEntry<class_type>();
 
+            newEntry->setValue((class_type)NULL);
+
             newEntry->setPrev(node);
             node->setNext(newEntry);
 
