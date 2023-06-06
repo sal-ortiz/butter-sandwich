@@ -48,7 +48,14 @@
       }
 
       static void* keyboardCallback(void* inp) {
-        //KeyboardEventParams* params = reinterpret_cast<KeyboardEventParams*>(inp);
+        KeyboardEventParams* params = reinterpret_cast<KeyboardEventParams*>(inp);
+        bool isPressed = false;
+
+        if (params->state == SDL_PRESSED) {
+          isPressed = true;
+        }
+
+        KeyboardInput::updateState(params->scanCode, isPressed);
 
         void* retVal = RuntimeBase::executeCallback("KEYBOARD", inp);
 
