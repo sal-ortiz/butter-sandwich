@@ -3,102 +3,76 @@
 
   #define _KEYBOARD_INPUT_HPP
 
+  #include <time.h>
   #include <SDL2/SDL.h>
 
+  #include "./list.hpp"
 
-  const unsigned char* _prevKeyboardState;
-  const unsigned char* _curKeyboardState;
 
+  struct KeyboardStateEntry {
+    bool isPressed;         // false = released, true = pressed
+    time_t timestamp;       // last action timestamp
+    unsigned long int code; // scancode
+  };
+
+  List<KeyboardStateEntry*>* keyboardState = new List<KeyboardStateEntry*>();
 
   class KeyboardInput {
-    // TODO: _prevKeyboardState doesn't actually work so we isReleqased() doesn't work.
 
     public:
 
-      static void updateState() {
-        int numKeys = 256;
+      static const unsigned int DELAY = 150;  // ms
 
-        _prevKeyboardState = _curKeyboardState;
-        _curKeyboardState = SDL_GetKeyboardState(&numKeys);
+      static void updateState(unsigned long int scanCode, bool state) {
+        KeyboardStateEntry* entry = keyboardState->get(scanCode);
+
+        if (entry == NULL) {
+          entry = new KeyboardStateEntry();
+
+          keyboardState->set(scanCode, entry);
+        }
+
+        if (entry->isPressed != state) {
+          entry->timestamp = time(NULL);
+        }
+
+        entry->isPressed = state;
+        entry->code = scanCode;
       }
 
-      static const unsigned char* getCurrentState() {
-        return _curKeyboardState;
-      }
+      static KeyboardStateEntry* getState(unsigned long int scanCode) {
+        KeyboardStateEntry* entry = keyboardState->get(scanCode);
 
-      static const unsigned char* getPreviousState() {
-        return _prevKeyboardState;
+        if (entry == NULL) {
+          entry = new KeyboardStateEntry();
+
+          entry->isPressed = 0;
+          entry->timestamp = 0;
+          entry->code = scanCode;
+        }
+
+        return entry;
       }
 
       static bool isPressed(unsigned char scanCode) {
-        const unsigned char* state = KeyboardInput::getCurrentState();
+        const KeyboardStateEntry* state = KeyboardInput::getState(scanCode);
 
-        if (state[scanCode] != 0) {
-          return true;
-        }
-
-        return false;
-      }
-
-      static bool wasPressed(unsigned char scanCode) {
-        const unsigned char* prevState = KeyboardInput::getPreviousState();
-
-        if (prevState && prevState[scanCode] != 0) {
-          return true;
-        }
-
-        return false;
+        return state->isPressed == true && state->timestamp < (time(NULL) + KeyboardInput::DELAY);
       }
 
       static bool isHeld(unsigned char scanCode) {
+        // NOTE: This doesn't actually work.
+        const KeyboardStateEntry* state = KeyboardInput::getState(scanCode);
 
-        if (KeyboardInput::isPressed(scanCode) && !KeyboardInput::wasPressed(scanCode)) {
-          return true;
-        }
-
-        return false;
+        return state->isPressed == true && state->timestamp > (time(NULL) + KeyboardInput::DELAY);
       }
 
       static bool isReleased(unsigned char scanCode) {
+        // NOTE: This doesn't actually work.
+        const KeyboardStateEntry* state = KeyboardInput::getState(scanCode);
 
-        if (!KeyboardInput::isPressed(scanCode) && KeyboardInput::wasPressed(scanCode)) {
-          printf("SADFASDFSA");
-          return true;
-        }
-
-
-        return false;
+        return state->isPressed == false && state->timestamp < (time(NULL) + KeyboardInput::DELAY);
       }
-
-      static bool isPressed(unsigned char* scanCodes) {
-        unsigned char aryLen = sizeof(scanCodes) / sizeof(unsigned char);
-
-        for (unsigned char idx = 0; idx < aryLen; idx++) {
-          unsigned char scanCode = scanCodes[idx];
-
-          if (!KeyboardInput::isPressed(scanCode)) {
-            return false;
-          }
-
-          return true;
-        }
-
-      }
-
-      static bool isReleased(unsigned char* scanCodes) {
-        unsigned char aryLen = sizeof(scanCodes) / sizeof(unsigned char);
-
-        for (unsigned char idx = 0; idx < aryLen; idx++) {
-          unsigned char scanCode = scanCodes[idx];
-
-          if (!KeyboardInput::isReleased(scanCode)) {
-            return false;
-          }
-
-          return true;
-        }
-
-    }
 
   };
 
