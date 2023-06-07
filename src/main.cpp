@@ -70,6 +70,16 @@ int main(int argc, char *argv[]) {
   Application* app = new Application();
   Scene* scene = new Scene();
 
+  //app->on("KEYBOARD", keyboardCallback, (void*)player);
+  app->on("QUIT", quitCallback, (void*)NULL);
+  win->on("CLOSED", closedCallback, (void*)NULL);
+  //win->on("PRESENT", windowPresentCallback, (void*)win);
+
+  scene->view->size.horz = SCREEN_WIDTH;
+  scene->view->size.vert = SCREEN_HEIGHT;
+
+  //scene->onEvaluate(sceneEvaluateCallback, (void*)NULL);
+
   Player* player = Player::loadAssets(scene);
   Background00* background00 = Background00::loadAssets(scene);
   Background01* background01 = Background01::loadAssets(scene);
@@ -91,23 +101,13 @@ int main(int argc, char *argv[]) {
     scene->addElement(name, bullet);
   }
 
-  //scene->onEvaluate(sceneEvaluateCallback, (void*)NULL);
+  Position* playerAbsolutePos = (Position*)player->state->get("absolute_position");
 
-  //app->on("KEYBOARD", keyboardCallback, (void*)player);
-  app->on("QUIT", quitCallback, (void*)NULL);
-  win->on("CLOSED", closedCallback, (void*)NULL);
-  //win->on("PRESENT", windowPresentCallback, (void*)win);
-
-  scene->view->size.horz = SCREEN_WIDTH;
-  scene->view->size.vert = SCREEN_HEIGHT;
+  playerAbsolutePos->horz = scene->size->horz / 2;
+  playerAbsolutePos->vert = scene->size->vert / 2;
 
   scene->view->position.horz = round((scene->size->horz / 2) - (scene->view->size.horz / 2));
   scene->view->position.vert = round((scene->size->vert / 2) - (scene->view->size.vert / 2));
-
-  Position* playerAbsolutePos = (Position*)player->state->get("absolute_position");
-
-  scene->view->position.horz = playerAbsolutePos->horz - round(scene->view->size.horz / 2);
-  scene->view->position.vert = playerAbsolutePos->vert - round(scene->view->size.vert / 2);
 
   win->open("blasteroids", 600, 150, SCREEN_WIDTH, SCREEN_HEIGHT);
 

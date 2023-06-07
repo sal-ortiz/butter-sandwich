@@ -83,7 +83,6 @@
         absPosition->horz = scene->size->horz / 2;
         absPosition->vert = scene->size->vert / 2;
 
-
         player->onEvaluate(Player::evaluateCallback, scene);
 
         return player;
@@ -234,12 +233,10 @@
             if (element->isActive == false && typeCmpRes == 0) {
               Bullet* bullet = reinterpret_cast<Bullet*>(element);
 
-              bullet->state->set("absolute_position", new Position(
-                (scene->size->horz / 2) - (scene->view->size.horz / 2) - (player->width / 2) + 20,
-                (scene->size->vert / 2) - (scene->view->size.vert / 2) - (player->width / 2) + 20
-              ));
-
               Position* bulletAbsolutePos = (Position*)bullet->state->get("absolute_position");
+              bulletAbsolutePos->horz = (scene->size->horz / 2) - (scene->view->size.horz / 2) - (player->width / 2) + 20;
+              bulletAbsolutePos->vert = (scene->size->vert / 2) - (scene->view->size.vert / 2) - (player->width / 2) + 20;
+
               Position* bulletPos = (Position*)bullet->state->get("position");
               Angle* bulletAngle = (Angle*)bullet->state->get("angle");
               Trajectory* bulletTraj = (Trajectory*)bullet->state->get("trajectory");
