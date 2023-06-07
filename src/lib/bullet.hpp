@@ -28,22 +28,23 @@
       static Bullet* loadAssets(Scene* scene) {
         Bullet* bullet = new Bullet();
 
-        Scale* bulletScale = (Scale*)bullet->state->get("scale");
+        Scale* scale = (Scale*)bullet->state->get("scale");
+        Position* absPosition = (Position*)bullet->state->get("absolute_position");
 
-        Sprite* bulletSprite = new Sprite();
-        Image* bulletImage = Image::load("./bullet.png", 0, 0, 6, 6);
+        Sprite* sprite = new Sprite();
+        Image* image = Image::load("./src/assets/bullet.png", 0, 0, 6, 6);
 
-        bulletSprite->addFrame(bulletImage, 0);
-        bulletSprite->setLoop(false);
+        sprite->addFrame(image, 0);
+        sprite->setLoop(false);
 
-        bullet->addSprite("bullet", bulletSprite);
+        bullet->addSprite("bullet", sprite);
         bullet->setAction("bullet");
 
-        bulletScale->horz = 2.0;
-        bulletScale->vert = 2.0;
+        scale->horz = 2.0;
+        scale->vert = 2.0;
 
-        Position* absolutePos = new Position(-1, -1, -1);
-        bullet->state->set("absolute_position", absolutePos);
+        absPosition->horz = -1;
+        absPosition->vert = -1;
 
         bullet->onEvaluate(Bullet::evaluateCallback, scene);
 
@@ -54,30 +55,30 @@
         Bullet* bullet = reinterpret_cast<Bullet*>(inp);
         Scene* scene = reinterpret_cast<Scene*>(data);
 
-        Position* bulletAbsolutePos = (Position*)bullet->state->get("absolute_position");
+        Position* absPosition = (Position*)bullet->state->get("absolute_position");
 
-        Position* bulletPos = (Position*)bullet->state->get("position");
-        Trajectory* bulletTraj = (Trajectory*)bullet->state->get("trajectory");
+        Position* position = (Position*)bullet->state->get("position");
+        Trajectory* trajectory = (Trajectory*)bullet->state->get("trajectory");
 
-        bulletAbsolutePos->horz += bulletTraj->position.horz;
-        bulletAbsolutePos->vert += bulletTraj->position.vert;
-        bulletAbsolutePos->depth += bulletTraj->position.depth;
+        absPosition->horz += trajectory->position.horz;
+        absPosition->vert += trajectory->position.vert;
+        absPosition->depth += trajectory->position.depth;
 
-        if (bulletAbsolutePos->horz > scene->view->position.horz
-          && bulletAbsolutePos->horz < (scene->view->position.horz + scene->view->size.horz)
-          && bulletAbsolutePos->vert > scene->view->position.vert
-          && bulletAbsolutePos->vert < (scene->view->position.vert + scene->view->size.vert)
+        if (absPosition->horz > scene->view->position.horz
+          && absPosition->horz < (scene->view->position.horz + scene->view->size.horz)
+          && absPosition->vert > scene->view->position.vert
+          && absPosition->vert < (scene->view->position.vert + scene->view->size.vert)
         ) {
           // our bullet is visible within our screen.
-          bulletPos->horz = (bulletAbsolutePos->horz - scene->view->position.horz);
-          bulletPos->vert = (bulletAbsolutePos->vert - scene->view->position.vert);
+          position->horz = (absPosition->horz - scene->view->position.horz);
+          position->vert = (absPosition->vert - scene->view->position.vert);
 
         }
 
-        if (bulletAbsolutePos->horz < 0
-          || bulletAbsolutePos->vert < 0
-          || bulletAbsolutePos->horz > scene->size->horz
-          || bulletAbsolutePos->vert > scene->size->vert
+        if (absPosition->horz < 0
+          || absPosition->vert < 0
+          || absPosition->horz > scene->size->horz
+          || absPosition->vert > scene->size->vert
         ) {
           // our bullet has left our space.
 

@@ -23,19 +23,19 @@
     public:
 
       Player() {
-        Trajectory* traj = (Trajectory*)this->state->get("trajectory");
+        Trajectory* trajectory = (Trajectory*)this->state->get("trajectory");
 
-        traj->positionRate.horz = 0.925;
-        traj->positionRate.vert = 0.925;
-        traj->positionRate.depth = 0.925;
+        trajectory->positionRate.horz = 0.925;
+        trajectory->positionRate.vert = 0.925;
+        trajectory->positionRate.depth = 0.925;
 
-        traj->angleRate.pitch = 0.85;
-        traj->angleRate.roll = 0.85;
-        traj->angleRate.yaw = 0.85;
+        trajectory->angleRate.pitch = 0.85;
+        trajectory->angleRate.roll = 0.85;
+        trajectory->angleRate.yaw = 0.85;
 
-        traj->scaleRate.horz = 0.90;
-        traj->scaleRate.vert = 0.90;
-        traj->scaleRate.depth = 0.90;
+        trajectory->scaleRate.horz = 0.90;
+        trajectory->scaleRate.vert = 0.90;
+        trajectory->scaleRate.depth = 0.90;
 
         this->isActive = true;
       }
@@ -48,10 +48,10 @@
         Sprite* turningLeftSprite = new Sprite();
         Sprite* turningRightSprite = new Sprite();
 
-        Image* shipStandingStill = Image::load("./ship_sheet.png", 390, 150, 75, 75);
-        Image* shipTurningLeft = Image::load("./ship_sheet.png", 490, 50, 75, 75);
-        Image* shipTurningRight = Image::load("./ship_sheet.png", 190, 50, 75, 75);
-        Image* shipMovingForward = Image::load("./ship_sheet.png", 90, 50, 75, 75);
+        Image* shipStandingStill = Image::load("./src/assets/ship_sheet.png", 390, 150, 75, 75);
+        Image* shipTurningLeft = Image::load("./src/assets/ship_sheet.png", 490, 50, 75, 75);
+        Image* shipTurningRight = Image::load("./src/assets/ship_sheet.png", 190, 50, 75, 75);
+        Image* shipMovingForward = Image::load("./src/assets/ship_sheet.png", 90, 50, 75, 75);
 
         standingStillSprite->addFrame(shipStandingStill, 0);
         movingForwardSprite->addFrame(shipMovingForward, 0);
@@ -71,9 +71,18 @@
         player->setAction("standing_still");
 
         Scale* playerScale = (Scale*)player->state->get("scale");
+        Angle* angle = (Angle*)player->state->get("angle");
+        Position* absPosition = (Position*)player->state->get("absolute_position");
 
         playerScale->horz = 1.0;
         playerScale->vert = 1.0;
+
+        angle->center.horz = 43;
+        angle->center.vert = 43;
+
+        absPosition->horz = scene->size->horz / 2;
+        absPosition->vert = scene->size->vert / 2;
+
 
         player->onEvaluate(Player::evaluateCallback, scene);
 
@@ -84,102 +93,99 @@
         Player* player = reinterpret_cast<Player*>(inp);
         Scene* scene = reinterpret_cast<Scene*>(data);
 
-        Background* background = (Background*)scene->getElement("background");
+        Position* position = (Position*)player->state->get("position");
+        Angle* angle = (Angle*)player->state->get("angle");
+        Trajectory* trajectory = (Trajectory*)player->state->get("trajectory");
 
-        Position* playerPos = (Position*)player->state->get("position");
-        Angle* playerAngle = (Angle*)player->state->get("angle");
-        Trajectory* playerTraj = (Trajectory*)player->state->get("trajectory");
+        Position* absPosition = (Position*)player->state->get("absolute_position");
 
-        Position* playerAbsolutePos = (Position*)player->state->get("absolute_position");
-        Position* backgroundAbsolutePos = (Position*)background->state->get("absolute_position");
+        absPosition->horz += trajectory->position.horz;
+        absPosition->vert += trajectory->position.vert;
+        absPosition->depth += trajectory->position.depth;
 
-        playerAbsolutePos->horz += playerTraj->position.horz;
-        playerAbsolutePos->vert += playerTraj->position.vert;
-        playerAbsolutePos->depth += playerTraj->position.depth;
+        angle->pitch += trajectory->angle.pitch;
+        angle->roll += trajectory->angle.roll;
+        angle->yaw += trajectory->angle.yaw;
 
-        playerAngle->pitch += playerTraj->angle.pitch;
-        playerAngle->roll += playerTraj->angle.roll;
-        playerAngle->yaw += playerTraj->angle.yaw;
+        trajectory->position.horz *= (trajectory->positionRate.horz);
+        trajectory->position.vert *= (trajectory->positionRate.vert);
+        trajectory->position.depth *= (trajectory->positionRate.depth);
 
-        playerTraj->position.horz *= (playerTraj->positionRate.horz);
-        playerTraj->position.vert *= (playerTraj->positionRate.vert);
-        playerTraj->position.depth *= (playerTraj->positionRate.depth);
+        trajectory->angle.pitch *= (trajectory->angleRate.pitch);
+        trajectory->angle.roll *= (trajectory->angleRate.roll);
+        trajectory->angle.yaw *= (trajectory->angleRate.yaw);
 
-        playerTraj->angle.pitch *= (playerTraj->angleRate.pitch);
-        playerTraj->angle.roll *= (playerTraj->angleRate.roll);
-        playerTraj->angle.yaw *= (playerTraj->angleRate.yaw);
-
-        if (playerAbsolutePos->horz < round(player->width / 2)) {
+        if (absPosition->horz < round(player->width / 2)) {
           // enforce our leftmost border
-          playerAbsolutePos->horz = round(player->width / 2);
-          playerTraj->position.horz = 0;
+          absPosition->horz = round(player->width / 2);
+          trajectory->position.horz = 0;
         }
 
-        if (playerAbsolutePos->vert < round(player->height / 2)) {
+        if (absPosition->vert < round(player->height / 2)) {
           // enforce our upper border
-          playerAbsolutePos->vert = round(player->height / 2);
-          playerTraj->position.vert = 0;
+          absPosition->vert = round(player->height / 2);
+          trajectory->position.vert = 0;
         }
 
-        if (playerAbsolutePos->horz > (scene->size->horz - round(player->width / 2))) {
+        if (absPosition->horz > (scene->size->horz - round(player->width / 2))) {
           // enforce our rightmost border
-          playerAbsolutePos->horz = scene->size->horz - round(player->width / 2);
-          playerTraj->position.horz = 0;
+          absPosition->horz = scene->size->horz - round(player->width / 2);
+          trajectory->position.horz = 0;
         }
 
-        if (playerAbsolutePos->vert > (scene->size->vert - round(player->height / 2))) {
+        if (absPosition->vert > (scene->size->vert - round(player->height / 2))) {
           // enforce our lower border
-          playerAbsolutePos->vert = scene->size->vert - round(player->height / 2);
-          playerTraj->position.vert = 0;
+          absPosition->vert = scene->size->vert - round(player->height / 2);
+          trajectory->position.vert = 0;
         }
 
-        if (playerAbsolutePos->horz > round(scene->view->size.horz / 2)
-          && playerAbsolutePos->horz < scene->size->horz - round(scene->view->size.horz / 2)
+        if (absPosition->horz > round(scene->view->size.horz / 2)
+          && absPosition->horz < scene->size->horz - round(scene->view->size.horz / 2)
         ) {
           // moving horizontally around the center of our map
-          playerPos->horz = round(scene->view->size.horz / 2);
-          scene->view->position.horz = playerAbsolutePos->horz - round(scene->view->size.horz / 2);
+          position->horz = round(scene->view->size.horz / 2);
+          scene->view->position.horz = absPosition->horz - round(scene->view->size.horz / 2);
 
-        } else if (playerAbsolutePos->horz < round(scene->view->size.horz / 2)) {
+        } else if (absPosition->horz < round(scene->view->size.horz / 2)) {
           // moving horizontally around the left border of our map
-          playerPos->horz = playerAbsolutePos->horz;
+          position->horz = absPosition->horz;
 
-        } else if (playerAbsolutePos->horz > scene->size->horz - round(scene->view->size.horz / 2)) {
+        } else if (absPosition->horz > scene->size->horz - round(scene->view->size.horz / 2)) {
           // moving horizontally around the right border of our map
-          playerPos->horz = scene->view->size.horz - (scene->size->horz - playerAbsolutePos->horz);
+          position->horz = scene->view->size.horz - (scene->size->horz - absPosition->horz);
         }
 
-        if (playerAbsolutePos->vert > round(scene->view->size.vert / 2)
-          && playerAbsolutePos->vert < scene->size->vert - round(scene->view->size.vert / 2)
+        if (absPosition->vert > round(scene->view->size.vert / 2)
+          && absPosition->vert < scene->size->vert - round(scene->view->size.vert / 2)
         ) {
           // moving vertically around the center of our map.
-          playerPos->vert = round(scene->view->size.vert / 2);
-          scene->view->position.vert = playerAbsolutePos->vert - round(scene->view->size.vert / 2);
+          position->vert = round(scene->view->size.vert / 2);
+          scene->view->position.vert = absPosition->vert - round(scene->view->size.vert / 2);
 
-        } else if (playerAbsolutePos->vert < round(scene->view->size.vert / 2)) {
+        } else if (absPosition->vert < round(scene->view->size.vert / 2)) {
           // moving vertically around the upper border of our map.
-          playerPos->vert = playerAbsolutePos->vert;
+          position->vert = absPosition->vert;
 
-        } else if (playerAbsolutePos->vert > scene->size->vert - round(scene->view->size.vert / 2)) {
+        } else if (absPosition->vert > scene->size->vert - round(scene->view->size.vert / 2)) {
           // moving vertically around the lower border of our map.
-          playerPos->vert = scene->view->size.vert - (scene->size->vert - playerAbsolutePos->vert);
+          position->vert = scene->view->size.vert - (scene->size->vert - absPosition->vert);
         }
 
-        float playerHorzRatio = 0.0;
-        float playerVertRatio = 0.0;
+        float horzRatio = 0.0;
+        float vertRatio = 0.0;
 
-        if (playerAngle->pitch >= 180) {
-          playerHorzRatio = -(((270 - playerAngle->pitch) / 90));
+        if (angle->pitch >= 180) {
+          horzRatio = -(((270 - angle->pitch) / 90));
         } else {
-          playerHorzRatio = ((90 - playerAngle->pitch) / 90);
+          horzRatio = ((90 - angle->pitch) / 90);
         }
 
-        if (playerAngle->pitch <= 90) {
-          playerVertRatio = (playerAngle->pitch) / 90;
-        } else if (playerAngle->pitch > 270) {
-          playerVertRatio = -(360 - playerAngle->pitch) / 90;
+        if (angle->pitch <= 90) {
+          vertRatio = (angle->pitch) / 90;
+        } else if (angle->pitch > 270) {
+          vertRatio = -(360 - angle->pitch) / 90;
         } else {
-          playerVertRatio = (180 - playerAngle->pitch) / 90;
+          vertRatio = (180 - angle->pitch) / 90;
         }
 
       //  if (KeyboardInput::isReleased(82)) {
@@ -190,21 +196,21 @@
         if (KeyboardInput::isPressed(80)) {
           // turn left.
           player->setAction("turning_left");
-          playerTraj->angle.pitch -= 1;
+          trajectory->angle.pitch -= 1;
         }
 
         if (KeyboardInput::isPressed(79)) {
           // turn right.
           player->setAction("turning_right");
-          playerTraj->angle.pitch += 1;
+          trajectory->angle.pitch += 1;
         }
 
         if (KeyboardInput::isPressed(82)) {
           // move forward.
           player->setAction("moving_forward");
 
-          playerTraj->position.horz += 1.5 * playerHorzRatio;
-          playerTraj->position.vert += 1.5 * playerVertRatio;
+          trajectory->position.horz += 1.5 * horzRatio;
+          trajectory->position.vert += 1.5 * vertRatio;
         }
 
         if (KeyboardInput::isPressed(44)
@@ -238,16 +244,16 @@
               Angle* bulletAngle = (Angle*)bullet->state->get("angle");
               Trajectory* bulletTraj = (Trajectory*)bullet->state->get("trajectory");
 
-              bulletAngle->center.horz = playerAngle->center.horz - 36;
-              bulletAngle->center.vert = playerAngle->center.vert - 36;
+              bulletAngle->center.horz = angle->center.horz - 36;
+              bulletAngle->center.vert = angle->center.vert - 36;
 
-              bulletTraj->position.horz = 24 * playerHorzRatio;
-              bulletTraj->position.vert = 24 * playerVertRatio;
+              bulletTraj->position.horz = 24 * horzRatio;
+              bulletTraj->position.vert = 24 * vertRatio;
 
-              bulletAbsolutePos->horz = playerAbsolutePos->horz;
-              bulletAbsolutePos->vert = playerAbsolutePos->vert;
+              bulletAbsolutePos->horz = absPosition->horz;
+              bulletAbsolutePos->vert = absPosition->vert;
 
-              bulletAngle->pitch = playerAngle->pitch + 132;
+              bulletAngle->pitch = angle->pitch + 132;
 
               bullet->isActive = true;
 
@@ -261,8 +267,8 @@
         }
         // keep angle within 360 degrees
         // TODO: enforce this from a state callback.
-        playerAngle->pitch = playerAngle->pitch < 0 ? 360 - abs(playerAngle->pitch) : playerAngle->pitch;
-        playerAngle->pitch = playerAngle->pitch >= 360 ? playerAngle->pitch / 360 : playerAngle->pitch;
+        angle->pitch = angle->pitch < 0 ? 360 - abs(angle->pitch) : angle->pitch;
+        angle->pitch = angle->pitch >= 360 ? angle->pitch / 360 : angle->pitch;
 
         return (void*)NULL;
       }

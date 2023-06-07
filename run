@@ -1,3 +1,12 @@
 #!/usr/bin/env bash
-rm -f ./main
-g++ ./main.cpp -o ./main -std=c++17 -lSDL2 -lSDL2_image && ./main
+
+clear
+
+g++ ./src/main.cpp -o ./main -std=c++17 -lSDL2 -lSDL2_image
+
+if [ -x ./main ]; then
+  ./main
+
+  rm -f ./main
+fi
+

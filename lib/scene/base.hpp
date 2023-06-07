@@ -47,6 +47,8 @@
         this->state->set("scale", new Scale());
         this->state->set("view", new View());
         this->state->set("trajectory", new Trajectory());
+
+        this->state->set("absolute_position", new Position());
       }
 
       void addSprite(const char* actionId, Sprite* sprite) {
