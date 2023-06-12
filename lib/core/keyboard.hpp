@@ -1,7 +1,7 @@
 
-#ifndef _CORE_KEYBOARD_HPP
+#ifndef _KEYBOARD_INPUT_HPP
 
-  #define _CORE_KEYBOARD_HPP
+  #define _KEYBOARD_INPUT_HPP
 
   #include <time.h>
   #include <SDL2/SDL.h>

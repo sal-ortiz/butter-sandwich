@@ -5,7 +5,8 @@
 
   #include <string.h>
 
-  #include "./runtime.hpp"
+  #include "./runtime/data/size.hpp"
+  #include "./runtime/data/view.hpp"
   #include "./scene/base.hpp"
   #include "./scene/character.hpp"
   #include "./scene/background.hpp"

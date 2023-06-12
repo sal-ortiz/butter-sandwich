@@ -1,7 +1,7 @@
 
-#ifndef _EVENT_KEYBOARD_HPP
+#ifndef _KEYBOARD_EVENT_HPP
 
-  #define _EVENT_KEYBOARD_HPP
+  #define _KEYBOARD_EVENT_HPP
 
   #include "./base.hpp"
 

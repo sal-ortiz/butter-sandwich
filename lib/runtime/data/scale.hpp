@@ -1,7 +1,7 @@
 
-#ifndef _DATA_SCALE_HPP
+#ifndef _SCALE_HPP
 
-  #define _DATA_SCALE_HPP
+  #define _SCALE_HPP
 
 
   class Scale {

@@ -1,12 +1,14 @@
 
-#ifndef _RUNTIME_SPRITE_HPP
+#ifndef _SPRITE_HPP
 
-  #define _RUNTIME_SPRITE_HPP
+  #define _SPRITE_HPP
 
-  #include "../core.hpp"
-  #include "./data.hpp"
-
+  #include "../core/image.hpp"
+  #include "../core/list.hpp"
   #include "./sprite/frame.hpp"
+  #include "./data/position.hpp"
+  #include "./data/angle.hpp"
+  #include "./data/view.hpp"
 
 
   class Sprite {

@@ -1,7 +1,7 @@
 
-#ifndef _DATA_VIEW_HPP
+#ifndef _VIEW_HPP
 
-  #define _DATA_VIEW_HPP
+  #define _VIEW_HPP
 
   #include "./position.hpp"
   #include "./size.hpp"

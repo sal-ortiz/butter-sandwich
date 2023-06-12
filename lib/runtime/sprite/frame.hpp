@@ -3,8 +3,11 @@
 
   #define _SPRITE_FRAME_HPP
 
-  #include "../../core.hpp"
-  #include "../data.hpp"
+  #include "../../core/image.hpp"
+  #include "../data/position.hpp"
+  #include "../data/view.hpp"
+  #include "../data/angle.hpp"
+  #include "../data/scale.hpp"
 
 
   class SpriteFrame {

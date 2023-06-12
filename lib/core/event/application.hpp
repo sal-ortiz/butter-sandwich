@@ -1,7 +1,7 @@
 
-#ifndef _EVENT_APPLICATION_HPP
+#ifndef _APPLICATION_EVENT_HPP
 
-  #define _EVENT_APPLICATION_HPP
+  #define _APPLICATION_EVENT_HPP
 
   #include "./base.hpp"
 

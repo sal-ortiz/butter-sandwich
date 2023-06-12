@@ -1,7 +1,7 @@
 
-#ifndef _CORE_IMAGE_HPP
+#ifndef _IMAGE_HPP
 
-  #define _CORE_IMAGE_HPP
+  #define _IMAGE_HPP
 
   #include <math.h>
 

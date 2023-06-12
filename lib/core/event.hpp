@@ -1,7 +1,7 @@
 
-#ifndef _CORE_EVENT_HPP
+#ifndef _EVENT_HPP
 
-  #define _CORE_EVENT_HPP
+  #define _EVENT_HPP
 
   #include <SDL2/SDL.h>
 

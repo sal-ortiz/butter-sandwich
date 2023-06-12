@@ -1,7 +1,7 @@
 
-#ifndef _DATA_TRAJECTORY_HPP
+#ifndef _TRAJECTORY_HPP
 
-  #define _DATA_TRAJECTORY_HPP
+  #define _TRAJECTORY_HPP
 
   #include "./position.hpp"
   #include "./angle.hpp"

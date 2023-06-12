@@ -1,7 +1,7 @@
 
-#ifndef _CORE_DICT_HPP
+#ifndef _DICT_HPP
 
-  #define _CORE_DICT_HPP
+  #define _DICT_HPP
 
   #include <string.h>
 

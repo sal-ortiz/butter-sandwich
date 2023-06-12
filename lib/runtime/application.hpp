@@ -1,12 +1,12 @@
 
-#ifndef _RUNTIME_APPLICATION_HPP
+#ifndef _APPLICATION_HPP
 
-  #define _RUNTIME_APPLICATION_HPP
+  #define _APPLICATION_HPP
 
   #include <SDL2/SDL.h>
 
   #include "./base.hpp"
-  #include "../core.hpp"
+  #include "../core/event.hpp"
 
 
   class Application: public RuntimeBase {
