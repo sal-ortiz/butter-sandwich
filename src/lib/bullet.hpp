@@ -51,9 +51,9 @@
         return bullet;
       }
 
-      static void* evaluateCallback(void* inp, void* data) {
+      static void* evaluateCallback(void* inp, void* dataOne, void* dataTwo) {
         Bullet* bullet = reinterpret_cast<Bullet*>(inp);
-        Scene* scene = reinterpret_cast<Scene*>(data);
+        Scene* scene = reinterpret_cast<Scene*>(dataOne);
 
         Position* absPosition = (Position*)bullet->state->get("absolute_position");
 

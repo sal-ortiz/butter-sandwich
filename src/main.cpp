@@ -24,7 +24,7 @@
 const unsigned long int SCREEN_WIDTH = 1200;
 const unsigned long int SCREEN_HEIGHT = 800;
 
-void* quitCallback(void* inp, void* data) {
+void* quitCallback(void* inp, void* dataOne, void* dataTwo) {
   ApplicationEventParams* parsedInp = reinterpret_cast<ApplicationEventParams*>(inp);
 
   printf("\nQuitting application at %lums\n", parsedInp->timestamp);
@@ -32,7 +32,7 @@ void* quitCallback(void* inp, void* data) {
   return (void*)NULL;
 }
 
-void* closedCallback(void* inp, void* data) {
+void* closedCallback(void* inp, void* dataOne, void* dataTwo) {
   WindowEventParams* parsedInp = reinterpret_cast<WindowEventParams*>(inp);
 
   printf("\nWindow closed at %ldms", parsedInp->timestamp);
@@ -40,14 +40,14 @@ void* closedCallback(void* inp, void* data) {
   return (void*)NULL;
 }
 
-//void* keyboardCallback(void* inp, void* data) {
+//void* keyboardCallback(void* inp, void* dataOne, void* dataTwo) {
 //  KeyboardEventParams* parsedInp = reinterpret_cast<KeyboardEventParams*>(inp);
 //  Player* player = reinterpret_cast<Player*>(data);
 //
 //  return (void*)NULL;
 //}
 
-//void* windowPresentCallback(void* inp, void* data) {
+//void* windowPresentCallback(void* inp, void* dataOne, void* dataTwo) {
 //  UserEventParams* parsedInp = reinterpret_cast<UserEventParams*>(inp);
 //  Window* win = reinterpret_cast<Window*>(data);
 //
@@ -57,7 +57,7 @@ void* closedCallback(void* inp, void* data) {
 //  return (void*)NULL;
 //}
 
-//void* sceneEvaluateCallback(void* inp, void* data) {
+//void* sceneEvaluateCallback(void* inp, void* dataOne, void* dataTwo) {
 //  Scene* scene = reinterpret_cast<Scene*>(inp);
 //
 //  Background00* background00 = (Background00*)scene->getElement("background00");

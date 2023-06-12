@@ -79,11 +79,11 @@
         return this->type;
       }
 
-      void onEvaluate(void*(*callback)(void*, void*), void* data) {
+      void onEvaluate(void*(*callback)(void*, void*, void*), void* dataOne=NULL, void* dataTwo=NULL) {
         unsigned long int charId = this->identifier;
         const char* hookId = Hook::generateIdentifier(charId, "onEvaluate");
 
-        this->on(hookId, callback, data);
+        this->on(hookId, callback, dataOne, dataTwo);
       }
 
       void render(SDL_Renderer* renderer) {

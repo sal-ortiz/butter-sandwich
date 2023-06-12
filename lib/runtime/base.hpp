@@ -35,17 +35,18 @@
         return this->identifier;
       }
 
-      void on(const char* id, void*(*callback)(void*, void*), void* inp) {
-        Hook::setCallback(id, callback, inp);
+      void on(const char* id, void*(*callback)(void*, void*, void*), void* dataOne=NULL, void* dataTwo=NULL) {
+        Hook::setCallback(id, callback, dataOne, dataTwo);
       }
 
       static void* executeCallback(const char* id, void* inp) {
 
         if (Hook::hasCallback(id) == true) {
-          void*(*callback)(void*, void*) = Hook::getCallback(id);
-          void* data = Hook::getInput(id);
+          void*(*callback)(void*, void*, void*) = Hook::getCallback(id);
+          void* dataOne = Hook::getInputOne(id);
+          void* dataTwo = Hook::getInputTwo(id);
 
-          return callback(inp, data);
+          return callback(inp, dataOne, dataTwo);
         }
 
         return inp;

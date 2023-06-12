@@ -82,7 +82,7 @@
         return asteroid;
       }
 
-      static void* evaluateCallback(void* inp, void* dataOne) {
+      static void* evaluateCallback(void* inp, void* dataOne, void* dataTwo) {
         Asteroid00* asteroid = reinterpret_cast<Asteroid00*>(inp);
         Scene* scene = reinterpret_cast<Scene*>(dataOne);
 

@@ -88,9 +88,9 @@
         return player;
       }
 
-      static void* evaluateCallback(void* inp, void* data) {
+      static void* evaluateCallback(void* inp, void* dataOne, void* dataTwo) {
         Player* player = reinterpret_cast<Player*>(inp);
-        Scene* scene = reinterpret_cast<Scene*>(data);
+        Scene* scene = reinterpret_cast<Scene*>(dataOne);
 
         Position* position = (Position*)player->state->get("position");
         Angle* angle = (Angle*)player->state->get("angle");

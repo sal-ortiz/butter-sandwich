@@ -42,9 +42,9 @@
         return background;
       }
 
-      static void* evaluateCallback(void* inp, void* data) {
+      static void* evaluateCallback(void* inp, void* dataOne, void* dataTwo) {
         Background01* background = reinterpret_cast<Background01*>(inp);
-        Scene* scene = reinterpret_cast<Scene*>(data);
+        Scene* scene = reinterpret_cast<Scene*>(dataOne);
 
         Background00* baseBackground = (Background00*)scene->getElement("background00");;
 
