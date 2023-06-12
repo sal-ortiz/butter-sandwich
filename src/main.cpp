@@ -18,6 +18,7 @@
 #include "./lib/background00.hpp"
 #include "./lib/background01.hpp"
 #include "./lib/player.hpp"
+#include "./lib/asteroid00.hpp"
 
 
 const unsigned long int SCREEN_WIDTH = 1200;
@@ -80,15 +81,17 @@ int main(int argc, char *argv[]) {
 
   //scene->onEvaluate(sceneEvaluateCallback, (void*)NULL);
 
-  Player* player = Player::loadAssets(scene);
-  Background00* background00 = Background00::loadAssets(scene);
-  Background01* background01 = Background01::loadAssets(scene);
-
   scene->size->horz = 3000;
   scene->size->vert = 1688;
 
+  Player* player = Player::loadAssets(scene);
+  Background00* background00 = Background00::loadAssets(scene);
+  Background01* background01 = Background01::loadAssets(scene);
+  Asteroid00* asteroid00 = Asteroid00::loadAssets(scene);
+
   scene->addElement("background00", background00);
   scene->addElement("background01", background01);
+  scene->addElement("asteroid00", asteroid00);
   scene->addElement("player", player);
 
   for (unsigned long int bulletsIdx = 0; bulletsIdx < Bullet::MAX_COUNT; bulletsIdx++) {
