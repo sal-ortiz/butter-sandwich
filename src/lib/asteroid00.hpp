@@ -7,14 +7,8 @@
   #include <string.h>
   #include <stdlib.h>
 
-  #include "../../lib/core/keyboard.hpp"
-  #include "../../lib/core/image.hpp"
-  #include "../../lib/runtime/sprite.hpp"
-  #include "../../lib/runtime/data/trajectory.hpp"
-  #include "../../lib/runtime/data/position.hpp"
-  #include "../../lib/runtime/data/angle.hpp"
-  #include "../../lib/runtime/data/scale.hpp"
-  #include "../../lib/runtime/data/view.hpp"
+  #include "../../lib/core.hpp"
+  #include "../../lib/runtime.hpp"
   #include "../../lib/scene.hpp"
 
 

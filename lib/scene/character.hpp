@@ -3,7 +3,7 @@
 
   #define _SCENE_CHARACTER_HPP
 
-  #include "../scene/base.hpp"
+  #include "./base.hpp"
 
 
   class SceneCharacter: public SceneBase {

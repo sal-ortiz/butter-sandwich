@@ -1,9 +1,7 @@
 
+#ifndef _CORE_LIST_HPP
 
-
-#ifndef _LIST_HPP
-
-  #define _LIST_HPP
+  #define _CORE_LIST_HPP
 
   #include "./list/entry.hpp"
 

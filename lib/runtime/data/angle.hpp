@@ -1,7 +1,7 @@
 
-#ifndef _ANGLE_HPP
+#ifndef _DATA_ANGLE_HPP
 
-  #define _ANGLE_HPP
+  #define _DATA_ANGLE_HPP
 
   #include "./position.hpp"
 

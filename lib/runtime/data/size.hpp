@@ -1,7 +1,7 @@
 
-#ifndef _SIZE_HPP
+#ifndef _DATA_SIZE_HPP
 
-  #define _SIZE_HPP
+  #define _DATA_SIZE_HPP
 
 
   class Size {

@@ -1,12 +1,12 @@
 
-#ifndef _STATE_HPP
+#ifndef _RUNTIME_STATE_HPP
 
-  #define _STATE_HPP
+  #define _RUNTIME_STATE_HPP
 
   #include <SDL2/SDL.h>
 
   #include "./base.hpp"
-  #include "../core/dict.hpp"
+  #include "../core.hpp"
 
 
   struct HookCallbackParams {

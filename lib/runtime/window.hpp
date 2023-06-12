@@ -1,12 +1,12 @@
 
-#ifndef _WINDOW_HPP
+#ifndef _RUNTIME_WINDOW_HPP
 
-  #define _WINDOW_HPP
+  #define _RUNTIME_WINDOW_HPP
 
   #include <SDL2/SDL.h>
 
   #include "./base.hpp"
-  #include "../core/event.hpp"
+  #include "../core.hpp"
 
 
   class Window: public RuntimeBase {

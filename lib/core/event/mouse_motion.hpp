@@ -1,8 +1,8 @@
 
 
-#ifndef _MOUSE_MOTION_EVENT_HPP
+#ifndef _EVENT_MOUSE_MOTION_HPP
 
-  #define _MOUSE_MOTION_EVENT_HPP
+  #define _EVENT_MOUSE_MOTION_HPP
 
   #include "./base.hpp"
 

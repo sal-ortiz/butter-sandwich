@@ -1,10 +1,10 @@
 
 
-#ifndef _HOOK_HPP
+#ifndef _RUNTIME_HOOK_HPP
 
-  #define _HOOK_HPP
+  #define _RUNTIME_HOOK_HPP
 
-  #include "../core/dict.hpp"
+  #include "../core.hpp"
 
 
   struct HookCallbackRecord {
@@ -13,9 +13,7 @@
     void* dataTwo;
   };
 
-
   Dict<HookCallbackRecord> _hookCallbacks;
-
 
   class Hook {
 

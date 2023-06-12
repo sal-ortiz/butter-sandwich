@@ -1,7 +1,7 @@
 
-#ifndef _POSITION_HPP
+#ifndef _DATA_POSITION_HPP
 
-  #define _POSITION_HPP
+  #define _DATA_POSITION_HPP
 
 
   class Position {

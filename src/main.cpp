@@ -6,12 +6,8 @@
 
 #include <math.h>
 
-#include "../lib/core/keyboard.hpp"
-#include "../lib/runtime/window.hpp"
-#include "../lib/runtime/application.hpp"
-#include "../lib/runtime/data/view.hpp"
-#include "../lib/runtime/data/angle.hpp"
-#include "../lib/runtime/data/position.hpp"
+#include "../lib/core.hpp"
+#include "../lib/runtime.hpp"
 #include "../lib/scene.hpp"
 
 #include "./lib/bullet.hpp"

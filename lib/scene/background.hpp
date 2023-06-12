@@ -3,7 +3,7 @@
 
   #define _SCENE_BACKGROUND_HPP
 
-  #include "../scene/base.hpp"
+  #include "./base.hpp"
 
 
   class SceneBackground: public SceneBase {

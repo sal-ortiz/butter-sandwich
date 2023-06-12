@@ -1,7 +1,7 @@
 
-#ifndef _THREAD_HPP
+#ifndef _CORE_THREAD_HPP
 
-  #define _THREAD_HPP
+  #define _CORE_THREAD_HPP
 
   #include <SDL2/SDL.h>
 
