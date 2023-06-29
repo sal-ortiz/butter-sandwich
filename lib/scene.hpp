@@ -15,12 +15,9 @@
 
   class Scene: public SceneBase {
 
-    private:
+    public:
 
       List<SceneBase*>* elements;
-
-
-    public:
 
       Size* size;
       View* view;
