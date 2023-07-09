@@ -3,6 +3,8 @@
 
   #define _LIST_ENTRY_HPP
 
+  #include <stddef.h>
+
 
   template <class class_type>
   class ListEntry {

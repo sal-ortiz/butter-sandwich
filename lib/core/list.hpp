@@ -6,6 +6,7 @@
   #define _LIST_HPP
 
   #include "./list/entry.hpp"
+  #include <stdio.h>
 
 
   template <class class_type>
@@ -14,6 +15,9 @@
     private:
 
       ListEntry<class_type>* root;
+
+      unsigned long int length;
+
 
       ListEntry<class_type>* getEntry(unsigned long int targIndex) {
         ListEntry<class_type>* node = this->root;
@@ -39,18 +43,46 @@
           if (node->getNext() == (ListEntry<class_type>*)NULL) {
             ListEntry<class_type>* newEntry = new ListEntry<class_type>();
 
-            newEntry->setValue((class_type)NULL);
+            //newEntry->setValue((class_type)NULL);
 
             newEntry->setPrev(node);
             node->setNext(newEntry);
-
           }
 
           node = node->getNext();
         }
 
+        if (targIndex >= this->length) {
+          this->length = targIndex + 1;
+        }
+
         node->setValue(value);
       }
+
+      void insertEntry(unsigned long int targIndex, class_type value) {
+        ListEntry<class_type>* newEntry = new ListEntry<class_type>();
+
+        if (targIndex >= this->getLength()) {
+          this->setEntry(targIndex, value);
+        }
+
+        ListEntry<class_type>* node = this->getEntry(targIndex);
+        ListEntry<class_type>* prev = node->getPrev();
+
+        newEntry->setValue(value);
+
+        newEntry->setPrev(prev);
+        newEntry->setNext(node);
+
+        node->setPrev(newEntry);
+
+        if (prev) {
+          prev->setNext(newEntry);
+        }
+
+        this->length++;
+      }
+
 
       void deleteEntry(unsigned long int targIndex) {
         unsigned long int length = this->getLength();
@@ -68,6 +100,8 @@
           next->setPrev(prev);
         }
 
+        this->length--;
+
         delete node;
       }
 
@@ -76,6 +110,8 @@
 
       List() {
         this->root = new ListEntry<class_type>();
+
+        this->length = 0;
       }
 
       ListEntry<class_type>* getRoot() {
@@ -93,14 +129,17 @@
           node = node->getNext();
         }
 
+        //printf("\nthis->length: %lu\tthis->getLength(): %lu", this->length, length);
+        //return this->length;
+
         return length;
       }
 
       class_type get(unsigned long int targIndex) {
 
-        if (targIndex > (this->getLength() - 1)) {
-          throw;
-        }
+        //if (targIndex > (this->getLength() - 1)) {
+        //  throw;
+        //}
 
         ListEntry<class_type>* node = this->getEntry(targIndex);
 
@@ -113,82 +152,45 @@
 
       void remove(unsigned long int targIndex) {
 
-        if (targIndex > (this->getLength() - 1)) {
-          throw;
-        }
+        //if (targIndex > (this->getLength() - 1)) {
+        //  throw;
+        //}
 
         this->deleteEntry(targIndex);
       }
 
       void push(class_type value) {
-        unsigned long int length = this->getLength();
+        unsigned long int index = this->getLength();
 
-        ListEntry<class_type>* newEntry = new ListEntry<class_type>();
-        ListEntry<class_type>* node = this->getEntry(length - 1);
-
-        newEntry->setValue(value);
-
-        newEntry->setPrev(node);
-        node->setNext(newEntry);
+        this->setEntry(index, value);
       }
 
       void unshift(class_type value) {
-        ListEntry<class_type>* newEntry = new ListEntry<class_type>();
-        ListEntry<class_type>* root = this->getRoot();
-        ListEntry<class_type>* next = root->getNext();
+        unsigned long int index = 0;
 
-        newEntry->setValue(value);
-
-        root->setNext(newEntry);
-
-        newEntry->setPrev(root);
-
-        if (next != (ListEntry<class_type>*)NULL) {
-          newEntry->setNext(next);
-
-          next->setPrev(newEntry);
-        }
-
+        this->insertEntry(index, value);
       }
 
       class_type pop() {
-        unsigned long int length = this->getLength();
+        unsigned long int index = this->getLength() - 1;
 
-        ListEntry<class_type>* node = this->getEntry(length - 1);
-        ListEntry<class_type>* prev = this->getEntry(length - 2);
-
-        prev->setNext((ListEntry<class_type>*)NULL);
-
-        node->setNext((ListEntry<class_type>*)NULL);
-        node->setPrev((ListEntry<class_type>*)NULL);
+        ListEntry<class_type>* node = this->getEntry(index);
 
         class_type outpValue = node->getValue();
 
-        delete node;
+        this->deleteEntry(index);
 
         return outpValue;
       }
 
       class_type shift() {
-        ListEntry<class_type>* root = this->getRoot();
-        ListEntry<class_type>* next = root->getNext();
+        unsigned long int index = 0;
 
-        if (next != (ListEntry<class_type>*)NULL) {
-          ListEntry<class_type>* further = next->getNext();
+        ListEntry<class_type>* node = this->getEntry(index);
 
+        class_type outpValue = node->getValue();
 
-          if (further) {
-            root->setNext(further);
-            further->setPrev(root);
-          }
-
-          next->setPrev((ListEntry<class_type>*)NULL);
-          next->setNext((ListEntry<class_type>*)NULL);
-        }
-
-        class_type outpValue = next->getValue();
-
-        delete next;
+        this->deleteEntry(index);
 
         return outpValue;
       }
