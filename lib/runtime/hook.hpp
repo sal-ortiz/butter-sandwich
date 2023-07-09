@@ -14,7 +14,7 @@
   };
 
 
-  Dict<HookCallbackRecord> _hookCallbacks;
+  Dict<HookCallbackRecord*> _hookCallbacks;
 
 
   class Hook {
@@ -36,25 +36,29 @@
       }
 
       static void*(*getCallback(const char* id))(void*, void*, void*) {
-        HookCallbackRecord rec = _hookCallbacks.get(id);
+        HookCallbackRecord* rec = _hookCallbacks.get(id);
 
-        return rec.method;
+        return rec->method;
       }
 
       static void* getInputOne(const char* id) {
-        HookCallbackRecord rec = _hookCallbacks.get(id);
+        HookCallbackRecord* rec = _hookCallbacks.get(id);
 
-        return rec.dataOne;
+        return rec->dataOne;
       }
 
       static void* getInputTwo(const char* id) {
-        HookCallbackRecord rec = _hookCallbacks.get(id);
+        HookCallbackRecord* rec = _hookCallbacks.get(id);
 
-        return rec.dataTwo;
+        return rec->dataTwo;
       }
 
       static void setCallback(const char* id, void*(*callback)(void*, void*, void*), void* dataOne, void* dataTwo) {
-        HookCallbackRecord rec = { callback, dataOne, dataTwo };
+        HookCallbackRecord* rec = new HookCallbackRecord();
+
+        rec->method = callback;
+        rec->dataOne = dataOne;
+        rec->dataTwo = dataTwo;
 
         _hookCallbacks.set(id, rec);
       }

@@ -42,16 +42,21 @@
           val = this->data.get(key);
         }
 
-        HookCallbackParams inp = { (void*)this, (void*)NULL, val };
-        void* outp = RuntimeBase::executeCallback(identifier, (void*)&inp);
+        HookCallbackParams* inp = new HookCallbackParams();
 
-        HookCallbackParams retVal = *(HookCallbackParams*)outp;
+        inp->target = this;
+        inp->newValue = NULL;
+        inp->oldValue = val;
 
-        if (retVal.newValue != NULL) {
-          return retVal.newValue;
+        void* outp = RuntimeBase::executeCallback(identifier, (void*)inp);
+
+        HookCallbackParams* retVal = (HookCallbackParams*)outp;
+
+        if (retVal->newValue != NULL) {
+          return retVal->newValue;
         }
 
-        return retVal.oldValue;
+        return retVal->oldValue;
       }
 
       void set(const char* key, void* val) {
@@ -64,16 +69,21 @@
           oldVal = NULL;
         }
 
-        HookCallbackParams inp = { (void*)this, val, oldVal };
-        void* outp = RuntimeBase::executeCallback(identifier, (void*)&inp);
+        HookCallbackParams* inp = new HookCallbackParams();
 
-        HookCallbackParams retVal = *(HookCallbackParams*)outp;
+        inp->target = this;
+        inp->newValue = val;
+        inp->oldValue = oldVal;
 
-        if (retVal.newValue != NULL) {
-          this->data.set(key, retVal.oldValue);
+        void* outp = RuntimeBase::executeCallback(identifier, (void*)inp);
+
+        HookCallbackParams* retVal = (HookCallbackParams*)outp;
+
+        if (retVal->newValue != NULL) {
+          this->data.set(key, retVal->oldValue);
         }
 
-        this->data.set(key, retVal.newValue);
+        this->data.set(key, retVal->newValue);
       }
 
       void onGet(const char* key, void*(*callback)(void*, void*, void*)) {

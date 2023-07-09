@@ -51,11 +51,11 @@
         void* retVal = (void*)true;
 
         if (_callbacks.has(name)) {
-          CallbackRecord callbackRec = _callbacks.get(name);
+          CallbackRecord* callbackRec = _callbacks.get(name);
 
-          void*(*callback)(void*) = callbackRec.method;
+          void*(*callback)(void*) = callbackRec->method;
 
-          params.data = callbackRec.input;
+          params.data = callbackRec->input;
 
           retVal = callback((void*)&params);
         }

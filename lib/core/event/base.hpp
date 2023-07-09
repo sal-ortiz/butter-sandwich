@@ -16,7 +16,7 @@
   };
 
 
-  Dict<CallbackRecord> _callbacks;
+  Dict<CallbackRecord*> _callbacks;
 
 
   class EventBase {

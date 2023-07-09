@@ -18,7 +18,10 @@
     public:
 
       static void on(const char* id, void*(*callback)(void*), void* inp) {
-        CallbackRecord entry = { callback, inp };
+        CallbackRecord* entry = new CallbackRecord();
+
+        entry->method = callback;
+        entry->input = inp;
 
         _callbacks.set(id, entry);
       }
