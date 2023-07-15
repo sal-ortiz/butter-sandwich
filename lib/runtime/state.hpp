@@ -20,7 +20,7 @@
 
     private:
 
-      Dict<void*> data;
+      Dict<void*>* data;
 
       char* generateHookIdentifier(const char* key, const char* action) {
         char* hookId = new char[64];
@@ -34,12 +34,16 @@
 
     public:
 
+      State() {
+        this->data = new Dict<void*>();
+      }
+
       void* get(const char* key) {
         char* identifier = this->generateHookIdentifier(key, "get");
         void* val;
 
-        if (this->data.has(key)) {
-          val = this->data.get(key);
+        if (this->data->has(key)) {
+          val = this->data->get(key);
         }
 
         HookCallbackParams* inp = new HookCallbackParams();
@@ -63,8 +67,8 @@
         char* identifier = this->generateHookIdentifier(key, "set");
         void* oldVal;
 
-        if (this->data.has(key)) {
-          oldVal = this->data.get(key);
+        if (this->data->has(key)) {
+          oldVal = this->data->get(key);
         } else {
           oldVal = NULL;
         }
@@ -80,10 +84,10 @@
         HookCallbackParams* retVal = (HookCallbackParams*)outp;
 
         if (retVal->newValue != NULL) {
-          this->data.set(key, retVal->oldValue);
+          this->data->set(key, retVal->oldValue);
         }
 
-        this->data.set(key, retVal->newValue);
+        this->data->set(key, retVal->newValue);
       }
 
       void onGet(const char* key, void*(*callback)(void*, void*, void*)) {
