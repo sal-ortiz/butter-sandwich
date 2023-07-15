@@ -18,11 +18,10 @@
 
       unsigned long int length;
 
-
       ListEntry<class_type>* getEntry(unsigned long int targIndex) {
         ListEntry<class_type>* node = this->root;
 
-        for (unsigned long int idx = 0; idx < targIndex + 1; idx++) {
+        for (unsigned long int idx = 0; idx <= targIndex; idx++) {
 
           if (node->getNext() != (ListEntry<class_type>*)NULL) {
             node = node->getNext();
@@ -43,7 +42,7 @@
           if (node->getNext() == (ListEntry<class_type>*)NULL) {
             ListEntry<class_type>* newEntry = new ListEntry<class_type>();
 
-            //newEntry->setValue((class_type)NULL);
+            newEntry->setValue((class_type)NULL);
 
             newEntry->setPrev(node);
             node->setNext(newEntry);
@@ -64,29 +63,28 @@
 
         if (targIndex >= this->getLength()) {
           this->setEntry(targIndex, value);
+        } else {
+
+          ListEntry<class_type>* node = this->getEntry(targIndex);
+          ListEntry<class_type>* prev = node->getPrev();
+
+          newEntry->setValue(value);
+
+          newEntry->setPrev(prev);
+          newEntry->setNext(node);
+
+          node->setPrev(newEntry);
+
+          if (prev) {
+            prev->setNext(newEntry);
+          }
+
+          this->length++;
         }
 
-        ListEntry<class_type>* node = this->getEntry(targIndex);
-        ListEntry<class_type>* prev = node->getPrev();
-
-        newEntry->setValue(value);
-
-        newEntry->setPrev(prev);
-        newEntry->setNext(node);
-
-        node->setPrev(newEntry);
-
-        if (prev) {
-          prev->setNext(newEntry);
-        }
-
-        this->length++;
       }
 
-
       void deleteEntry(unsigned long int targIndex) {
-        unsigned long int length = this->getLength();
-
         ListEntry<class_type>* node = this->getEntry(targIndex);
 
         ListEntry<class_type>* prev = node->getPrev();
@@ -119,12 +117,15 @@
       }
 
       unsigned long int getLength() {
-        unsigned long int length = 0;
+        unsigned long int len = 0;
 
-        ListEntry<class_type>* node = this->root;
+        //printf("\n==========================================================");
+        //printf("\n====== this->length: %lu", this->length);
+
+        ListEntry<class_type>* node = this->getRoot();
 
         while (node->getNext() != (ListEntry<class_type>*)NULL) {
-          length++;
+          len++;
 
           node = node->getNext();
         }
@@ -132,7 +133,7 @@
         //printf("\nthis->length: %lu\tthis->getLength(): %lu", this->length, length);
         //return this->length;
 
-        return length;
+        return len;
       }
 
       class_type get(unsigned long int targIndex) {

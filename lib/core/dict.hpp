@@ -16,7 +16,7 @@
 
     private:
 
-      List<DictEntry<class_type>>* data;
+      List<DictEntry<class_type>*>* data;
 
       unsigned long int hashCode(const char* key) {
         unsigned long int outpValue = 1;
@@ -31,18 +31,11 @@
         return outpValue;
       }
 
-
-    public:
-
-      Dict() {
-        this->data = new List<DictEntry<class_type>>[DICT_LIST_ARRAY_LEN];
-      }
-
-      class_type get(const char* key) {
+      DictEntry<class_type>* getEntry(const char* key) {
         unsigned long int aryIdx = this->hashCode(key) % DICT_LIST_ARRAY_LEN;
 
-        List<DictEntry<class_type>> list = this->data[aryIdx];
-        DictEntry<class_type> entry;
+        List<DictEntry<class_type>*> list = this->data[aryIdx];
+        DictEntry<class_type>* entry;
 
         unsigned long int listLen = list.getLength();
 
@@ -50,7 +43,7 @@
 
         for (unsigned long int idx = 0; idx < listLen; idx++) {
           entry = list.get(idx);
-          unsigned int cmp = strcmp(entry.getKey(), key);
+          unsigned int cmp = strcmp(entry->getKey(), key);
 
           if (cmp == 0) {
             found = true;
@@ -63,50 +56,96 @@
         if (!found) {
           throw (void*)NULL;
         } else {
-          return entry.getValue();
+          return entry;
         }
 
       }
 
-      void set(const char* key, class_type value) {
+      void setEntry(const char* key, class_type value) {
         unsigned long int aryIdx = this->hashCode(key) % DICT_LIST_ARRAY_LEN;
 
-        List<DictEntry<class_type>> list = data[aryIdx];
+        List<DictEntry<class_type>*> list = this->data[aryIdx];
+        DictEntry<class_type>* entry;
+
         DictEntry<class_type>* newEntry = new DictEntry<class_type>(key, value);
-
-        list.unshift(*newEntry);
-      }
-
-      void remove(const char* key) {
-        unsigned long int aryIdx = this->hashCode(key) % DICT_LIST_ARRAY_LEN;
-
-        List<DictEntry<class_type>> list = data[aryIdx];
-        DictEntry<class_type> entry;
 
         unsigned long int listLen = list.getLength();
 
         bool found = false;
 
         for (unsigned long int idx = 0; idx < listLen; idx++) {
+          // HACKY!!! write a more efficient way to do this.
           entry = list.get(idx);
 
-          unsigned int cmp = strcmp(entry.getKey(), key);
+          int cmp = strcmp(entry->getKey(), key);
 
           if (cmp == 0) {
             found = true;
-
-            list.remove(idx);
 
             break;
           }
 
         }
 
-        if (!found) {
-          throw (void*)NULL;
+        if (found) {
+          entry->setValue(value);
+        } else {
+          list.unshift(newEntry);
         }
 
       }
+
+      //void deleteEntry(const char* key) {
+      //  unsigned long int aryIdx = this->hashCode(key) % DICT_LIST_ARRAY_LEN;
+      //
+      //  List<DictEntry<class_type>> list = data[aryIdx];
+      //  DictEntry<class_type> entry;
+      //
+      //  unsigned long int listLen = list.getLength();
+      //
+      //  bool found = false;
+      //
+      //  for (unsigned long int idx = 0; idx < listLen; idx++) {
+      //    entry = list.get(idx);
+      //
+      //    int cmp = strcmp(entry.getKey(), key);
+      //
+      //    if (cmp == 0) {
+      //      found = true;
+      //
+      //      list.remove(idx);
+      //
+      //      break;
+      //    }
+      //
+      //  }
+      //
+      //  //if (!found) {
+      //  //  throw (void*)NULL;
+      //  //}
+      //
+      //}
+
+
+    public:
+
+      Dict() {
+        this->data = new List<DictEntry<class_type>*>[DICT_LIST_ARRAY_LEN];
+      }
+
+      class_type get(const char* key) {
+        DictEntry<class_type>* entry = this->getEntry(key);
+
+        return entry->getValue();
+      }
+
+      void set(const char* key, class_type value) {
+        this->setEntry(key, value);
+      }
+
+      //void remove(const char* key) {
+      //  this->deleteEntry(key);
+      //}
 
       List<char*>* getKeys() {
         // TODO: It might be faster/efficient to merge the various lists
