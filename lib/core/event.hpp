@@ -23,7 +23,11 @@
         entry->method = callback;
         entry->input = inp;
 
-        _callbacks.set(id, entry);
+        if (_callbacks == NULL) {
+          _callbacks = new Dict<CallbackRecord*>();
+        }
+
+        _callbacks->set(id, entry);
       }
 
       static void* evaluate() {

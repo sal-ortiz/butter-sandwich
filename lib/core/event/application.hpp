@@ -37,8 +37,8 @@
       static void* handleEvent(const char* name, SDL_QuitEvent evt, ApplicationEventParams params) {
         void* retVal = (void*)true;
 
-        if (_callbacks.has(name)) {
-          CallbackRecord* callbackRec = _callbacks.get(name);
+        if (_callbacks->has(name)) {
+          CallbackRecord* callbackRec = _callbacks->get(name);
 
           void*(*callback)(void*) = callbackRec->method;
 
