@@ -4,7 +4,7 @@ clear
 
 g++ ./src/main.cpp -o ./main -std=c++17 -lSDL2 -lSDL2_image
 
-if [ -x ./main ]; then
+if [ $? == 0 ]; then
   ./main
 
   rm -f ./main
