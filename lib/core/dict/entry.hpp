@@ -17,7 +17,7 @@
 
       DictEntry() {
         this->key = (const char*)NULL;
-        //this->value = (class_type)NULL;
+        this->value = (class_type)NULL;
       }
 
       DictEntry(const char* key, class_type value) {

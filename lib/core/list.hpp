@@ -119,21 +119,19 @@
       unsigned long int getLength() {
         unsigned long int len = 0;
 
-        //printf("\n==========================================================");
-        //printf("\n====== this->length: %lu", this->length);
-
         ListEntry<class_type>* node = this->getRoot();
 
-        while (node->getNext() != (ListEntry<class_type>*)NULL) {
+        while (node->getNext() != NULL) {
           len++;
 
           node = node->getNext();
         }
 
-        //printf("\nthis->length: %lu\tthis->getLength(): %lu", this->length, length);
-        //return this->length;
-
         return len;
+
+        // TODO: returning this->length is much more efficient
+        //       than traversing the list every time.
+        //return this->length;
       }
 
       class_type get(unsigned long int targIndex) {
@@ -196,20 +194,20 @@
         return outpValue;
       }
 
-      void fill(class_type value, unsigned long int end=0, unsigned long int start=0) {
-        unsigned long int endIdx;
-
-        if (end == 0) {
-          endIdx = this->getLength() - 1;
-        } else {
-          endIdx = end;
-        }
-
-        for (unsigned long int idx = start; idx <= endIdx; idx++) {
-          this->setEntry(idx, value);
-        }
-
-      }
+      //void fill(class_type value, unsigned long int end=0, unsigned long int start=0) {
+      //  unsigned long int endIdx;
+      //
+      //  if (end == 0) {
+      //    endIdx = this->getLength() - 1;
+      //  } else {
+      //    endIdx = end;
+      //  }
+      //
+      //  for (unsigned long int idx = start; idx <= endIdx; idx++) {
+      //    this->setEntry(idx, value);
+      //  }
+      //
+      //}
 
   };
 

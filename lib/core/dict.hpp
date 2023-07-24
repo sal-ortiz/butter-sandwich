@@ -8,7 +8,7 @@
   #include "./list.hpp"
   #include "./dict/entry.hpp"
 
-  #define DICT_LIST_ARRAY_LEN   256
+  #define DICT_LIST_ARRAY_LEN   64
 
 
   template <class class_type>
@@ -89,8 +89,10 @@
 
         if (found) {
           entry->setValue(value);
+
         } else {
           list.unshift(newEntry);
+          //list.push(newEntry);
         }
 
       }
