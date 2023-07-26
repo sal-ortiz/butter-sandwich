@@ -21,7 +21,9 @@
       ListEntry<class_type>* getEntry(unsigned long int targIndex) {
         ListEntry<class_type>* node = this->root;
 
-        for (unsigned long int idx = 0; idx <= targIndex; idx++) {
+        unsigned long int idx = 0;
+
+        while (idx <= targIndex) {
 
           if (node->getNext() != (ListEntry<class_type>*)NULL) {
             node = node->getNext();
@@ -29,6 +31,7 @@
             break;
           }
 
+          idx++;
         }
 
         return node;
@@ -37,7 +40,9 @@
       void setEntry(unsigned long int targIndex, class_type value) {
         ListEntry<class_type>* node = this->root;
 
-        for (unsigned long int idx = 0; idx <= targIndex; idx++) {
+        unsigned long int idx = 0;
+
+        while (idx <= targIndex) {
 
           if (node->getNext() == (ListEntry<class_type>*)NULL) {
             ListEntry<class_type>* newEntry = new ListEntry<class_type>();
@@ -49,6 +54,8 @@
           }
 
           node = node->getNext();
+
+          idx++;
         }
 
         if (targIndex >= this->length) {
