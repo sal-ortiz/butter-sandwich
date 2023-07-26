@@ -12,7 +12,7 @@
 
   class RuntimeBase {
 
-    protected:
+    private:
 
       unsigned long int identifier;
 
