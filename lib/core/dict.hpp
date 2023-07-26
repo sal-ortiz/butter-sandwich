@@ -93,6 +93,8 @@
         } else {
           list.unshift(newEntry);
           //list.push(newEntry);
+
+          this->data[aryIdx] = list;
         }
 
       }

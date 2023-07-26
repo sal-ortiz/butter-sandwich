@@ -127,11 +127,7 @@
           node = node->getNext();
         }
 
-        return len;
-
-        // TODO: returning this->length is much more efficient
-        //       than traversing the list every time.
-        //return this->length;
+        return this->length;
       }
 
       class_type get(unsigned long int targIndex) {
