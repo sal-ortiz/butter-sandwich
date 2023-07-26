@@ -10,6 +10,9 @@
   #include "./hook.hpp"
 
 
+  unsigned long int MAGIC_NUMBER = 1;
+
+
   class RuntimeBase {
 
     private:
@@ -17,11 +20,11 @@
       unsigned long int identifier;
 
       unsigned long int generateIdentifier() {
-        time_t timestamp = time(NULL);
+        unsigned long int timestamp = SDL_GetTicks();
 
-        srand(timestamp * rand());
+        MAGIC_NUMBER = (MAGIC_NUMBER * rand()) % 0xffffffff;
 
-        return timestamp % (rand() * rand() * rand());
+        return MAGIC_NUMBER;
       }
 
 
