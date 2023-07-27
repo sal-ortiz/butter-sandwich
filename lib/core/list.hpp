@@ -1,6 +1,4 @@
 
-
-
 #ifndef _LIST_HPP
 
   #define _LIST_HPP
@@ -15,36 +13,48 @@
     private:
 
       ListEntry<class_type>* root;
+      ListEntry<class_type>* indexEntry;
 
+      unsigned long int index;
       unsigned long int length;
 
       ListEntry<class_type>* getEntry(unsigned long int targIndex) {
-        ListEntry<class_type>* node = this->root;
+        ListEntry<class_type>* node = this->indexEntry;
 
-        unsigned long int idx = 0;
-
-        while (idx <= targIndex) {
-
-          if (node->getNext() != (ListEntry<class_type>*)NULL) {
-            node = node->getNext();
-          } else {
-            break;
-          }
-
-          idx++;
+        if (targIndex >= this->length) {
+          return NULL;
         }
 
-        return node;
+        while (this->index != targIndex) {
+
+          if (node->getNext() != NULL) {
+            node = node->getNext();
+
+            this->index++;
+
+          } else {
+            node = this->root;
+
+            this->index = 0;
+          }
+
+        }
+
+        this->indexEntry = node;
+
+        return node->getNext();
       }
 
       void setEntry(unsigned long int targIndex, class_type value) {
-        ListEntry<class_type>* node = this->root;
+        ListEntry<class_type>* node = this->indexEntry;
 
-        unsigned long int idx = 0;
+        if (targIndex >= this->length) {
+          this->length = targIndex + 1;
+        }
 
-        while (idx <= targIndex) {
+        while ((this->index - 1) != targIndex) {
 
-          if (node->getNext() == (ListEntry<class_type>*)NULL) {
+          if (node->getNext() == NULL) {
             ListEntry<class_type>* newEntry = new ListEntry<class_type>();
 
             newEntry->setValue((class_type)NULL);
@@ -53,14 +63,19 @@
             node->setNext(newEntry);
           }
 
-          node = node->getNext();
+          this->index++;
 
-          idx++;
+          if (this->index > this->length) {
+            this->index = this->index % (this->length + 1);
+
+            node = this->root;
+          } else {
+            node = node->getNext();
+          }
+
         }
 
-        if (targIndex >= this->length) {
-          this->length = targIndex + 1;
-        }
+        this->indexEntry = node;
 
         node->setValue(value);
       }
@@ -73,6 +88,11 @@
         } else {
 
           ListEntry<class_type>* node = this->getEntry(targIndex);
+
+          if (node == NULL) {
+            this->setEntry(targIndex, value);
+          }
+
           ListEntry<class_type>* prev = node->getPrev();
 
           newEntry->setValue(value);
@@ -93,6 +113,10 @@
 
       void deleteEntry(unsigned long int targIndex) {
         ListEntry<class_type>* node = this->getEntry(targIndex);
+
+        if (node == NULL) {
+          return;
+        }
 
         ListEntry<class_type>* prev = node->getPrev();
         ListEntry<class_type>* next = node->getNext();
@@ -115,7 +139,9 @@
 
       List() {
         this->root = new ListEntry<class_type>();
+        this->indexEntry = this->root;
 
+        this->index = 0;
         this->length = 0;
       }
 
@@ -124,16 +150,6 @@
       }
 
       unsigned long int getLength() {
-        unsigned long int len = 0;
-
-        ListEntry<class_type>* node = this->getRoot();
-
-        while (node->getNext() != NULL) {
-          len++;
-
-          node = node->getNext();
-        }
-
         return this->length;
       }
 
@@ -144,6 +160,10 @@
         //}
 
         ListEntry<class_type>* node = this->getEntry(targIndex);
+
+        if (node == NULL) {
+          return (class_type)NULL;
+        }
 
         return node->getValue();
       }
@@ -178,6 +198,10 @@
 
         ListEntry<class_type>* node = this->getEntry(index);
 
+        if (node == NULL) {
+          return NULL;
+        }
+
         class_type outpValue = node->getValue();
 
         this->deleteEntry(index);
@@ -189,6 +213,10 @@
         unsigned long int index = 0;
 
         ListEntry<class_type>* node = this->getEntry(index);
+
+        if (node == NULL) {
+          return NULL;
+        }
 
         class_type outpValue = node->getValue();
 
