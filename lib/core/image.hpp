@@ -39,6 +39,18 @@
         img->surface = IMG_Load(filename);
         img->view = { viewX, viewY, viewW, viewH };
 
+        if (viewW == 0) {
+          img->width = img->surface->w;
+        } else {
+          img->width = viewW;
+        }
+
+        if (viewH == 0) {
+          img->height = img->surface->h;
+        } else {
+          img->height = viewH;
+        }
+
         return img;
       }
 
@@ -68,8 +80,6 @@
           SDL_QueryTexture(texture, NULL, NULL, &imgWidth, &imgHeight);
 
           this->texture = texture;
-          this->width = imgWidth;
-          this->height = imgHeight;
 
         } else {
           texture = this->texture;

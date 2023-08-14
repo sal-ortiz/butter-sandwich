@@ -59,6 +59,7 @@
         Sprite* curSprite = this->sprites.get(curAction);
 
         this->action = curAction;
+
         this->width = curSprite->width;
         this->height = curSprite->height;
       }
@@ -96,7 +97,6 @@
 
         Sprite* sprite = this->sprites.get(actionId);
 
-        // TODO: hack: find a better place to set these values.
         this->width = sprite->width;
         this->height = sprite->height;
 
