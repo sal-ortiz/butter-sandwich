@@ -11,11 +11,11 @@
   #include "../../lib/scene.hpp"
 
 
-  class Background01: public SceneBackground {
+  class Foreground00: public SceneBackground {
 
     public:
 
-      Background01() {
+      Foreground00() {
         Trajectory* trajectory = (Trajectory*)this->state->get("trajectory");
 
         trajectory->positionRate.horz = 0.90;
@@ -25,8 +25,8 @@
         this->isActive = true;
       }
 
-      static Background01* loadAssets(Scene* scene) {
-        Background01* background = new Background01();
+      static Foreground00* loadAssets(Scene* scene) {
+        Foreground00* foreground = new Foreground00();
 
         Sprite* sprite = new Sprite();
         Image* image = Image::load("./src/assets/background01.png", 0, 0, 3840, 2160);
@@ -34,24 +34,24 @@
         sprite->addFrame(image, 0);
         sprite->setLoop(false);
 
-        background->addSprite("background", sprite);
-        background->setAction("background");
+        foreground->addSprite("foreground", sprite);
+        foreground->setAction("foreground");
 
-        background->onEvaluate(Background01::evaluateCallback, scene);
+        foreground->onEvaluate(Foreground00::evaluateCallback, scene);
 
-        return background;
+        return foreground;
       }
 
       static void* evaluateCallback(void* inp, void* dataOne, void* dataTwo) {
-        Background01* background = reinterpret_cast<Background01*>(inp);
+        Foreground00* foreground = reinterpret_cast<Foreground00*>(inp);
         Scene* scene = reinterpret_cast<Scene*>(dataOne);
 
-        Background00* baseBackground = (Background00*)scene->getElement("background00");;
+        Background00* baseBackground = (Background00*)scene->getBackground("background00");;
 
-        Trajectory* trajectory = (Trajectory*)background->state->get("trajectory");
-        View* view = (View*)background->state->get("view");
-        Position* absPosition = (Position*)background->state->get("absolute_position");
-        Position* position = (Position*)background->state->get("position");
+        Trajectory* trajectory = (Trajectory*)foreground->state->get("trajectory");
+        View* view = (View*)foreground->state->get("view");
+        Position* absPosition = (Position*)foreground->state->get("absolute_position");
+        Position* position = (Position*)foreground->state->get("position");
 
         // NOTE: This only needs to be set once.
         view->size.horz = scene->view->size.horz;
@@ -78,19 +78,19 @@
 
           } else {
             // moving horizontally along our righthand border and the center of the map
-            view->position.horz = (view->position.horz - absPosition->horz) * ((float)background->width / (float)baseBackground->width);
+            view->position.horz = (view->position.horz - absPosition->horz) * ((float)foreground->width / (float)baseBackground->width);
           }
 
         } else {
 
-          if (view->position.horz > background->width - (view->size.horz + abs(absPosition->horz))) {
+          if (view->position.horz > foreground->width - (view->size.horz + abs(absPosition->horz))) {
             // moving horizontally along our righthand border
             position->horz = 0;
 
-            view->size.horz = absPosition->horz + (background->width - view->position.horz);
+            view->size.horz = absPosition->horz + (foreground->width - view->position.horz);
           }
 
-          view->position.horz = (view->position.horz - absPosition->horz) * ((float)background->width / (float)baseBackground->width);
+          view->position.horz = (view->position.horz - absPosition->horz) * ((float)foreground->width / (float)baseBackground->width);
         }
 
         if (absPosition->vert >= 0) {
@@ -103,20 +103,20 @@
 
           } else {
             // moving vertically along our lower border and the center of the map
-            view->position.vert = (view->position.vert - absPosition->vert) * ((float)background->height / (float)baseBackground->height);
+            view->position.vert = (view->position.vert - absPosition->vert) * ((float)foreground->height / (float)baseBackground->height);
           }
 
         } else {
 
-          if (view->position.vert > background->height - (view->size.vert + abs(absPosition->vert))) {
+          if (view->position.vert > foreground->height - (view->size.vert + abs(absPosition->vert))) {
             // moving around verticaly along our righthand border
             position->vert = 0;
 
-            view->size.vert = absPosition->vert + (background->height - view->position.vert);
+            view->size.vert = absPosition->vert + (foreground->height - view->position.vert);
 
           }
 
-          view->position.vert = (view->position.vert - absPosition->vert) * ((float)background->height / (float)baseBackground->height);
+          view->position.vert = (view->position.vert - absPosition->vert) * ((float)foreground->height / (float)baseBackground->height);
         }
 
         return (void*)NULL;

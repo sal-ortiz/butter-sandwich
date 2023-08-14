@@ -18,12 +18,19 @@
     public:
 
       List<SceneBase*>* elements;
+      List<SceneBase*>* backgrounds;
+      List<SceneBase*>* foregrounds;
+
+
+    public:
 
       Size* size;
       View* view;
 
       Scene() {
         this->elements = new List<SceneBase*>();
+        this->backgrounds = new List<SceneBase*>();
+        this->foregrounds = new List<SceneBase*>();
 
         this->size = new Size();
         this->view = new View();
@@ -39,10 +46,20 @@
         this->elements->push(element);
       }
 
-      SceneBase* getElement(const char* name) {
-        List<SceneBase*>* elements = this->elements;
+      void addBackground(const char* name, SceneBase* element) {
+        element->setName(name);
 
-        unsigned long int elementsLen = this->getNumElements();
+        this->backgrounds->push(element);
+      }
+
+      void addForeground(const char* name, SceneBase* element) {
+        element->setName(name);
+
+        this->foregrounds->push(element);
+      }
+
+      SceneBase* getElement(const char* name) {
+        unsigned long int elementsLen = this->elements->getLength();
 
         for (unsigned long int elementsIdx = 0; elementsIdx < elementsLen; elementsIdx++) {
           SceneBase* element = this->elements->get(elementsIdx);
@@ -58,11 +75,44 @@
         return (SceneBase*)NULL;
       }
 
-      void evaluate() {
-        List<SceneBase*>* elements = this->elements;
-        unsigned long int elementsLen = elements->getLength();
+      SceneBase* getBackground(const char* name) {
+        unsigned long int backgroundsLen = this->backgrounds->getLength();
 
-        SceneBase::evaluate();
+        for (unsigned long int backgroundsIdx = 0; backgroundsIdx < backgroundsLen; backgroundsIdx++) {
+          SceneBase* element = this->backgrounds->get(backgroundsIdx);
+
+          int cmpRes = strcmp(element->getName(), name);
+
+          if (cmpRes == 0) {
+            return element;
+          }
+
+        }
+
+        return (SceneBase*)NULL;
+      }
+
+      SceneBase* getForeground(const char* name) {
+        unsigned long int foregroundsLen = this->foregrounds->getLength();
+
+        for (unsigned long int foregroundsIdx = 0; foregroundsIdx < foregroundsLen; foregroundsIdx++) {
+          SceneBase* element = this->foregrounds->get(foregroundsIdx);
+
+          int cmpRes = strcmp(element->getName(), name);
+
+          if (cmpRes == 0) {
+            return element;
+          }
+
+        }
+
+        return (SceneBase*)NULL;
+      }
+
+      void evaluate() {
+        unsigned long int elementsLen = this->elements->getLength();
+        unsigned long int backgroundsLen = this->backgrounds->getLength();
+        unsigned long int foregroundsLen = this->foregrounds->getLength();
 
         for (unsigned long int elementsIdx = 0; elementsIdx < elementsLen; elementsIdx++) {
           SceneBase* element = this->elements->get(elementsIdx);
@@ -73,15 +123,54 @@
 
         }
 
+        for (unsigned long int backgroundsIdx = 0; backgroundsIdx < backgroundsLen; backgroundsIdx++) {
+          SceneBase* element = this->backgrounds->get(backgroundsIdx);
+
+          if (element->isActive) {
+            element->evaluate();
+          }
+
+        }
+
+        for (unsigned long int foregroundsIdx = 0; foregroundsIdx < foregroundsLen; foregroundsIdx++) {
+          SceneBase* element = this->foregrounds->get(foregroundsIdx);
+
+          if (element->isActive) {
+            element->evaluate();
+          }
+
+        }
+
+        SceneBase::evaluate();
+
+        //Physics::evaluate();
       }
 
       void render(SDL_Renderer* renderer) {
-        List<SceneBase*>* elements = this->elements;
+        unsigned long int elementsLen = this->elements->getLength();
+        unsigned long int backgroundsLen = this->backgrounds->getLength();
+        unsigned long int foregroundsLen = this->backgrounds->getLength();
 
-        unsigned long int elementsLen = elements->getLength();
+        for (unsigned long int backgroundsIdx = 0; backgroundsIdx < backgroundsLen; backgroundsIdx++) {
+          SceneBase* element = this->backgrounds->get(backgroundsIdx);
+
+          if (element->isActive) {
+            element->render(renderer);
+          }
+
+        }
 
         for (unsigned long int elementsIdx = 0; elementsIdx < elementsLen; elementsIdx++) {
           SceneBase* element = this->elements->get(elementsIdx);
+
+          if (element->isActive) {
+            element->render(renderer);
+          }
+
+        }
+
+        for (unsigned long int foregroundsIdx = 0; foregroundsIdx < foregroundsLen; foregroundsIdx++) {
+          SceneBase* element = this->foregrounds->get(foregroundsIdx);
 
           if (element->isActive) {
             element->render(renderer);
