@@ -57,21 +57,21 @@
         Position* absPosition = (Position*)asteroid->state->get("absolute_position");
         Trajectory* trajectory = (Trajectory*)asteroid->state->get("trajectory");
 
-        scale->horz = 1.0;
-        scale->vert = 1.0;
+        unsigned long int timestamp = SDL_GetTicks();
+
+        srand(timestamp);
+
+        //scale->horz = (rand() % 2) - 1;
+        //scale->vert = (rand() % 2) - 1;
 
         angle->center.horz = 28;
         angle->center.vert = 33;
 
-        time_t timestamp = time(NULL);
-
-        srand(timestamp);
-
         absPosition->horz = rand() % (unsigned long int)scene->size->horz;
         absPosition->vert = rand() % (unsigned long int)scene->size->vert;
 
-        trajectory->position.horz = ((float)(rand() % 5) / 2) - 2.5;
-        trajectory->position.vert = ((float)(rand() % 5) / 2) - 2.5;
+        trajectory->position.horz = ((float)(rand() % 3) / 2) - 1.5;
+        trajectory->position.vert = ((float)(rand() % 3) / 2) - 1.5;
 
         trajectory->angle.pitch = ((float)(rand() % 3) / 2) - 1.5;
         trajectory->angle.roll = ((float)(rand() % 3) / 2) - 1.5;

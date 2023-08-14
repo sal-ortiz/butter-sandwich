@@ -70,12 +70,12 @@
 
         player->setAction("standing_still");
 
-        Scale* playerScale = (Scale*)player->state->get("scale");
+        Scale* scale = (Scale*)player->state->get("scale");
         Angle* angle = (Angle*)player->state->get("angle");
         Position* absPosition = (Position*)player->state->get("absolute_position");
 
-        playerScale->horz = 1.0;
-        playerScale->vert = 1.0;
+        scale->horz = 1.0;
+        scale->vert = 1.0;
 
         angle->center.horz = 43;
         angle->center.vert = 43;
