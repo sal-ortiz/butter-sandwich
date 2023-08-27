@@ -19,6 +19,12 @@
       unsigned long int length;
 
       ListEntry<class_type>* getEntry(unsigned long int targIndex) {
+
+        if (targIndex < this->index) {
+          this->indexEntry = this->root;
+          this->index = 0;
+        }
+
         ListEntry<class_type>* node = this->indexEntry;
 
         if (targIndex >= this->length) {
@@ -31,11 +37,6 @@
             node = node->getNext();
 
             this->index++;
-
-          } else {
-            node = this->root;
-
-            this->index = 0;
           }
 
         }
@@ -46,6 +47,12 @@
       }
 
       void setEntry(unsigned long int targIndex, class_type value) {
+
+        if (targIndex < this->index) {
+          this->indexEntry = this->root;
+          this->index = 0;
+        }
+
         ListEntry<class_type>* node = this->indexEntry;
 
         if (targIndex >= this->length) {
@@ -65,14 +72,7 @@
 
           this->index++;
 
-          if (this->index > this->length) {
-            this->index = this->index % (this->length + 1);
-
-            node = this->root;
-          } else {
-            node = node->getNext();
-          }
-
+          node = node->getNext();
         }
 
         this->indexEntry = node;
