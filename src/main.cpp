@@ -16,7 +16,7 @@
 
 #include "./lib/bullet.hpp"
 #include "./lib/background00.hpp"
-#include "./lib/background01.hpp"
+#include "./lib/foreground00.hpp"
 #include "./lib/player.hpp"
 #include "./lib/asteroid00.hpp"
 
@@ -61,7 +61,7 @@ void* closedCallback(void* inp, void* dataOne, void* dataTwo) {
 //  Scene* scene = reinterpret_cast<Scene*>(inp);
 //
 //  Background00* background00 = (Background00*)scene->getElement("background00");
-//  Background01* background01 = (Background01*)scene->getElement("background01");
+//  Foreground00* foreground00 = (Foreground00*)scene->getElement("foreground00");
 //
 //  return (void*)NULL;
 //}
@@ -70,6 +70,10 @@ int main(int argc, char *argv[]) {
   Window* win = new Window();
   Application* app = new Application();
   Scene* scene = new Scene();
+
+  Player* player = Player::loadAssets(scene);
+  Background00* background00 = Background00::loadAssets(scene);
+  Foreground00* foreground00 = Foreground00::loadAssets(scene);
 
   //app->on("KEYBOARD", keyboardCallback, (void*)player);
   app->on("QUIT", quitCallback, (void*)NULL);
@@ -84,14 +88,8 @@ int main(int argc, char *argv[]) {
   scene->size->horz = 3000;
   scene->size->vert = 1688;
 
-  Player* player = Player::loadAssets(scene);
-  Background00* background00 = Background00::loadAssets(scene);
-  Background01* background01 = Background01::loadAssets(scene);
-  Asteroid00* asteroid00 = Asteroid00::loadAssets(scene);
-
-  scene->addElement("background00", background00);
-  scene->addElement("background01", background01);
-  scene->addElement("asteroid00", asteroid00);
+  scene->addBackground("background00", background00);
+  scene->addForeground("foreground00", foreground00);
   scene->addElement("player", player);
 
   for (unsigned long int bulletsIdx = 0; bulletsIdx < Bullet::MAX_COUNT; bulletsIdx++) {
