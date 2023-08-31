@@ -92,6 +92,16 @@ int main(int argc, char *argv[]) {
   scene->addForeground("foreground00", foreground00);
   scene->addElement("player", player);
 
+  for (unsigned long int asteroidIdx = 0; asteroidIdx < Asteroid00::MAX_COUNT; asteroidIdx++) {
+    Asteroid00* asteroid = Asteroid00::loadAssets(scene);
+
+    char* name = new char();
+
+    sprintf(name, "asteroid-%lu", asteroid->getIdentifier());
+
+    scene->addElement(name, asteroid);
+  }
+
   for (unsigned long int bulletsIdx = 0; bulletsIdx < Bullet::MAX_COUNT; bulletsIdx++) {
     Bullet* bullet = Bullet::loadAssets(scene);
 

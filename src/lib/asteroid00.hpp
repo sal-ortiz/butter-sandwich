@@ -22,6 +22,8 @@
 
     public:
 
+      static const unsigned long int MAX_COUNT = 36;
+
       Asteroid00() {
         Trajectory* trajectory = (Trajectory*)this->state->get("trajectory");
 
