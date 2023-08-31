@@ -27,7 +27,7 @@ const unsigned long int SCREEN_HEIGHT = 800;
 void* quitCallback(void* inp, void* dataOne, void* dataTwo) {
   ApplicationEventParams* parsedInp = reinterpret_cast<ApplicationEventParams*>(inp);
 
-  printf("\nQuitting application at %lums\n", parsedInp->timestamp);
+  printf("\n[%u] exiting application at %ldms\n", SDL_GetTicks(), parsedInp->timestamp);
 
   return (void*)NULL;
 }
@@ -35,14 +35,14 @@ void* quitCallback(void* inp, void* dataOne, void* dataTwo) {
 void* closedCallback(void* inp, void* dataOne, void* dataTwo) {
   WindowEventParams* parsedInp = reinterpret_cast<WindowEventParams*>(inp);
 
-  printf("\nWindow closed at %ldms", parsedInp->timestamp);
+  printf("\n[%u] window closed at %ldms", SDL_GetTicks(), parsedInp->timestamp);
 
   return (void*)NULL;
 }
 
 //void* keyboardCallback(void* inp, void* dataOne, void* dataTwo) {
 //  KeyboardEventParams* parsedInp = reinterpret_cast<KeyboardEventParams*>(inp);
-//  Player* player = reinterpret_cast<Player*>(data);
+//  Player* player = reinterpret_cast<Player*>(dataOne);
 //
 //  return (void*)NULL;
 //}
@@ -67,6 +67,8 @@ void* closedCallback(void* inp, void* dataOne, void* dataTwo) {
 //}
 
 int main(int argc, char *argv[]) {
+  unsigned long int loadStartTimestamp = SDL_GetTicks();
+
   Window* win = new Window();
   Application* app = new Application();
   Scene* scene = new Scene();
@@ -132,17 +134,17 @@ int main(int argc, char *argv[]) {
   unsigned long int framePasses = 0;
   unsigned long int frameEvalDelay = 100;
 
+  printf("\n[%u] load time: %lums", SDL_GetTicks(), SDL_GetTicks() - loadStartTimestamp);
+
   while (app->isActive) {
+    frameStart = SDL_GetTicks();
 
     Event::evaluate();
-
-    frameStart = SDL_GetTicks();
 
     win->clear();
 
     scene->evaluate();
     scene->render(renderer);
-
 
     frameElapsed += SDL_GetTicks() - frameStart;
     framePasses++;
@@ -152,7 +154,7 @@ int main(int argc, char *argv[]) {
     if (framePasses % frameEvalDelay == 0) {
       float avgFrameTime = (float)frameElapsed / (float)framePasses;
 
-      printf("\n[%u] AVG FRAME TIME: %.2fms", SDL_GetTicks(), avgFrameTime);
+      printf("\n[%u] average frame time: %.2fms", SDL_GetTicks(), avgFrameTime);
 
       frameElapsed = 0;
       framePasses = 0;
