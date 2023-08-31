@@ -5,6 +5,7 @@
 
   #include <string.h>
 
+  #include "../lib/runtime/physics.hpp"
   #include "./runtime/data/size.hpp"
   #include "./runtime/data/view.hpp"
   #include "./scene/base.hpp"
@@ -13,9 +14,10 @@
   #include "./scene/element.hpp"
 
 
+
   class Scene: public SceneBase {
 
-    public:
+    private:
 
       List<SceneBase*>* elements;
       List<SceneBase*>* backgrounds;
@@ -114,11 +116,19 @@
         unsigned long int backgroundsLen = this->backgrounds->getLength();
         unsigned long int foregroundsLen = this->foregrounds->getLength();
 
+        // TODO: find a better way to get this value into Physics::Collision
+        Collision::setWidth(this->size->horz);
+        Collision::setHeight(this->size->vert);
+
         for (unsigned long int elementsIdx = 0; elementsIdx < elementsLen; elementsIdx++) {
           SceneBase* element = this->elements->get(elementsIdx);
 
           if (element->isActive) {
             element->evaluate();
+
+            Position* position = (Position*)element->state->get("absolute_position");
+
+            Collision::insert(position->horz, position->vert, element->width, element->height);
           }
 
         }
@@ -141,9 +151,9 @@
 
         }
 
-        SceneBase::evaluate();
+        Collision::evaluate();
 
-        //Physics::evaluate();
+        SceneBase::evaluate();
       }
 
       void render(SDL_Renderer* renderer) {
