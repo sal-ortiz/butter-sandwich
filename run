@@ -5,6 +5,8 @@ clear
 g++ ./src/main.cpp -o ./main -std=c++17 -lSDL2 -lSDL2_image
 
 if [ $? == 0 ]; then
+  cat ./assets/title.asc
+
   ./main
 
   rm -f ./main
