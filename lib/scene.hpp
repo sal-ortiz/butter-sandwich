@@ -126,9 +126,7 @@
           if (element->isActive) {
             element->evaluate();
 
-            Position* position = (Position*)element->state->get("absolute_position");
-
-            Collision::insert(position->horz, position->vert, element->width, element->height);
+            Collision::insert(element);
           }
 
         }

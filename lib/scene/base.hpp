@@ -80,6 +80,13 @@
         return this->type;
       }
 
+      void onCollision(void*(*callback)(void*, void*, void*), void* dataOne=NULL, void* dataTwo=NULL) {
+        unsigned long int charId = this->getIdentifier();
+        const char* hookId = Hook::generateIdentifier(charId, "onCollision");
+
+        this->on(hookId, callback, dataOne, dataTwo);
+      }
+
       void onEvaluate(void*(*callback)(void*, void*, void*), void* dataOne=NULL, void* dataTwo=NULL) {
         unsigned long int charId = this->getIdentifier();
         const char* hookId = Hook::generateIdentifier(charId, "onEvaluate");

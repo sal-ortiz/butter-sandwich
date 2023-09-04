@@ -21,18 +21,13 @@
 
     public:
 
-      static void insert(
-        float horzPos,
-        float vertPos,
-        float width,
-        float height
-      ) {
+      static void insert(SceneBase* el) {
 
         if (_collisionTree == NULL) {
           _collisionTree = new QuadNode(_collisionTreeWidth, _collisionTreeHeight);
         }
 
-        _collisionTree->insert(horzPos, vertPos, width, height);
+        _collisionTree->insert(el);
       }
 
       static float getWidth() {

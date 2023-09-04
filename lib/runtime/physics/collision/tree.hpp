@@ -5,19 +5,12 @@
 
   #include "../../../core/list.hpp"
   #include "../../../runtime/data/size.hpp"
+  #include "../../../runtime/base.hpp"
   #include "../../../scene/base.hpp"
   #include "../../data/size.hpp"
   #include "../../data/position.hpp"
 
-  #define MAX_QUADTREE_LEVELS 6
-
-
-  struct NodeElement {
-    Size* size;
-    Position* position;
-
-    //void*(*callback)(void*, void*, void*);
-  };
+  #define MAX_QUADTREE_LEVELS 48
 
 
   class QuadNode {
@@ -26,7 +19,7 @@
 
       Size* size;
 
-      List<NodeElement*>* elements;
+      List<SceneBase*>* elements;
       List<QuadNode*>* nodes;
 
       QuadNode(
@@ -35,7 +28,7 @@
       ) {
         this->size = new Size(width, height);
 
-        this->elements = new List<NodeElement*>();
+        this->elements = new List<SceneBase*>();
         this->nodes = new List<QuadNode*>();
 
         this->nodes->set(0, NULL);
@@ -58,36 +51,18 @@
 
       }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-      void insert(float horzPos, float vertPos, float elWidth, float elHeight, unsigned long int levelNum=0) {
+      void insert(SceneBase* el, unsigned long int levelNum=0) {
 
         if (levelNum > MAX_QUADTREE_LEVELS) {
           return;
         }
 
-        NodeElement* newEntry = new NodeElement();
+        this->elements->unshift(el);
 
-        newEntry->position = new Position(horzPos, vertPos);
-        newEntry->size = new Size(elWidth, elHeight);
+        Position* elPos = (Position*)el->state->get("position");
 
-        this->elements->unshift(newEntry);
+        float horzPos = elPos->horz;
+        float vertPos = elPos->vert;
 
         unsigned char quadrant;
 
@@ -134,17 +109,10 @@
           nodeElVertPos = vertPos - (this->size->vert / 2);
         }
 
-        childNode->insert(
-          nodeElHorzPos, nodeElVertPos, elWidth, elHeight, (levelNum + 1)
-        );
+        childNode->insert(el, (levelNum + 1));
 
         this->nodes->set(quadrant - 1, childNode);
       }
-
-
-
-
-
 
       void evaluate() {
         unsigned char numNodes = this->nodes->getLength();
@@ -163,13 +131,16 @@
             unsigned long int numEls = this->elements->getLength();
 
             for (unsigned long int elsIdx = 0; elsIdx < numEls; elsIdx++) {
-              NodeElement* el = this->elements->get(elsIdx);
+              SceneBase* el = this->elements->get(elsIdx);
 
               if (
-                el->size->horz > node->size->horz &&
-                el->size->vert > node->size->horz
+                el->width > node->size->horz &&
+                el->height > node->size->vert
               ) {
-                //printf("\nCOLLISION!!!! (%f / %f)", el->size->horz, el->size->vert);
+                unsigned long int charId = el->getIdentifier();
+                const char* hookId = Hook::generateIdentifier(charId, "onCollision");
+
+                el->executeCallback(hookId, (void*)this, this->elements);
               }
 
             }
@@ -177,8 +148,6 @@
           } else {
             node->evaluate();
           }
-
-
 
         }
 

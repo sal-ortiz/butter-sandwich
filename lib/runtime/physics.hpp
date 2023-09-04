@@ -12,10 +12,6 @@
 
       static void evaluate() {
 
-
-
-
-
       }
 
   };
