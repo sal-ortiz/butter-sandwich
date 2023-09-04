@@ -84,8 +84,19 @@
         absPosition->vert = scene->size->vert / 2;
 
         player->onEvaluate(Player::evaluateCallback, scene);
+        player->onCollision(Player::collisionCallback, scene);
 
         return player;
+      }
+
+      static void* collisionCallback(void* inp, void* dataOne, void* dataTwo) {
+        Player* player = reinterpret_cast<Player*>(inp);
+
+
+        printf("\nCOLLISION!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+
+
+        return NULL;
       }
 
       static void* evaluateCallback(void* inp, void* dataOne, void* dataTwo) {

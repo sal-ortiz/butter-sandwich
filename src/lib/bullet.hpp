@@ -47,8 +47,19 @@
         absPosition->vert = -1;
 
         bullet->onEvaluate(Bullet::evaluateCallback, scene);
+        bullet->onCollision(Bullet::collisionCallback, scene);
 
         return bullet;
+      }
+
+      static void* collisionCallback(void* inp, void* dataOne, void* dataTwo) {
+        Bullet* bullet = reinterpret_cast<Bullet*>(inp);
+
+
+        printf("\nCOLLISION!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+
+
+        return NULL;
       }
 
       static void* evaluateCallback(void* inp, void* dataOne, void* dataTwo) {

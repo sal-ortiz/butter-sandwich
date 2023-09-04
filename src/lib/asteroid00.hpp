@@ -80,8 +80,20 @@
         trajectory->angle.yaw = ((float)(rand() % 3) / 2) - 1.5;
 
         asteroid->onEvaluate(Asteroid00::evaluateCallback, scene);
+        asteroid->onCollision(Asteroid00::collisionCallback, scene);
 
         return asteroid;
+      }
+
+      static void* collisionCallback(void* inp, void* dataOne, void* dataTwo) {
+        Asteroid00* asteroid = reinterpret_cast<Asteroid00*>(inp);
+        List<SceneBase*>* elements = reinterpret_cast<List<SceneBase*>*>(dataOne);
+
+
+        printf("\nCOLLISION!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+
+
+        return NULL;
       }
 
       static void* evaluateCallback(void* inp, void* dataOne, void* dataTwo) {
