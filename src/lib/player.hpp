@@ -198,24 +198,19 @@
           vertRatio = (180 - angle->pitch) / 90;
         }
 
-      //  if (KeyboardInput::isReleased(82)) {
-      //    printf("stopping\n");
-      //    player->setAction("standing_still");
-      //  }
-
-        if (KeyboardInput::isPressed(80)) {
+        if (KeyboardInput::isPressed(80) || KeyboardInput::isHeld(80)) {
           // turn left.
           player->setAction("turning_left");
           trajectory->angle.pitch -= 1;
         }
 
-        if (KeyboardInput::isPressed(79)) {
+        if (KeyboardInput::isPressed(79) || KeyboardInput::isHeld(79)) {
           // turn right.
           player->setAction("turning_right");
           trajectory->angle.pitch += 1;
         }
 
-        if (KeyboardInput::isPressed(82)) {
+        if (KeyboardInput::isPressed(82) || KeyboardInput::isHeld(82)) {
           // move forward.
           player->setAction("moving_forward");
 
@@ -223,7 +218,16 @@
           trajectory->position.vert += 1.5 * vertRatio;
         }
 
-        if (KeyboardInput::isPressed(44)
+        if (
+          KeyboardInput::isReleased(79) ||  // right
+          KeyboardInput::isReleased(80) ||  // left
+          KeyboardInput::isReleased(82)     // forward
+        ) {
+          // standing still.
+          player->setAction("standing_still");
+        }
+
+        if ((KeyboardInput::isPressed(44) || KeyboardInput::isHeld(44))
           && (SDL_GetTicks() - lastBulletTimestamp) > Bullet::DELAY
         ) {
           // fire a pellet
