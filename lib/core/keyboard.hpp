@@ -3,16 +3,15 @@
 
   #define _KEYBOARD_INPUT_HPP
 
-  #include <time.h>
   #include <SDL2/SDL.h>
 
   #include "./list.hpp"
 
 
   struct KeyboardStateEntry {
-    bool isPressed;         // false = released, true = pressed
-    time_t timestamp;       // last action timestamp
-    unsigned long int code; // scancode
+    bool isPressed;       // false = released, true = pressed
+    time_t timestamp;     // last action timestamp
+    unsigned char code;   // scancode
   };
 
   List<KeyboardStateEntry*>* keyboardState = new List<KeyboardStateEntry*>();
@@ -21,9 +20,9 @@
 
     public:
 
-      static const unsigned int DELAY = 150;  // ms
+      static const unsigned int DELAY = 8;  // ms
 
-      static void updateState(unsigned long int scanCode, bool state) {
+      static void updateState(unsigned char scanCode, bool state) {
         KeyboardStateEntry* entry = keyboardState->get(scanCode);
 
         if (entry == NULL) {
@@ -33,14 +32,14 @@
         }
 
         if (entry->isPressed != state) {
-          entry->timestamp = time(NULL);
+          entry->timestamp = SDL_GetTicks();
         }
 
         entry->isPressed = state;
         entry->code = scanCode;
       }
 
-      static KeyboardStateEntry* getState(unsigned long int scanCode) {
+      static KeyboardStateEntry* getState(unsigned char scanCode) {
         KeyboardStateEntry* entry = keyboardState->get(scanCode);
 
         if (entry == NULL) {
@@ -57,21 +56,19 @@
       static bool isPressed(unsigned char scanCode) {
         const KeyboardStateEntry* state = KeyboardInput::getState(scanCode);
 
-        return state->isPressed == true && state->timestamp < (time(NULL) + KeyboardInput::DELAY);
+        return state->isPressed == true && SDL_GetTicks() < (state->timestamp + KeyboardInput::DELAY);
       }
 
       static bool isHeld(unsigned char scanCode) {
-        // NOTE: This doesn't actually work.
         const KeyboardStateEntry* state = KeyboardInput::getState(scanCode);
 
-        return state->isPressed == true && state->timestamp > (time(NULL) + KeyboardInput::DELAY);
+        return state->isPressed == true && SDL_GetTicks() > (state->timestamp + KeyboardInput::DELAY);
       }
 
       static bool isReleased(unsigned char scanCode) {
-        // NOTE: This doesn't actually work.
         const KeyboardStateEntry* state = KeyboardInput::getState(scanCode);
 
-        return state->isPressed == false && state->timestamp < (time(NULL) + KeyboardInput::DELAY);
+        return state->isPressed == false && SDL_GetTicks() < (state->timestamp + KeyboardInput::DELAY);
       }
 
   };
