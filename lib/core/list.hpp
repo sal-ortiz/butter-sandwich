@@ -145,6 +145,19 @@
         this->length = 0;
       }
 
+      ~List() {
+        ListEntry<class_type>* node = this->root;
+
+        while (node != NULL) {
+          ListEntry<class_type>* next = node->getNext();
+
+          delete node;
+
+          node = next;
+        }
+
+      }
+
       ListEntry<class_type>* getRoot() {
         return this->root;
       }
