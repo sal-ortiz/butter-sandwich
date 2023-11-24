@@ -81,11 +81,11 @@
       }
 
       void insertEntry(unsigned long int targIndex, class_type value) {
-        ListEntry<class_type>* newEntry = new ListEntry<class_type>();
 
         if (targIndex >= this->getLength()) {
           this->setEntry(targIndex, value);
         } else {
+          ListEntry<class_type>* newEntry = new ListEntry<class_type>();
 
           ListEntry<class_type>* node = this->getEntry(targIndex);
 

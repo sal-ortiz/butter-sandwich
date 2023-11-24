@@ -67,7 +67,6 @@
         List<DictEntry<class_type>*>* list = this->data[aryIdx];
         DictEntry<class_type>* entry;
 
-        DictEntry<class_type>* newEntry = new DictEntry<class_type>(key, value);
 
         unsigned long int listLen = list->getLength();
 
@@ -91,8 +90,10 @@
           entry->setValue(value);
 
         } else {
+          DictEntry<class_type>* newEntry = new DictEntry<class_type>(key, value);
+
           list->unshift(newEntry);
-          //list.push(newEntry);
+          //list->push(newEntry);
 
           this->data[aryIdx] = list;
         }
@@ -134,7 +135,6 @@
     public:
 
       Dict() {
-        //this->data = new List<DictEntry<class_type>*>*[DICT_LIST_ARRAY_LEN];
 
         for (unsigned long int idx = 0; idx < DICT_LIST_ARRAY_LEN; idx++) {
           this->data[idx] = new List<DictEntry<class_type>*>();
@@ -147,10 +147,17 @@
         for (long unsigned int idx = 0; idx < DICT_LIST_ARRAY_LEN; idx++) {
           List<DictEntry<class_type>*>* list = this->data[idx];
 
+          unsigned long int listLen = list->getLength();
+
+          for (unsigned long int listIdx = 0; listIdx < listLen; listIdx++) {
+            DictEntry<class_type>* entry = list->get(listIdx);
+
+            delete entry;
+          }
+
           delete list;
         }
 
-        delete this->data;
       }
 
       class_type get(const char* key) {
