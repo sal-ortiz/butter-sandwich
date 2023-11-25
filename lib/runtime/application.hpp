@@ -55,7 +55,7 @@
           isPressed = true;
         }
 
-        KeyboardInput::updateState(params->scanCode, isPressed);
+        KeyboardInput::setState(params->scanCode, isPressed);
 
         void* retVal = RuntimeBase::executeCallback("KEYBOARD", inp);
 

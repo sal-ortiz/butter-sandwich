@@ -69,6 +69,8 @@ void* closedCallback(void* inp, void* dataOne, void* dataTwo) {
 int main(int argc, char *argv[]) {
   unsigned long int loadStartTimestamp = SDL_GetTicks();
 
+  KeyboardInput::initialize();
+
   Window* win = new Window();
   Application* app = new Application();
   Scene* scene = new Scene();
@@ -161,6 +163,8 @@ int main(int argc, char *argv[]) {
     }
 
   }
+
+  KeyboardInput::deinitialize();
 
   delete scene;
 
