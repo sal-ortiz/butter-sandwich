@@ -205,14 +205,14 @@
         List<class_type>* outp = new List<class_type>();
 
         for (unsigned long int aryIdx = 0; aryIdx < DICT_LIST_ARRAY_LEN; aryIdx++) {
-          List<DictEntry<class_type>>* list = data[aryIdx];
+          List<DictEntry<class_type>*>* list = data[aryIdx];
 
           unsigned long int listLen = list->getLength();
 
           for (unsigned long int listIdx = 0; listIdx < listLen; listIdx++) {
             DictEntry<class_type>* entry = list->get(listIdx);
 
-            class_type value = entry.getValue();
+            class_type value = entry->getValue();
 
             outp->push(value);
           }
