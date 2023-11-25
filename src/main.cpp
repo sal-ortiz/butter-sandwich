@@ -70,6 +70,7 @@ int main(int argc, char *argv[]) {
   unsigned long int loadStartTimestamp = SDL_GetTicks();
 
   KeyboardInput::initialize();
+  Event::initialize();
 
   Window* win = new Window();
   Application* app = new Application();
@@ -164,6 +165,7 @@ int main(int argc, char *argv[]) {
 
   }
 
+  Event::deinitialize();
   KeyboardInput::deinitialize();
 
   delete scene;

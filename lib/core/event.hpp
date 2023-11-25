@@ -5,6 +5,7 @@
 
   #include <SDL2/SDL.h>
 
+  #include "./dict.hpp"
   #include "./event/window.hpp"
   #include "./event/application.hpp"
   #include "./event/keyboard.hpp"
@@ -17,15 +18,30 @@
 
     public:
 
+      static void initialize() {
+        _callbacks = new Dict<CallbackRecord*>();
+      }
+
+      static void deinitialize() {
+        List<CallbackRecord*>* vals = _callbacks->getValues();
+
+        unsigned long int valsLen = vals->getLength();
+
+        for (unsigned long int idx = 0; idx < valsLen; idx++) {
+          CallbackRecord* val = vals->get(idx);
+
+          delete val;
+        }
+
+        delete vals;
+        delete _callbacks;
+      }
+
       static void on(const char* id, void*(*callback)(void*), void* inp) {
         CallbackRecord* entry = new CallbackRecord();
 
         entry->method = callback;
         entry->input = inp;
-
-        if (_callbacks == NULL) {
-          _callbacks = new Dict<CallbackRecord*>();
-        }
 
         _callbacks->set(id, entry);
       }
