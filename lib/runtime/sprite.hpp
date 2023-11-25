@@ -92,7 +92,7 @@
       void addFrame(Image* img, unsigned int frameNum) {
         // NOTE: The first frasme *must* begin at index 0.
 
-        if (frames->getLength() > 0) {
+        if (this->frames->getLength() > 0) {
           unsigned int curFrame = this->currentFrame;
           uint32_t frameRef = this->framesList->get(curFrame);
 
@@ -110,8 +110,8 @@
         SpriteFrame* newFrame = new SpriteFrame();
 
         newFrame->setImage(img);
-        frames->push(newFrame);
-        framesList->set(frameNum, frames->getLength() - 1);
+        this->frames->push(newFrame);
+        this->framesList->set(frameNum, this->frames->getLength() - 1);
 
         this->normalizeFramesList();
       }
