@@ -20,15 +20,13 @@
 
     private:
 
+      static const unsigned char HOOK_ID_LENGTH = 65;
+
       Dict<void*>* data;
 
-      char* generateHookIdentifier(const char* key, const char* action) {
-        char* hookId = new char[64];
-        unsigned long int instIdentifier = this->getIdentifier();
+      static void generateHookIdentifier(char* dest, unsigned long int instId, const char* key, const char* action) {
 
-        sprintf(hookId, "state.%s.%ld.%s", action, instIdentifier, key);
-
-        return hookId;
+        sprintf(dest, "state.%16s.%24ld.%16s", action, instId, key);
       }
 
 
@@ -38,9 +36,17 @@
         this->data = new Dict<void*>();
       }
 
+      ~State() {
+        delete this->data;
+      }
+
       void* get(const char* key) {
-        char* identifier = this->generateHookIdentifier(key, "get");
         void* val;
+
+        char hookId[State::HOOK_ID_LENGTH];
+        unsigned long int instId = this->getIdentifier();
+
+        State::generateHookIdentifier(hookId, instId, key, "get");
 
         if (this->data->has(key)) {
           val = this->data->get(key);
@@ -52,7 +58,7 @@
         inp->newValue = NULL;
         inp->oldValue = val;
 
-        void* outp = RuntimeBase::executeCallback(identifier, (void*)inp);
+        void* outp = RuntimeBase::executeCallback(hookId, (void*)inp);
 
         HookCallbackParams* retVal = (HookCallbackParams*)outp;
 
@@ -64,8 +70,12 @@
       }
 
       void set(const char* key, void* val) {
-        char* identifier = this->generateHookIdentifier(key, "set");
         void* oldVal;
+
+        char hookId[State::HOOK_ID_LENGTH];
+        unsigned long int instId = this->getIdentifier();
+
+        State::generateHookIdentifier(hookId, instId, key, "get");
 
         if (this->data->has(key)) {
           oldVal = this->data->get(key);
@@ -79,7 +89,7 @@
         inp->newValue = val;
         inp->oldValue = oldVal;
 
-        void* outp = RuntimeBase::executeCallback(identifier, (void*)inp);
+        void* outp = RuntimeBase::executeCallback(hookId, (void*)inp);
 
         HookCallbackParams* retVal = (HookCallbackParams*)outp;
 
@@ -91,15 +101,21 @@
       }
 
       void onGet(const char* key, void*(*callback)(void*, void*, void*)) {
-        char* id = this->generateHookIdentifier(key, "get");
+        char hookId[State::HOOK_ID_LENGTH];
+        unsigned long int instId = this->getIdentifier();
 
-        RuntimeBase::on(id, callback);
+        State::generateHookIdentifier(hookId, instId, key, "get");
+
+        RuntimeBase::on(hookId, callback);
       }
 
       void onSet(const char* key, void*(*callback)(void*, void*, void*)) {
-        const char* id = this->generateHookIdentifier(key, "set");
+        char hookId[State::HOOK_ID_LENGTH];
+        unsigned long int instId = this->getIdentifier();
 
-        RuntimeBase::on(id, callback);
+        State::generateHookIdentifier(hookId, instId, key, "set");
+
+        RuntimeBase::on(hookId, callback);
       }
 
   };
