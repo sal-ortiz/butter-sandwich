@@ -91,15 +91,14 @@
       }
 
       static void pushEvent(signed long int code, void* dataOne=(void*)NULL, void* dataTwo=(void*)NULL) {
+        SDL_Event event;
 
-        SDL_Event* event = new SDL_Event();
+        event.type = SDL_USEREVENT;
+        event.user.code = code;
+        event.user.data1 = dataOne;
+        event.user.data2 = dataTwo;
 
-        event->type = SDL_USEREVENT;
-        event->user.code = code;
-        event->user.data1 = dataOne;
-        event->user.data2 = dataTwo;
-
-        SDL_PushEvent(event);
+        SDL_PushEvent(&event);
       }
 
   };
