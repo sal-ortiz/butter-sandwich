@@ -62,6 +62,19 @@
         this->height = 0;
       }
 
+      ~Sprite() {
+        unsigned long int listLen = this->frames->getLength();
+
+        for (unsigned long int idx = 0; idx < listLen; idx++) {
+          SpriteFrame* entry = this->frames->get(idx);
+
+          delete entry;
+        }
+
+        delete this->frames;
+        delete this->framesList;
+      }
+
       void setLoop(bool value) {
         this->loop = value;
       }
