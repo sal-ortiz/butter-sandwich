@@ -138,7 +138,7 @@
                 el->height > node->size->vert
               ) {
                 unsigned long int charId = el->getIdentifier();
-                const char* hookId = Hook::generateIdentifier(charId, "onCollision");
+                const char* hookId = Hook::generateIdentifier("hook,", charId, "onCollision");
 
                 el->executeCallback(hookId, (void*)this, this->elements);
               }
