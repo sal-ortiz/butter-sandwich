@@ -22,9 +22,9 @@
     public:
 
       static char* generateIdentifier(unsigned long int objId, const char* key) {
-        char* identifier = new char[41];
+        char* identifier = new char[51];
 
-        sprintf(identifier, "hook-%.10ld-%.24s", objId, key);
+        sprintf(identifier, "hook-%.20ld-%.24s", objId, key);
 
         return identifier;
       }
