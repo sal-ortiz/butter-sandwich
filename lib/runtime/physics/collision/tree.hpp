@@ -140,7 +140,7 @@
                 unsigned long int charId = el->getIdentifier();
 
                 char* hookId = new char[Hook::ID_LENGTH];
-                Hook::generateIdentifier(hookId, "hook", charId, "onCollision");
+                Hook::generateIdentifier(hookId, "hook", charId, "onCollision", "action");
 
                 el->executeCallback(hookId, (void*)this, this->elements);
               }

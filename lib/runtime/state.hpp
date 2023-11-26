@@ -20,14 +20,7 @@
 
     private:
 
-      static const unsigned char HOOK_ID_LENGTH = 77;
-
       Dict<void*>* data;
-
-      static void generateHookIdentifier(char* dest, unsigned long int instId, const char* key, const char* action) {
-
-        sprintf(dest, "state-%.24s-%.20lu-%.24s", action, instId, key);
-      }
 
 
     public:
@@ -42,11 +35,10 @@
 
       void* get(const char* key) {
         void* val;
-
-        char hookId[State::HOOK_ID_LENGTH];
         unsigned long int instId = this->getIdentifier();
 
-        State::generateHookIdentifier(hookId, instId, key, "get");
+        char hookId[Hook::ID_LENGTH];
+        Hook::generateIdentifier(hookId, "state", instId, key, "get");
 
         if (this->data->has(key)) {
           val = this->data->get(key);
@@ -71,11 +63,10 @@
 
       void set(const char* key, void* val) {
         void* oldVal;
-
-        char hookId[State::HOOK_ID_LENGTH];
         unsigned long int instId = this->getIdentifier();
 
-        State::generateHookIdentifier(hookId, instId, key, "get");
+        char hookId[Hook::ID_LENGTH];
+        Hook::generateIdentifier(hookId, "state", instId, key, "get");
 
         if (this->data->has(key)) {
           oldVal = this->data->get(key);
@@ -101,19 +92,19 @@
       }
 
       void onGet(const char* key, void*(*callback)(void*, void*, void*)) {
-        char hookId[State::HOOK_ID_LENGTH];
         unsigned long int instId = this->getIdentifier();
 
-        State::generateHookIdentifier(hookId, instId, key, "get");
+        char hookId[Hook::ID_LENGTH];
+        Hook::generateIdentifier(hookId, "state", instId, key, "get");
 
         this->on(hookId, callback);
       }
 
       void onSet(const char* key, void*(*callback)(void*, void*, void*)) {
-        char hookId[State::HOOK_ID_LENGTH];
         unsigned long int instId = this->getIdentifier();
 
-        State::generateHookIdentifier(hookId, instId, key, "set");
+        char hookId[Hook::ID_LENGTH];
+        Hook::generateIdentifier(hookId, "state", instId, key, "set");
 
         this->on(hookId, callback);
       }
