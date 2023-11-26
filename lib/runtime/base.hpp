@@ -8,6 +8,7 @@
   #include <stdlib.h>
 
   #include "./hook.hpp"
+  #include "../tools/identifier.hpp"
 
 
   unsigned long int MAGIC_NUMBER = 1;
@@ -19,19 +20,11 @@
 
       unsigned long int identifier;
 
-      unsigned long int generateIdentifier() {
-        unsigned long int timestamp = SDL_GetTicks();
-
-        MAGIC_NUMBER = (MAGIC_NUMBER * rand()) % 0xffffffff;
-
-        return MAGIC_NUMBER;
-      }
-
 
     public:
 
       RuntimeBase() {
-        this->identifier = this->generateIdentifier();
+        this->identifier = IdentifierTools::generate();
       }
 
       unsigned long int getIdentifier() {
