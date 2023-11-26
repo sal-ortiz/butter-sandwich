@@ -82,14 +82,18 @@
 
       void onCollision(void*(*callback)(void*, void*, void*), void* dataOne=NULL, void* dataTwo=NULL) {
         unsigned long int charId = this->getIdentifier();
-        const char* hookId = Hook::generateIdentifier("hook", charId, "onCollision");
+
+        char* hookId = new char[Hook::ID_LENGTH];
+        Hook::generateIdentifier(hookId, "hook", charId, "onCollision");
 
         this->on(hookId, callback, dataOne, dataTwo);
       }
 
       void onEvaluate(void*(*callback)(void*, void*, void*), void* dataOne=NULL, void* dataTwo=NULL) {
         unsigned long int charId = this->getIdentifier();
-        const char* hookId = Hook::generateIdentifier("hook", charId, "onEvaluate");
+
+        char* hookId = new char[Hook::ID_LENGTH];
+        Hook::generateIdentifier(hookId, "hook", charId, "onEvaluate");
 
         this->on(hookId, callback, dataOne, dataTwo);
       }
@@ -112,7 +116,9 @@
 
       void evaluate() {
         unsigned long int charId = this->getIdentifier();
-        const char* hookId = Hook::generateIdentifier("hook", charId, "onEvaluate");
+
+        char* hookId = new char[Hook::ID_LENGTH];
+        Hook::generateIdentifier(hookId, "hook", charId, "onEvaluate");
 
         this->executeCallback(hookId, (void*)this);
       }

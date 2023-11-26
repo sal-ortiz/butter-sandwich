@@ -58,7 +58,7 @@
         inp->newValue = NULL;
         inp->oldValue = val;
 
-        void* outp = RuntimeBase::executeCallback(hookId, (void*)inp);
+        void* outp = this->executeCallback(hookId, (void*)inp);
 
         HookCallbackParams* retVal = (HookCallbackParams*)outp;
 
@@ -89,7 +89,7 @@
         inp->newValue = val;
         inp->oldValue = oldVal;
 
-        void* outp = RuntimeBase::executeCallback(hookId, (void*)inp);
+        void* outp = this->executeCallback(hookId, (void*)inp);
 
         HookCallbackParams* retVal = (HookCallbackParams*)outp;
 
@@ -106,7 +106,7 @@
 
         State::generateHookIdentifier(hookId, instId, key, "get");
 
-        RuntimeBase::on(hookId, callback);
+        this->on(hookId, callback);
       }
 
       void onSet(const char* key, void*(*callback)(void*, void*, void*)) {
@@ -115,7 +115,7 @@
 
         State::generateHookIdentifier(hookId, instId, key, "set");
 
-        RuntimeBase::on(hookId, callback);
+        this->on(hookId, callback);
       }
 
   };
