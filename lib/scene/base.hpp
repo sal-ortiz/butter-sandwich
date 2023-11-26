@@ -84,6 +84,7 @@
         unsigned long int charId = this->getIdentifier();
 
         char* hookId = new char[Hook::ID_LENGTH];
+        // TODO: char hookId[Hook::ID_LENGTH];
         Hook::generateIdentifier(hookId, "hook", charId, "onCollision", "action");
 
         this->on(hookId, callback, dataOne, dataTwo);
@@ -93,6 +94,7 @@
         unsigned long int charId = this->getIdentifier();
 
         char* hookId = new char[Hook::ID_LENGTH];
+        // TODO: char hookId[Hook::ID_LENGTH];
         Hook::generateIdentifier(hookId, "hook", charId, "onEvaluate", "action");
 
         this->on(hookId, callback, dataOne, dataTwo);
@@ -118,6 +120,7 @@
         unsigned long int charId = this->getIdentifier();
 
         char* hookId = new char[Hook::ID_LENGTH];
+        // TODO: char hookId[Hook::ID_LENGTH];
         Hook::generateIdentifier(hookId, "hook", charId, "onEvaluate", "action");
 
         this->executeCallback(hookId, (void*)this);
