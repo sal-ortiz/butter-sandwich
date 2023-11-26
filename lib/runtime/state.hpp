@@ -20,13 +20,13 @@
 
     private:
 
-      static const unsigned char HOOK_ID_LENGTH = 65;
+      static const unsigned char HOOK_ID_LENGTH = 67;
 
       Dict<void*>* data;
 
       static void generateHookIdentifier(char* dest, unsigned long int instId, const char* key, const char* action) {
 
-        sprintf(dest, "state.%16s.%24ld.%16s", action, instId, key);
+        sprintf(dest, "state-%.24s-%.10ld-%.24s", action, instId, key);
       }
 
 
