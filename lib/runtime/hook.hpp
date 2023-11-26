@@ -21,10 +21,10 @@
 
     public:
 
-      static char* generateIdentifier(unsigned long int objId, const char* key) {
-        char* identifier = new char[51];
+      static char* generateIdentifier(const char* objType, unsigned long int objId, const char* key) {
+        char* identifier = new char[69];
 
-        sprintf(identifier, "hook-%.20ld-%.24s", objId, key);
+        sprintf(identifier, "%.24s-%.20lu-%.24s", objType, objId, key);
 
         return identifier;
       }

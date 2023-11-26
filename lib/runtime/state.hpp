@@ -26,7 +26,7 @@
 
       static void generateHookIdentifier(char* dest, unsigned long int instId, const char* key, const char* action) {
 
-        sprintf(dest, "state-%.24s-%.20ld-%.24s", action, instId, key);
+        sprintf(dest, "state-%.24s-%.20lu-%.24s", action, instId, key);
       }
 
 
