@@ -22,13 +22,13 @@
 #include "./lib/asteroid00.hpp"
 
 
-const unsigned long int SCREEN_WIDTH = 1200;
-const unsigned long int SCREEN_HEIGHT = 800;
+const uint32_t SCREEN_WIDTH = 1200;
+const uint32_t SCREEN_HEIGHT = 800;
 
 void* quitCallback(void* inp, void* dataOne, void* dataTwo) {
   ApplicationEventParams* parsedInp = reinterpret_cast<ApplicationEventParams*>(inp);
 
-  printf("\n[%u] exiting application at %ldms\n", SDL_GetTicks(), parsedInp->timestamp);
+  printf("\n[%u] exiting application at %ums\n", SDL_GetTicks(), parsedInp->timestamp);
 
   return (void*)NULL;
 }
@@ -36,7 +36,7 @@ void* quitCallback(void* inp, void* dataOne, void* dataTwo) {
 void* closedCallback(void* inp, void* dataOne, void* dataTwo) {
   WindowEventParams* parsedInp = reinterpret_cast<WindowEventParams*>(inp);
 
-  printf("\n[%u] window closed at %ldms", SDL_GetTicks(), parsedInp->timestamp);
+  printf("\n[%u] window closed at %ums", SDL_GetTicks(), parsedInp->timestamp);
 
   return (void*)NULL;
 }
@@ -68,7 +68,7 @@ void* closedCallback(void* inp, void* dataOne, void* dataTwo) {
 //}
 
 int main(int argc, char *argv[]) {
-  unsigned long int loadStartTimestamp = SDL_GetTicks();
+  uint32_t loadStartTimestamp = SDL_GetTicks();
 
   KeyboardInput::initialize();
   Event::initialize();
@@ -98,22 +98,22 @@ int main(int argc, char *argv[]) {
   scene->addForeground("foreground00", foreground00);
   scene->addElement("player", player);
 
-  for (unsigned long int asteroidIdx = 0; asteroidIdx < Asteroid00::MAX_COUNT; asteroidIdx++) {
+  for (uint32_t asteroidIdx = 0; asteroidIdx < Asteroid00::MAX_COUNT; asteroidIdx++) {
     Asteroid00* asteroid = Asteroid00::loadAssets(scene);
 
     char* name = new char();
 
-    sprintf(name, "asteroid-%lu", asteroid->getIdentifier());
+    sprintf(name, "asteroid-%u", asteroid->getIdentifier());
 
     scene->addElement(name, asteroid);
   }
 
-  for (unsigned long int bulletsIdx = 0; bulletsIdx < Bullet::MAX_COUNT; bulletsIdx++) {
+  for (uint32_t bulletsIdx = 0; bulletsIdx < Bullet::MAX_COUNT; bulletsIdx++) {
     Bullet* bullet = Bullet::loadAssets(scene);
 
     char* name = new char();
 
-    sprintf(name, "bullet-%.2lu", bulletsIdx);
+    sprintf(name, "bullet-%.2u", bulletsIdx);
 
     scene->addElement(name, bullet);
   }
@@ -132,13 +132,13 @@ int main(int argc, char *argv[]) {
 
   app->start();
 
-  unsigned long int frameElapsed = 0;
+  uint32_t frameElapsed = 0;
 
-  unsigned long int frameStart = 0;
-  unsigned long int framePasses = 0;
-  unsigned long int frameEvalDelay = 100;
+  uint32_t frameStart = 0;
+  uint32_t framePasses = 0;
+  uint32_t frameEvalDelay = 100;
 
-  printf("\n[%u] load time: %lums", SDL_GetTicks(), SDL_GetTicks() - loadStartTimestamp);
+  printf("\n[%u] load time: %ums", SDL_GetTicks(), SDL_GetTicks() - loadStartTimestamp);
 
   while (app->isActive) {
     frameStart = SDL_GetTicks();
