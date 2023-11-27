@@ -4,6 +4,7 @@
   #define _SPRITE_FRAME_HPP
 
   #include "../../core/image.hpp"
+  #include "../../core/renderer.hpp"
   #include "../data/position.hpp"
   #include "../data/view.hpp"
   #include "../data/angle.hpp"
@@ -22,22 +23,11 @@
       float width;
       float height;
 
-
       SpriteFrame() {
         this->image = NULL;
       }
 
-      void render(SDL_Renderer* renderer, Position dstPos, View srcView, Angle angle, Scale scale) {
-
-        SDL_Rect srcRect = {
-          (uint16_t)srcView.position.horz, (uint16_t)srcView.position.vert,
-          (uint16_t)srcView.size.horz, (uint16_t)srcView.size.horz
-        };
-
-        SDL_Point center = {
-          (int16_t)angle.center.horz,
-          (uint16_t)angle.center.vert
-        };
+      void render(Renderer* renderer, Position dstPos, View srcView, Angle angle, Scale scale) {
 
         if (this->image) {
 

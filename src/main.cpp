@@ -7,6 +7,7 @@
 #include <math.h>
 
 #include "../lib/core/keyboard.hpp"
+#include "../lib/core/renderer.hpp"
 #include "../lib/runtime/window.hpp"
 #include "../lib/runtime/application.hpp"
 #include "../lib/runtime/data/view.hpp"
@@ -127,7 +128,7 @@ int main(int argc, char *argv[]) {
 
   win->open("blasteroids", 600, 150, SCREEN_WIDTH, SCREEN_HEIGHT);
 
-  SDL_Renderer* renderer = win->getRenderer();
+  Renderer* renderer = win->getRenderer();
 
   app->start();
 

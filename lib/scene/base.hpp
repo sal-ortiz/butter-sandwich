@@ -4,6 +4,7 @@
   #define _SCENE_BASE_HPP
 
   #include "../core/dict.hpp"
+  #include "../core/renderer.hpp"
   #include "../runtime/base.hpp"
   #include "../runtime/sprite.hpp"
   #include "../runtime/state.hpp"
@@ -100,7 +101,7 @@
         this->on(hookId, callback, dataOne, dataTwo);
       }
 
-      void render(SDL_Renderer* renderer) {
+      void render(Renderer* renderer) {
         const char* actionId = this->action;
 
         Position* position = (Position*)this->state->get("position");

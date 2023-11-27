@@ -8,6 +8,8 @@
   #include <SDL2/SDL.h>
   #include <SDL2/SDL_image.h>
 
+  #include "./renderer.hpp"
+
 
   class Image {
 
@@ -55,7 +57,7 @@
       }
 
       void render(
-        SDL_Renderer* renderer,
+        Renderer* renderer,
         uint32_t dstX,
         uint32_t dstY,
         float dstScaleHorz,
@@ -75,9 +77,9 @@
         SDL_Texture* texture = NULL;
 
         if (this->texture == NULL) {
-          texture = SDL_CreateTextureFromSurface(renderer, this->surface);
+          texture = SDL_CreateTextureFromSurface(renderer->getRenderer(), this->surface);
 
-          SDL_QueryTexture(texture, NULL, NULL, &imgWidth, &imgHeight);
+          //SDL_QueryTexture(texture, NULL, NULL, &imgWidth, &imgHeight);
 
           this->texture = texture;
 
@@ -85,42 +87,34 @@
           texture = this->texture;
         }
 
-        SDL_Rect srcRect = {
-          (uint16_t)srcX,
-          (uint16_t)srcY,
-          (uint16_t)srcWidth,
-          (uint16_t)srcHeight
-        };
+        unsigned long int srcHorzPos = srcX == 0 ? this->view.x : srcX;
+        unsigned long int srcVertPos = srcY == 0 ? this->view.y : srcY;
+        unsigned long int srcHorzSize = srcWidth == 0 ? this->view.w : srcWidth;
+        unsigned long int srcVertSize = srcHeight == 0 ? this->view.h : srcHeight;
 
-        SDL_Point center = {
-          (uint16_t)round(centerX * dstScaleHorz),
-          (uint16_t)round(centerY * dstScaleVert)
-        };
+        unsigned long int centerHorzPos = round(centerX * dstScaleHorz);
+        unsigned long int centerVertPos = round(centerY * dstScaleVert);
 
-        if (srcRect.x == 0) {
-          srcRect.x = this->view.x;
-        }
+        unsigned long int destHorzPos = dstX - centerHorzPos;
+        unsigned long int destVertPos = dstY - centerVertPos;
+        unsigned long int destHorzSize = srcHorzSize * dstScaleHorz;
+        unsigned long int destVertSize = srcVertSize * dstScaleVert;
 
-        if (srcRect.y == 0) {
-          srcRect.y = this->view.y;
-        }
+        renderer->render(
+          texture,
+          destHorzPos,
+          destVertPos,
+          destHorzSize,
+          destVertSize,
+          srcHorzPos,
+          srcVertPos,
+          srcHorzSize,
+          srcVertSize,
+          dstAngle,
+          centerHorzPos,
+          centerVertPos
+        );
 
-        if (srcRect.w == 0) {
-          srcRect.w = this->view.w;
-        }
-
-        if (srcRect.h == 0) {
-          srcRect.h = this->view.h;
-        }
-
-        SDL_Rect dstRect = {
-          (uint16_t)dstX - center.x,
-          (uint16_t)dstY - center.y,
-          (uint16_t)round(srcRect.w * dstScaleHorz),
-          (uint16_t)round(srcRect.h * dstScaleVert),
-        };
-
-        SDL_RenderCopyEx(renderer, texture, &srcRect, &dstRect, dstAngle, &center, SDL_FLIP_NONE);
       }
 
   };

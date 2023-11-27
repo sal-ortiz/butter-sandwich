@@ -6,6 +6,7 @@
   #include <string.h>
 
   #include "../lib/runtime/physics.hpp"
+  #include "../lib/core/renderer.hpp"
   #include "./runtime/data/size.hpp"
   #include "./runtime/data/view.hpp"
   #include "./scene/base.hpp"
@@ -154,7 +155,7 @@
         SceneBase::evaluate();
       }
 
-      void render(SDL_Renderer* renderer) {
+      void render(Renderer* renderer) {
         unsigned long int elementsLen = this->elements->getLength();
         unsigned long int backgroundsLen = this->backgrounds->getLength();
         unsigned long int foregroundsLen = this->backgrounds->getLength();

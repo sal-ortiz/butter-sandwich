@@ -5,6 +5,7 @@
 
   #include "../core/image.hpp"
   #include "../core/list.hpp"
+  #include "../core/renderer.hpp"
   #include "./sprite/frame.hpp"
   #include "./data/position.hpp"
   #include "./data/angle.hpp"
@@ -116,7 +117,7 @@
         this->normalizeFramesList();
       }
 
-      void render(SDL_Renderer *renderer, Position* dstPos, View* srcView, Angle* angle, Scale* scale) {
+      void render(Renderer *renderer, Position* dstPos, View* srcView, Angle* angle, Scale* scale) {
         SpriteFrame* frame = this->nextFrame();
 
         frame->render(renderer, *dstPos, *srcView, *angle, *scale);
