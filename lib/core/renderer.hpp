@@ -15,14 +15,15 @@
 
       SDL_Renderer* renderer;
 
-      Dict<RenderCache*>* cache;
+      //Dict<RenderCache*>* cache;
+
 
     public:
 
       Renderer(SDL_Window* winHandle) {
         uint32_t flags = SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC;
 
-        this->cache = new Dict<RenderCache*>();
+        //this->cache = new Dict<RenderCache*>();
         this->renderer = SDL_CreateRenderer(winHandle, -1, flags);
       }
 
