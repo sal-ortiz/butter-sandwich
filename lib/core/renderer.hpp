@@ -15,7 +15,38 @@
 
       SDL_Renderer* renderer;
 
-      //Dict<RenderCache*>* cache;
+      List<RenderCache*>* cache;
+
+      void emptyCache() {
+        uint32_t len = this->cache->getLength();
+
+        for (uint32_t idx = 0; idx < len; idx++) {
+          RenderCache* entry = this->cache->get(idx);
+
+          delete entry;
+        }
+
+      }
+
+      void renderCache() {
+        uint32_t len = this->cache->getLength();
+
+        for (uint32_t idx = 0; idx < len; idx++) {
+          RenderCache* entry = this->cache->get(idx);
+
+          SDL_RenderCopyEx(
+            this->renderer,
+            entry->texture,
+            &(entry->src),
+            &(entry->dst),
+            entry->angle,
+            &(entry->center),
+            SDL_FLIP_NONE
+          );
+
+        }
+
+      }
 
 
     public:
@@ -23,27 +54,15 @@
       Renderer(SDL_Window* winHandle) {
         uint32_t flags = SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC;
 
-        //this->cache = new Dict<RenderCache*>();
         this->renderer = SDL_CreateRenderer(winHandle, -1, flags);
+        this->cache = new List<RenderCache*>();
       }
 
       ~Renderer() {
-
-        //// used for selective rendering
-        //List<RenderCache*>* cacheList = this->cache->getValues();
-        //
-        //uint32_t cacheLen = cacheList->getLength();
-        //
-        //for (uint32_t cacheIdx = 0; cacheIdx < cacheLen; cacheIdx++) {
-        //  RenderCache* entry = cacheList->get(cacheIdx);
-        //
-        //  delete entry;
-        //}
-        //
-        //delete cacheList;
-        //delete this->cache;
-
         SDL_DestroyRenderer(this->renderer);
+
+        this->emptyCache();
+        delete this->cache;
       }
 
       SDL_Renderer* getRenderer() {
@@ -55,64 +74,15 @@
       }
 
       void present() {
-        SDL_RenderPresent(this->renderer);
-      }
+        this->renderCache();
 
-      //void render(
-      //  uint32_t identifier,
-      //  SDL_Texture* texture,
-      //  uint32_t dstX,
-      //  uint32_t dstY,
-      //  uint32_t dstWidth,
-      //  uint32_t dstHeight,
-      //  uint32_t srcX,
-      //  uint32_t srcY,
-      //  uint32_t srcWidth,
-      //  uint32_t srcHeight,
-      //  float dstAngle=0.0,
-      //  uint32_t centerX=0,
-      //  uint32_t centerY=0
-      //) {
-      //  // selective rendering
-      //  char idStr[11];
-      //
-      //  sprintf(idStr, "%10.lu", identifier);
-      //
-      //  RenderCache* entry = this->cache->get(idStr);
-      //
-      //  if (
-      //    entry == NULL ||
-      //    (entry->dstX != dstX) ||
-      //    (entry->dstY != dstY) ||
-      //    (entry->dstWidth != dstWidth) ||
-      //    (entry->dstHeight != dstHeight) ||
-      //    (entry->srcX != srcX) ||
-      //    (entry->srcY != srcY) ||
-      //    (entry->srcWidth != srcWidth) ||
-      //    (entry->srcHeight != srcHeight) ||
-      //    (entry->dstAngle != dstAngle) ||
-      //    (entry->centerX != centerX) ||
-      //    (entry->centerY != centerY)
-      //  ) {
-      //
-      //    this->render(
-      //      texture,
-      //      dstX, dstY, dstWidth, dstHeight,
-      //      srcX, srcY, srcWidth, srcHeight,
-      //      dstAngle, centerX, centerY
-      //    );
-      //
-      //    RenderCache* newEntry = new RenderCache(
-      //      identifier,
-      //      dstX, dstY, dstWidth, dstHeight,
-      //      srcX, srcY, srcWidth, srcHeight,
-      //      dstAngle, centerX, centerY
-      //    );
-      //
-      //    this->cache->set(idStr, newEntry);
-      //  }
-      //
-      //}
+        SDL_RenderPresent(this->renderer);
+
+        this->emptyCache();
+        delete this->cache;
+
+        this->cache = new List<RenderCache*>();
+      }
 
       void render(
         SDL_Texture* texture,
@@ -128,11 +98,6 @@
         uint32_t centerX=0,
         uint32_t centerY=0
       ) {
-        // TODO: Instead of rendering here, we should track everything that
-        //       needs to be rendered and wait until we're presenting
-        //       to actually render. That way we can isolate the regions
-        //       of the screen where changes are to be rendered and not
-        //       render the whole screen every time.
 
         SDL_Rect srcRect = {
           (uint16_t)srcX,
@@ -153,7 +118,9 @@
           (uint16_t)dstHeight
         };
 
-        SDL_RenderCopyEx(this->renderer, texture, &srcRect, &dstRect, dstAngle, &center, SDL_FLIP_NONE);
+        RenderCache* newEntry = new RenderCache(texture, srcRect, dstRect, center, dstAngle);
+
+        this->cache->push(newEntry);
       }
 
   };
