@@ -9,11 +9,14 @@
   #include <SDL2/SDL_image.h>
 
   #include "./renderer.hpp"
+  //#include "../tools/identifier.hpp"  // used by selective rendering
 
 
   class Image {
 
     private:
+
+      //unsigned long int identifier;   // used by selective rendering
 
       SDL_Surface* surface;
       SDL_Texture* texture;
@@ -26,6 +29,8 @@
       int height;
 
       Image() {
+        //this->identifier = IdentifierTools::generate(); // used by selective rendering
+
         this->surface = NULL;
         this->texture = NULL;
       }
@@ -71,15 +76,15 @@
         uint32_t centerY=0
       ) {
 
-        int imgWidth;
-        int imgHeight;
+        //int imgWidth;   // unused
+        //int imgHeight;  // unused
 
         SDL_Texture* texture = NULL;
 
         if (this->texture == NULL) {
           texture = SDL_CreateTextureFromSurface(renderer->getRenderer(), this->surface);
 
-          //SDL_QueryTexture(texture, NULL, NULL, &imgWidth, &imgHeight);
+          //SDL_QueryTexture(texture, NULL, NULL, &imgWidth, &imgHeight);   // unused
 
           this->texture = texture;
 
@@ -101,6 +106,7 @@
         unsigned long int destVertSize = srcVertSize * dstScaleVert;
 
         renderer->render(
+          //this->identifier, // used by selective rendering
           texture,
           destHorzPos,
           destVertPos,
