@@ -125,15 +125,15 @@
         trajectory->angle.roll *= (trajectory->angleRate.roll);
         trajectory->angle.yaw *= (trajectory->angleRate.yaw);
 
-        if (absPosition->horz < round(player->width / 2)) {
+        if (absPosition->horz < round(player->width / 2) + 6) { // +6 tweak
           // enforce our leftmost border
-          absPosition->horz = round(player->width / 2);
+          absPosition->horz = round(player->width / 2) + 6;     // +6 tweak
           trajectory->position.horz = 0;
         }
 
-        if (absPosition->vert < round(player->height / 2)) {
+        if (absPosition->vert < round(player->height / 2) + 6) {  // +6 tweak
           // enforce our upper border
-          absPosition->vert = round(player->height / 2);
+          absPosition->vert = round(player->height / 2) + 6;      // +6 tweak
           trajectory->position.vert = 0;
         }
 
