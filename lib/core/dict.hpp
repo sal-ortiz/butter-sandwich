@@ -227,14 +227,7 @@
       }
 
       bool has(const char* key) {
-
-        try {
-          this->get(key);
-        } catch(...) {
-          return false;
-        }
-
-        return true;
+        return !!this->get(key);
       }
 
   };
