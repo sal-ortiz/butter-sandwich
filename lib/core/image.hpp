@@ -16,7 +16,7 @@
 
     private:
 
-      //unsigned long int identifier;   // used by selective rendering
+      //uint32_t identifier;   // used by selective rendering
 
       SDL_Surface* surface;
       SDL_Texture* texture;
@@ -25,8 +25,8 @@
 
       SDL_Rect view;
 
-      int width;
-      int height;
+      uint16_t width;
+      uint16_t height;
 
       Image() {
         //this->identifier = IdentifierTools::generate(); // used by selective rendering
@@ -92,18 +92,18 @@
           texture = this->texture;
         }
 
-        unsigned long int srcHorzPos = srcX == 0 ? this->view.x : srcX;
-        unsigned long int srcVertPos = srcY == 0 ? this->view.y : srcY;
-        unsigned long int srcHorzSize = srcWidth == 0 ? this->view.w : srcWidth;
-        unsigned long int srcVertSize = srcHeight == 0 ? this->view.h : srcHeight;
+        uint32_t srcHorzPos = srcX == 0 ? this->view.x : srcX;
+        uint32_t srcVertPos = srcY == 0 ? this->view.y : srcY;
+        uint32_t srcHorzSize = srcWidth == 0 ? this->view.w : srcWidth;
+        uint32_t srcVertSize = srcHeight == 0 ? this->view.h : srcHeight;
 
-        unsigned long int centerHorzPos = round(centerX * dstScaleHorz);
-        unsigned long int centerVertPos = round(centerY * dstScaleVert);
+        uint32_t centerHorzPos = round(centerX * dstScaleHorz);
+        uint32_t centerVertPos = round(centerY * dstScaleVert);
 
-        unsigned long int destHorzPos = dstX - centerHorzPos;
-        unsigned long int destVertPos = dstY - centerVertPos;
-        unsigned long int destHorzSize = srcHorzSize * dstScaleHorz;
-        unsigned long int destVertSize = srcVertSize * dstScaleVert;
+        uint32_t destHorzPos = dstX - centerHorzPos;
+        uint32_t destVertPos = dstY - centerVertPos;
+        uint32_t destHorzSize = srcHorzSize * dstScaleHorz;
+        uint32_t destVertSize = srcVertSize * dstScaleVert;
 
         renderer->render(
           //this->identifier, // used by selective rendering

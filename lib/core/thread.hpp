@@ -12,7 +12,7 @@
 
       char* identifier;
 
-      int(*func)(void*);
+      int32_t(*func)(void*);
 
       SDL_Thread* threadObj;
       SDL_mutex* mutexObj;
@@ -36,7 +36,7 @@
         this->mutexObj = SDL_CreateMutex();
       }
 
-      Thread(int(*func)(void*)) {
+      Thread(int32_t(*func)(void*)) {
         this->identifier = Thread::generateIdentifier();
         this->func = func;
         this->mutexObj = SDL_CreateMutex();
@@ -71,7 +71,7 @@
         SDL_UnlockMutex(this->mutexObj);
       }
 
-      static void execute(int(*func)(void*), void* data) {
+      static void execute(int32_t(*func)(void*), void* data) {
         Thread* thread = new Thread(func);
 
         thread->execute(data);

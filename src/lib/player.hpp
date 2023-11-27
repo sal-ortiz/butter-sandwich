@@ -16,7 +16,7 @@
   #include "../../lib/scene.hpp"
 
 
-  unsigned long int lastBulletTimestamp = 0;
+  uint32_t lastBulletTimestamp = 0;
 
   class Player: public SceneCharacter {
 
@@ -232,7 +232,7 @@
         ) {
           // fire a pellet
 
-          for (unsigned long int bulletIdx = 0; bulletIdx < scene->getNumElements(); bulletIdx++) {
+          for (uint32_t bulletIdx = 0; bulletIdx < scene->getNumElements(); bulletIdx++) {
             char* name = new char();
 
             sprintf(name, "bullet-%.2lu", bulletIdx);
@@ -243,7 +243,7 @@
               continue;
             }
 
-            int typeCmpRes = strcmp(element->getType(), "bullet");
+            int32_t typeCmpRes = strcmp(element->getType(), "bullet");
 
             if (element->isActive == false && typeCmpRes == 0) {
               Bullet* bullet = reinterpret_cast<Bullet*>(element);

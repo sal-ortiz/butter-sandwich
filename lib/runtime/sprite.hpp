@@ -64,9 +64,9 @@
       }
 
       ~Sprite() {
-        unsigned long int listLen = this->frames->getLength();
+        uint32_t listLen = this->frames->getLength();
 
-        for (unsigned long int idx = 0; idx < listLen; idx++) {
+        for (uint32_t idx = 0; idx < listLen; idx++) {
           SpriteFrame* entry = this->frames->get(idx);
 
           delete entry;
@@ -84,17 +84,17 @@
       //  this->currentFrame = frameNum;
       //}
 
-      void addFrame(unsigned int frameNum) {
+      void addFrame(uint32_t frameNum) {
         framesList->set(frameNum, frames->getLength() - 1);
 
         this->normalizeFramesList();
       }
 
-      void addFrame(Image* img, unsigned int frameNum) {
+      void addFrame(Image* img, uint32_t frameNum) {
         // NOTE: The first frasme *must* begin at index 0.
 
         if (this->frames->getLength() > 0) {
-          unsigned int curFrame = this->currentFrame;
+          uint32_t curFrame = this->currentFrame;
           uint32_t frameRef = this->framesList->get(curFrame);
 
           SpriteFrame* frame = this->frames->get(frameRef);

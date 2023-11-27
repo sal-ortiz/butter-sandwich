@@ -7,14 +7,14 @@
 
   #include <SDL2/SDL.h>
 
-  unsigned long int ID_TOOLS_MAGIC_NUMBER = 1;
+  uint32_t ID_TOOLS_MAGIC_NUMBER = 1;
 
   class IdentifierTools {
 
     public:
 
-      static unsigned long int generate() {
-        unsigned long int timestamp = SDL_GetTicks();
+      static uint32_t generate() {
+        uint32_t timestamp = SDL_GetTicks();
 
         ID_TOOLS_MAGIC_NUMBER = (ID_TOOLS_MAGIC_NUMBER * rand()) % 0xffffffff;
 

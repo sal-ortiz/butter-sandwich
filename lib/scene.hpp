@@ -39,7 +39,7 @@
         this->view = new View();
       }
 
-      unsigned long int getNumElements() {
+      uint32_t getNumElements() {
         return this->elements->getLength();
       }
 
@@ -62,12 +62,12 @@
       }
 
       SceneBase* getElement(const char* name) {
-        unsigned long int elementsLen = this->elements->getLength();
+        uint32_t elementsLen = this->elements->getLength();
 
-        for (unsigned long int elementsIdx = 0; elementsIdx < elementsLen; elementsIdx++) {
+        for (uint32_t elementsIdx = 0; elementsIdx < elementsLen; elementsIdx++) {
           SceneBase* element = this->elements->get(elementsIdx);
 
-          int cmpRes = strcmp(element->getName(), name);
+          int32_t cmpRes = strcmp(element->getName(), name);
 
           if (cmpRes == 0) {
             return element;
@@ -79,12 +79,12 @@
       }
 
       SceneBase* getBackground(const char* name) {
-        unsigned long int backgroundsLen = this->backgrounds->getLength();
+        uint32_t backgroundsLen = this->backgrounds->getLength();
 
-        for (unsigned long int backgroundsIdx = 0; backgroundsIdx < backgroundsLen; backgroundsIdx++) {
+        for (uint32_t backgroundsIdx = 0; backgroundsIdx < backgroundsLen; backgroundsIdx++) {
           SceneBase* element = this->backgrounds->get(backgroundsIdx);
 
-          int cmpRes = strcmp(element->getName(), name);
+          int32_t cmpRes = strcmp(element->getName(), name);
 
           if (cmpRes == 0) {
             return element;
@@ -96,12 +96,12 @@
       }
 
       SceneBase* getForeground(const char* name) {
-        unsigned long int foregroundsLen = this->foregrounds->getLength();
+        uint32_t foregroundsLen = this->foregrounds->getLength();
 
-        for (unsigned long int foregroundsIdx = 0; foregroundsIdx < foregroundsLen; foregroundsIdx++) {
+        for (uint32_t foregroundsIdx = 0; foregroundsIdx < foregroundsLen; foregroundsIdx++) {
           SceneBase* element = this->foregrounds->get(foregroundsIdx);
 
-          int cmpRes = strcmp(element->getName(), name);
+          int32_t cmpRes = strcmp(element->getName(), name);
 
           if (cmpRes == 0) {
             return element;
@@ -113,15 +113,15 @@
       }
 
       void evaluate() {
-        unsigned long int elementsLen = this->elements->getLength();
-        unsigned long int backgroundsLen = this->backgrounds->getLength();
-        unsigned long int foregroundsLen = this->foregrounds->getLength();
+        uint32_t elementsLen = this->elements->getLength();
+        uint32_t backgroundsLen = this->backgrounds->getLength();
+        uint32_t foregroundsLen = this->foregrounds->getLength();
 
         // TODO: find a better way to get this value into Physics::Collision
         Collision::setWidth(this->size->horz);
         Collision::setHeight(this->size->vert);
 
-        for (unsigned long int elementsIdx = 0; elementsIdx < elementsLen; elementsIdx++) {
+        for (uint32_t elementsIdx = 0; elementsIdx < elementsLen; elementsIdx++) {
           SceneBase* element = this->elements->get(elementsIdx);
 
           if (element->isActive) {
@@ -132,7 +132,7 @@
 
         }
 
-        for (unsigned long int backgroundsIdx = 0; backgroundsIdx < backgroundsLen; backgroundsIdx++) {
+        for (uint32_t backgroundsIdx = 0; backgroundsIdx < backgroundsLen; backgroundsIdx++) {
           SceneBase* element = this->backgrounds->get(backgroundsIdx);
 
           if (element->isActive) {
@@ -141,7 +141,7 @@
 
         }
 
-        for (unsigned long int foregroundsIdx = 0; foregroundsIdx < foregroundsLen; foregroundsIdx++) {
+        for (uint32_t foregroundsIdx = 0; foregroundsIdx < foregroundsLen; foregroundsIdx++) {
           SceneBase* element = this->foregrounds->get(foregroundsIdx);
 
           if (element->isActive) {
@@ -156,11 +156,11 @@
       }
 
       void render(Renderer* renderer) {
-        unsigned long int elementsLen = this->elements->getLength();
-        unsigned long int backgroundsLen = this->backgrounds->getLength();
-        unsigned long int foregroundsLen = this->backgrounds->getLength();
+        uint32_t elementsLen = this->elements->getLength();
+        uint32_t backgroundsLen = this->backgrounds->getLength();
+        uint32_t foregroundsLen = this->backgrounds->getLength();
 
-        for (unsigned long int backgroundsIdx = 0; backgroundsIdx < backgroundsLen; backgroundsIdx++) {
+        for (uint32_t backgroundsIdx = 0; backgroundsIdx < backgroundsLen; backgroundsIdx++) {
           SceneBase* element = this->backgrounds->get(backgroundsIdx);
 
           if (element->isActive) {
@@ -169,7 +169,7 @@
 
         }
 
-        for (unsigned long int elementsIdx = 0; elementsIdx < elementsLen; elementsIdx++) {
+        for (uint32_t elementsIdx = 0; elementsIdx < elementsLen; elementsIdx++) {
           SceneBase* element = this->elements->get(elementsIdx);
 
           if (element->isActive) {
@@ -178,7 +178,7 @@
 
         }
 
-        for (unsigned long int foregroundsIdx = 0; foregroundsIdx < foregroundsLen; foregroundsIdx++) {
+        for (uint32_t foregroundsIdx = 0; foregroundsIdx < foregroundsLen; foregroundsIdx++) {
           SceneBase* element = this->foregrounds->get(foregroundsIdx);
 
           if (element->isActive) {

@@ -7,8 +7,8 @@
 
 
   struct WindowEventParams: EventParamsBase {
-    signed long int horz;
-    signed long int vert;
+    int32_t horz;
+    int32_t vert;
   };
 
 

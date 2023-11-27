@@ -8,14 +8,14 @@
 
 
   struct MouseMotionEventParams: EventParamsBase {
-    unsigned long int mouseId;
-    unsigned long int state;
+    uint32_t mouseId;
+    uint32_t state;
 
-    signed long int absoluteHorzPos;
-    signed long int absoluteVertPos;
+    int32_t absoluteHorzPos;
+    int32_t absoluteVertPos;
 
-    signed long int relativeHorzPos;
-    signed long int relativeVertPos;
+    int32_t relativeHorzPos;
+    int32_t relativeVertPos;
   };
 
 

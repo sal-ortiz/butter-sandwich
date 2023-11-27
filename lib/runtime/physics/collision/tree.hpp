@@ -22,10 +22,7 @@
       List<SceneBase*>* elements;
       List<QuadNode*>* nodes;
 
-      QuadNode(
-        unsigned long int width,
-        unsigned long int height
-      ) {
+      QuadNode(uint32_t width, uint32_t height) {
         this->size = new Size(width, height);
 
         this->elements = new List<SceneBase*>();
@@ -38,9 +35,9 @@
       }
 
       ~QuadNode() {
-        unsigned char numNodes = this->nodes->getLength();
+        uint32_t numNodes = this->nodes->getLength();
 
-        for (unsigned char nodesIdx = 0; nodesIdx < numNodes; nodesIdx++) {
+        for (uint32_t nodesIdx = 0; nodesIdx < numNodes; nodesIdx++) {
           QuadNode* node = this->nodes->get(nodesIdx);
 
           if (node != NULL) {
@@ -51,7 +48,7 @@
 
       }
 
-      void insert(SceneBase* el, unsigned long int levelNum=0) {
+      void insert(SceneBase* el, uint32_t levelNum=0) {
 
         if (levelNum > MAX_QUADTREE_LEVELS) {
           return;
@@ -64,7 +61,7 @@
         float horzPos = elPos->horz;
         float vertPos = elPos->vert;
 
-        unsigned char quadrant;
+        uint8_t quadrant;
 
         if (horzPos > this->size->horz / 2) {
 
@@ -115,9 +112,9 @@
       }
 
       void evaluate() {
-        unsigned char numNodes = this->nodes->getLength();
+        uint32_t numNodes = this->nodes->getLength();
 
-        for (unsigned char nodeIdx = 0; nodeIdx < numNodes; nodeIdx++) {
+        for (uint32_t nodeIdx = 0; nodeIdx < numNodes; nodeIdx++) {
           QuadNode* node = this->nodes->get(nodeIdx);
 
           if (node == NULL) {
@@ -128,16 +125,16 @@
             node->elements->getLength() <= 1
           ) {
 
-            unsigned long int numEls = this->elements->getLength();
+            uint32_t numEls = this->elements->getLength();
 
-            for (unsigned long int elsIdx = 0; elsIdx < numEls; elsIdx++) {
+            for (uint32_t elsIdx = 0; elsIdx < numEls; elsIdx++) {
               SceneBase* el = this->elements->get(elsIdx);
 
               if (
                 el->width > node->size->horz &&
                 el->height > node->size->vert
               ) {
-                unsigned long int charId = el->getIdentifier();
+                uint32_t charId = el->getIdentifier();
 
                 char* hookId = new char[Hook::ID_LENGTH];
                 // TODO: char hookId[Hook::ID_LENGTH];

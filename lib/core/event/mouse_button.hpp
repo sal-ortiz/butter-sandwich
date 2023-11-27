@@ -8,14 +8,14 @@
 
 
   struct MouseButtonEventParams: EventParamsBase {
-    unsigned long int mouseId;
-    unsigned char state;
+    uint32_t mouseId;
+    uint8_t state;
 
-    unsigned char button;
-    unsigned char clicks;
+    uint8_t button;
+    uint8_t clicks;
 
-    signed long int horzPos;
-    signed long int vertPos;
+    int32_t horzPos;
+    int32_t vertPos;
   };
 
 

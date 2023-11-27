@@ -15,10 +15,10 @@
       ListEntry<class_type>* root;
       ListEntry<class_type>* indexEntry;
 
-      unsigned long int index;
-      unsigned long int length;
+      uint32_t index;
+      uint32_t length;
 
-      ListEntry<class_type>* getEntry(unsigned long int targIndex) {
+      ListEntry<class_type>* getEntry(uint32_t targIndex) {
 
         if (targIndex < this->index) {
           this->indexEntry = this->root;
@@ -46,7 +46,7 @@
         return node->getNext();
       }
 
-      void setEntry(unsigned long int targIndex, class_type value) {
+      void setEntry(uint32_t targIndex, class_type value) {
 
         if (targIndex < this->index) {
           this->indexEntry = this->root;
@@ -80,7 +80,7 @@
         node->setValue(value);
       }
 
-      void insertEntry(unsigned long int targIndex, class_type value) {
+      void insertEntry(uint32_t targIndex, class_type value) {
 
         if (targIndex >= this->getLength()) {
           this->setEntry(targIndex, value);
@@ -111,7 +111,7 @@
 
       }
 
-      void deleteEntry(unsigned long int targIndex) {
+      void deleteEntry(uint32_t targIndex) {
         ListEntry<class_type>* node = this->getEntry(targIndex);
 
         if (node == NULL) {
@@ -162,11 +162,11 @@
         return this->root;
       }
 
-      unsigned long int getLength() {
+      uint32_t getLength() {
         return this->length;
       }
 
-      class_type get(unsigned long int targIndex) {
+      class_type get(uint32_t targIndex) {
 
         //if (targIndex > (this->getLength() - 1)) {
         //  throw;
@@ -181,11 +181,11 @@
         return node->getValue();
       }
 
-      void set(unsigned long int targIndex, class_type value) {
+      void set(uint32_t targIndex, class_type value) {
         this->setEntry(targIndex, value);
       }
 
-      void remove(unsigned long int targIndex) {
+      void remove(uint32_t targIndex) {
 
         //if (targIndex > (this->getLength() - 1)) {
         //  throw;
@@ -195,19 +195,19 @@
       }
 
       void push(class_type value) {
-        unsigned long int index = this->getLength();
+        uint32_t index = this->getLength();
 
         this->setEntry(index, value);
       }
 
       void unshift(class_type value) {
-        unsigned long int index = 0;
+        uint32_t index = 0;
 
         this->insertEntry(index, value);
       }
 
       class_type pop() {
-        unsigned long int index = this->getLength() - 1;
+        uint32_t index = this->getLength() - 1;
 
         ListEntry<class_type>* node = this->getEntry(index);
 
@@ -223,7 +223,7 @@
       }
 
       class_type shift() {
-        unsigned long int index = 0;
+        uint32_t index = 0;
 
         ListEntry<class_type>* node = this->getEntry(index);
 
@@ -238,8 +238,8 @@
         return outpValue;
       }
 
-      //void fill(class_type value, unsigned long int end=0, unsigned long int start=0) {
-      //  unsigned long int endIdx;
+      //void fill(class_type value, uint32_t end=0, uint32_t start=0) {
+      //  uint32_t endIdx;
       //
       //  if (end == 0) {
       //    endIdx = this->getLength() - 1;
@@ -247,7 +247,7 @@
       //    endIdx = end;
       //  }
       //
-      //  for (unsigned long int idx = start; idx <= endIdx; idx++) {
+      //  for (uint32_t idx = start; idx <= endIdx; idx++) {
       //    this->setEntry(idx, value);
       //  }
       //

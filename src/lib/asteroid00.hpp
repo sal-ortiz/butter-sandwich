@@ -22,7 +22,7 @@
 
     public:
 
-      static const unsigned long int MAX_COUNT = 36;
+      static const uint32_t MAX_COUNT = 1;
 
       Asteroid00() {
         Trajectory* trajectory = (Trajectory*)this->state->get("trajectory");
@@ -59,7 +59,7 @@
         Position* absPosition = (Position*)asteroid->state->get("absolute_position");
         Trajectory* trajectory = (Trajectory*)asteroid->state->get("trajectory");
 
-        unsigned long int timestamp = SDL_GetTicks();
+        uint32_t timestamp = SDL_GetTicks();
 
         srand(timestamp);
 
@@ -69,8 +69,8 @@
         angle->center.horz = 28;
         angle->center.vert = 33;
 
-        absPosition->horz = rand() % (unsigned long int)scene->size->horz;
-        absPosition->vert = rand() % (unsigned long int)scene->size->vert;
+        absPosition->horz = rand() % (uint32_t)scene->size->horz;
+        absPosition->vert = rand() % (uint32_t)scene->size->vert;
 
         trajectory->position.horz = ((float)(rand() % 3) / 2) - 1.5;
         trajectory->position.vert = ((float)(rand() % 3) / 2) - 1.5;

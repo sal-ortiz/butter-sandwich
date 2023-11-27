@@ -10,8 +10,8 @@
   };
 
   struct EventParamsBase {
-    unsigned long int timestamp;
-    unsigned long int windowID;
+    uint32_t timestamp;
+    uint32_t windowID;
     void* data;
   };
 

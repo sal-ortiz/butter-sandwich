@@ -18,12 +18,12 @@
 
       List<DictEntry<class_type>*>* data[DICT_LIST_ARRAY_LEN];
 
-      unsigned long int hashCode(const char* key) {
-        unsigned long int outpValue = 1;
-        unsigned int keyLen = strlen(key);
+      uint32_t hashCode(const char* key) {
+        uint32_t outpValue = 1;
+        uint32_t keyLen = strlen(key);
 
-        for (unsigned int keyIdx = 0; keyIdx < keyLen; keyIdx++) {
-          unsigned char curChar = (unsigned char)key[keyIdx];
+        for (uint32_t keyIdx = 0; keyIdx < keyLen; keyIdx++) {
+          uint8_t curChar = (uint8_t)key[keyIdx];
 
           outpValue *= curChar;
         }
@@ -32,18 +32,18 @@
       }
 
       DictEntry<class_type>* getEntry(const char* key) {
-        unsigned long int aryIdx = this->hashCode(key) % DICT_LIST_ARRAY_LEN;
+        uint32_t aryIdx = this->hashCode(key) % DICT_LIST_ARRAY_LEN;
 
         List<DictEntry<class_type>*>* list = this->data[aryIdx];
         DictEntry<class_type>* entry;
 
-        unsigned long int listLen = list->getLength();
+        uint32_t listLen = list->getLength();
 
         bool found = false;
 
-        for (unsigned long int idx = 0; idx < listLen; idx++) {
+        for (uint32_t idx = 0; idx < listLen; idx++) {
           entry = list->get(idx);
-          unsigned int cmp = strcmp(entry->getKey(), key);
+          int32_t cmp = strcmp(entry->getKey(), key);
 
           if (cmp == 0) {
             found = true;
@@ -62,21 +62,21 @@
       }
 
       void setEntry(const char* key, class_type value) {
-        unsigned long int aryIdx = this->hashCode(key) % DICT_LIST_ARRAY_LEN;
+        uint32_t aryIdx = this->hashCode(key) % DICT_LIST_ARRAY_LEN;
 
         List<DictEntry<class_type>*>* list = this->data[aryIdx];
         DictEntry<class_type>* entry;
 
 
-        unsigned long int listLen = list->getLength();
+        uint32_t listLen = list->getLength();
 
         bool found = false;
 
-        for (unsigned long int idx = 0; idx < listLen; idx++) {
+        for (uint32_t idx = 0; idx < listLen; idx++) {
           // HACKY!!! write a more efficient way to do this.
           entry = list->get(idx);
 
-          int cmp = strcmp(entry->getKey(), key);
+          int32_t cmp = strcmp(entry->getKey(), key);
 
           if (cmp == 0) {
             found = true;
@@ -101,19 +101,19 @@
       }
 
       //void deleteEntry(const char* key) {
-      //  unsigned long int aryIdx = this->hashCode(key) % DICT_LIST_ARRAY_LEN;
+      //  uint32_t aryIdx = this->hashCode(key) % DICT_LIST_ARRAY_LEN;
       //
       //  List<DictEntry<class_type>> list = data[aryIdx];
       //  DictEntry<class_type> entry;
       //
-      //  unsigned long int listLen = list.getLength();
+      //  uint32_t listLen = list.getLength();
       //
       //  bool found = false;
       //
-      //  for (unsigned long int idx = 0; idx < listLen; idx++) {
+      //  for (uint32_t idx = 0; idx < listLen; idx++) {
       //    entry = list.get(idx);
       //
-      //    int cmp = strcmp(entry.getKey(), key);
+      //    int32_t cmp = strcmp(entry.getKey(), key);
       //
       //    if (cmp == 0) {
       //      found = true;
@@ -136,7 +136,7 @@
 
       Dict() {
 
-        for (unsigned long int idx = 0; idx < DICT_LIST_ARRAY_LEN; idx++) {
+        for (uint32_t idx = 0; idx < DICT_LIST_ARRAY_LEN; idx++) {
           this->data[idx] = new List<DictEntry<class_type>*>();
         }
 
@@ -144,12 +144,12 @@
 
       ~Dict() {
 
-        for (long unsigned int idx = 0; idx < DICT_LIST_ARRAY_LEN; idx++) {
+        for (uint32_t idx = 0; idx < DICT_LIST_ARRAY_LEN; idx++) {
           List<DictEntry<class_type>*>* list = this->data[idx];
 
-          unsigned long int listLen = list->getLength();
+          uint32_t listLen = list->getLength();
 
-          for (unsigned long int listIdx = 0; listIdx < listLen; listIdx++) {
+          for (uint32_t listIdx = 0; listIdx < listLen; listIdx++) {
             DictEntry<class_type>* entry = list->get(listIdx);
 
             delete entry;
@@ -184,12 +184,12 @@
 
         List<char*>* outp = new List<char*>();
 
-        for (unsigned long int aryIdx = 0; aryIdx < DICT_LIST_ARRAY_LEN; aryIdx++) {
+        for (uint32_t aryIdx = 0; aryIdx < DICT_LIST_ARRAY_LEN; aryIdx++) {
           List<DictEntry<class_type>>* list = data[aryIdx];
 
-          unsigned long int listLen = list->getLength();
+          uint32_t listLen = list->getLength();
 
-          for (unsigned long int listIdx = 0; listIdx < listLen; listIdx++) {
+          for (uint32_t listIdx = 0; listIdx < listLen; listIdx++) {
             DictEntry<class_type>* entry = list->get(listIdx);
 
             char* key = entry->getKey();
@@ -208,12 +208,12 @@
 
         List<class_type>* outp = new List<class_type>();
 
-        for (unsigned long int aryIdx = 0; aryIdx < DICT_LIST_ARRAY_LEN; aryIdx++) {
+        for (uint32_t aryIdx = 0; aryIdx < DICT_LIST_ARRAY_LEN; aryIdx++) {
           List<DictEntry<class_type>*>* list = data[aryIdx];
 
-          unsigned long int listLen = list->getLength();
+          uint32_t listLen = list->getLength();
 
-          for (unsigned long int listIdx = 0; listIdx < listLen; listIdx++) {
+          for (uint32_t listIdx = 0; listIdx < listLen; listIdx++) {
             DictEntry<class_type>* entry = list->get(listIdx);
 
             class_type value = entry->getValue();

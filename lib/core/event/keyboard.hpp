@@ -7,13 +7,13 @@
 
 
   struct KeyboardEventParams: EventParamsBase {
-    unsigned char state;  // SDL_PRESSED or SDL_RELEASED
-    unsigned char repeat;
+    uint8_t state;  // SDL_PRESSED or SDL_RELEASED
+    uint8_t repeat;
 
-    unsigned long int scanCode;
-    //unsigned long int keycode;
+    uint32_t scanCode;
+    //uint32_t keycode;
 
-    unsigned int modifier;
+    uint16_t modifier;
   };
 
 

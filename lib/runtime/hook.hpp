@@ -21,10 +21,10 @@
 
     public:
 
-      static const char ID_LENGTH = 60;
+      static const uint8_t ID_LENGTH = 60;
 
-      static void generateIdentifier(char* dest, const char* objType, unsigned long int objId, const char* key, const char* action) {
-        sprintf(dest, "%.12s-%.20lu-%.12s-%.12s", objType, objId, key, action);
+      static void generateIdentifier(char* dest, const char* objType, uint32_t objId, const char* key, const char* action) {
+        sprintf(dest, "%.12s-%.20u-%.12s-%.12s", objType, objId, key, action);
       }
 
       static bool hasCallback(const char* id) {

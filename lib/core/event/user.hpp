@@ -6,8 +6,8 @@
   #include "./base.hpp"
 
 
-  const signed long int PRESENT_WINDOW = 0x0001;
-  const signed long int RENDER_ELEMENT = 0x0002;
+  const int32_t PRESENT_WINDOW = 0x0001;
+  const int32_t RENDER_ELEMENT = 0x0002;
 
 
   struct UserEventParams: EventParamsBase {

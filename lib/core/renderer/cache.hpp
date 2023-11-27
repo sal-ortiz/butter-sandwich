@@ -10,7 +10,7 @@
   //  // used for selective rendering
   //  public:
   //
-  //    unsigned long int identifier;
+  //    uint32_t identifier;
   //
   //    uint32_t dstX;
   //    uint32_t dstY;
@@ -25,7 +25,7 @@
   //    uint32_t centerY;
   //
   //    RenderCache(
-  //      unsigned long int identifier,
+  //      uint32_t identifier,
   //      uint32_t dstX,
   //      uint32_t dstY,
   //      uint32_t dstWidth,

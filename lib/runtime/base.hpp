@@ -11,14 +11,11 @@
   #include "../tools/identifier.hpp"
 
 
-  unsigned long int MAGIC_NUMBER = 1;
-
-
   class RuntimeBase {
 
     private:
 
-      unsigned long int identifier;
+      uint32_t identifier;
 
 
     public:
@@ -27,7 +24,7 @@
         this->identifier = IdentifierTools::generate();
       }
 
-      unsigned long int getIdentifier() {
+      uint32_t getIdentifier() {
         return this->identifier;
       }
 

@@ -17,8 +17,8 @@
 
     public:
 
-      static const unsigned long int DELAY = 200; // ms
-      static const unsigned long int MAX_COUNT = 8;
+      static const uint32_t DELAY = 200; // ms
+      static const uint32_t MAX_COUNT = 8;
 
       Bullet() {
         this->isActive = false;

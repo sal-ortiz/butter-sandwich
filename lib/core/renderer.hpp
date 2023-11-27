@@ -32,9 +32,9 @@
         //// used for selective rendering
         //List<RenderCache*>* cacheList = this->cache->getValues();
         //
-        //unsigned long int cacheLen = cacheList->getLength();
+        //uint32_t cacheLen = cacheList->getLength();
         //
-        //for (unsigned long int cacheIdx = 0; cacheIdx < cacheLen; cacheIdx++) {
+        //for (uint32_t cacheIdx = 0; cacheIdx < cacheLen; cacheIdx++) {
         //  RenderCache* entry = cacheList->get(cacheIdx);
         //
         //  delete entry;
@@ -59,7 +59,7 @@
       }
 
       //void render(
-      //  unsigned long int identifier,
+      //  uint32_t identifier,
       //  SDL_Texture* texture,
       //  uint32_t dstX,
       //  uint32_t dstY,

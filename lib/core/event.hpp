@@ -25,9 +25,9 @@
       static void deinitialize() {
         List<CallbackRecord*>* vals = _callbacks->getValues();
 
-        unsigned long int valsLen = vals->getLength();
+        uint32_t valsLen = vals->getLength();
 
-        for (unsigned long int idx = 0; idx < valsLen; idx++) {
+        for (uint32_t idx = 0; idx < valsLen; idx++) {
           CallbackRecord* val = vals->get(idx);
 
           delete val;
@@ -50,7 +50,7 @@
         SDL_Event evt;
         void* retVal = (void*)true;
 
-        int res = SDL_PollEvent(&evt);
+        int32_t res = SDL_PollEvent(&evt);
 
         if (res == 0) {
           // no events to pull.
@@ -90,7 +90,7 @@
         return retVal;
       }
 
-      static void pushEvent(signed long int code, void* dataOne=(void*)NULL, void* dataTwo=(void*)NULL) {
+      static void pushEvent(int32_t code, void* dataOne=(void*)NULL, void* dataTwo=(void*)NULL) {
         SDL_Event event;
 
         event.type = SDL_USEREVENT;

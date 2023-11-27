@@ -7,7 +7,7 @@
 
 
   struct ApplicationEventParams: EventParamsBase {
-    // intentionally left blank.
+    // blank.
   };
 
 
@@ -18,7 +18,7 @@
       static ApplicationEventParams parseEventParams(SDL_QuitEvent evt) {
         ApplicationEventParams params = {
           evt.timestamp,
-          (unsigned long int)NULL,
+          (uint32_t)NULL,
           NULL
         };
 

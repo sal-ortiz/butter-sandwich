@@ -33,8 +33,8 @@
       const char* type;
 
       // TODO: hack: find a better way to serve these values.
-      unsigned long int width;
-      unsigned long int height;
+      uint32_t width;
+      uint32_t height;
 
       bool isActive;
 
@@ -82,7 +82,7 @@
       }
 
       void onCollision(void*(*callback)(void*, void*, void*), void* dataOne=NULL, void* dataTwo=NULL) {
-        unsigned long int charId = this->getIdentifier();
+        uint32_t charId = this->getIdentifier();
 
         char* hookId = new char[Hook::ID_LENGTH];
         // TODO: char hookId[Hook::ID_LENGTH];
@@ -92,7 +92,7 @@
       }
 
       void onEvaluate(void*(*callback)(void*, void*, void*), void* dataOne=NULL, void* dataTwo=NULL) {
-        unsigned long int charId = this->getIdentifier();
+        uint32_t charId = this->getIdentifier();
 
         char* hookId = new char[Hook::ID_LENGTH];
         // TODO: char hookId[Hook::ID_LENGTH];
@@ -118,7 +118,7 @@
       }
 
       void evaluate() {
-        unsigned long int charId = this->getIdentifier();
+        uint32_t charId = this->getIdentifier();
 
         char* hookId = new char[Hook::ID_LENGTH];
         // TODO: char hookId[Hook::ID_LENGTH];

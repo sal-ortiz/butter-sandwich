@@ -35,7 +35,7 @@
 
       void* get(const char* key) {
         void* val;
-        unsigned long int instId = this->getIdentifier();
+        uint32_t instId = this->getIdentifier();
 
         char hookId[Hook::ID_LENGTH];
         Hook::generateIdentifier(hookId, "state", instId, key, "get");
@@ -63,7 +63,7 @@
 
       void set(const char* key, void* val) {
         void* oldVal;
-        unsigned long int instId = this->getIdentifier();
+        uint32_t instId = this->getIdentifier();
 
         char hookId[Hook::ID_LENGTH];
         Hook::generateIdentifier(hookId, "state", instId, key, "get");
@@ -92,7 +92,7 @@
       }
 
       void onGet(const char* key, void*(*callback)(void*, void*, void*)) {
-        unsigned long int instId = this->getIdentifier();
+        uint32_t instId = this->getIdentifier();
 
         char hookId[Hook::ID_LENGTH];
         Hook::generateIdentifier(hookId, "state", instId, key, "get");
@@ -101,7 +101,7 @@
       }
 
       void onSet(const char* key, void*(*callback)(void*, void*, void*)) {
-        unsigned long int instId = this->getIdentifier();
+        uint32_t instId = this->getIdentifier();
 
         char hookId[Hook::ID_LENGTH];
         Hook::generateIdentifier(hookId, "state", instId, key, "set");
