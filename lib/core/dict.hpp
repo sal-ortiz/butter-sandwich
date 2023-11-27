@@ -54,7 +54,7 @@
         }
 
         if (!found) {
-          throw (void*)NULL;
+          return NULL;
         } else {
           return entry;
         }
@@ -162,6 +162,10 @@
 
       class_type get(const char* key) {
         DictEntry<class_type>* entry = this->getEntry(key);
+
+        if (entry == NULL) {
+          return NULL;
+        }
 
         return entry->getValue();
       }
