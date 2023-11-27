@@ -4,6 +4,8 @@
 
   #define _HOOK_HPP
 
+  #include <stdint.h>
+
   #include "../core/dict.hpp"
 
 

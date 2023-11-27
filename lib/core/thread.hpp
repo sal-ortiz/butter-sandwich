@@ -3,6 +3,8 @@
 
   #define _THREAD_HPP
 
+  #include <stdint.h>
+
   #include <SDL2/SDL.h>
 
 

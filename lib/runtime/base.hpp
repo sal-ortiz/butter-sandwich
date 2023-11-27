@@ -4,6 +4,7 @@
 
   #define _RUNTIME_BASE_HPP
 
+  #include <stdint.h>
   #include <time.h>
   #include <stdlib.h>
 

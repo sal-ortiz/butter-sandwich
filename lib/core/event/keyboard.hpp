@@ -3,6 +3,8 @@
 
   #define _KEYBOARD_EVENT_HPP
 
+  #include <stdint.h>
+
   #include "./base.hpp"
 
 

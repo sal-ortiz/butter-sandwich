@@ -3,6 +3,8 @@
 
   #define _STATE_HPP
 
+  #include <stdint.h>
+
   #include <SDL2/SDL.h>
 
   #include "./base.hpp"

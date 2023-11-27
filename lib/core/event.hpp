@@ -3,6 +3,8 @@
 
   #define _EVENT_HPP
 
+  #include <stdint.h>
+
   #include <SDL2/SDL.h>
 
   #include "./dict.hpp"

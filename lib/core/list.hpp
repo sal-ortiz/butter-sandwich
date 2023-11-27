@@ -3,8 +3,10 @@
 
   #define _LIST_HPP
 
-  #include "./list/entry.hpp"
+  #include <stdint.h>
   #include <stdio.h>
+
+  #include "./list/entry.hpp"
 
 
   template <class class_type>

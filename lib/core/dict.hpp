@@ -4,6 +4,7 @@
   #define _DICT_HPP
 
   #include <string.h>
+  #include <stdint.h>
 
   #include "./list.hpp"
   #include "./dict/entry.hpp"

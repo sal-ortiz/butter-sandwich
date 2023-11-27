@@ -4,6 +4,8 @@
 
   #define _MOUSE_MOTION_EVENT_HPP
 
+  #include <stdint.h>
+
   #include "./base.hpp"
 
 

@@ -3,6 +3,8 @@
 
   #define _KEYBOARD_INPUT_HPP
 
+  #include <stdint.h>
+
   #include <SDL2/SDL.h>
 
   #include "./list.hpp"

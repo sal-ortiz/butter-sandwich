@@ -3,6 +3,8 @@
 
   #define _SPRITE_HPP
 
+  #include <stdint.h>
+
   #include "../core/image.hpp"
   #include "../core/list.hpp"
   #include "../core/renderer.hpp"

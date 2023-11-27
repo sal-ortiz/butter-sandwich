@@ -3,6 +3,8 @@
 
   #define _COLLISION_TREE_HPP
 
+  #include <stdint.h>
+
   #include "../../../core/list.hpp"
   #include "../../../runtime/data/size.hpp"
   #include "../../../runtime/base.hpp"

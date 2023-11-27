@@ -3,6 +3,8 @@
 
   #define _APPLICATION_EVENT_HPP
 
+  #include <stdint.h>
+
   #include "./base.hpp"
 
 

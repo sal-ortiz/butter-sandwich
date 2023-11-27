@@ -4,6 +4,7 @@
   #define _IMAGE_HPP
 
   #include <math.h>
+  #include <stdint.h>
 
   #include <SDL2/SDL.h>
   #include <SDL2/SDL_image.h>
