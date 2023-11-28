@@ -18,15 +18,15 @@
 
     private:
 
-      static WindowEventParams parseEventParams(SDL_WindowEvent evt) {
-        WindowEventParams params = {
-          evt.timestamp,
-          evt.windowID,
-          NULL,
+      static WindowEventParams* parseEventParams(SDL_WindowEvent evt) {
+        WindowEventParams* params = new WindowEventParams();
 
-          evt.data1,
-          evt.data2
-        };
+        params->timestamp = evt.timestamp;
+        params->windowId = evt.windowID;
+        params->data = NULL;
+
+        params->horz = evt.data1;
+        params->vert = evt.data2;
 
         return params;
       }
@@ -37,7 +37,7 @@
       static void* parse(SDL_WindowEvent evt) {
         void* retVal = (void*)true;
 
-        WindowEventParams params = WindowEvent::parseEventParams(evt);
+        WindowEventParams* params = WindowEvent::parseEventParams(evt);
 
         switch (evt.event) {
 
@@ -55,10 +55,11 @@
 
         }
 
+        delete params;
         return retVal;
       }
 
-      static void* handleEvent(const char* name, SDL_WindowEvent evt, WindowEventParams params) {
+      static void* handleEvent(const char* name, SDL_WindowEvent evt, WindowEventParams* params) {
         void* retVal = (void*)true;
 
         if (_callbacks->has(name)) {
@@ -66,8 +67,8 @@
 
           void*(*callback)(void*) = callbackRec->method;
 
-          params.data = callbackRec->input;
-          retVal = callback((void*)&params);
+          params->data = callbackRec->input;
+          retVal = callback((void*)params);
         }
 
         return retVal;

@@ -14,7 +14,7 @@
 
   struct EventParamsBase {
     uint32_t timestamp;
-    uint32_t windowID;
+    uint32_t windowId;
     void* data;
   };
 

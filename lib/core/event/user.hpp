@@ -21,20 +21,23 @@
 
     private:
 
-      static UserEventParams parseEventParams(SDL_UserEvent evt) {
-        UserEventParams params = {
+      static UserEventParams* parseEventParams(SDL_UserEvent evt) {
+        UserEventParams* params = new UserEventParams();
 
-        };
+        params->timestamp = evt.timestamp;
+        params->windowId = evt.windowID;
+        params->data = NULL;
 
         return params;
       }
+
 
     public:
 
       static void* parse(SDL_UserEvent evt) {
         void* retVal = (void*)true;
 
-        UserEventParams params = UserEvent::parseEventParams(evt);
+        UserEventParams* params = UserEvent::parseEventParams(evt);
 
         switch (evt.code) {
           //case RENDER_ELEMENT:
@@ -47,10 +50,11 @@
 
         }
 
+        delete params;
         return retVal;
       }
 
-      static void* handleEvent(const char* name, SDL_UserEvent evt, UserEventParams params) {
+      static void* handleEvent(const char* name, SDL_UserEvent evt, UserEventParams* params) {
         void* retVal = (void*)true;
 
         if (_callbacks->has(name)) {
@@ -58,8 +62,8 @@
 
           void*(*callback)(void*) = callbackRec->method;
 
-          params.data = callbackRec->input;
-          retVal = callback((void*)&params);
+          params->data = callbackRec->input;
+          retVal = callback((void*)params);
         }
 
         return retVal;

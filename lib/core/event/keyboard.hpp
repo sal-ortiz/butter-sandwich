@@ -13,7 +13,7 @@
     uint8_t repeat;
 
     uint32_t scanCode;
-    //uint32_t keycode;
+    //uint32_t keyCode;
 
     uint16_t modifier;
   };
@@ -23,19 +23,19 @@
 
     private:
 
-      static KeyboardEventParams parseEventParams(SDL_KeyboardEvent evt) {
-        KeyboardEventParams params = {
-          evt.timestamp,
-          evt.windowID,
-          NULL,
+      static KeyboardEventParams* parseEventParams(SDL_KeyboardEvent evt) {
+        KeyboardEventParams* params = new KeyboardEventParams();
 
-          evt.state,
-          evt.repeat,
+        params->timestamp = evt.timestamp;
+        params->windowId = evt.windowID;
+        params->data = NULL;
 
-          evt.keysym.scancode,
-          //evt.keysym.sym,
-          evt.keysym.mod
-        };
+        params->state = evt.state;
+        params->repeat = evt.repeat;
+
+        params->scanCode = evt.keysym.scancode;
+        //params->keyCode = evt.keysym.sym;
+        params->modifier = evt.keysym.mod;
 
         return params;
       }
@@ -44,12 +44,15 @@
     public:
 
       static void* parse(SDL_KeyboardEvent evt) {
-        KeyboardEventParams params = KeyboardEvent::parseEventParams(evt);
+        KeyboardEventParams* params = KeyboardEvent::parseEventParams(evt);
 
-        return KeyboardEvent::handleEvent("SystemEvent.KEYBOARD", evt, params);
+        void* retVal = KeyboardEvent::handleEvent("SystemEvent.KEYBOARD", evt, params);
+
+        delete params;
+        return retVal;
       }
 
-      static void* handleEvent(const char* name, SDL_KeyboardEvent evt, KeyboardEventParams params) {
+      static void* handleEvent(const char* name, SDL_KeyboardEvent evt, KeyboardEventParams* params) {
         void* retVal = (void*)true;
 
         if (_callbacks->has(name)) {
@@ -57,9 +60,9 @@
 
           void*(*callback)(void*) = callbackRec->method;
 
-          params.data = callbackRec->input;
+          params->data = callbackRec->input;
 
-          retVal = callback((void*)&params);
+          retVal = callback((void*)params);
         }
 
         return retVal;

@@ -25,20 +25,20 @@
 
     private:
 
-      static MouseMotionEventParams parseEventParams(SDL_MouseMotionEvent evt) {
-        MouseMotionEventParams params = {
-          evt.timestamp,
-          evt.windowID,
-          NULL,
+      static MouseMotionEventParams* parseEventParams(SDL_MouseMotionEvent evt) {
+        MouseMotionEventParams* params = new MouseMotionEventParams();
 
-          evt.which,
-          evt.state,
+        params->timestamp = evt.timestamp;
+        params->windowId = evt.windowID;
+        params->data = NULL;
 
-          evt.x,
-          evt.y,
-          evt.xrel,
-          evt.yrel
-        };
+        params->mouseId = evt.which;
+        params->state = evt.state;
+
+        params->absoluteHorzPos = evt.x;
+        params->absoluteVertPos = evt.y;
+        params->relativeHorzPos = evt.xrel;
+        params->relativeVertPos = evt.yrel;
 
         return params;
       }
@@ -47,12 +47,15 @@
     public:
 
       static void* parse(SDL_MouseMotionEvent evt) {
-        MouseMotionEventParams params = MouseMotionEvent::parseEventParams(evt);
+        MouseMotionEventParams* params = MouseMotionEvent::parseEventParams(evt);
 
-        return MouseMotionEvent::handleEvent("SystemEvent.MOUSEMOTION", evt, params);
+        void* retVal =  MouseMotionEvent::handleEvent("SystemEvent.MOUSEMOTION", evt, params);
+
+        delete params;
+        return retVal;
       }
 
-      static void* handleEvent(const char* name, SDL_MouseMotionEvent, MouseMotionEventParams params) {
+      static void* handleEvent(const char* name, SDL_MouseMotionEvent, MouseMotionEventParams* params) {
         void* retVal = (void*)true;
 
         if (_callbacks->has(name)) {
@@ -60,8 +63,8 @@
 
           void*(*callback)(void*) = callbackRec->method;
 
-          params.data = callbackRec->input;
-          retVal = callback((void*)&params);
+          params->data = callbackRec->input;
+          retVal = callback((void*)params);
         }
 
         return retVal;

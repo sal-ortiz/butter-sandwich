@@ -25,20 +25,20 @@
 
     private:
 
-      static MouseButtonEventParams parseEventParams(SDL_MouseButtonEvent evt) {
-        MouseButtonEventParams params = {
-          evt.timestamp,
-          evt.windowID,
-          NULL,
+      static MouseButtonEventParams* parseEventParams(SDL_MouseButtonEvent evt) {
+        MouseButtonEventParams* params = new MouseButtonEventParams();
 
-          evt.which,
-          evt.state,
+        params->timestamp = evt.timestamp;
+        params->windowId = evt.windowID;
+        params->data = NULL;
 
-          evt.button,
-          evt.clicks,
-          evt.x,
-          evt.y
-        };
+        params->mouseId = evt.which;
+        params->state = evt.state;
+
+        params->button = evt.button;
+        params->clicks = evt.clicks;
+        params->horzPos = evt.x;
+        params->vertPos = evt.y;
 
         return params;
       }
@@ -47,12 +47,15 @@
     public:
 
       static void* parse(SDL_MouseButtonEvent evt) {
-        MouseButtonEventParams params = MouseButtonEvent::parseEventParams(evt);
+        MouseButtonEventParams* params = MouseButtonEvent::parseEventParams(evt);
 
-        return MouseButtonEvent::handleEvent("SystemEvent.MOUSEBUTTON", evt, params);
+        void* retVal = MouseButtonEvent::handleEvent("SystemEvent.MOUSEBUTTON", evt, params);
+
+        delete params;
+        return retVal;
       }
 
-      static void* handleEvent(const char* name, SDL_MouseButtonEvent, MouseButtonEventParams params) {
+      static void* handleEvent(const char* name, SDL_MouseButtonEvent, MouseButtonEventParams* params) {
         void* retVal = (void*)true;
 
         if (_callbacks->has(name)) {
@@ -60,8 +63,8 @@
 
           void*(*callback)(void*) = callbackRec->method;
 
-          params.data = callbackRec->input;
-          retVal = callback((void*)&params);
+          params->data = callbackRec->input;
+          retVal = callback((void*)params);
         }
 
         return retVal;
