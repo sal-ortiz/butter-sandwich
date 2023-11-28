@@ -15,7 +15,6 @@
   #include "./scene/element.hpp"
 
 
-
   class Scene: public SceneBase {
 
     private:
@@ -37,6 +36,34 @@
 
         this->size = new Size();
         this->view = new View();
+      }
+
+      ~Scene() {
+        uint32_t elListLen = this->elements->getLength();
+        uint32_t bgListLen = this->backgrounds->getLength();
+        uint32_t fgListLen = this->foregrounds->getLength();
+
+        for (uint32_t elIdx = 0; elIdx < elListLen; elIdx++) {
+          SceneBase* element = this->elements->get(elIdx);
+
+          delete element;
+        }
+
+        for (uint32_t fgIdx = 0; fgIdx < fgListLen; fgIdx++) {
+          SceneBase* element = this->foregrounds->get(fgIdx);
+
+          delete element;
+        }
+
+        for (uint32_t bgIdx = 0; bgIdx < bgListLen; bgIdx++) {
+          SceneBase* element = this->backgrounds->get(bgIdx);
+
+          delete element;
+        }
+
+        delete this->elements;
+        delete this->foregrounds;
+        delete this->backgrounds;
       }
 
       uint32_t getNumElements() {
