@@ -110,6 +110,8 @@
         Hook::generateIdentifier(hookId, "state", instId, key, "get");
 
         this->on(hookId, callback);
+
+        delete hookId;
       }
 
       void onSet(const char* key, void*(*callback)(void*, void*, void*)) {
@@ -119,6 +121,8 @@
         Hook::generateIdentifier(hookId, "state", instId, key, "set");
 
         this->on(hookId, callback);
+
+        delete hookId;
       }
 
   };
