@@ -32,6 +32,16 @@
       }
 
       ~State() {
+        List<void*>* dataList = this->data->getValues();
+        uint32_t dataListLen = dataList->getLength();
+
+        for (uint32_t idx = 0; idx < dataListLen; idx++) {
+          void* entry = dataList->get(idx);
+
+          free(entry);  // free void* vals
+        }
+
+        delete dataList;
         delete this->data;
       }
 
