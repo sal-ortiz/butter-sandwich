@@ -101,6 +101,8 @@
         }
 
         this->data->set(key, retVal->newValue);
+
+        delete inp;
       }
 
       void onGet(const char* key, void*(*callback)(void*, void*, void*)) {
@@ -111,7 +113,7 @@
 
         this->on(hookId, callback);
 
-        delete hookId;
+        free(hookId);
       }
 
       void onSet(const char* key, void*(*callback)(void*, void*, void*)) {
@@ -122,7 +124,7 @@
 
         this->on(hookId, callback);
 
-        delete hookId;
+        free(hookId);
       }
 
   };
