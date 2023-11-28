@@ -91,7 +91,12 @@
           entry->setValue(value);
 
         } else {
-          DictEntry<class_type>* newEntry = new DictEntry<class_type>(key, value);
+          uint32_t keyLen = strlen(key);
+          char* newKey = new char[keyLen + 1];
+
+          strcpy(newKey, key);
+
+          DictEntry<class_type>* newEntry = new DictEntry<class_type>(newKey, value);
 
           list->unshift(newEntry);
           //list->push(newEntry);
@@ -153,6 +158,7 @@
           for (uint32_t listIdx = 0; listIdx < listLen; listIdx++) {
             DictEntry<class_type>* entry = list->get(listIdx);
 
+            delete entry->key;
             delete entry;
           }
 
