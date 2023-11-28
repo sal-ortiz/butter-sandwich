@@ -66,7 +66,12 @@
       }
 
       void setName(const char* name) {
-        this->name = name;
+        uint32_t nameLen = strlen(name);
+        char* newName = new char[nameLen + 1];
+
+        strcpy(newName, name);
+
+        this->name = newName;
       }
 
       const char* getName() {
