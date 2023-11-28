@@ -72,6 +72,7 @@ int main(int argc, char *argv[]) {
 
   KeyboardInput::initialize();
   Event::initialize();
+  Hook::initialize();
 
   Window* win = new Window();
   Application* app = new Application();
@@ -166,6 +167,7 @@ int main(int argc, char *argv[]) {
 
   }
 
+  Hook::deinitialize();
   Event::deinitialize();
   KeyboardInput::deinitialize();
 
