@@ -3,58 +3,84 @@
 
   #define _THREAD_HPP
 
-  #include <stdint.h>
+  #include <string.h>
 
   #include <SDL2/SDL.h>
+
+  #include "./list.hpp"
+  //#include "../tools/identifier.hpp"
+
+
+  struct ThreadParams {
+    void* thread;   // when seperating header and impl files, change this to a Thread obj
+    void*(*func)(void*, void*, void*);
+
+    void* dataOne;
+    void* dataTwo;
+    void* dataThree;
+  };
 
 
   class Thread {
 
     private:
 
-      char* identifier;
-
-      int32_t(*func)(void*);
-
       SDL_Thread* threadObj;
-      SDL_mutex* mutexObj;
+      SDL_mutex* mutex;
+      //SDL_cond* condition;
 
-      static char* generateIdentifier() {
-        char* identifier = new char[64];
-        time_t timestamp = time(NULL);
+      void*(*func)(void*, void*, void*);
 
-        srand(timestamp * rand());
+      static const uint8_t ID_LENGTH = 18;
 
-        sprintf(identifier, "thread-%ld", timestamp % (rand() * rand() * rand()));
+      static int32_t threadFunc(void* data) {
+        ThreadParams* parsedData = reinterpret_cast<ThreadParams*>(data);
+        Thread* thread = reinterpret_cast<Thread*>(parsedData->thread);
 
-        return identifier;
+        thread->lock();
+        parsedData->func(
+          parsedData->dataOne,
+          parsedData->dataTwo,
+          parsedData->dataThree
+        );
+        thread->unlock();
+
+        //thread->triggerCondition();
+
+        return (int32_t)NULL;
       }
 
 
     public:
 
       Thread() {
-        this->identifier = Thread::generateIdentifier();
-        this->mutexObj = SDL_CreateMutex();
-      }
-
-      Thread(int32_t(*func)(void*)) {
-        this->identifier = Thread::generateIdentifier();
-        this->func = func;
-        this->mutexObj = SDL_CreateMutex();
+        this->mutex = SDL_CreateMutex();
+        //this->condition = SDL_CreateCond();
       }
 
       ~Thread() {
-        SDL_UnlockMutex(this->mutexObj);
-        SDL_DestroyMutex(this->mutexObj);
+        SDL_UnlockMutex(this->mutex);
+        SDL_DestroyMutex(this->mutex);
+        //SDL_DestroyCond(this->condition);
       }
 
-      void setFunc() {
-        this->func = func;
-      }
+      //static void generateIdentifier(char* dest) {
+      //  uint32_t runtimeId = IdentifierTools::generate();
+      //
+      //  sprintf(dest, "thread-%.10u", runtimeId);
+      //}
 
-      void execute(void* data) {
-        threadObj = SDL_CreateThread(func, identifier, data);
+      void execute(void*(*func)(void*, void*, void*), void* inpOne=NULL, void* inpTwo=NULL, void* inpThree=NULL) {
+        ThreadParams* params = new ThreadParams();
+
+        params->thread = (void*)this;
+        params->func = func;
+
+        params->dataOne = inpOne;
+        params->dataTwo = inpTwo;
+        params->dataThree = inpThree;
+
+        this->threadObj = SDL_CreateThread(Thread::threadFunc, NULL, params);
       }
 
       void detach() {
@@ -62,23 +88,26 @@
       }
 
       void wait() {
+        //SDL_CondWait(this->condition, this->mutex);
         SDL_WaitThread(this->threadObj, NULL);
       }
 
+      //void wait(Thread* thread) {
+      //  //SDL_CondWait(thread->condition, this->mutex);
+      //  SDL_WaitThread(thread->threadObj, NULL);
+      //}
+
       void lock() {
-        SDL_LockMutex(this->mutexObj);
+        SDL_LockMutex(this->mutex);
       }
 
       void unlock() {
-        SDL_UnlockMutex(this->mutexObj);
+        SDL_UnlockMutex(this->mutex);
       }
 
-      static void execute(int32_t(*func)(void*), void* data) {
-        Thread* thread = new Thread(func);
-
-        thread->execute(data);
-        thread->detach();
-      }
+      //void triggerCondition() {
+      //  SDL_CondSignal(this->condition);
+      //}
 
   };
 
