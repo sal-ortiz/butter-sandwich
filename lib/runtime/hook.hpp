@@ -82,6 +82,25 @@
         _hookCallbacks->set(id, rec);
       }
 
+      static void* executeCallback(const char* id, void* inpOne=NULL, void* inpTwo=NULL, void* inpThree=NULL) {
+
+        if (Hook::hasCallback(id) == true) {
+          void*(*callback)(void*, void*, void*) = Hook::getCallback(id);
+
+          if (inpTwo == NULL) {
+            inpTwo = Hook::getInputOne(id);
+          }
+
+          if (inpThree == NULL) {
+            inpThree = Hook::getInputTwo(id);
+          }
+
+          return callback(inpOne, inpTwo, inpThree);
+        }
+
+        return inpOne;
+      }
+
   };
 
 #endif
