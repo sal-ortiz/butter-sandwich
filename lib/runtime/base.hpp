@@ -33,7 +33,7 @@
         Hook::setCallback(id, callback, dataOne, dataTwo);
       }
 
-      static void* executeCallback(const char* id, void* inpOne=NULL, void* inpTwo=NULL, void* inpThree=NULL) {
+      void* executeCallback(const char* id, void* inpOne=NULL, void* inpTwo=NULL, void* inpThree=NULL) {
 
         if (Hook::hasCallback(id) == true) {
           void* retVal = Hook::executeCallback(id, inpOne, inpTwo, inpThree);
