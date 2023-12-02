@@ -6,7 +6,7 @@
   #include <stdint.h>
 
 
-  struct CallbackRecord {
+  struct EventCallbackRecord {
     void*(*method)(void*);
     void* input;
   };
@@ -19,7 +19,7 @@
   };
 
 
-  Dict<CallbackRecord*>* _callbacks;
+  Dict<EventCallbackRecord*>* _eventCallbacks;
 
 
   class EventBase {

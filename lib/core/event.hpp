@@ -21,31 +21,31 @@
     public:
 
       static void initialize() {
-        _callbacks = new Dict<CallbackRecord*>();
+        _eventCallbacks = new Dict<EventCallbackRecord*>();
       }
 
       static void deinitialize() {
-        List<CallbackRecord*>* vals = _callbacks->getValues();
+        List<EventCallbackRecord*>* vals = _eventCallbacks->getValues();
 
         uint32_t valsLen = vals->getLength();
 
         for (uint32_t idx = 0; idx < valsLen; idx++) {
-          CallbackRecord* val = vals->get(idx);
+          EventCallbackRecord* val = vals->get(idx);
 
           delete val;
         }
 
         delete vals;
-        delete _callbacks;
+        delete _eventCallbacks;
       }
 
       static void on(const char* id, void*(*callback)(void*), void* inp) {
-        CallbackRecord* entry = new CallbackRecord();
+        EventCallbackRecord* entry = new EventCallbackRecord();
 
         entry->method = callback;
         entry->input = inp;
 
-        _callbacks->set(id, entry);
+        _eventCallbacks->set(id, entry);
       }
 
       static void* evaluate() {

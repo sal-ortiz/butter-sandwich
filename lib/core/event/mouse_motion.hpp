@@ -58,12 +58,12 @@
       static void* handleEvent(const char* name, SDL_MouseMotionEvent, MouseMotionEventParams* params) {
         void* retVal = (void*)true;
 
-        if (_callbacks->has(name)) {
-          CallbackRecord* callbackRec = _callbacks->get(name);
+        if (_eventCallbacks->has(name)) {
+          EventCallbackRecord* rec = _eventCallbacks->get(name);
 
-          void*(*callback)(void*) = callbackRec->method;
+          void*(*callback)(void*) = rec->method;
 
-          params->data = callbackRec->input;
+          params->data = rec->input;
           retVal = callback((void*)params);
         }
 
