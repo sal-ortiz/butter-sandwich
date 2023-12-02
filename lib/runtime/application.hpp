@@ -40,7 +40,7 @@
         ApplicationEventParams* params = reinterpret_cast<ApplicationEventParams*>(inp);
         Application* app = (Application*)params->data;
 
-        void* retVal = Hook::executeCallback("QUIT", inp);
+        void* retVal = Runtime::executeCallback("QUIT", inp);
 
         app->exit();
 
@@ -57,7 +57,7 @@
 
         KeyboardInput::setState(params->scanCode, isPressed);
 
-        void* retVal = Hook::executeCallback("KEYBOARD", inp);
+        void* retVal = Runtime::executeCallback("KEYBOARD", inp);
 
         return retVal;
       }
@@ -65,7 +65,7 @@
       static void* mouseMotionCallback(void* inp) {
         //MouseMotionEventParams* params = reinterpret_cast<MouseMotionEventParams*>(inp);
 
-        void* retVal = Hook::executeCallback("MOUSEMOTION", inp);
+        void* retVal = Runtime::executeCallback("MOUSEMOTION", inp);
 
         return retVal;
       }
@@ -73,7 +73,7 @@
       static void* mouseButtonCallback(void* inp) {
         //MouseButtonEventParams* params = reinterpret_cast<MouseButtonEventParams*>(inp);
 
-        void* retVal = Hook::executeCallback("MOUSEBUTTON", inp);
+        void* retVal = Runtime::executeCallback("MOUSEBUTTON", inp);
 
         return retVal;
       }
