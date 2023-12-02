@@ -64,7 +64,7 @@
         WindowEventParams* params = reinterpret_cast<WindowEventParams*>(inp);
         Window* win = (Window*)params->data;
 
-        void* retVal = Runtime::executeCallback("CLOSED", inp);
+        void* retVal = Hook::executeCallback("CLOSED", inp);
 
         win->close();
 
@@ -73,7 +73,7 @@
 
       static void* movedCallback(void* inp) {
         WindowEventParams* params = reinterpret_cast<WindowEventParams*>(inp);
-        void* retVal = Runtime::executeCallback("MOVED", inp);
+        void* retVal = Hook::executeCallback("MOVED", inp);
 
         //printf("MOVED TO %ld, %ld\n", params->horz, params->vert);
 
@@ -82,7 +82,7 @@
 
       static void* resizedCallback(void* inp) {
         WindowEventParams* params = reinterpret_cast<WindowEventParams*>(inp);
-        void* retVal = Runtime::executeCallback("RESIZED", inp);
+        void* retVal = Hook::executeCallback("RESIZED", inp);
 
         //printf("RESIZED TO %ld, %ld\n", params->horz, params->vert);
 
@@ -91,7 +91,7 @@
 
       static void* presentCallback(void* inp) {
         UserEventParams* params = reinterpret_cast<UserEventParams*>(inp);
-        void* retVal = Runtime::executeCallback("PRESENT", inp);
+        void* retVal = Hook::executeCallback("PRESENT", inp);
 
         //printf("RENDERING WINDOW\n");
 
