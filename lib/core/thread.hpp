@@ -20,32 +20,37 @@
     void* dataThree;
   };
 
-
   class Thread {
 
     private:
 
       SDL_Thread* threadObj;
-      SDL_mutex* mutex;
-      //SDL_cond* condition;
+      SDL_mutex* mutexObj;
+      SDL_cond* conditionObj;
 
       void*(*func)(void*, void*, void*);
 
-      static const uint8_t ID_LENGTH = 18;
+      //static const uint8_t ID_LENGTH = 18;
 
       static int32_t threadFunc(void* data) {
         ThreadParams* parsedData = reinterpret_cast<ThreadParams*>(data);
         Thread* thread = reinterpret_cast<Thread*>(parsedData->thread);
 
+        thread->waitForTrigger();
+
         thread->lock();
+
         parsedData->func(
           parsedData->dataOne,
           parsedData->dataTwo,
           parsedData->dataThree
         );
+
         thread->unlock();
 
-        //thread->triggerCondition();
+        SDL_DestroyCond(thread->conditionObj);
+
+        thread->conditionObj = SDL_CreateCond();
 
         return (int32_t)NULL;
       }
@@ -54,14 +59,15 @@
     public:
 
       Thread() {
-        this->mutex = SDL_CreateMutex();
-        //this->condition = SDL_CreateCond();
+        this->mutexObj = SDL_CreateMutex();
+        //this->conditionObj = SDL_CreateCond();
       }
 
       ~Thread() {
-        SDL_UnlockMutex(this->mutex);
-        SDL_DestroyMutex(this->mutex);
-        //SDL_DestroyCond(this->condition);
+        SDL_UnlockMutex(this->mutexObj);
+        SDL_DestroyMutex(this->mutexObj);
+
+        SDL_DestroyCond(this->conditionObj);
       }
 
       //static void generateIdentifier(char* dest) {
@@ -88,26 +94,30 @@
       }
 
       void wait() {
-        //SDL_CondWait(this->condition, this->mutex);
+        //SDL_CondWait(this->conditionObj, this->mutexObj);
         SDL_WaitThread(this->threadObj, NULL);
       }
 
-      //void wait(Thread* thread) {
-      //  //SDL_CondWait(thread->condition, this->mutex);
-      //  SDL_WaitThread(thread->threadObj, NULL);
-      //}
+      void wait(Thread* thread) {
+        //SDL_CondWait(thread->conditionObj, this->mutexObj);
+        SDL_WaitThread(thread->threadObj, NULL);
+      }
 
       void lock() {
-        SDL_LockMutex(this->mutex);
+        SDL_LockMutex(this->mutexObj);
       }
 
       void unlock() {
-        SDL_UnlockMutex(this->mutex);
+        SDL_UnlockMutex(this->mutexObj);
       }
 
-      //void triggerCondition() {
-      //  SDL_CondSignal(this->condition);
-      //}
+      void waitForTrigger() {
+        SDL_CondWait(this->conditionObj, this->mutexObj);
+      }
+
+      void trigger() {
+        SDL_CondSignal(this->conditionObj);
+      }
 
   };
 

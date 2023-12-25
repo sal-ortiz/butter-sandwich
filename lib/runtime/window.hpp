@@ -10,6 +10,7 @@
   #include "./base.hpp"
   #include "../core/event.hpp"
   #include "../core/renderer.hpp"
+  #include "../core/thread.hpp"
 
 
   class Window: public RuntimeBase {
@@ -19,6 +20,8 @@
       SDL_Window* handle;
       Renderer* renderer;
 
+      Thread* renderThread;
+
 
     public:
 
@@ -27,10 +30,14 @@
         Event::on("WindowEvent.MOVED", Window::movedCallback, this);
         Event::on("WindowEvent.RESIZED", Window::resizedCallback, this);
         Event::on("UserEvent.WINDOWPRESENT", Window::presentCallback, this);
+
+        this->renderThread = new Thread();
       }
 
       ~Window() {
         delete this->renderer;
+
+        delete this->renderThread;
 
         SDL_DestroyWindow(this->handle);
       }
@@ -40,6 +47,8 @@
 
         this->handle = SDL_CreateWindow(title, xPos, yPos, width, height, windowFlags);
         this->renderer = new Renderer(this->handle);
+
+        this->renderThread->execute(Window::renderThreadFunc, this->renderer);
       }
 
       void close() {
@@ -53,7 +62,10 @@
       void render() {
         //Event::pushEvent(PRESENT_WINDOW);
 
-        this->renderer->present();
+        this->renderThread->trigger();
+        this->renderThread->wait();
+
+        this->renderThread->execute(Window::renderThreadFunc, this->renderer);
       }
 
       Renderer* getRenderer() {
@@ -96,6 +108,14 @@
         //printf("RENDERING WINDOW\n");
 
         return retVal;
+      }
+
+      static void* renderThreadFunc(void* inpOne, void* inpTwo, void* inpThree) {
+        Renderer* renderer = reinterpret_cast<Renderer*>(inpOne);
+
+        renderer->present();
+
+        return NULL;
       }
 
   };
