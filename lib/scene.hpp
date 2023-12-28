@@ -5,7 +5,7 @@
 
   #include <string.h>
 
-  #include "../lib/runtime/physics.hpp"
+  #include "../lib/core/quadtree.hpp"
   #include "../lib/core/renderer.hpp"
   #include "./runtime/data/size.hpp"
   #include "./runtime/data/view.hpp"
@@ -23,6 +23,7 @@
       List<SceneBase*>* backgrounds;
       List<SceneBase*>* foregrounds;
 
+      QuadNode* quadTree;
 
     public:
 
@@ -36,6 +37,8 @@
 
         this->size = new Size();
         this->view = new View();
+
+        this->quadTree = new QuadNode(0, 0, this->size->horz, this->size->vert);
       }
 
       ~Scene() {
@@ -144,9 +147,9 @@
         uint32_t backgroundsLen = this->backgrounds->getLength();
         uint32_t foregroundsLen = this->foregrounds->getLength();
 
-        // TODO: find a better way to get this value into Physics::Collision
-        Collision::setWidth(this->size->horz);
-        Collision::setHeight(this->size->vert);
+        //// TODO: find a better way to get this value into Physics::Collision
+        //Collision::setWidth(this->size->horz);
+        //Collision::setHeight(this->size->vert);
 
         for (uint32_t elementsIdx = 0; elementsIdx < elementsLen; elementsIdx++) {
           SceneBase* element = this->elements->get(elementsIdx);
@@ -154,16 +157,52 @@
           if (element->isActive) {
             element->evaluate();
 
-            Collision::insert(element);
+
+
+
+
+            Position* elPos = (Position*)element->state->get("absolute_position");
+            Size* elSize = new Size(element->width, element->height);
+
+
+
+
+            //this->quadTree->insert(elPos->horz, elPos->vert, elSize->horz, elSize->vert, NULL);
+
+
+
+
           }
 
         }
+
+        for (uint32_t elementsIdx = 0; elementsIdx < elementsLen; elementsIdx++) {
+          SceneBase* element = this->elements->get(elementsIdx);
+
+
+          //List<QuadNodeEntry*>* collList = this->quadTree->query(0, 0, this->size->horz, this->size->vert);
+
+
+
+          // TODO: call callbacks.
+
+
+
+
+
+
+
+
+
+        }
+
 
         for (uint32_t backgroundsIdx = 0; backgroundsIdx < backgroundsLen; backgroundsIdx++) {
           SceneBase* element = this->backgrounds->get(backgroundsIdx);
 
           if (element->isActive) {
             element->evaluate();
+
           }
 
         }
@@ -173,11 +212,11 @@
 
           if (element->isActive) {
             element->evaluate();
+
           }
 
         }
 
-        Collision::evaluate();
 
         SceneBase::evaluate();
       }

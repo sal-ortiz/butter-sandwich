@@ -19,7 +19,7 @@
 
     private:
 
-      void*(*evalCallback)(void*);
+      //void*(*evalCallback)(void*);
 
       const char* action;
       Dict<Sprite*> sprites;
@@ -39,7 +39,7 @@
       bool isActive;
 
       SceneBase() {
-        this->evalCallback = NULL;
+        //this->evalCallback = NULL;
 
         this->state = new State();
 
@@ -86,6 +86,14 @@
         return this->type;
       }
 
+
+
+
+
+
+
+
+
       void onCollision(void*(*callback)(void*, void*, void*), void* dataOne=NULL, void* dataTwo=NULL) {
         uint32_t charId = this->getIdentifier();
 
@@ -95,6 +103,16 @@
 
         this->on(hookId, callback, dataOne, dataTwo);
       }
+
+
+
+
+
+
+
+
+
+
 
       void onEvaluate(void*(*callback)(void*, void*, void*), void* dataOne=NULL, void* dataTwo=NULL) {
         uint32_t charId = this->getIdentifier();

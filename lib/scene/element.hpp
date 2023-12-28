@@ -12,6 +12,25 @@
 
       SceneElement() {
         this->type = "element";
+
+
+
+
+
+        //this->onCollision(this->collisionCallback);
+
+
+
+
+
+      }
+
+
+      static void* collisionCallback(void* inpOne, void* inpTwo, void* inpThree) {
+        printf("\n\n============================================");
+        printf("\n==== COLLISION!!! ============================");
+        printf("\n============================================\n\n");
+
       }
 
   };
