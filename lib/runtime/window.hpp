@@ -20,7 +20,7 @@
       SDL_Window* handle;
       Renderer* renderer;
 
-      Thread* renderThread;
+      //Thread* renderThread;
 
 
     public:
@@ -31,13 +31,13 @@
         Event::on("WindowEvent.RESIZED", Window::resizedCallback, this);
         Event::on("UserEvent.WINDOWPRESENT", Window::presentCallback, this);
 
-        this->renderThread = new Thread();
+        //this->renderThread = new Thread();
       }
 
       ~Window() {
         delete this->renderer;
 
-        delete this->renderThread;
+        //delete this->renderThread;
 
         SDL_DestroyWindow(this->handle);
       }
@@ -48,7 +48,7 @@
         this->handle = SDL_CreateWindow(title, xPos, yPos, width, height, windowFlags);
         this->renderer = new Renderer(this->handle);
 
-        this->renderThread->execute(Window::renderThreadFunc, this->renderer);
+        //this->renderThread->execute(Window::renderThreadFunc, this->renderer);
       }
 
       void close() {
@@ -62,10 +62,12 @@
       void render() {
         //Event::pushEvent(PRESENT_WINDOW);
 
-        this->renderThread->trigger();
-        this->renderThread->wait();
+        //this->renderThread->trigger();
+        //this->renderThread->wait();
 
-        this->renderThread->execute(Window::renderThreadFunc, this->renderer);
+        //this->renderThread->execute(Window::renderThreadFunc, this->renderer);
+
+        this->renderer->present();
       }
 
       Renderer* getRenderer() {
@@ -110,13 +112,13 @@
         return retVal;
       }
 
-      static void* renderThreadFunc(void* inpOne, void* inpTwo, void* inpThree) {
-        Renderer* renderer = reinterpret_cast<Renderer*>(inpOne);
-
-        renderer->present();
-
-        return NULL;
-      }
+      //static void* renderThreadFunc(void* inpOne, void* inpTwo, void* inpThree) {
+      //  Renderer* renderer = reinterpret_cast<Renderer*>(inpOne);
+      //
+      //  renderer->present();
+      //
+      //  return NULL;
+      //}
 
   };
 
