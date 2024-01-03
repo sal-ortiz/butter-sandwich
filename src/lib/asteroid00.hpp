@@ -86,8 +86,9 @@
       }
 
       static void* collisionCallback(void* inp, void* dataOne, void* dataTwo) {
-        Asteroid00* asteroid = reinterpret_cast<Asteroid00*>(inp);
-        List<SceneBase*>* elements = reinterpret_cast<List<SceneBase*>*>(dataOne);
+        SceneBase* targ = reinterpret_cast<SceneBase*>(inp);
+        Scene* scene = reinterpret_cast<Scene*>(dataOne);
+        //List<SceneBase*>* elements = reinterpret_cast<List<SceneBase*>*>(dataOne);
 
 
         printf("\n[%u] ASTEROID COLLISION!!", SDL_GetTicks());

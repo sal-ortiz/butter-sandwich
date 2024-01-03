@@ -197,10 +197,10 @@
                 // TODO: char testElHookId[Hook::ID_LENGTH];
 
                 Hook::generateIdentifier(baseElHookId, "hook", baseElCharId, "onCollision", "action");
-                Hook::executeCallback(baseElHookId, (void*)this);
+                Hook::executeCallback(baseElHookId, (void*)testEl);
 
                 Hook::generateIdentifier(testElHookId, "hook", testElCharId, "onCollision", "action");
-                Hook::executeCallback(testElHookId, (void*)this);
+                Hook::executeCallback(testElHookId, (void*)baseEl);
               }
 
             }

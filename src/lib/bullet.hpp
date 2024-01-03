@@ -53,7 +53,8 @@
       }
 
       static void* collisionCallback(void* inp, void* dataOne, void* dataTwo) {
-        Bullet* bullet = reinterpret_cast<Bullet*>(inp);
+        SceneBase* targ = reinterpret_cast<SceneBase*>(inp);
+        Scene* scene = reinterpret_cast<Scene*>(dataOne);
 
 
         printf("\n[%u] BULLET COLLISION!!", SDL_GetTicks());

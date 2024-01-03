@@ -90,7 +90,8 @@
       }
 
       static void* collisionCallback(void* inp, void* dataOne, void* dataTwo) {
-        Player* player = reinterpret_cast<Player*>(inp);
+        SceneBase* targ = reinterpret_cast<SceneBase*>(inp);
+        Scene* scene = reinterpret_cast<Scene*>(dataOne);
 
 
         printf("\n[%u] PLAYER COLLISION!!", SDL_GetTicks());
