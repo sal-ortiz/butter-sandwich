@@ -90,7 +90,7 @@
         List<SceneBase*>* elements = reinterpret_cast<List<SceneBase*>*>(dataOne);
 
 
-        printf("\nCOLLISION!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        printf("\n[%u] ASTEROID COLLISION!!", SDL_GetTicks());
 
 
         return NULL;

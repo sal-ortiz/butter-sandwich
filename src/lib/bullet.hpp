@@ -56,7 +56,7 @@
         Bullet* bullet = reinterpret_cast<Bullet*>(inp);
 
 
-        printf("\nCOLLISION!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        printf("\n[%u] BULLET COLLISION!!", SDL_GetTicks());
 
 
         return NULL;

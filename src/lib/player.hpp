@@ -93,7 +93,7 @@
         Player* player = reinterpret_cast<Player*>(inp);
 
 
-        printf("\nCOLLISION!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        printf("\n[%u] PLAYER COLLISION!!", SDL_GetTicks());
 
 
         return NULL;

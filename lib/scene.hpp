@@ -149,17 +149,68 @@
 
 
           if (element->isActive) {
+            // TODO: We should differentiate between 'active' and 'visible'.
+
             element->evaluate();
 
-            Position* elPos = (Position*)element->state->get("absolute_position");
-            Size* elSize = new Size(element->width, element->height);
-
-            Collision::insert(elPos->horz, elPos->vert, elSize->horz, elSize->vert, NULL);
+            //Position* elPos = (Position*)element->state->get("absolute_position");
+            //Size* elSize = new Size(element->width, element->height);
+            //
+            //Collision::insert(elPos->horz, elPos->vert, elSize->horz, elSize->vert, NULL);
           }
 
         }
 
-        Collision::evaluate();
+
+
+
+
+
+        for (uint32_t baseElsIdx = 0; baseElsIdx < elementsLen; baseElsIdx++) {
+          SceneBase* baseEl = this->elements->get(baseElsIdx);
+
+
+          for (uint32_t testElsIdx = baseElsIdx; testElsIdx < elementsLen; testElsIdx++) {
+            SceneBase* testEl = this->elements->get(testElsIdx);
+
+            if (baseElsIdx == testElsIdx) {
+              continue;
+            }
+
+            if (baseEl->isActive && testEl->isActive) {
+              // TODO: We should differentiate between 'active' and 'visible'.
+              Position* baseElPos = (Position*)baseEl->state->get("absolute_position");
+              Position* testElPos = (Position*)testEl->state->get("absolute_position");
+
+              Size* baseElSize = new Size(baseEl->width, baseEl->height);
+              Size* testElSize = new Size(testEl->width, testEl->height);
+
+              bool hasCollided = Collision::evaluate(baseElPos, baseElSize, testElPos, testElSize);
+
+              if (hasCollided) {
+                uint32_t baseElCharId = baseEl->getIdentifier();
+                uint32_t testElCharId = testEl->getIdentifier();
+
+                char* baseElHookId = new char[Hook::ID_LENGTH];
+                // TODO: char baseElHookId[Hook::ID_LENGTH];
+                char* testElHookId = new char[Hook::ID_LENGTH];
+                // TODO: char testElHookId[Hook::ID_LENGTH];
+
+                Hook::generateIdentifier(baseElHookId, "hook", baseElCharId, "onCollision", "action");
+                Hook::executeCallback(baseElHookId, (void*)this);
+
+                Hook::generateIdentifier(testElHookId, "hook", testElCharId, "onCollision", "action");
+                Hook::executeCallback(testElHookId, (void*)this);
+              }
+
+            }
+
+          }
+
+        }
+
+
+
 
 
         for (uint32_t backgroundsIdx = 0; backgroundsIdx < backgroundsLen; backgroundsIdx++) {
@@ -182,7 +233,15 @@
 
         }
 
-        Collision::clear();
+
+
+
+
+        //Collision::clear();
+
+
+
+
 
         SceneBase::evaluate();
       }
