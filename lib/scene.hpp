@@ -143,15 +143,15 @@
       void evaluateCollision() {
         uint32_t numElements = elements->getLength();
 
-        for (uint32_t baseElsIdx = 0; baseElsIdx < numElements; baseElsIdx++) {
+        for (uint32_t baseElsIdx = 0; baseElsIdx < numElements - 1; baseElsIdx++) {
           SceneBase* baseEl = this->elements->get(baseElsIdx);
 
-          for (uint32_t testElsIdx = baseElsIdx; testElsIdx < numElements; testElsIdx++) {
+          for (uint32_t testElsIdx = baseElsIdx + 1; testElsIdx < numElements; testElsIdx++) {
             SceneBase* testEl = this->elements->get(testElsIdx);
 
-            if (baseElsIdx == testElsIdx) {
-              continue;
-            }
+            //if (baseElsIdx == testElsIdx) {
+            //  continue;
+            //}
 
             if (baseEl->isActive && testEl->isActive) {
               // TODO: We should differentiate between 'active' and 'visible'.
