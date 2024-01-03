@@ -62,7 +62,7 @@
         inp->newValue = NULL;
         inp->oldValue = val;
 
-        void* outp = this->executeCallback(hookId, (void*)inp);
+        void* outp = Hook::executeCallback(hookId, (void*)inp);
 
         HookCallbackParams* retVal = (HookCallbackParams*)outp;
 
@@ -92,7 +92,7 @@
         inp->newValue = val;
         inp->oldValue = oldVal;
 
-        void* outp = this->executeCallback(hookId, (void*)inp);
+        void* outp = Hook::executeCallback(hookId, (void*)inp);
 
         HookCallbackParams* retVal = (HookCallbackParams*)outp;
 

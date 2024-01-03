@@ -147,7 +147,7 @@
         // TODO: char hookId[Hook::ID_LENGTH];
         Hook::generateIdentifier(hookId, "hook", charId, "onEvaluate", "action");
 
-        this->executeCallback(hookId, (void*)this);
+        Hook::executeCallback(hookId, (void*)this);
       }
 
   };
