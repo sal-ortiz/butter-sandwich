@@ -139,38 +139,14 @@
         return (SceneBase*)NULL;
       }
 
-      void evaluate() {
-        uint32_t elementsLen = this->elements->getLength();
-        uint32_t backgroundsLen = this->backgrounds->getLength();
-        uint32_t foregroundsLen = this->foregrounds->getLength();
 
-        for (uint32_t elementsIdx = 0; elementsIdx < elementsLen; elementsIdx++) {
-          SceneBase* element = this->elements->get(elementsIdx);
+      void evaluateCollision() {
+        uint32_t numElements = elements->getLength();
 
-
-          if (element->isActive) {
-            // TODO: We should differentiate between 'active' and 'visible'.
-
-            element->evaluate();
-
-            //Position* elPos = (Position*)element->state->get("absolute_position");
-            //Size* elSize = new Size(element->width, element->height);
-            //
-            //Collision::insert(elPos->horz, elPos->vert, elSize->horz, elSize->vert, NULL);
-          }
-
-        }
-
-
-
-
-
-
-        for (uint32_t baseElsIdx = 0; baseElsIdx < elementsLen; baseElsIdx++) {
+        for (uint32_t baseElsIdx = 0; baseElsIdx < numElements; baseElsIdx++) {
           SceneBase* baseEl = this->elements->get(baseElsIdx);
 
-
-          for (uint32_t testElsIdx = baseElsIdx; testElsIdx < elementsLen; testElsIdx++) {
+          for (uint32_t testElsIdx = baseElsIdx; testElsIdx < numElements; testElsIdx++) {
             SceneBase* testEl = this->elements->get(testElsIdx);
 
             if (baseElsIdx == testElsIdx) {
@@ -209,9 +185,26 @@
 
         }
 
+      }
 
 
+      void evaluate() {
+        uint32_t elementsLen = this->elements->getLength();
+        uint32_t backgroundsLen = this->backgrounds->getLength();
+        uint32_t foregroundsLen = this->foregrounds->getLength();
 
+        for (uint32_t elementsIdx = 0; elementsIdx < elementsLen; elementsIdx++) {
+          SceneBase* element = this->elements->get(elementsIdx);
+
+
+          if (element->isActive) {
+            // TODO: We should differentiate between 'active' and 'visible'.
+            element->evaluate();
+          }
+
+        }
+
+        evaluateCollision();
 
         for (uint32_t backgroundsIdx = 0; backgroundsIdx < backgroundsLen; backgroundsIdx++) {
           SceneBase* element = this->backgrounds->get(backgroundsIdx);
@@ -232,16 +225,6 @@
           }
 
         }
-
-
-
-
-
-        //Collision::clear();
-
-
-
-
 
         SceneBase::evaluate();
       }
