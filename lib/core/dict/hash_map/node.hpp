@@ -1,13 +1,13 @@
 
-#ifndef _DICT_ENTRY_HPP
+#ifndef _HASHMAP_NODE_HPP
 
-  #define _DICT_ENTRY_HPP
+  #define _HASHMAP_NODE_HPP
 
   #include <string.h>
 
 
   template <class class_type>
-  class DictEntry {
+  class HashMapNode {
 
     private:
 
@@ -17,17 +17,17 @@
 
     public:
 
-      DictEntry() {
+      HashMapNode() {
         this->key = (const char*)NULL;
         this->value = (class_type)NULL;
       }
 
-      DictEntry(const char* key, class_type value) {
+      HashMapNode(const char* key, class_type value) {
         this->setKey(key);
         this->setValue(value);
       }
 
-      ~DictEntry() {
+      ~HashMapNode() {
         delete this->key;
       }
 
