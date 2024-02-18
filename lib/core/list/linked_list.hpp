@@ -11,6 +11,7 @@
 
   template <class class_type>
   class LinkedList {
+    // TODO: implement reverse traversal
 
     private:
 

@@ -38,16 +38,16 @@
         return this->next;
       }
 
-      void setNext(LinkedListNode<class_type>* entry) {
-        this->next = entry;
+      void setNext(LinkedListNode<class_type>* node) {
+        this->next = node;
       }
 
       LinkedListNode<class_type>* getPrev() {
         return this->prev;
       }
 
-      void setPrev(LinkedListNode<class_type>* entry) {
-        this->prev = entry;
+      void setPrev(LinkedListNode<class_type>* node) {
+        this->prev = node;
       }
 
   };
