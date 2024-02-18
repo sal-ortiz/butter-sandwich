@@ -19,7 +19,7 @@
 
       List<HashMapNode<class_type>*>* data[HASHMAP_LIST_ARRAY_LEN];
 
-      uint32_t hashCode(const char* key) {
+      static uint32_t hashCode(const char* key) {
         uint32_t outpValue = 1;
         uint32_t keyLen = strlen(key);
 
@@ -33,7 +33,7 @@
       }
 
       HashMapNode<class_type>* getEntry(const char* key) {
-        uint32_t aryIdx = this->hashCode(key) % HASHMAP_LIST_ARRAY_LEN;
+        uint32_t aryIdx = HashMap::hashCode(key) % HASHMAP_LIST_ARRAY_LEN;
 
         List<HashMapNode<class_type>*>* list = this->data[aryIdx];
         HashMapNode<class_type>* entry;
@@ -63,7 +63,7 @@
       }
 
       void setEntry(const char* key, class_type value) {
-        uint32_t aryIdx = this->hashCode(key) % HASHMAP_LIST_ARRAY_LEN;
+        uint32_t aryIdx = HashMap::hashCode(key) % HASHMAP_LIST_ARRAY_LEN;
 
         List<HashMapNode<class_type>*>* list = this->data[aryIdx];
         HashMapNode<class_type>* entry;
@@ -102,7 +102,7 @@
       }
 
       //void deleteEntry(const char* key) {
-      //  uint32_t aryIdx = this->hashCode(key) % HASHMAP_LIST_ARRAY_LEN;
+      //  uint32_t aryIdx = HashMap::hashCode(key) % HASHMAP_LIST_ARRAY_LEN;
       //
       //  List<HashMapNode<class_type>> list = data[aryIdx];
       //  HashMapNode<class_type> entry;
