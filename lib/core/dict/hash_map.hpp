@@ -179,11 +179,11 @@
       //  this->deleteEntry(key);
       //}
 
-      List<char*>* getKeys() {
+      List<const char*>* getKeys() {
         // TODO: It might be faster/efficient to merge the various lists
         //       contained in data instead of iterating through each one.
 
-        List<char*>* outp = new List<char*>();
+        List<const char*>* outp = new List<char*>();
 
         for (uint32_t aryIdx = 0; aryIdx < HASHMAP_LIST_ARRAY_LEN; aryIdx++) {
           List<HashMapNode<class_type>>* list = data[aryIdx];
@@ -228,7 +228,7 @@
       }
 
       bool has(const char* key) {
-        return !!this->get(key);
+        return !!this->getEntry(key);
       }
 
   };
