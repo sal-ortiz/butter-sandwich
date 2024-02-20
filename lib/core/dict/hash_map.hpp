@@ -183,17 +183,17 @@
         // TODO: It might be faster/efficient to merge the various lists
         //       contained in data instead of iterating through each one.
 
-        List<const char*>* outp = new List<char*>();
+        List<const char*>* outp = new List<const char*>();
 
         for (uint32_t aryIdx = 0; aryIdx < HASHMAP_LIST_ARRAY_LEN; aryIdx++) {
-          List<HashMapNode<class_type>>* list = data[aryIdx];
+          List<HashMapNode<class_type>*>* list = data[aryIdx];
 
           uint32_t listLen = list->getLength();
 
           for (uint32_t listIdx = 0; listIdx < listLen; listIdx++) {
             HashMapNode<class_type>* entry = list->get(listIdx);
 
-            char* key = entry->getKey();
+            const char* key = entry->getKey();
 
             outp->push(key);
           }
