@@ -75,33 +75,15 @@
 
         if (keyCmp < 0) {
           TreeMapNode<class_type>* leftNode = node->getLeft();
+          TreeMapNode<class_type>* tmpLeft = this->setEntry(leftNode, key, value);
 
-          if (leftNode == NULL) {
-            TreeMapNode<class_type>* newNode = new TreeMapNode<class_type>();
-
-            newNode->setKey(key);
-            newNode->setValue(value);
-
-            node->setLeft(newNode);
-
-          } else {
-            this->setEntry(leftNode, key, value);
-          }
+          node->setLeft(tmpLeft);
 
         } else if (keyCmp > 0) {
           TreeMapNode<class_type>* rightNode = node->getRight();
+          TreeMapNode<class_type>* tmpRight = this->setEntry(rightNode, key, value);
 
-          if (rightNode == NULL) {
-            TreeMapNode<class_type>* newNode = new TreeMapNode<class_type>();
-
-            newNode->setKey(key);
-            newNode->setValue(value);
-
-            node->setRight(newNode);
-
-          } else {
-            this->setEntry(rightNode, key, value);
-          }
+          node->setRight(tmpRight);
 
         } else {
           node->setValue(value);
@@ -239,6 +221,25 @@
 //        return node;
 //      }
 
+      TreeMapNode<class_type>* clear(TreeMapNode<class_type>* node) {
+
+        if (node != NULL) {
+          TreeMapNode<class_type>* leftChild = node->getLeft();
+          TreeMapNode<class_type>* rightChild = node->getRight();
+
+          TreeMapNode<class_type>* tmpLeft = this->clear(leftChild);
+          TreeMapNode<class_type>* tmpRight = this->clear(rightChild);
+
+          delete tmpLeft;
+          delete tmpRight;
+
+          node->setLeft(NULL);
+          node->setRight(NULL);
+        }
+
+        return node;
+      }
+
 
     public:
 
@@ -246,9 +247,11 @@
         this->root = NULL;
       }
 
-      //~TreeMap() {
-      //  // TODO: delete each entry
-      //}
+      ~TreeMap() {
+        this->clear(this->root);
+
+        delete this->root;
+      }
 
       //TreeMapNode<class_type>* getRoot() {
       //  return this->root;
