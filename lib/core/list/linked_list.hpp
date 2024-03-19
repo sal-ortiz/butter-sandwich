@@ -5,80 +5,141 @@
 
   #include <stdint.h>
   #include <stdio.h>
+  #include <math.h>
 
   #include "./linked_list/node.hpp"
 
 
   template <class class_type>
   class LinkedList {
-    // TODO: implement reverse traversal
 
     private:
 
       LinkedListNode<class_type>* root;
-      LinkedListNode<class_type>* indexEntry;
+      LinkedListNode<class_type>* last;
+      LinkedListNode<class_type>* indexNode;
 
       uint32_t index;
       uint32_t length;
 
+
       LinkedListNode<class_type>* getEntry(uint32_t targIndex) {
-
-        if (targIndex < this->index) {
-          this->indexEntry = this->root;
-          this->index = 0;
-        }
-
-        LinkedListNode<class_type>* node = this->indexEntry;
-
         if (targIndex >= this->length) {
           return NULL;
         }
 
-        while (this->index != targIndex) {
+        int index;
+        LinkedListNode<class_type>* node;
 
-          if (node->getNext() != NULL) {
-            node = node->getNext();
+        uint32_t distFromRoot = targIndex;
+        uint32_t distFromIndex = abs((int)targIndex - (int)this->index);
+        uint32_t distFromLast = this->length - (int)targIndex;
+        int8_t direction = 1;
 
-            this->index++;
+        if (distFromRoot <= distFromIndex && distFromRoot <= distFromLast) {
+          node = this->root;
+          index = 0;
+
+          direction = 1;
+
+        } else if (distFromIndex <= distFromRoot && distFromIndex <= distFromLast) {
+          node = this->indexNode;
+          index = this->index;
+
+          if (targIndex < this->index) {
+            direction = -1;
+          } else {
+            direction = 1;
+          }
+
+        } else if (distFromLast <= distFromRoot && distFromLast <= distFromIndex) {
+          node = this->last->getPrev();
+          index = this->length - 1;
+
+          direction = -1;
+        }
+
+        while (index != targIndex) {
+          LinkedListNode<class_type>* prev = node->getPrev();
+          LinkedListNode<class_type>* next = node->getNext();
+
+          index += direction;
+
+          if (direction > 0 && next != NULL) {
+            node = next;
+          } else if (direction < 0 && prev != NULL) {
+            node = prev;
           }
 
         }
 
-        this->indexEntry = node;
+        this->indexNode = node;
+        this->index = index;
 
         return node->getNext();
       }
 
       void setEntry(uint32_t targIndex, class_type value) {
+        uint32_t distFromRoot = targIndex;
+        uint32_t distFromIndex = abs((int)targIndex - (int)this->index);
+        uint32_t distFromLast = this->length - (int)targIndex;
+        int8_t direction = 1;
 
-        if (targIndex < this->index) {
-          this->indexEntry = this->root;
-          this->index = 0;
+        int index /*= this->index*/;
+        LinkedListNode<class_type>* node /*= this->indexNode*/;
+
+        if (distFromRoot <= distFromIndex && distFromRoot <= distFromLast) {
+          node = this->root;
+          index = 0;
+
+          direction = 1;
+
+        } else if (distFromIndex <= distFromRoot && distFromIndex <= distFromLast) {
+          node = this->indexNode;
+          index = this->index;
+
+          if (targIndex < this->index) {
+            direction = -1;
+          } else {
+            direction = 1;
+          }
+
+        } else if (distFromLast <= distFromRoot && distFromLast <= distFromIndex) {
+          node = this->last->getPrev();
+          index = this->length - 1;
+
+          direction = -1;
         }
-
-        LinkedListNode<class_type>* node = this->indexEntry;
 
         if (targIndex >= this->length) {
           this->length = targIndex + 1;
         }
 
-        while ((this->index - 1) != targIndex) {
+        while ((index - 1) != targIndex) {
 
-          if (node->getNext() == NULL) {
+          if (direction > 0 && node->getNext() == NULL) {
             LinkedListNode<class_type>* newEntry = new LinkedListNode<class_type>();
 
             newEntry->setValue((class_type)NULL);
 
             newEntry->setPrev(node);
             node->setNext(newEntry);
+
+            this->last = newEntry;
           }
 
-          this->index++;
+          index += direction;
 
-          node = node->getNext();
+          if (direction > 0) {
+            node = node->getNext();
+          } else {
+            node = node->getPrev();
+          }
+
         }
 
-        this->indexEntry = node;
+        this->indexNode = node;
+        this->index = index;
 
         node->setValue(value);
       }
@@ -89,12 +150,7 @@
           this->setEntry(targIndex, value);
         } else {
           LinkedListNode<class_type>* newEntry = new LinkedListNode<class_type>();
-
           LinkedListNode<class_type>* node = this->getEntry(targIndex);
-
-          if (node == NULL) {
-            this->setEntry(targIndex, value);
-          }
 
           LinkedListNode<class_type>* prev = node->getPrev();
 
@@ -142,7 +198,8 @@
 
       LinkedList() {
         this->root = new LinkedListNode<class_type>();
-        this->indexEntry = this->root;
+        this->indexNode = this->root;
+        this->last = this->root;
 
         this->index = 0;
         this->length = 0;
