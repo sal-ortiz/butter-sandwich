@@ -161,9 +161,9 @@
 
       }
 
-      LinkedListNode<class_type>* getRoot() {
-        return this->root;
-      }
+      //LinkedListNode<class_type>* getRoot() {
+      //  return this->root;
+      //}
 
       uint32_t getLength() {
         return this->length;
