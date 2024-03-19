@@ -85,7 +85,7 @@
 
       void insertEntry(uint32_t targIndex, class_type value) {
 
-        if (targIndex >= this->getLength()) {
+        if (targIndex >= this->length) {
           this->setEntry(targIndex, value);
         } else {
           LinkedListNode<class_type>* newEntry = new LinkedListNode<class_type>();
@@ -171,7 +171,7 @@
 
       class_type get(uint32_t targIndex) {
 
-        //if (targIndex > (this->getLength() - 1)) {
+        //if (targIndex > (this->length - 1)) {
         //  throw;
         //}
 
@@ -190,7 +190,7 @@
 
       void remove(uint32_t targIndex) {
 
-        //if (targIndex > (this->getLength() - 1)) {
+        //if (targIndex > (this->length - 1)) {
         //  throw;
         //}
 
@@ -198,7 +198,7 @@
       }
 
       void push(class_type value) {
-        uint32_t index = this->getLength();
+        uint32_t index = this->length;
 
         this->setEntry(index, value);
       }
@@ -210,7 +210,7 @@
       }
 
       class_type pop() {
-        uint32_t index = this->getLength() - 1;
+        uint32_t index = this->length - 1;
 
         LinkedListNode<class_type>* node = this->getEntry(index);
 
@@ -245,7 +245,7 @@
       //  uint32_t endIdx;
       //
       //  if (end == 0) {
-      //    endIdx = this->getLength() - 1;
+      //    endIdx = this->length - 1;
       //  } else {
       //    endIdx = end;
       //  }
