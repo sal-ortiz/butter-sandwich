@@ -269,10 +269,6 @@
       //  this->deleteEntry(key);
       //}
 
-      bool has(const char* key) {
-        return !!this->getEntry(key);
-      }
-
       List<const char*>* getKeys() {
         return this->getKeys(this->root);
       }

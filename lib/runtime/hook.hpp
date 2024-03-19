@@ -49,9 +49,9 @@
       }
 
       static bool hasCallback(const char* id) {
-        bool retVal = _hookCallbacks->has(id);
+        void* callbackRec = _hookCallbacks->get(id);
 
-        return retVal;
+        return callbackRec != NULL;
       }
 
       static void*(*getCallback(const char* id))(void*, void*, void*) {

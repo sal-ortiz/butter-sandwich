@@ -58,9 +58,9 @@
       static void* handleEvent(const char* name, SDL_MouseButtonEvent, MouseButtonEventParams* params) {
         void* retVal = (void*)true;
 
-        if (_eventCallbacks->has(name)) {
-          EventCallbackRecord* rec = _eventCallbacks->get(name);
+        EventCallbackRecord* rec = _eventCallbacks->get(name);
 
+        if (rec) {
           void*(*callback)(void*) = rec->method;
 
           params->data = rec->input;

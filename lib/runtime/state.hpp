@@ -52,9 +52,7 @@
         char hookId[Hook::ID_LENGTH];
         Hook::generateIdentifier(hookId, "state", instId, key, "get");
 
-        if (this->data->has(key)) {
-          val = this->data->get(key);
-        }
+        val = this->data->get(key);
 
         HookCallbackParams* inp = new HookCallbackParams();
 
@@ -80,11 +78,7 @@
         char hookId[Hook::ID_LENGTH];
         Hook::generateIdentifier(hookId, "state", instId, key, "get");
 
-        if (this->data->has(key)) {
-          oldVal = this->data->get(key);
-        } else {
-          oldVal = NULL;
-        }
+        oldVal = this->data->get(key);
 
         HookCallbackParams* inp = new HookCallbackParams();
 

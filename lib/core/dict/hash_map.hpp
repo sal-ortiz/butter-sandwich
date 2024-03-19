@@ -227,10 +227,6 @@
         return outp;
       }
 
-      bool has(const char* key) {
-        return !!this->getEntry(key);
-      }
-
   };
 
 #endif
