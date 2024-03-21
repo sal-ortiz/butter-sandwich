@@ -53,15 +53,15 @@
           }
 
         } else if (distFromLast <= distFromRoot && distFromLast <= distFromIndex) {
-          node = this->last->getPrev();
+          node = this->last->prev;
           index = this->length - 1;
 
           direction = -1;
         }
 
         while (index != targIndex) {
-          LinkedListNode<class_type>* prev = node->getPrev();
-          LinkedListNode<class_type>* next = node->getNext();
+          LinkedListNode<class_type>* prev = node->prev;
+          LinkedListNode<class_type>* next = node->next;
 
           index += direction;
 
@@ -76,7 +76,7 @@
         this->indexNode = node;
         this->index = index;
 
-        return node->getNext();
+        return node->next;
       }
 
       void setEntry(uint32_t targIndex, class_type value) {
@@ -105,7 +105,7 @@
           }
 
         } else if (distFromLast <= distFromRoot && distFromLast <= distFromIndex) {
-          node = this->last->getPrev();
+          node = this->last->prev;
           index = this->length - 1;
 
           direction = -1;
@@ -117,13 +117,13 @@
 
         while ((index - 1) != targIndex) {
 
-          if (direction > 0 && node->getNext() == NULL) {
-            LinkedListNode<class_type>* newEntry = new LinkedListNode<class_type>();
+          if (direction > 0 && node->next == NULL) {
+            LinkedListNode<class_type>* newEntry = new LinkedListNode<class_type>{};
 
-            newEntry->setValue((class_type)NULL);
+            newEntry->value = (class_type)NULL;
 
-            newEntry->setPrev(node);
-            node->setNext(newEntry);
+            newEntry->prev = node;
+            node->next = newEntry;
 
             this->last = newEntry;
           }
@@ -131,9 +131,9 @@
           index += direction;
 
           if (direction > 0) {
-            node = node->getNext();
+            node = node->next;
           } else {
-            node = node->getPrev();
+            node = node->prev;
           }
 
         }
@@ -141,7 +141,7 @@
         this->indexNode = node;
         this->index = index;
 
-        node->setValue(value);
+        node->value = value;
       }
 
       void insertEntry(uint32_t targIndex, class_type value) {
@@ -149,20 +149,20 @@
         if (targIndex >= this->length) {
           this->setEntry(targIndex, value);
         } else {
-          LinkedListNode<class_type>* newEntry = new LinkedListNode<class_type>();
+          LinkedListNode<class_type>* newEntry = new LinkedListNode<class_type>{};
           LinkedListNode<class_type>* node = this->getEntry(targIndex);
 
-          LinkedListNode<class_type>* prev = node->getPrev();
+          LinkedListNode<class_type>* prev = node->prev;
 
-          newEntry->setValue(value);
+          newEntry->value = value;
 
-          newEntry->setPrev(prev);
-          newEntry->setNext(node);
+          newEntry->prev = prev;
+          newEntry->next = node;
 
-          node->setPrev(newEntry);
+          node->prev = newEntry;
 
           if (prev) {
-            prev->setNext(newEntry);
+            prev->next = newEntry;
           }
 
           this->length++;
@@ -177,15 +177,15 @@
           return;
         }
 
-        LinkedListNode<class_type>* prev = node->getPrev();
-        LinkedListNode<class_type>* next = node->getNext();
+        LinkedListNode<class_type>* prev = node->prev;
+        LinkedListNode<class_type>* next = node->next;
 
         if (prev) {
-          prev->setNext(next);
+          prev->next = next;
         }
 
         if (next) {
-          next->setPrev(prev);
+          next->prev = prev;
         }
 
         this->length--;
@@ -197,7 +197,7 @@
     public:
 
       LinkedList() {
-        this->root = new LinkedListNode<class_type>();
+        this->root = new LinkedListNode<class_type>{};
         this->indexNode = this->root;
         this->last = this->root;
 
@@ -209,7 +209,7 @@
         LinkedListNode<class_type>* node = this->root;
 
         while (node != NULL) {
-          LinkedListNode<class_type>* next = node->getNext();
+          LinkedListNode<class_type>* next = node->next;
 
           delete node;
 
@@ -238,7 +238,7 @@
           return (class_type)NULL;
         }
 
-        return node->getValue();
+        return node->value;
       }
 
       void set(uint32_t targIndex, class_type value) {
@@ -275,7 +275,7 @@
           return NULL;
         }
 
-        class_type outpValue = node->getValue();
+        class_type outpValue = node->value;
 
         this->deleteEntry(index);
 
@@ -291,7 +291,7 @@
           return NULL;
         }
 
-        class_type outpValue = node->getValue();
+        class_type outpValue = node->value;
 
         this->deleteEntry(index);
 

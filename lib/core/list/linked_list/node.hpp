@@ -6,50 +6,13 @@
   #include <stddef.h>
 
 
-  template <class class_type>
-  class LinkedListNode {
+  template <typename data_type>
+  struct LinkedListNode {
 
-    private:
+    LinkedListNode<data_type>* next;
+    LinkedListNode<data_type>* prev;
 
-      class_type value;
-
-      LinkedListNode<class_type>* next;
-      LinkedListNode<class_type>* prev;
-
-
-    public:
-
-      LinkedListNode() {
-        this->next = (LinkedListNode<class_type>*)NULL;
-        this->prev = (LinkedListNode<class_type>*)NULL;
-
-        //this->value = NULL;
-      }
-
-      class_type getValue() {
-        return this->value;
-      }
-
-      void setValue(class_type value) {
-        this->value = value;
-      }
-
-      LinkedListNode<class_type>* getNext() {
-        return this->next;
-      }
-
-      void setNext(LinkedListNode<class_type>* node) {
-        this->next = node;
-      }
-
-      LinkedListNode<class_type>* getPrev() {
-        return this->prev;
-      }
-
-      void setPrev(LinkedListNode<class_type>* node) {
-        this->prev = node;
-      }
-
+    data_type value;
   };
 
 #endif
