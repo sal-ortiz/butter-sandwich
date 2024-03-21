@@ -9,6 +9,7 @@
   #include "../data/view.hpp"
   #include "../data/angle.hpp"
   #include "../data/scale.hpp"
+  #include "../data/color.hpp"
 
 
   class SpriteFrame {
@@ -27,7 +28,7 @@
         this->image = NULL;
       }
 
-      void render(Renderer* renderer, Position dstPos, View srcView, Angle angle, Scale scale) {
+      void render(Renderer* renderer, Position dstPos, View srcView, Angle angle, Scale scale, Color color) {
 
         if (this->image) {
 
@@ -43,7 +44,11 @@
             srcView.size.vert,
             angle.pitch,
             angle.center.horz,
-            angle.center.vert
+            angle.center.vert,
+            color.red,
+            color.blue,
+            color.green,
+            color.alpha
           );
 
         }

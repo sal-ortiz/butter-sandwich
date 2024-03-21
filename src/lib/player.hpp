@@ -37,6 +37,11 @@
         trajectory->scaleRate.vert = 0.90;
         trajectory->scaleRate.depth = 0.90;
 
+        trajectory->colorRate.red = 10.0;
+        trajectory->colorRate.green = 10.0;
+        trajectory->colorRate.blue = 10.0;
+        trajectory->colorRate.alpha = 10.0;
+
         this->isActive = true;
       }
 
@@ -70,6 +75,7 @@
 
         player->setAction("standing_still");
 
+        Color* color = (Color*)player->state->get("color");
         Scale* scale = (Scale*)player->state->get("scale");
         Angle* angle = (Angle*)player->state->get("angle");
         Position* absPosition = (Position*)player->state->get("absolute_position");
@@ -82,6 +88,11 @@
 
         absPosition->horz = scene->size->horz / 2;
         absPosition->vert = scene->size->vert / 2;
+
+        color->red = 1.0;
+        color->green = 1.0;
+        color->blue = 1.0;
+        color->alpha = 1.0;
 
         player->onEvaluate(Player::evaluateCallback, scene);
         player->onCollision(Player::collisionCallback, scene);
@@ -106,6 +117,7 @@
 
         Position* position = (Position*)player->state->get("position");
         Angle* angle = (Angle*)player->state->get("angle");
+        Color* color = (Color*)player->state->get("color");
         Trajectory* trajectory = (Trajectory*)player->state->get("trajectory");
 
         Position* absPosition = (Position*)player->state->get("absolute_position");
@@ -118,6 +130,11 @@
         angle->roll += trajectory->angle.roll;
         angle->yaw += trajectory->angle.yaw;
 
+        color->red = trajectory->color.red;
+        color->green = trajectory->color.green;
+        color->blue = trajectory->color.blue;
+        color->alpha = trajectory->color.alpha;
+
         trajectory->position.horz *= (trajectory->positionRate.horz);
         trajectory->position.vert *= (trajectory->positionRate.vert);
         trajectory->position.depth *= (trajectory->positionRate.depth);
@@ -125,6 +142,17 @@
         trajectory->angle.pitch *= (trajectory->angleRate.pitch);
         trajectory->angle.roll *= (trajectory->angleRate.roll);
         trajectory->angle.yaw *= (trajectory->angleRate.yaw);
+
+        trajectory->color.red += ((1 + trajectory->color.red) * trajectory->colorRate.red) / 36;
+        trajectory->color.green += ((1 + trajectory->color.green) * trajectory->colorRate.green) / 36;
+        trajectory->color.blue += ((1 + trajectory->color.blue) * trajectory->colorRate.blue) / 36;
+        trajectory->color.alpha += ((1 + trajectory->color.alpha) * trajectory->colorRate.alpha) / 36;
+
+
+        if (trajectory->color.red > 255)    trajectory->color.red = 255;
+        if (trajectory->color.blue > 255)   trajectory->color.blue = 255;
+        if (trajectory->color.green > 255)  trajectory->color.green = 255;
+        if (trajectory->color.alpha > 255)  trajectory->color.alpha = 255;
 
         if (absPosition->horz < round(player->width / 2) + 6) { // +6 tweak
           // enforce our leftmost border
@@ -236,7 +264,7 @@
           for (uint32_t bulletIdx = 0; bulletIdx < scene->getNumElements(); bulletIdx++) {
             char* name = new char();
 
-            sprintf(name, "bullet-%.2lu", bulletIdx);
+            sprintf(name, "bullet-%.2u", bulletIdx);
 
             SceneElement* element = (SceneElement*)scene->getElement(name);
 
@@ -271,6 +299,11 @@
               bullet->isActive = true;
 
               lastBulletTimestamp = SDL_GetTicks();
+
+              bulletTraj->color.red = 120;
+              bulletTraj->color.green = 10;
+              bulletTraj->color.blue = 10;
+              bulletTraj->color.alpha = 100;
 
               break;
             }

@@ -74,7 +74,11 @@
         uint32_t srcHeight,
         float dstAngle=0.0,
         uint32_t centerX=0,
-        uint32_t centerY=0
+        uint32_t centerY=0,
+        uint8_t red=255,
+        uint8_t green=255,
+        uint8_t blue=255,
+        uint8_t alpha=255
       ) {
 
         //int imgWidth;   // unused
@@ -119,7 +123,11 @@
           srcVertSize,
           dstAngle,
           centerHorzPos,
-          centerVertPos
+          centerVertPos,
+          red,
+          green,
+          blue,
+          alpha
         );
 
       }

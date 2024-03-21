@@ -119,10 +119,10 @@
         this->normalizeFramesList();
       }
 
-      void render(Renderer *renderer, Position* dstPos, View* srcView, Angle* angle, Scale* scale) {
+      void render(Renderer *renderer, Position* dstPos, View* srcView, Angle* angle, Scale* scale, Color* color) {
         SpriteFrame* frame = this->nextFrame();
 
-        frame->render(renderer, *dstPos, *srcView, *angle, *scale);
+        frame->render(renderer, *dstPos, *srcView, *angle, *scale, *color);
       }
 
       SpriteFrame* nextFrame() {

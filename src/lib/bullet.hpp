@@ -23,6 +23,13 @@
       Bullet() {
         this->isActive = false;
         this->type = "bullet";
+
+        Trajectory* trajectory = (Trajectory*)this->state->get("trajectory");
+
+        trajectory->colorRate.red = 45.0;
+        trajectory->colorRate.green = 45.0;
+        trajectory->colorRate.blue = 45.0;
+        trajectory->colorRate.alpha = 45.0;
       }
 
       static Bullet* loadAssets(Scene* scene) {
@@ -71,10 +78,26 @@
 
         Position* position = (Position*)bullet->state->get("position");
         Trajectory* trajectory = (Trajectory*)bullet->state->get("trajectory");
+        Color* color = (Color*)bullet->state->get("color");
 
         absPosition->horz += trajectory->position.horz;
         absPosition->vert += trajectory->position.vert;
         absPosition->depth += trajectory->position.depth;
+
+        color->red = trajectory->color.red;
+        color->green = trajectory->color.green;
+        color->blue = trajectory->color.blue;
+        color->alpha = trajectory->color.alpha;
+
+        trajectory->color.red += ((1 + trajectory->color.red) * trajectory->colorRate.red) / 36;
+        trajectory->color.green += ((1 + trajectory->color.green) * trajectory->colorRate.green) / 36;
+        trajectory->color.blue += ((1 + trajectory->color.blue) * trajectory->colorRate.blue) / 36;
+        trajectory->color.alpha += ((1 + trajectory->color.alpha) * trajectory->colorRate.alpha) / 36;
+
+        if (trajectory->color.red > 255)    trajectory->color.red = 255;
+        if (trajectory->color.blue > 255)   trajectory->color.blue = 255;
+        if (trajectory->color.green > 255)  trajectory->color.green = 255;
+        if (trajectory->color.alpha > 255)  trajectory->color.alpha = 255;
 
         if (absPosition->horz > scene->view->position.horz
           && absPosition->horz < (scene->view->position.horz + scene->view->size.horz)

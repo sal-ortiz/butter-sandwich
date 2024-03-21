@@ -36,6 +36,15 @@
         for (uint32_t idx = 0; idx < len; idx++) {
           RenderCache* entry = this->cache->get(idx);
 
+          SDL_SetTextureColorMod(
+            entry->texture,
+            entry->color.r,
+            entry->color.g,
+            entry->color.b
+          );
+
+          SDL_SetTextureAlphaMod(entry->texture, entry->color.a);
+
           SDL_RenderCopyEx(
             this->renderer,
             entry->texture,
@@ -46,6 +55,8 @@
             SDL_FLIP_NONE
           );
 
+          SDL_SetTextureColorMod(entry->texture, 255, 255, 255);
+          SDL_SetTextureAlphaMod(entry->texture, 255);
         }
 
       }
@@ -98,7 +109,11 @@
         uint32_t srcHeight,
         float dstAngle=0.0,
         uint32_t centerX=0,
-        uint32_t centerY=0
+        uint32_t centerY=0,
+        uint8_t red=255,
+        uint8_t green=255,
+        uint8_t blue=255,
+        uint8_t alpha=255
       ) {
 
         SDL_Rect srcRect = {
@@ -120,7 +135,14 @@
           (uint16_t)dstHeight
         };
 
-        RenderCache* newEntry = new RenderCache(texture, srcRect, dstRect, center, dstAngle);
+        SDL_Color color = {
+          (uint8_t)red,
+          (uint8_t)green,
+          (uint8_t)blue,
+          (uint8_t)alpha
+        };
+
+        RenderCache* newEntry = new RenderCache(texture, srcRect, dstRect, center, dstAngle, color);
 
         this->cache->push(newEntry);
       }

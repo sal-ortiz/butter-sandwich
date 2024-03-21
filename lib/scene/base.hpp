@@ -47,6 +47,7 @@
         this->state->set("angle", new Angle());
         this->state->set("scale", new Scale());
         this->state->set("view", new View());
+        this->state->set("color", new Color());
         this->state->set("trajectory", new Trajectory());
 
         this->state->set("absolute_position", new Position());
@@ -131,13 +132,14 @@
         Angle* angle = (Angle*)this->state->get("angle");
         Scale* scale = (Scale*)this->state->get("scale");
         View* view = (View*)this->state->get("view");
+        Color* color = (Color*)this->state->get("color");
 
         Sprite* sprite = this->sprites.get(actionId);
 
         this->width = sprite->width;
         this->height = sprite->height;
 
-        sprite->render(renderer, position, view, angle, scale);
+        sprite->render(renderer, position, view, angle, scale, color);
       }
 
       void evaluate() {
