@@ -44,7 +44,7 @@
 
         for (uint32_t idx = 0; idx < listLen; idx++) {
           entry = list->get(idx);
-          int32_t cmp = strcmp(entry->getKey(), key);
+          int32_t cmp = strcmp(entry->key, key);
 
           if (cmp == 0) {
             found = true;
@@ -77,7 +77,7 @@
           // HACKY!!! write a more efficient way to do this.
           entry = list->get(idx);
 
-          int32_t cmp = strcmp(entry->getKey(), key);
+          int32_t cmp = strcmp(entry->key, key);
 
           if (cmp == 0) {
             found = true;
@@ -88,10 +88,13 @@
         }
 
         if (found) {
-          entry->setValue(value);
+          entry->value = value;
 
         } else {
-          HashMapNode<class_type>* newEntry = new HashMapNode<class_type>(key, value);
+          HashMapNode<class_type>* newEntry = new HashMapNode<class_type>{
+            key,
+            value
+          };
 
           list->unshift(newEntry);
           //list->push(newEntry);
@@ -114,7 +117,7 @@
       //  for (uint32_t idx = 0; idx < listLen; idx++) {
       //    entry = list.get(idx);
       //
-      //    int32_t cmp = strcmp(entry.getKey(), key);
+      //    int32_t cmp = strcmp(entry.key, key);
       //
       //    if (cmp == 0) {
       //      found = true;
@@ -138,7 +141,7 @@
       HashMap() {
 
         for (uint32_t idx = 0; idx < HASHMAP_LIST_ARRAY_LEN; idx++) {
-          this->data[idx] = new List<HashMapNode<class_type>*>();
+          this->data[idx] = new List<HashMapNode<class_type>*>{};
         }
 
       }
@@ -168,7 +171,7 @@
           return NULL;
         }
 
-        return entry->getValue();
+        return entry->value;
       }
 
       void set(const char* key, class_type value) {
@@ -183,7 +186,7 @@
         // TODO: It might be faster/efficient to merge the various lists
         //       contained in data instead of iterating through each one.
 
-        List<const char*>* outp = new List<const char*>();
+        List<const char*>* outp = new List<const char*>{};
 
         for (uint32_t aryIdx = 0; aryIdx < HASHMAP_LIST_ARRAY_LEN; aryIdx++) {
           List<HashMapNode<class_type>*>* list = data[aryIdx];
@@ -193,7 +196,7 @@
           for (uint32_t listIdx = 0; listIdx < listLen; listIdx++) {
             HashMapNode<class_type>* entry = list->get(listIdx);
 
-            const char* key = entry->getKey();
+            const char* key = entry->key;
 
             outp->push(key);
           }
@@ -207,7 +210,7 @@
         // TODO: It might be faster/efficient to merge the various lists
         //       contained in data instead of iterating through each one.
 
-        List<class_type>* outp = new List<class_type>();
+        List<class_type>* outp = new List<class_type>{};
 
         for (uint32_t aryIdx = 0; aryIdx < HASHMAP_LIST_ARRAY_LEN; aryIdx++) {
           List<HashMapNode<class_type>*>* list = data[aryIdx];
@@ -217,7 +220,7 @@
           for (uint32_t listIdx = 0; listIdx < listLen; listIdx++) {
             HashMapNode<class_type>* entry = list->get(listIdx);
 
-            class_type value = entry->getValue();
+            class_type value = entry->value;
 
             outp->push(value);
           }
