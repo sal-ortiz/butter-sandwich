@@ -21,7 +21,7 @@
         TreeMapNode<class_type>* node = getEntry(this->root, key);
 
         if (node != NULL) {
-          return node->getValue();
+          return node->value;
         }
 
         return (class_type)NULL;
@@ -33,7 +33,7 @@
           return NULL;
         }
 
-        const char* nodeKey = node->getKey();
+        const char* nodeKey = node->key;
         uint8_t keyCmp = strcmp(key, nodeKey);
 
         TreeMapNode<class_type>* left = NULL;
@@ -42,9 +42,9 @@
         if (keyCmp == 0) {
           return node;
         } else if (keyCmp < 0) {
-          left = getEntry(node->getLeft(), key);
+          left = getEntry(node->left, key);
         } else if (keyCmp > 0) {
-          right = getEntry(node->getRight(), key);
+          right = getEntry(node->right, key);
         }
 
         if (left) {
@@ -62,31 +62,31 @@
       TreeMapNode<class_type>* setEntry(TreeMapNode<class_type>* node, const char* key, class_type value) {
 
         if (node == NULL) {
-          TreeMapNode<class_type>* newNode = new TreeMapNode<class_type>();
+          TreeMapNode<class_type>* newNode = new TreeMapNode<class_type>{};
 
-          newNode->setKey(key);
-          newNode->setValue(value);
+          newNode->key = key;
+          newNode->value = value;
 
           return newNode;
         }
 
-        const char* nodeKey = node->getKey();
+        const char* nodeKey = node->key;
         uint8_t keyCmp = strcmp(key, nodeKey);
 
         if (keyCmp < 0) {
-          TreeMapNode<class_type>* leftNode = node->getLeft();
+          TreeMapNode<class_type>* leftNode = node->left;
           TreeMapNode<class_type>* tmpLeft = this->setEntry(leftNode, key, value);
 
-          node->setLeft(tmpLeft);
+          node->left = tmpLeft;
 
         } else if (keyCmp > 0) {
-          TreeMapNode<class_type>* rightNode = node->getRight();
+          TreeMapNode<class_type>* rightNode = node->right;
           TreeMapNode<class_type>* tmpRight = this->setEntry(rightNode, key, value);
 
-          node->setRight(tmpRight);
+          node->right = tmpRight;
 
         } else {
-          node->setValue(value);
+          node->value = value;
         }
 
         return node;
@@ -96,17 +96,17 @@
       List<const char*>* getKeys(TreeMapNode<class_type>* node, List<const char*>* list=NULL) {
 
         if (list == NULL) {
-          list = new List<const char*>();
+          list = new List<const char*>{};
         }
 
         if (node != NULL) {
-          TreeMapNode<class_type>* leftChild = node->getLeft();
-          TreeMapNode<class_type>* rightChild = node->getRight();
+          TreeMapNode<class_type>* leftChild = node->left;
+          TreeMapNode<class_type>* rightChild = node->right;
 
           this->getKeys(leftChild, list);
           this->getKeys(rightChild, list);
 
-          list->push(node->getKey());
+          list->push(node->key);
         }
 
         return list;
@@ -115,27 +115,24 @@
       List<class_type>* getValues(TreeMapNode<class_type>* node, List<class_type>* list=NULL) {
 
         if (list == NULL) {
-          list = new List<class_type>();
+          list = new List<class_type>{};
         }
 
         if (node != NULL) {
-          TreeMapNode<class_type>* leftChild = node->getLeft();
-          TreeMapNode<class_type>* rightChild = node->getRight();
+          TreeMapNode<class_type>* leftChild = node->left;
+          TreeMapNode<class_type>* rightChild = node->right;
 
           this->getValues(leftChild, list);
           this->getValues(rightChild, list);
 
-          list->push(node->getValue());
+          list->push(node->value);
         }
 
         return list;
       }
 
-
-
-
 //      TreeMapNode<class_type>* getMinIndex(TreeMapNode<class_type>* node) {
-//        TreeMapNode<class_type>* leftChild = node->getLeft();
+//        TreeMapNode<class_type>* leftChild = node->left;
 //
 //        if (leftChild == NULL) {
 //          return node;
@@ -146,7 +143,7 @@
 //      }
 //
 //      TreeMapNode<class_type>* getMaxIndex(TreeMapNode<class_type>* node) {
-//        TreeMapNode<class_type>* rightChild = node->getLeft();
+//        TreeMapNode<class_type>* rightChild = node->left;
 //
 //        if (rightChild == NULL) {
 //          return node;
@@ -167,21 +164,21 @@
 //          return node;    // maybe throw an exception??
 //        }
 //
-//        if (key < node->getKey()) {
+//        if (key < node->key) {
 //          // move left...
-//          TreeMapNode<class_type>* leftChild = node->getLeft();
+//          TreeMapNode<class_type>* leftChild = node->left;
 //          TreeMapNode<class_type>* tmpNode = this->deleteEntry(leftChild, key);
 //
-//          node->setLeft(tmpNode);
+//          node->left = tmpNode;
 //
 //          return node;
 //
-//        } else if (key > node->getKey()) {
+//        } else if (key > node->key) {
 //          // move right...
-//          TreeMapNode<class_type>* rightChild = node->getRight();
+//          TreeMapNode<class_type>* rightChild = node->right;
 //          TreeMapNode<class_type>* tmpNode = this->deleteEntry(rightChild, key);
 //
-//          node->setRight(tmpNode);
+//          node->right = tmpNode;
 //
 //          return node;
 //
@@ -189,8 +186,8 @@
 //
 //          //this->length--;
 //
-//          TreeMapNode<class_type>* leftChild = node->getLeft();
-//          TreeMapNode<class_type>* rightChild = node->getRight();
+//          TreeMapNode<class_type>* leftChild = node->left;
+//          TreeMapNode<class_type>* rightChild = node->right;
 //
 //          if (leftChild == NULL && rightChild == NULL) {
 //            // just delete the entry.
@@ -209,8 +206,8 @@
 //          } else {
 //            // we have two children...it gets a bit more complex.
 //            TreeMapNode<class_type>* minNode = this->getMinIndex(rightChild);
-//            minNode->setLeft(leftChild);
-//            rightChild->setLeft(minNode);
+//            minNode->left = leftChild;
+//            rightChild->left = minNode;
 //
 //            return rightChild;
 //          }
@@ -224,8 +221,8 @@
       TreeMapNode<class_type>* clear(TreeMapNode<class_type>* node) {
 
         if (node != NULL) {
-          TreeMapNode<class_type>* leftChild = node->getLeft();
-          TreeMapNode<class_type>* rightChild = node->getRight();
+          TreeMapNode<class_type>* leftChild = node->left;
+          TreeMapNode<class_type>* rightChild = node->right;
 
           TreeMapNode<class_type>* tmpLeft = this->clear(leftChild);
           TreeMapNode<class_type>* tmpRight = this->clear(rightChild);
@@ -233,8 +230,8 @@
           delete tmpLeft;
           delete tmpRight;
 
-          node->setLeft(NULL);
-          node->setRight(NULL);
+          node->left = NULL;
+          node->right = NULL;
         }
 
         return node;
