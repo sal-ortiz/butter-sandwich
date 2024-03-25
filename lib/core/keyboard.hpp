@@ -16,7 +16,7 @@
     uint8_t code;   // scancode
   };
 
-  List<KeyboardStateEntry*>* keyboardState/* = new List<KeyboardStateEntry*>()*/;
+  static List<KeyboardStateEntry*>* keyboardState/* = new List<KeyboardStateEntry*>()*/;
 
   class KeyboardInput {
 

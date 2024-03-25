@@ -16,7 +16,7 @@
   };
 
 
-  Dict<HookCallbackRecord*>* _hookCallbacks;
+  static Dict<HookCallbackRecord*>* _hookCallbacks;
 
 
   class Hook {
