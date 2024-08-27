@@ -313,8 +313,31 @@
       //
       //}
 
+      LinkedList<class_type>* clone() {
+        LinkedList<class_type>* newList = new LinkedList<class_type>();
+
+        uint32_t listLen = this->getLength();
+
+        for (uint32_t idx = 0; idx < listLen; idx++) {
+          class_type entry = this->get(idx);
+
+          newList->push(entry);
+        }
+
+        return newList;
+      }
+
+      void concat(LinkedList<class_type> list) {
+        uint32_t listLen = list->getLength();
+
+        for (uint32_t idx = 0; idx < listLen; idx++) {
+          class_type entry = list->get(idx);
+
+          this->push(entry);
+        }
+
+      }
+
   };
 
 #endif
-
-
