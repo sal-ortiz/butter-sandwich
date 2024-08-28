@@ -87,38 +87,67 @@
           // HACKY!!! write a more efficient way to do this.
           entry = list->get(idx);
 
-          int32_t cmp = strcmp(entry->key, key);
+          if (entry != NULL && !strcmp(entry->key, key)) {
+            entry->value = value;
 
-          if (cmp == 0) {
-            found = true;
-
-            break;
+            return;
           }
 
         }
 
-        if (found) {
-          entry->value = value;
+        HashMapNode<class_type>* newEntry = new HashMapNode<class_type>{};
 
-        } else {
-          HashMapNode<class_type>* newEntry = new HashMapNode<class_type>{
-            key,
-            value
-          };
+        newEntry->key = key;
+        newEntry->value = value;
 
-          list->unshift(newEntry);
-          //list->push(newEntry);
+        list->unshift(newEntry);
 
-          this->data[aryIdx] = list;
+        this->data[aryIdx] = list;
 
-          if (this->data[aryIdx]->getLength() > HASHMAP_LISTLEN_MAX) {
-            uint32_t newLen = this->listArrayLen * 2;
+        if (this->data[aryIdx]->getLength() > HASHMAP_LISTLEN_MAX) {
+          uint32_t newLen = this->listArrayLen * 2;
 
-            this->rebase(newLen);
-          }
+          //printf("\nREBASING: %s", key);
 
+          //this->rebase(newLen);
         }
 
+      }
+
+      void rebase(uint32_t newLen) {
+        uint32_t aryLen = this->listArrayLen;
+        uint32_t newAryLen = newLen;  // assumes new length > old length
+        uint32_t newArySize = newAryLen * sizeof(List<HashMapNode<class_type>*>*);
+
+        List<HashMapNode<class_type>*>** newAry = (List<HashMapNode<class_type>*>**)malloc(newArySize);
+
+        for (uint32_t newAryIdx = 0; newAryIdx < newAryLen; newAryIdx++) {
+          newAry[newAryIdx] = new List<HashMapNode<class_type>*>();
+        }
+
+        for (uint32_t aryIdx = 0; aryIdx < aryLen; aryIdx++) {
+          List<HashMapNode<class_type>*>* curList = this->data[aryIdx];
+
+          uint32_t curListLen = curList->getLength();
+
+          for (uint32_t curListIdx = 0; curListIdx < curListLen; curListIdx++) {
+            HashMapNode<class_type>* curEntry = curList->get(curListIdx);
+
+            const char* curKey = curEntry->key;
+
+            uint32_t newAryIdx = HashMap::hashCode(curKey) % newAryLen;
+
+            newAry[newAryIdx]->unshift(curEntry);
+          }
+
+          delete curList;
+        }
+
+        this->listArrayLen = newAryLen;
+
+        free(this->data);
+
+        this->data = newAry;
       }
 
       //void deleteEntry(const char* key) {
@@ -152,44 +181,6 @@
       //
       //}
 
-      void rebase(uint32_t newLen) {
-        // NOTE: We're assuming that newLen is greater than this->listArrayLen.
-        uint32_t aryLen = this->listArrayLen;
-        uint32_t arySize = aryLen * sizeof(List<HashMapNode<class_type>*>*);
-        uint32_t newArySize = newLen * sizeof(List<HashMapNode<class_type>*>*);
-
-        List<HashMapNode<class_type>*>** newAry = (List<HashMapNode<class_type>*>**)malloc(newArySize);
-
-        for (uint32_t aryIdx = 0; aryIdx < aryLen; aryIdx++) {
-          List<HashMapNode<class_type>*>* list = this->data[aryIdx];
-
-          while (list->getLength() > 0) {
-            HashMapNode<class_type>* node = list->pop();
-            HashMapNode<class_type>* newNode = new HashMapNode<class_type>{};
-
-            newNode->key = node->key;
-            newNode->value = node->value;
-
-            uint32_t newAryIdx = HashMap::hashCode(newNode->key) % newLen;
-
-            if (newAry[newAryIdx] == NULL) {
-              newAry[newAryIdx] = new List<HashMapNode<class_type>*>();
-            }
-
-            newAry[newAryIdx]->unshift(newNode);
-
-            delete node;
-          }
-
-          delete list;
-        }
-
-        delete this->data;
-
-        this->data = newAry;
-        this->listArrayLen = newLen;
-
-      }
 
 
     public:
