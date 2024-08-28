@@ -15,12 +15,10 @@
   template <class class_type>
   class HashMap {
 
-
     private:
 
-      uint32_t listArrayLen = HASHMAP_LIST_ARYLEN;
+      uint32_t listArrayLen;
 
-      // TODO: init'd and sized dynamically in the code, not here.
       List<HashMapNode<class_type>*>** data;
 
       static uint32_t hashCode(const char* key) {
@@ -40,30 +38,21 @@
         uint32_t aryIdx = HashMap::hashCode(key) % this->listArrayLen;
 
         List<HashMapNode<class_type>*>* list = this->data[aryIdx];
-        HashMapNode<class_type>* entry;
 
         uint32_t listLen = list->getLength();
 
-        bool found = false;
+        HashMapNode<class_type>* entry;
 
         for (uint32_t idx = 0; idx < listLen; idx++) {
           entry = list->get(idx);
-          int32_t cmp = strcmp(entry->key, key);
 
-          if (cmp == 0) {
-            found = true;
-
-            break;
+          if (!strcmp(entry->key, key)) {
+            return entry;
           }
 
         }
 
-        if (!found) {
-          return NULL;
-        } else {
-          return entry;
-        }
-
+        return NULL;
       }
 
       void setEntry(const char* key, class_type value) {
@@ -71,13 +60,6 @@
 
         List<HashMapNode<class_type>*>* list = this->data[aryIdx];
         HashMapNode<class_type>* entry;
-
-        if (list == NULL) {
-          this->data[aryIdx] = new List<HashMapNode<class_type>*>();
-
-          list = this->data[aryIdx];
-        }
-
 
         uint32_t listLen = list->getLength();
 
@@ -163,9 +145,7 @@
       //  for (uint32_t idx = 0; idx < listLen; idx++) {
       //    entry = list.get(idx);
       //
-      //    int32_t cmp = strcmp(entry.key, key);
-      //
-      //    if (cmp == 0) {
+      //    if (!strcmp(entry.key, key) == 0) {
       //      found = true;
       //
       //      list.remove(idx);
@@ -186,13 +166,14 @@
     public:
 
       HashMap() {
-        uint32_t aryLen = this->listArrayLen;
-        uint32_t arySize = aryLen * sizeof(List<HashMapNode<class_type>*>*);
+        this->listArrayLen = HASHMAP_LIST_ARYLEN;
+
+        uint32_t arySize = this->listArrayLen * sizeof(List<HashMapNode<class_type>*>*);
 
         this->data = (List<HashMapNode<class_type>*>**)malloc(arySize);
 
-        for (uint32_t idx = 0; idx < aryLen; idx++) {
-          this->data[idx] = new List<HashMapNode<class_type>*>{};
+        for (uint32_t aryIdx = 0; aryIdx < this->listArrayLen; aryIdx++) {
+          this->data[aryIdx] = new List<HashMapNode<class_type>*>();
         }
 
       }
@@ -218,6 +199,7 @@
           delete list;
         }
 
+        free(this->data);
       }
 
       class_type get(const char* key) {
@@ -242,7 +224,7 @@
         // TODO: It might be faster/efficient to merge the various lists
         //       contained in data instead of iterating through each one.
 
-        List<const char*>* outp = new List<const char*>{};
+        List<const char*>* outp = new List<const char*>();
         uint32_t aryLen = this->listArrayLen;
 
         for (uint32_t aryIdx = 0; aryIdx < aryLen; aryIdx++) {
@@ -274,7 +256,7 @@
         // TODO: It might be faster/efficient to merge the various lists
         //       contained in data instead of iterating through each one.
 
-        List<class_type>* outp = new List<class_type>{};
+        List<class_type>* outp = new List<class_type>();
         uint32_t aryLen = this->listArrayLen;
 
         for (uint32_t aryIdx = 0; aryIdx < aryLen; aryIdx++) {

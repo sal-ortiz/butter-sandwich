@@ -3,7 +3,6 @@
 
   #define _HASHMAP_NODE_HPP
 
-
   template <typename data_type>
   struct HashMapNode {
 
