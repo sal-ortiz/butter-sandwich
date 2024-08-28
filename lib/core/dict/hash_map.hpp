@@ -9,8 +9,9 @@
   #include "./../list.hpp"
   #include "./hash_map/node.hpp"
 
-  #define HASHMAP_LIST_ARYLEN   64
-  #define HASHMAP_LISTLEN_MAX   36
+  #define HASHMAP_LIST_ARYLEN   128
+  #define HASHMAP_LISTLEN_MAX   512
+
 
   template <class class_type>
   class HashMap {
