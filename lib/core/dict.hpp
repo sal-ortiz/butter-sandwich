@@ -3,7 +3,7 @@
 
   #define _DICT_HPP
 
-  #include "./dict/hash_map.hpp"
+  //#include "./dict/hash_map.hpp"
   #include "./dict/tree_map.hpp"
 
 
