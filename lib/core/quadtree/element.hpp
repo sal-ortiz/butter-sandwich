@@ -9,14 +9,18 @@
     public:
       class_type value;
 
-      float horzPos;
-      float vertPos;
-      //float width;
-      //float height;
+      uint32_t horzPos;
+      uint32_t vertPos;
+      uint32_t width;
+      uint32_t height;
 
-      QuadtreeElement(float horzPos, float vertPos) {
+      QuadtreeElement(uint32_t horzPos, uint32_t vertPos, uint32_t width, uint32_t height, class_type val) {
         this->horzPos = horzPos;
         this->vertPos = vertPos;
+        this->width = width;
+        this->height = height;
+
+        this->value = val;
       }
 
   };

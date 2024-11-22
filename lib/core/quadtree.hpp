@@ -15,118 +15,97 @@
       float width;
       float height;
 
-      List<Quadtree<class_type>*>* children;  // four cartesion quadrants
+      uint32_t xPos;
+      uint32_t yPos;
+
+
+      Quadtree<class_type>* children[4];    // four cartesian quadrants
       List<QuadtreeElement<class_type>*>* elements;
 
-      Quadtree(float width, float height) {
+      Quadtree(float width, float height, uint32_t xPos, uint32_t yPos) {
         this->width = width;
         this->height = height;
 
-        this->children = new List<Quadtree<class_type>*>();
+        this->xPos = xPos;
+        this->yPos = yPos;
+
+        this->children[0] = NULL;   // upper-right
+        this->children[1] = NULL;   // upper-left
+        this->children[2] = NULL;   // lower-left
+        this->children[3] = NULL;   // lower-right
+
         this->elements = new List<QuadtreeElement<class_type>*>();
-
-        uint32_t childWidth = this->width / 2;
-        uint32_t childHeight = this->height / 2;
       }
 
-      void insert(class_type newVal, float horzPos, float vertPos/*, float width, float height*/, uint8_t depth=0) {
+      void insert(uint32_t xPos, uint32_t yPos, uint32_t width, uint32_t height, class_type val, uint16_t depth=0) {
+        uint8_t quadNum = this->calculateQuadrant(xPos, yPos);
+        Quadtree<class_type>* child = this->children[quadNum];
 
-        QuadtreeElement<class_type>* newEl = new QuadtreeElement<class_type>(horzPos, vertPos);
-        newEl->value = newVal;
+        QuadtreeElement<class_type>* newEl = new QuadtreeElement<class_type>(xPos, yPos, width, height, val);
 
-        this->elements->unshift(newEl);
+        this->elements->push(newEl);
 
-        uint8_t quadNum = Quadtree::determineQuadrant(this, horzPos, vertPos);
+        if (!child) {
+          float childWidth = this->width / 2;
+          float childHeight = this->height / 2;
+          uint32_t childHorzPos = this->xPos;
+          uint32_t childVertPos = this->yPos;
 
-        Quadtree<class_type>* child = this->children->get(quadNum);
+          if ((xPos - this->xPos) > childWidth) {
+            childHorzPos += childWidth;
+          }
 
-        uint32_t quadWidth = this->width / 2;
-        uint32_t quadHeight = this->height / 2;
+          if ((yPos - this->yPos) > childHeight) {
+            childVertPos += childHeight;
+          }
 
-        if (child == NULL) {
-          child = new Quadtree<class_type>(quadWidth, quadHeight);
-
-          this->children->set(quadNum, child);
+          child = new Quadtree<class_type>(childWidth, childHeight, childHorzPos, childVertPos);
         }
 
-        if (quadWidth < 1 || quadHeight < 1) {
-          return;
+        if (child->width > 1 && child->height > 1) {
+          child->insert(xPos, yPos, width, height, val, depth + 1);
         }
 
-
-        float childHorzPos = horzPos;
-        float childVertPos = vertPos;
-
-        if (quadNum == 0) {
-          childHorzPos = horzPos - (this->width / 2);
-          //childVertPos = vertPos;
-        } /*else if (quadNum == 1) {
-          //childHorzPos = horzPos;
-          //childVertPos = vertPos;
-        }*/ else if (quadNum == 2) {
-          //childHorzPos = horzPos;
-          childVertPos = vertPos - (this->height / 2);
-        } else if (quadNum == 3) {
-          childHorzPos = horzPos - (this->width / 2);
-          childVertPos = vertPos - (this->height / 2);
-        }
-
-        child->insert(newVal, childHorzPos, childVertPos, depth + 1);
-
-        return;
+        this->children[quadNum] = child;
       }
 
-      LinkedList<QuadtreeElement<class_type>*>* query(float horzPos, float vertPos/*, float width, float height*/, uint8_t depth=0) {
+      LinkedList<QuadtreeElement<class_type>*>* query(uint32_t xPos, uint32_t yPos, uint32_t width, uint32_t height, uint16_t depth=0) {
+        uint8_t quadNum = this->calculateQuadrant(xPos, yPos);
+        Quadtree<class_type>* child = this->children[quadNum];
 
-        uint8_t quadNum = Quadtree::determineQuadrant(this, horzPos, vertPos);
-
-        Quadtree<class_type>* child = this->children->get(quadNum);
-
-        if (child == NULL) {
+        if (!child) {
           return new LinkedList<QuadtreeElement<class_type>*>();
         }
 
-        if (child->width < 1 || child->height < 1) {
-          return this->elements->clone();
+        if (((xPos - child->xPos) + width > child->width) || ((yPos - child->yPos) + height > child->height)) {
+          return child->elements;
         }
 
-        float childHorzPos = horzPos;
-        float childVertPos = vertPos;
-
-        if (quadNum == 0) {
-          childHorzPos = horzPos - (this->width / 2);
-          //childVertPos = vertPos;
-        } /*else if (quadNum == 1) {
-          //childHorzPos = horzPos;
-          //childVertPos = vertPos;
-        }*/ else if (quadNum == 2) {
-          //childHorzPos = horzPos;
-          childVertPos = vertPos - (this->height / 2);
-        } else if (quadNum == 3) {
-          childHorzPos = horzPos - (this->width / 2);
-          childVertPos = vertPos - (this->height / 2);
-        }
-
-        return child->query(childHorzPos, childVertPos, depth + 1);
+        return child->query(xPos, yPos, width, height, depth + 1);
       }
 
-      static uint8_t determineQuadrant(Quadtree<class_type>* node, float horzPos, float vertPos) {
-        uint8_t outp = 0;
+      uint8_t calculateQuadrant(uint32_t xPos, uint32_t yPos) {
+        uint8_t quadNum = 1;
 
-        if (horzPos < (node->width / 2) && vertPos < (node->height / 2)) {
-          outp = 1;
+        if ((xPos - this->xPos) > (this->width / 2)) {
 
-        } else if (horzPos < (node->width / 2) && vertPos > (node->height / 2)) {
-          outp = 2;
+          if ((yPos - this->yPos) > (this->height / 2)) {
+            quadNum = 3;
+          } else {
+            quadNum = 0;
+          }
 
-        } /*else if (horzPos > (node->width / 2) && vertPos < (node->height / 2)) {
-          outp = 0;
+        } else {
 
-        }*/ else if (horzPos > (node->width / 2) && vertPos > (node->height / 2)) {
-          outp = 3;
+          if ((yPos - this->yPos) > (this->height / 2)) {
+            quadNum = 2;
+          }/* else {
+            quadNum = 1;
+          }*/
+
         }
 
-        return outp;
+        return quadNum;
       }
 
   };
