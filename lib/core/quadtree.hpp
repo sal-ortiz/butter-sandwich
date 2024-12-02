@@ -71,15 +71,20 @@
 
       LinkedList<QuadtreeElement<class_type>*>* query(uint32_t xPos, uint32_t yPos, uint32_t width, uint32_t height, uint16_t depth=0) {
         uint8_t quadNum = this->calculateQuadrant(xPos, yPos);
+
         Quadtree<class_type>* child = this->children[quadNum];
 
         if (!child) {
           return new LinkedList<QuadtreeElement<class_type>*>();
         }
 
-        if (((xPos - child->xPos) + width > child->width) || ((yPos - child->yPos) + height > child->height)) {
-          return child->elements;
+        if (
+          ((xPos - this->xPos) + width > this->width)
+          && ((yPos - this->yPos) + height > this->height)
+        ) {
+          return this->elements;
         }
+
 
         return child->query(xPos, yPos, width, height, depth + 1);
       }
