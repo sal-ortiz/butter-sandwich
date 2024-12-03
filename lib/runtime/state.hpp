@@ -11,11 +11,11 @@
   #include "../core/dict.hpp"
 
 
-  struct HookCallbackParams {
-    void* target;
-    void* newValue;
-    void* oldValue;
-  };
+  //struct HookCallbackParams {
+  //  void* target;
+  //  void* newValue;
+  //  void* oldValue;
+  //};
 
 
   class State: public RuntimeBase {
@@ -47,79 +47,82 @@
 
       void* get(const char* key) {
         void* val;
-        uint32_t instId = this->getIdentifier();
-
-        char hookId[Hook::ID_LENGTH];
-        Hook::generateIdentifier(hookId, "state", instId, key, "get");
-
+        //uint32_t instId = this->getIdentifier();
+        //
+        //char hookId[Hook::ID_LENGTH];
+        //Hook::generateIdentifier(hookId, "state", instId, key, "get");
+        //
         val = this->data->get(key);
+        //
+        //HookCallbackParams* inp = new HookCallbackParams();
+        //
+        //inp->target = this;
+        //inp->newValue = NULL;
+        //inp->oldValue = val;
+        //
+        //void* outp = Hook::executeCallback(hookId, (void*)inp);
+        //
+        //HookCallbackParams* retVal = (HookCallbackParams*)outp;
+        //
+        //if (retVal->newValue != NULL) {
+        //  return retVal->newValue;
+        //}
 
-        HookCallbackParams* inp = new HookCallbackParams();
-
-        inp->target = this;
-        inp->newValue = NULL;
-        inp->oldValue = val;
-
-        void* outp = Hook::executeCallback(hookId, (void*)inp);
-
-        HookCallbackParams* retVal = (HookCallbackParams*)outp;
-
-        if (retVal->newValue != NULL) {
-          return retVal->newValue;
-        }
-
-        return retVal->oldValue;
+        //return retVal->oldValue;
+        return val;
       }
 
       void set(const char* key, void* val) {
-        void* oldVal;
-        uint32_t instId = this->getIdentifier();
+        //void* oldVal;
+        //uint32_t instId = this->getIdentifier();
 
-        char hookId[Hook::ID_LENGTH];
-        Hook::generateIdentifier(hookId, "state", instId, key, "get");
+        //char hookId[Hook::ID_LENGTH];
+        //Hook::generateIdentifier(hookId, "state", instId, key, "get");
+        //
+        //oldVal = this->data->get(key);
+        //
+        //HookCallbackParams* inp = new HookCallbackParams();
+        //
+        //inp->target = this;
+        //inp->newValue = val;
+        //inp->oldValue = oldVal;
+        //
+        //void* outp = Hook::executeCallback(hookId, (void*)inp);
+        //
+        //HookCallbackParams* retVal = (HookCallbackParams*)outp;
+        //
+        //if (retVal->newValue != NULL) {
+        //  this->data->set(key, retVal->oldValue);
+        //}
+        //
+        //this->data->set(key, retVal->newValue);
 
-        oldVal = this->data->get(key);
+        this->data->set(key, val);
 
-        HookCallbackParams* inp = new HookCallbackParams();
-
-        inp->target = this;
-        inp->newValue = val;
-        inp->oldValue = oldVal;
-
-        void* outp = Hook::executeCallback(hookId, (void*)inp);
-
-        HookCallbackParams* retVal = (HookCallbackParams*)outp;
-
-        if (retVal->newValue != NULL) {
-          this->data->set(key, retVal->oldValue);
-        }
-
-        this->data->set(key, retVal->newValue);
-
-        delete inp;
+        //delete inp;
       }
 
-      void onGet(const char* key, void*(*callback)(void*, void*, void*)) {
-        uint32_t instId = this->getIdentifier();
+      //void onGet(const char* key, void*(*callback)(void*, void*, void*)) {
+      //  uint32_t instId = this->getIdentifier();
+      //
+      //  char hookId[Hook::ID_LENGTH];
+      //  Hook::generateIdentifier(hookId, "state", instId, key, "get");
+      //
+      //  this->on(hookId, callback);
+      //
+      //  free(hookId);
+      //}
 
-        char hookId[Hook::ID_LENGTH];
-        Hook::generateIdentifier(hookId, "state", instId, key, "get");
-
-        this->on(hookId, callback);
-
-        free(hookId);
-      }
-
-      void onSet(const char* key, void*(*callback)(void*, void*, void*)) {
-        uint32_t instId = this->getIdentifier();
-
-        char hookId[Hook::ID_LENGTH];
-        Hook::generateIdentifier(hookId, "state", instId, key, "set");
-
-        this->on(hookId, callback);
-
-        free(hookId);
-      }
+      //void onSet(const char* key, void*(*callback)(void*, void*, void*)) {
+      //  uint32_t instId = this->getIdentifier();
+      //
+      //  char hookId[Hook::ID_LENGTH];
+      //  Hook::generateIdentifier(hookId, "state", instId, key, "set");
+      //
+      //  this->on(hookId, callback);
+      //
+      //  free(hookId);
+      //}
 
   };
 
