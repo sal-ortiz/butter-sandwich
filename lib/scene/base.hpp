@@ -22,7 +22,7 @@
       //void*(*evalCallback)(void*);
 
       const char* action;
-      Dict<Sprite*> sprites;
+      Dict<Sprite*>* sprites;
 
 
     public:
@@ -40,7 +40,7 @@
 
       SceneBase() {
         //this->evalCallback = NULL;
-
+        this->sprites = new Dict<Sprite*>();
         this->state = new State();
 
         this->state->set("position", new Position());
@@ -54,11 +54,11 @@
       }
 
       void addSprite(const char* actionId, Sprite* sprite) {
-        this->sprites.set(actionId, sprite);
+        this->sprites->set(actionId, sprite);
       }
 
       void setAction(const char* curAction) {
-        Sprite* curSprite = this->sprites.get(curAction);
+        Sprite* curSprite = this->sprites->get(curAction);
 
         this->action = curAction;
 
@@ -87,39 +87,19 @@
         return this->type;
       }
 
-
-
-
-
-
-
-
-
       void onCollision(void*(*callback)(void*, void*, void*), void* dataOne=NULL, void* dataTwo=NULL) {
         uint32_t charId = this->getIdentifier();
 
         char* hookId = new char[Hook::ID_LENGTH];
-        // TODO: char hookId[Hook::ID_LENGTH];
         Hook::generateIdentifier(hookId, "hook", charId, "onCollision", "action");
 
         this->on(hookId, callback, dataOne, dataTwo);
       }
 
-
-
-
-
-
-
-
-
-
-
       void onEvaluate(void*(*callback)(void*, void*, void*), void* dataOne=NULL, void* dataTwo=NULL) {
         uint32_t charId = this->getIdentifier();
 
         char* hookId = new char[Hook::ID_LENGTH];
-        // TODO: char hookId[Hook::ID_LENGTH];
         Hook::generateIdentifier(hookId, "hook", charId, "onEvaluate", "action");
 
         this->on(hookId, callback, dataOne, dataTwo);
@@ -134,7 +114,7 @@
         View* view = (View*)this->state->get("view");
         Color* color = (Color*)this->state->get("color");
 
-        Sprite* sprite = this->sprites.get(actionId);
+        Sprite* sprite = this->sprites->get(actionId);
 
         this->width = sprite->width;
         this->height = sprite->height;
@@ -146,7 +126,6 @@
         uint32_t charId = this->getIdentifier();
 
         char* hookId = new char[Hook::ID_LENGTH];
-        // TODO: char hookId[Hook::ID_LENGTH];
         Hook::generateIdentifier(hookId, "hook", charId, "onEvaluate", "action");
 
         Hook::executeCallback(hookId, (void*)this);
