@@ -6,6 +6,7 @@
   #include <string.h>
 
   #include "./core/renderer.hpp"
+  #include "./core/quadtree.hpp"
   #include "./runtime/collision.hpp"
   #include "./runtime/data/size.hpp"
   #include "./runtime/data/view.hpp"
@@ -23,6 +24,7 @@
       List<SceneBase*>* backgrounds;
       List<SceneBase*>* foregrounds;
 
+      Quadtree<SceneBase*>* quadtree;
 
     public:
 
@@ -139,44 +141,56 @@
         return (SceneBase*)NULL;
       }
 
+      void populateCollision() {
+        uint32_t sceneWidth = this->size->horz;
+        uint32_t sceneHeight = this->size->vert;
+
+        // TODO: delete  old this->quadtree entries.
+
+        this->quadtree = new Quadtree<SceneBase*>(sceneWidth, sceneHeight, 0, 0);
+
+        uint32_t numEls = this->elements->getLength();
+
+        for (uint32_t elIdx = 0; elIdx < numEls; elIdx++) {
+          SceneBase* el = this->elements->get(elIdx);
+          Position* elPos = (Position*)el->state->get("absolute_position");
+
+          this->quadtree->insert(elPos->horz, elPos->vert, el->width, el->height, el);
+        }
+
+      }
 
       void evaluateCollision() {
-        uint32_t numElements = elements->getLength();
+        uint32_t numEls = elements->getLength();
 
-        for (uint32_t baseElsIdx = 0; baseElsIdx < numElements - 1; baseElsIdx++) {
-          SceneBase* baseEl = this->elements->get(baseElsIdx);
+        for (uint32_t baseElsIdx = 0; baseElsIdx < numEls - 1; baseElsIdx++) {
+          SceneBase* el = this->elements->get(baseElsIdx);
+          Position* pos = (Position*)el->state->get("absolute_position");
 
-          for (uint32_t testElsIdx = baseElsIdx + 1; testElsIdx < numElements; testElsIdx++) {
-            SceneBase* testEl = this->elements->get(testElsIdx);
+          if (!el->isActive) {
+            continue;
+          }
 
-            //if (baseElsIdx == testElsIdx) {
-            //  continue;
-            //}
+          LinkedList<QuadtreeElement<SceneBase*>*>* hitList = this->quadtree->query(pos->horz, pos->vert, el->width, el->height);
 
-            if (baseEl->isActive && testEl->isActive) {
-              // TODO: We should differentiate between 'active' and 'visible'.
-              Position* baseElPos = (Position*)baseEl->state->get("absolute_position");
-              Position* testElPos = (Position*)testEl->state->get("absolute_position");
+          if (hitList->getLength() > 1) {
 
-              Size* baseElSize = new Size(baseEl->width, baseEl->height);
-              Size* testElSize = new Size(testEl->width, testEl->height);
+            for (uint32_t hitIdx = 0; hitIdx < hitList->getLength(); hitIdx++) {
+              //QuadtreeElement<SceneBase*>*>* hitListEl = hitList->get(hitIdx);
 
-              bool hasCollided = Collision::evaluate(baseElPos, baseElSize, testElPos, testElSize);
+              QuadtreeElement<SceneBase*>* hitEntry = hitList->get(hitIdx);
+              SceneBase* hitEl = hitEntry->value;
 
-              if (hasCollided) {
-                uint32_t baseElCharId = baseEl->getIdentifier();
-                uint32_t testElCharId = testEl->getIdentifier();
+              if (
+                (/*el->isActive &&*/ hitEl->isActive)
+                && (el->getIdentifier() != hitEl->getIdentifier())
+              ) {
+                uint32_t charId = el->getIdentifier();
 
-                char* baseElHookId = new char[Hook::ID_LENGTH];
-                // TODO: char baseElHookId[Hook::ID_LENGTH];
-                char* testElHookId = new char[Hook::ID_LENGTH];
-                // TODO: char testElHookId[Hook::ID_LENGTH];
+                char* hookId = new char[Hook::ID_LENGTH];
+                Hook::generateIdentifier(hookId, "hook", charId, "onCollision", "action");
 
-                Hook::generateIdentifier(baseElHookId, "hook", baseElCharId, "onCollision", "action");
-                Hook::executeCallback(baseElHookId, (void*)testEl);
-
-                Hook::generateIdentifier(testElHookId, "hook", testElCharId, "onCollision", "action");
-                Hook::executeCallback(testElHookId, (void*)baseEl);
+                Hook::executeCallback(hookId, (void*)this);
               }
 
             }
@@ -219,6 +233,9 @@
           }
 
         }
+
+        this->populateCollision();
+        this->evaluateCollision();
 
         SceneBase::evaluate();
       }
