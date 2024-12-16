@@ -39,26 +39,26 @@
       }
 
       ~Scene() {
-        uint32_t elListLen = this->elements->getLength();
-        uint32_t bgListLen = this->backgrounds->getLength();
-        uint32_t fgListLen = this->foregrounds->getLength();
+        uint32_t elsLen = this->elements->getLength();
+        uint32_t bgsLen = this->backgrounds->getLength();
+        uint32_t fgsLen = this->foregrounds->getLength();
 
-        for (uint32_t elIdx = 0; elIdx < elListLen; elIdx++) {
-          SceneBase* element = this->elements->get(elIdx);
+        for (uint32_t elIdx = 0; elIdx < elsLen; elIdx++) {
+          SceneBase* el = this->elements->get(elIdx);
 
-          delete element;
+          delete el;
         }
 
-        for (uint32_t fgIdx = 0; fgIdx < fgListLen; fgIdx++) {
-          SceneBase* element = this->foregrounds->get(fgIdx);
+        for (uint32_t fgIdx = 0; fgIdx < fgsLen; fgIdx++) {
+          SceneBase* fg = this->foregrounds->get(fgIdx);
 
-          delete element;
+          delete fg;
         }
 
-        for (uint32_t bgIdx = 0; bgIdx < bgListLen; bgIdx++) {
-          SceneBase* element = this->backgrounds->get(bgIdx);
+        for (uint32_t bgIdx = 0; bgIdx < bgsLen; bgIdx++) {
+          SceneBase* bg = this->backgrounds->get(bgIdx);
 
-          delete element;
+          delete bg;
         }
 
         delete this->elements;
@@ -70,33 +70,33 @@
         return this->elements->getLength();
       }
 
-      void addElement(const char* name, SceneBase* element) {
-        element->setName(name);
+      void addElement(const char* name, SceneBase* el) {
+        el->setName(name);
 
-        this->elements->push(element);
+        this->elements->push(el);
       }
 
-      void addBackground(const char* name, SceneBase* element) {
-        element->setName(name);
+      void addBackground(const char* name, SceneBase* el) {
+        el->setName(name);
 
-        this->backgrounds->push(element);
+        this->backgrounds->push(el);
       }
 
-      void addForeground(const char* name, SceneBase* element) {
-        element->setName(name);
+      void addForeground(const char* name, SceneBase* el) {
+        el->setName(name);
 
-        this->foregrounds->push(element);
+        this->foregrounds->push(el);
       }
 
       SceneBase* getElement(const char* name) {
-        uint32_t elementsLen = this->elements->getLength();
+        uint32_t elsLen = this->elements->getLength();
 
-        for (uint32_t elementsIdx = 0; elementsIdx < elementsLen; elementsIdx++) {
-          SceneBase* element = this->elements->get(elementsIdx);
+        for (uint32_t elIdx = 0; elIdx < elsLen; elIdx++) {
+          SceneBase* element = this->elements->get(elIdx);
 
-          int32_t cmpRes = strcmp(element->getName(), name);
+          int32_t cmp = strcmp(element->getName(), name);
 
-          if (cmpRes == 0) {
+          if (cmp == 0) {
             return element;
           }
 
@@ -106,15 +106,15 @@
       }
 
       SceneBase* getBackground(const char* name) {
-        uint32_t backgroundsLen = this->backgrounds->getLength();
+        uint32_t len = this->backgrounds->getLength();
 
-        for (uint32_t backgroundsIdx = 0; backgroundsIdx < backgroundsLen; backgroundsIdx++) {
-          SceneBase* element = this->backgrounds->get(backgroundsIdx);
+        for (uint32_t idx = 0; idx < len; idx++) {
+          SceneBase* el = this->backgrounds->get(idx);
 
-          int32_t cmpRes = strcmp(element->getName(), name);
+          int32_t cmp = strcmp(el->getName(), name);
 
-          if (cmpRes == 0) {
-            return element;
+          if (cmp == 0) {
+            return el;
           }
 
         }
@@ -123,15 +123,15 @@
       }
 
       SceneBase* getForeground(const char* name) {
-        uint32_t foregroundsLen = this->foregrounds->getLength();
+        uint32_t len = this->foregrounds->getLength();
 
-        for (uint32_t foregroundsIdx = 0; foregroundsIdx < foregroundsLen; foregroundsIdx++) {
-          SceneBase* element = this->foregrounds->get(foregroundsIdx);
+        for (uint32_t idx = 0; idx < len; idx++) {
+          SceneBase* el = this->foregrounds->get(idx);
 
-          int32_t cmpRes = strcmp(element->getName(), name);
+          int32_t cmp = strcmp(el->getName(), name);
 
-          if (cmpRes == 0) {
-            return element;
+          if (cmp == 0) {
+            return el;
           }
 
         }
@@ -187,41 +187,35 @@
 
       }
 
-
       void evaluate() {
-        uint32_t elementsLen = this->elements->getLength();
-        uint32_t backgroundsLen = this->backgrounds->getLength();
-        uint32_t foregroundsLen = this->foregrounds->getLength();
-
-        for (uint32_t elementsIdx = 0; elementsIdx < elementsLen; elementsIdx++) {
-          SceneBase* element = this->elements->get(elementsIdx);
+        uint32_t elsLen = this->elements->getLength();
+        uint32_t bgsLen = this->backgrounds->getLength();
+        uint32_t fgsLen = this->foregrounds->getLength();
 
 
-          if (element->isActive) {
-            // TODO: We should differentiate between 'active' and 'visible'.
-            element->evaluate();
+      for (uint32_t bgIdx = 0; bgIdx < bgsLen; bgIdx++) {
+          SceneBase* bg = this->backgrounds->get(bgIdx);
+
+          if (bg->isActive) {
+            bg->evaluate();
           }
 
         }
 
-        evaluateCollision();
+        for (uint32_t elIdx = 0; elIdx < elsLen; elIdx++) {
+          SceneBase* el = this->elements->get(elIdx);
 
-        for (uint32_t backgroundsIdx = 0; backgroundsIdx < backgroundsLen; backgroundsIdx++) {
-          SceneBase* element = this->backgrounds->get(backgroundsIdx);
-
-          if (element->isActive) {
-            element->evaluate();
-
+          if (el->isActive) {
+            el->evaluate();
           }
 
         }
 
-        for (uint32_t foregroundsIdx = 0; foregroundsIdx < foregroundsLen; foregroundsIdx++) {
-          SceneBase* element = this->foregrounds->get(foregroundsIdx);
+        for (uint32_t fgIdx = 0; fgIdx < fgsLen; fgIdx++) {
+          SceneBase* fg = this->foregrounds->get(fgIdx);
 
-          if (element->isActive) {
-            element->evaluate();
-
+          if (fg->isActive) {
+            fg->evaluate();
           }
 
         }
@@ -230,12 +224,12 @@
       }
 
       void render(Renderer* renderer) {
-        uint32_t elementsLen = this->elements->getLength();
-        uint32_t backgroundsLen = this->backgrounds->getLength();
+        uint32_t elsLen = this->elements->getLength();
+        uint32_t bgsLen = this->backgrounds->getLength();
         uint32_t foregroundsLen = this->backgrounds->getLength();
 
-        for (uint32_t backgroundsIdx = 0; backgroundsIdx < backgroundsLen; backgroundsIdx++) {
-          SceneBase* element = this->backgrounds->get(backgroundsIdx);
+        for (uint32_t bgIdx = 0; bgIdx < bgsLen; bgIdx++) {
+          SceneBase* element = this->backgrounds->get(bgIdx);
 
           if (element->isActive) {
             element->render(renderer);
@@ -243,8 +237,8 @@
 
         }
 
-        for (uint32_t elementsIdx = 0; elementsIdx < elementsLen; elementsIdx++) {
-          SceneBase* element = this->elements->get(elementsIdx);
+        for (uint32_t elIdx = 0; elIdx < elsLen; elIdx++) {
+          SceneBase* element = this->elements->get(elIdx);
 
           if (element->isActive) {
             element->render(renderer);
@@ -252,8 +246,8 @@
 
         }
 
-        for (uint32_t foregroundsIdx = 0; foregroundsIdx < foregroundsLen; foregroundsIdx++) {
-          SceneBase* element = this->foregrounds->get(foregroundsIdx);
+        for (uint32_t fgIdx = 0; fgIdx < foregroundsLen; fgIdx++) {
+          SceneBase* element = this->foregrounds->get(fgIdx);
 
           if (element->isActive) {
             element->render(renderer);
