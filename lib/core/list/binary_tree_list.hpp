@@ -4,10 +4,10 @@
 
   #define _BINARY_TREE_LIST
 
+  //#include <stdio.h>
   #include <stddef.h>
   #include "binary_tree_list/node.hpp"
 
-  #include <stdio.h>
 
 
 
@@ -68,14 +68,15 @@
         BinaryTreeListNode<class_type>* curNode = this->root;
 
         while (curNode != NULL) {
+          uint32_t curNodeIdx = curNode->getIndex();
 
-          if (targIndex == curNode->getIndex()) {
+          if (targIndex == curNodeIdx) {
             curNode->setValue(value);
 
             return;
           }
 
-          if (targIndex < curNode->getIndex()) {
+          if (targIndex < curNodeIdx) {
             prevNode = curNode;
             curNode = curNode->getLeft();
 
@@ -87,7 +88,9 @@
 
         }
 
-        if (targIndex < prevNode->getIndex()) {
+        uint32_t prevNodeIdx = prevNode->getIndex();
+
+        if (targIndex < prevNodeIdx) {
           BinaryTreeListNode<class_type>* newNode = new BinaryTreeListNode<class_type>();
 
           newNode->setIndex(targIndex);
@@ -95,7 +98,7 @@
 
           prevNode->setLeft(newNode);
 
-        } else if (targIndex > prevNode->getIndex()) {
+        } else if (targIndex > prevNodeIdx) {
           BinaryTreeListNode<class_type>* newNode = new BinaryTreeListNode<class_type>();
 
           newNode->setIndex(targIndex);
@@ -135,8 +138,64 @@
         this->insertEntry(rightChild, targIndex, value);
       }
 
+
       void deleteEntry(uint32_t targIndex) {
-        // TODO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!111
+        BinaryTreeListNode<class_type>* node = this->root;
+
+        this->root = this->deleteEntry(node, targIndex);
+
+        this->length--;
+      }
+
+      BinaryTreeListNode<class_type>* deleteEntry(BinaryTreeListNode<class_type>* node, uint32_t targIndex) {
+
+        if (node == NULL) {
+          return NULL;
+        }
+
+        BinaryTreeListNode<class_type>* leftChild = node->getLeft();
+        BinaryTreeListNode<class_type>* rightChild = node->getRight();
+
+        leftChild = this->deleteEntry(leftChild, targIndex);
+        rightChild = this->deleteEntry(rightChild, targIndex);
+
+        uint32_t nodeIndex = node->getIndex();
+
+        if (nodeIndex == targIndex) {
+
+          if (!leftChild && !rightChild) {
+            return NULL;
+          } else if (!leftChild && rightChild) {
+            return rightChild;
+          } else if (leftChild && !rightChild) {
+            return leftChild;
+          } else {
+
+            BinaryTreeListNode<class_type>* prev = node;
+            BinaryTreeListNode<class_type>* succ = rightChild;
+
+            while (succ->getLeft() != NULL) {
+              prev = succ;
+              succ = succ->getLeft();
+            }
+
+            BinaryTreeListNode<class_type>* newLeaf = succ->getRight();
+
+            prev->setLeft(newLeaf);
+
+            succ->setLeft(leftChild);
+            succ->setRight(rightChild);
+
+            delete node;
+
+            return succ;
+          }
+
+        } else if (nodeIndex > targIndex) {
+          node->setIndex(nodeIndex - 1);
+        }
+
+        return node;
       }
 
 
@@ -163,15 +222,11 @@
           return node->getValue();
         }
 
-        return NULL;
+        return (class_type)NULL;
       }
 
       void set(uint32_t targIndex, class_type value) {
         this->setEntry(targIndex, value);
-      }
-
-      void remove(uint32_t targIndex) {
-        this->deleteEntry(targIndex);
       }
 
       void push(class_type value) {
@@ -180,10 +235,28 @@
         this->setEntry(index, value);
       }
 
-      void unshift(class_type value) {
+      class_type pop() {
+        uint32_t index = this->length - 1;
+
+        BinaryTreeListNode<class_type>* entry = this->getEntry(index);
+
+        this->deleteEntry(index);
+
+        return entry->getValue();
+      }
+
+      class_type shift() {
         uint32_t index = 0;
 
-        this->insertEntry(index, value);
+        BinaryTreeListNode<class_type>* entry = this->getEntry(index);
+
+        this->deleteEntry(index);
+
+        return entry->getValue();
+      }
+
+      void unshift(class_type value) {
+        this->insertEntry(0, value);
       }
 
   };

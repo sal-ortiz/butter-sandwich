@@ -21,8 +21,8 @@
     public:
 
       BinaryTreeListNode() {
-        this->left = (BinaryTreeListNode<class_type>*)NULL;
-        this->right = (BinaryTreeListNode<class_type>*)NULL;
+        this->left = NULL;
+        this->right = NULL;
 
         //this->value = NULL;
       }
