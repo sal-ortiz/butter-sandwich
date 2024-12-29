@@ -69,13 +69,13 @@
         this->children[quadNum] = child;
       }
 
-      LinkedList<QuadtreeElement<class_type>*>* query(uint32_t xPos, uint32_t yPos, uint32_t width, uint32_t height, uint16_t depth=0) {
+      List<QuadtreeElement<class_type>*>* query(uint32_t xPos, uint32_t yPos, uint32_t width, uint32_t height, uint16_t depth=0) {
         uint8_t quadNum = this->calculateQuadrant(xPos, yPos);
 
         Quadtree<class_type>* child = this->children[quadNum];
 
         if (!child) {
-          return new LinkedList<QuadtreeElement<class_type>*>();
+          return new List<QuadtreeElement<class_type>*>();
         }
 
         if (

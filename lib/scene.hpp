@@ -7,6 +7,7 @@
 
   #include "./core/renderer.hpp"
   #include "./core/quadtree.hpp"
+  #include "./core/list.hpp"
   #include "./runtime/collision.hpp"
   #include "./runtime/data/size.hpp"
   #include "./runtime/data/view.hpp"
@@ -171,7 +172,7 @@
             continue;
           }
 
-          LinkedList<QuadtreeElement<SceneBase*>*>* hitList = this->quadtree->query(pos->horz, pos->vert, el->width, el->height);
+          List<QuadtreeElement<SceneBase*>*>* hitList = this->quadtree->query(pos->horz, pos->vert, el->width, el->height);
 
           if (hitList->getLength() > 1) {
 
