@@ -32,6 +32,8 @@
         uint32_t distFromIndex = abs((int64_t)((uint32_t)targIndex - (uint32_t)this->index));
         uint32_t distFromTail = this->length - targIndex;
 
+        bool canUpdateIndex = false;
+
         if (distFromRoot <= distFromIndex && distFromRoot <= distFromTail) {
           direction = 1;
           curIndex = 0;
@@ -47,6 +49,8 @@
           } else {
             direction = 1;
           }
+
+          canUpdateIndex = true;
 
         } else {
           direction = -1;
@@ -70,8 +74,10 @@
           curIndex += direction;
         }
 
-        this->indexNode = node;
-        this->index = curIndex;
+        if (canUpdateIndex == true) {
+          this->indexNode = node;
+          this->index = curIndex;
+        }
 
         return node;
       }
@@ -85,6 +91,8 @@
         uint32_t distFromRoot = targIndex;
         uint32_t distFromIndex = abs((int64_t)((uint32_t)targIndex - (uint32_t)this->index));
         uint32_t distFromTail = this->length - targIndex;
+
+        bool canUpdateIndex = false;
 
         if (targIndex >= this->length) {
           direction = 1;
@@ -107,6 +115,8 @@
           } else {
             direction = 1;
           }
+
+          canUpdateIndex = true;
 
         } else {
           direction = -1;
@@ -142,8 +152,10 @@
 
         node->value = value;
 
-        this->index = curIndex - 1;
-        this->indexNode = node;
+        if (canUpdateIndex == true) {
+          this->index = curIndex - 1;
+          this->indexNode = node;
+        }
       }
 
       void insertEntry(uint32_t targIndex, class_type value) {
@@ -193,6 +205,7 @@
 
         this->length--;
 
+        //// TODO: make sure we're preserving our index node.
         //this->indexNode = node->prev;
         //this->index = targIndex/* - 1*/;
 
