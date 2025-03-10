@@ -13,6 +13,7 @@
   #define HASHMAP_LIST_ARYLEN   128
   #define HASHMAP_LISTLEN_MAX   512
 
+  #define MAX_HASHCODE_KEY_LEN    8
 
   template <class class_type>
   class HashMap {
@@ -24,13 +25,18 @@
       LinkedList<HashMapNode<class_type>*>** data;
 
       static uint32_t hashCode(const char* key) {
-        uint32_t outpValue = 1;
-        uint32_t keyLen = strlen(key);
+        uint32_t outpValue = 7;
+        uint8_t curChar = (uint8_t)key[0];
 
-        for (uint32_t keyIdx = 0; keyIdx < keyLen; keyIdx++) {
-          uint8_t curChar = (uint8_t)key[keyIdx];
+        for (uint32_t keyIdx = 1; curChar != 0; keyIdx++) {
 
           outpValue *= curChar;
+
+          if (keyIdx == MAX_HASHCODE_KEY_LEN) {
+            break;
+          }
+
+          curChar = (uint8_t)key[keyIdx];
         }
 
         return outpValue;
