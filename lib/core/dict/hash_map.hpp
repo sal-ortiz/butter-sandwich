@@ -6,7 +6,7 @@
   #include <string.h>
   #include <stdint.h>
 
-  #include "./../list.hpp"
+  #include "./../list/linked_list.hpp"
   #include "./hash_map/node.hpp"
 
   #define HASHMAP_LIST_ARYLEN   128
@@ -20,7 +20,7 @@
 
       uint32_t listArrayLen;
 
-      List<HashMapNode<class_type>*>** data;
+      LinkedList<HashMapNode<class_type>*>** data;
 
       static uint32_t hashCode(const char* key) {
         uint32_t outpValue = 1;
@@ -38,7 +38,7 @@
       HashMapNode<class_type>* getEntry(const char* key) {
         uint32_t aryIdx = HashMap::hashCode(key) % this->listArrayLen;
 
-        List<HashMapNode<class_type>*>* list = this->data[aryIdx];
+        LinkedList<HashMapNode<class_type>*>* list = this->data[aryIdx];
 
         uint32_t listLen = list->getLength();
 
@@ -59,7 +59,7 @@
       void setEntry(const char* key, class_type value) {
         uint32_t aryIdx = HashMap::hashCode(key) % this->listArrayLen;
 
-        List<HashMapNode<class_type>*>* list = this->data[aryIdx];
+        LinkedList<HashMapNode<class_type>*>* list = this->data[aryIdx];
         HashMapNode<class_type>* entry;
 
         uint32_t listLen = list->getLength();
@@ -83,7 +83,8 @@
         newEntry->key = key;
         newEntry->value = value;
 
-        list->unshift(newEntry);
+        list->unshift(newEntry);  // LinkedList, FixedTreeList, BinaryTreeListi
+        //list->push(newEntry);   // FixedTreeList, BinaryTreeList, ArrayList
 
         this->data[aryIdx] = list;
 
@@ -100,16 +101,16 @@
       void rebase(uint32_t newLen) {
         uint32_t aryLen = this->listArrayLen;
         uint32_t newAryLen = newLen;  // assumes new length > old length
-        uint32_t newArySize = newAryLen * sizeof(List<HashMapNode<class_type>*>*);
+        uint32_t newArySize = newAryLen * sizeof(LinkedList<HashMapNode<class_type>*>*);
 
-        List<HashMapNode<class_type>*>** newAry = (List<HashMapNode<class_type>*>**)malloc(newArySize);
+        LinkedList<HashMapNode<class_type>*>** newAry = (LinkedList<HashMapNode<class_type>*>**)malloc(newArySize);
 
         for (uint32_t newAryIdx = 0; newAryIdx < newAryLen; newAryIdx++) {
-          newAry[newAryIdx] = new List<HashMapNode<class_type>*>();
+          newAry[newAryIdx] = new LinkedList<HashMapNode<class_type>*>();
         }
 
         for (uint32_t aryIdx = 0; aryIdx < aryLen; aryIdx++) {
-          List<HashMapNode<class_type>*>* curList = this->data[aryIdx];
+          LinkedList<HashMapNode<class_type>*>* curLinkedList = this->data[aryIdx];
 
           uint32_t curListLen = curList->getLength();
 
@@ -136,7 +137,7 @@
       //void deleteEntry(const char* key) {
       //  uint32_t aryIdx = HashMap::hashCode(key) % this->listArrayLen;
       //
-      //  List<HashMapNode<class_type>> list = data[aryIdx];
+      //  LinkedList<HashMapNode<class_type>> list = data[aryIdx];
       //  HashMapNode<class_type> entry;
       //
       //  uint32_t listLen = list.getLength();
@@ -169,12 +170,12 @@
       HashMap() {
         this->listArrayLen = HASHMAP_LIST_ARYLEN;
 
-        uint32_t arySize = this->listArrayLen * sizeof(List<HashMapNode<class_type>*>*);
+        uint32_t arySize = this->listArrayLen * sizeof(LinkedList<HashMapNode<class_type>*>*);
 
-        this->data = (List<HashMapNode<class_type>*>**)malloc(arySize);
+        this->data = (LinkedList<HashMapNode<class_type>*>**)malloc(arySize);
 
         for (uint32_t aryIdx = 0; aryIdx < this->listArrayLen; aryIdx++) {
-          this->data[aryIdx] = new List<HashMapNode<class_type>*>();
+          this->data[aryIdx] = new LinkedList<HashMapNode<class_type>*>();
         }
 
       }
@@ -183,7 +184,7 @@
         uint32_t aryLen = this->listArrayLen;
 
         for (uint32_t idx = 0; idx < aryLen; idx++) {
-          List<HashMapNode<class_type>*>* list = this->data[idx];
+          LinkedList<HashMapNode<class_type>*>* list = this->data[idx];
 
           if (list == NULL) {
             continue;
@@ -221,15 +222,15 @@
       //  this->deleteEntry(key);
       //}
 
-      List<const char*>* getKeys() {
+      LinkedList<const char*>* getKeys() {
         // TODO: It might be faster/efficient to merge the various lists
         //       contained in data instead of iterating through each one.
 
-        List<const char*>* outp = new List<const char*>();
+        LinkedList<const char*>* outp = new LinkedList<const char*>();
         uint32_t aryLen = this->listArrayLen;
 
         for (uint32_t aryIdx = 0; aryIdx < aryLen; aryIdx++) {
-          List<HashMapNode<class_type>*>* list = data[aryIdx];
+          LinkedList<HashMapNode<class_type>*>* list = data[aryIdx];
 
           if (list == NULL) {
             continue;
@@ -253,15 +254,15 @@
         return outp;
       }
 
-      List<class_type>* getValues() {
+      LinkedList<class_type>* getValues() {
         // TODO: It might be faster/efficient to merge the various lists
         //       contained in data instead of iterating through each one.
 
-        List<class_type>* outp = new List<class_type>();
+        LinkedList<class_type>* outp = new LinkedList<class_type>();
         uint32_t aryLen = this->listArrayLen;
 
         for (uint32_t aryIdx = 0; aryIdx < aryLen; aryIdx++) {
-          List<HashMapNode<class_type>*>* list = data[aryIdx];
+          LinkedList<HashMapNode<class_type>*>* list = data[aryIdx];
 
           if (list == NULL) {
             continue;
