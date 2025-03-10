@@ -7,7 +7,7 @@
   #include <stdint.h>
 
   #include "./../list.hpp"
-  #include "./../list/linked_list.hpp"
+  #include "./../list/fixed_tree_list.hpp"
   #include "./hash_map/node.hpp"
 
   #define HASHMAP_LIST_ARYLEN   128
