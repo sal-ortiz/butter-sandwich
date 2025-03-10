@@ -17,7 +17,7 @@
 
       SDL_Renderer* renderer;
 
-      List<RenderCache*>* cache;
+      LinkedList<RenderCache*>* cache;
 
       void emptyCache() {
         uint32_t len = this->cache->getLength();
@@ -34,7 +34,7 @@
         uint32_t len = this->cache->getLength();
 
         for (uint32_t idx = 0; idx < len; idx++) {
-          RenderCache* entry = this->cache->get(idx);
+          RenderCache* entry = this->cache->shift();
 
           SDL_SetTextureColorMod(
             entry->texture,
@@ -57,6 +57,8 @@
 
           SDL_SetTextureColorMod(entry->texture, 255, 255, 255);
           SDL_SetTextureAlphaMod(entry->texture, 255);
+
+          delete entry;
         }
 
       }
@@ -68,13 +70,14 @@
         uint32_t flags = SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC;
 
         this->renderer = SDL_CreateRenderer(winHandle, -1, flags);
-        this->cache = new List<RenderCache*>();
+        this->cache = new LinkedList<RenderCache*>();
       }
 
       ~Renderer() {
         SDL_DestroyRenderer(this->renderer);
 
         this->emptyCache();
+
         delete this->cache;
       }
 
@@ -90,11 +93,6 @@
         this->renderCache();
 
         SDL_RenderPresent(this->renderer);
-
-        this->emptyCache();
-        delete this->cache;
-
-        this->cache = new List<RenderCache*>();
       }
 
       void render(
