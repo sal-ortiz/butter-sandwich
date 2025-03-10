@@ -6,6 +6,7 @@
   #include <string.h>
   #include <stdint.h>
 
+  #include "./../list.hpp"
   #include "./../list/linked_list.hpp"
   #include "./hash_map/node.hpp"
 
@@ -254,11 +255,11 @@
         return outp;
       }
 
-      LinkedList<class_type>* getValues() {
+      List<class_type>* getValues() {
         // TODO: It might be faster/efficient to merge the various lists
         //       contained in data instead of iterating through each one.
 
-        LinkedList<class_type>* outp = new LinkedList<class_type>();
+        List<class_type>* outp = new List<class_type>();
         uint32_t aryLen = this->listArrayLen;
 
         for (uint32_t aryIdx = 0; aryIdx < aryLen; aryIdx++) {
