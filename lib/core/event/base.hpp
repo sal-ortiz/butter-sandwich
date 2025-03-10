@@ -19,7 +19,7 @@
   };
 
 
-  Dict<EventCallbackRecord*>* _eventCallbacks;
+  HashMap<EventCallbackRecord*>* _eventCallbacks;
 
 
   class EventBase {

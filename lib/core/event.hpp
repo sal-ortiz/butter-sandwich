@@ -21,7 +21,7 @@
     public:
 
       static void initialize() {
-        _eventCallbacks = new Dict<EventCallbackRecord*>();
+        _eventCallbacks = new HashMap<EventCallbackRecord*>();
       }
 
       static void deinitialize() {
