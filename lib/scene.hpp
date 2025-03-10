@@ -21,9 +21,9 @@
 
     private:
 
-      FixedTreeList<SceneBase*>* elements;
-      FixedTreeList<SceneBase*>* backgrounds;
-      FixedTreeList<SceneBase*>* foregrounds;
+      LinkedList<SceneBase*>* elements;
+      LinkedList<SceneBase*>* backgrounds;
+      LinkedList<SceneBase*>* foregrounds;
 
       Quadtree<SceneBase*>* quadtree;
 
@@ -33,9 +33,9 @@
       View* view;
 
       Scene() {
-        this->elements = new FixedTreeList<SceneBase*>();
-        this->backgrounds = new FixedTreeList<SceneBase*>();
-        this->foregrounds = new FixedTreeList<SceneBase*>();
+        this->elements = new LinkedList<SceneBase*>();
+        this->backgrounds = new LinkedList<SceneBase*>();
+        this->foregrounds = new LinkedList<SceneBase*>();
 
         this->size = new Size();
         this->view = new View();
