@@ -6,7 +6,7 @@
 
   #include <stdint.h>
 
-  #include "../core/dict.hpp"
+  #include "../core/dict/hash_map.hpp"
 
 
   struct HookCallbackRecord {
@@ -16,7 +16,7 @@
   };
 
 
-  static Dict<HookCallbackRecord*>* _hookCallbacks;
+  static TreeMap<HookCallbackRecord*>* _hookCallbacks;
 
 
   class Hook {
@@ -30,7 +30,7 @@
       }
 
       static void initialize() {
-        _hookCallbacks = new Dict<HookCallbackRecord*>();
+        _hookCallbacks = new TreeMap<HookCallbackRecord*>();
       }
 
       static void deinitialize() {
