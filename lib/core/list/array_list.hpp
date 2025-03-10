@@ -9,8 +9,7 @@
 
   #include "./array_list/node.hpp"
 
-  #define _ARRAY_LIST_SIZE_MULTIPLIER   2
-  #define _ARRAY_LIST_INITIAL_SIZE      32
+  #define _ARRAY_LIST_ALLOC_INCREMENT   64
 
 
   template <class class_type>
@@ -23,16 +22,19 @@
       uint32_t arraySize;
       uint32_t length;
 
-
-      void resizeArray(uint32_t newLen) {
+      void allocateArray(uint32_t newLen) {
         uint32_t newSize = newLen * sizeof(ArrayListNode<class_type>*);
 
         this->array = (ArrayListNode<class_type>**)realloc(this->array, newSize);
-
         this->arraySize = newSize;
       }
 
       ArrayListNode<class_type>* getEntry(uint32_t targIndex) {
+
+        if (targIndex >= this->length) {
+          return NULL;
+        }
+
         return this->array[targIndex];
       }
 
@@ -41,7 +43,7 @@
         uint32_t aryLen = this->arraySize / sizeof(ArrayListNode<class_type>*);
 
         if ((targIndex * sizeof(ArrayListNode<class_type>*)) > arySize) {
-          this->resizeArray(targIndex * _ARRAY_LIST_SIZE_MULTIPLIER);
+          this->allocateArray(targIndex + _ARRAY_LIST_ALLOC_INCREMENT);
         }
 
         ArrayListNode<class_type>* curNode = this->array[targIndex];
@@ -103,18 +105,15 @@
     public:
 
       ArrayList() {
-        uint32_t arySize = _ARRAY_LIST_INITIAL_SIZE * sizeof(ArrayListNode<class_type>*);
-
-        this->array = (ArrayListNode<class_type>**)malloc(arySize);
-        this->arraySize = arySize;
-
         this->length = 0;
+
+        this->array = NULL;
+        this->allocateArray(_ARRAY_LIST_ALLOC_INCREMENT);
       }
 
       ~ArrayList() {
-        delete this->array;
+        free(this->array);
       }
-
 
       uint32_t getLength() {
         return this->length;
