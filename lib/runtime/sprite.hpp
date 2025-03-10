@@ -18,8 +18,8 @@
 
     private:
 
-      List<SpriteFrame*>* frames;
-      List<uint32_t>* framesList;
+      BinaryTreeList<SpriteFrame*>* frames;
+      FixedTreeList<uint32_t>* framesList;
 
       Position position;
       uint32_t currentFrame;
@@ -51,8 +51,8 @@
 
 
       Sprite() {
-        this->frames = new List<SpriteFrame*>();
-        this->framesList = new List<uint32_t>();
+        this->frames = new BinaryTreeList<SpriteFrame*>();
+        this->framesList = new FixedTreeList<uint32_t>();
 
         this->currentFrame = 0;
 
