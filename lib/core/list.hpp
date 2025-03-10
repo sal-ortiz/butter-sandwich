@@ -7,6 +7,7 @@
   #include "./list/linked_list.hpp"
   #include "./list/binary_tree_list.hpp"
   #include "./list/fixed_tree_list.hpp"
+  #include "./list/array_list.hpp"
 
 
   template <class class_type>
