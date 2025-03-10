@@ -22,13 +22,13 @@
 
     private:
 
-      Dict<void*>* data;
+      HashMap<void*>* data;
 
 
     public:
 
       State() {
-        this->data = new Dict<void*>();
+        this->data = new HashMap<void*>();
       }
 
       ~State() {
