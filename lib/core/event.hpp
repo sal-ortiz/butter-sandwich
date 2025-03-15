@@ -25,7 +25,7 @@
       }
 
       static void deinitialize() {
-        List<EventCallbackRecord*>* vals = _eventCallbacks->getValues();
+        LinkedList<EventCallbackRecord*>* vals = _eventCallbacks->getValues();
 
         uint32_t valsLen = vals->getLength();
 
