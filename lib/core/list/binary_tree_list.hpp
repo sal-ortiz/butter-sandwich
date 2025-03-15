@@ -9,8 +9,6 @@
   #include "binary_tree_list/node.hpp"
 
 
-
-
   template <class class_type>
   class BinaryTreeList {
 
@@ -28,22 +26,22 @@
         }
 
         BinaryTreeListNode<class_type>* curNode = this->root;
-        uint32_t curIndex = curNode->getIndex();
+        uint32_t curIndex = curNode->index;
 
         while (curNode != NULL && curIndex != targIndex) {
-          curIndex = curNode->getIndex();
+          curIndex = curNode->index;
 
           if (targIndex < curIndex) {
-            curNode = curNode->getLeft();
+            curNode = curNode->left;
           } else if (targIndex > curIndex) {
-            curNode = curNode->getRight();
+            curNode = curNode->right;
           }
 
           if (curNode == NULL) {
             return NULL;
           }
 
-          curIndex = curNode->getIndex();
+          curIndex = curNode->index;
         }
 
         return curNode;
@@ -58,8 +56,8 @@
         if (this->root == NULL) {
           this->root = new BinaryTreeListNode<class_type>();
 
-          this->root->setIndex(targIndex);
-          this->root->setValue(value);
+          this->root->index = targIndex;
+          this->root->value = value;
 
           return;
         }
@@ -68,43 +66,43 @@
         BinaryTreeListNode<class_type>* curNode = this->root;
 
         while (curNode != NULL) {
-          uint32_t curNodeIdx = curNode->getIndex();
+          uint32_t curNodeIdx = curNode->index;
 
           if (targIndex == curNodeIdx) {
-            curNode->setValue(value);
+            curNode->value = value;
 
             return;
           }
 
           if (targIndex < curNodeIdx) {
             prevNode = curNode;
-            curNode = curNode->getLeft();
+            curNode = curNode->left;
 
-          } else if (targIndex > curNode->getIndex()) {
+          } else if (targIndex > curNode->index) {
             prevNode = curNode;
-            curNode = curNode->getRight();
+            curNode = curNode->right;
 
           }
 
         }
 
-        uint32_t prevNodeIdx = prevNode->getIndex();
+        uint32_t prevNodeIdx = prevNode->index;
 
         if (targIndex < prevNodeIdx) {
           BinaryTreeListNode<class_type>* newNode = new BinaryTreeListNode<class_type>();
 
-          newNode->setIndex(targIndex);
-          newNode->setValue(value);
+          newNode->index = targIndex;
+          newNode->value = value;
 
-          prevNode->setLeft(newNode);
+          prevNode->left = newNode;
 
         } else if (targIndex > prevNodeIdx) {
           BinaryTreeListNode<class_type>* newNode = new BinaryTreeListNode<class_type>();
 
-          newNode->setIndex(targIndex);
-          newNode->setValue(value);
+          newNode->index = targIndex;
+          newNode->value = value;
 
-          prevNode->setRight(newNode);
+          prevNode->right = newNode;
         }
 
       }
@@ -125,14 +123,14 @@
         }
 
 
-        uint32_t nodeIdx = node->getIndex();
+        uint32_t nodeIdx = node->index;
 
         if (nodeIdx >= targIndex) {
           node->setIndex(nodeIdx + 1);
         }
 
-        BinaryTreeListNode<class_type>* leftChild = node->getLeft();
-        BinaryTreeListNode<class_type>* rightChild = node->getRight();
+        BinaryTreeListNode<class_type>* leftChild = node->left;
+        BinaryTreeListNode<class_type>* rightChild = node->right;
 
         this->insertEntry(leftChild, targIndex, value);
         this->insertEntry(rightChild, targIndex, value);
@@ -153,13 +151,13 @@
           return NULL;
         }
 
-        BinaryTreeListNode<class_type>* leftChild = node->getLeft();
-        BinaryTreeListNode<class_type>* rightChild = node->getRight();
+        BinaryTreeListNode<class_type>* leftChild = node->left;
+        BinaryTreeListNode<class_type>* rightChild = node->right;
 
         leftChild = this->deleteEntry(leftChild, targIndex);
         rightChild = this->deleteEntry(rightChild, targIndex);
 
-        uint32_t nodeIndex = node->getIndex();
+        uint32_t nodeIndex = node->index;
 
         if (nodeIndex == targIndex) {
 
@@ -174,17 +172,18 @@
             BinaryTreeListNode<class_type>* prev = node;
             BinaryTreeListNode<class_type>* succ = rightChild;
 
-            while (succ->getLeft() != NULL) {
+            while (succ->left != NULL) {
               prev = succ;
-              succ = succ->getLeft();
+              succ = succ->left;
             }
 
-            BinaryTreeListNode<class_type>* newLeaf = succ->getRight();
+            BinaryTreeListNode<class_type>* newLeaf = succ->right;
 
-            prev->setLeft(newLeaf);
+            prev->left = newLeaf;
 
-            succ->setLeft(leftChild);
-            succ->setRight(rightChild);
+            succ->left = leftChild;
+            succ->right = rightChild;
+
 
             delete node;
 
@@ -219,7 +218,7 @@
         BinaryTreeListNode<class_type>* node = this->getEntry(targIndex);
 
         if (node != NULL) {
-          return node->getValue();
+          return node->value;
         }
 
         return (class_type)NULL;
@@ -242,7 +241,7 @@
 
         this->deleteEntry(index);
 
-        return entry->getValue();
+        return entry->value;
       }
 
       class_type shift() {
@@ -252,7 +251,7 @@
 
         this->deleteEntry(index);
 
-        return entry->getValue();
+        return entry->value;
       }
 
       void unshift(class_type value) {
