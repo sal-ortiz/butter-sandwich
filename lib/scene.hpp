@@ -172,7 +172,7 @@
             continue;
           }
 
-          List<QuadtreeElement<SceneBase*>*>* hitList = this->quadtree->query(pos->horz, pos->vert, el->width, el->height);
+          LinkedList<QuadtreeElement<SceneBase*>*>* hitList = this->quadtree->query(pos->horz, pos->vert, el->width, el->height);
 
           if (hitList->getLength() > 1) {
 

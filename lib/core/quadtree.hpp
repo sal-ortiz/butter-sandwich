@@ -20,7 +20,7 @@
 
 
       Quadtree<class_type>* children[4];    // four cartesian quadrants
-      List<QuadtreeElement<class_type>*>* elements;
+      LinkedList<QuadtreeElement<class_type>*>* elements;
 
       Quadtree(float width, float height, uint32_t xPos, uint32_t yPos) {
         this->width = width;
@@ -34,7 +34,7 @@
         this->children[2] = NULL;   // lower-left
         this->children[3] = NULL;   // lower-right
 
-        this->elements = new List<QuadtreeElement<class_type>*>();
+        this->elements = new LinkedList<QuadtreeElement<class_type>*>();
       }
 
       void insert(uint32_t xPos, uint32_t yPos, uint32_t width, uint32_t height, class_type val, uint16_t depth=0) {
@@ -69,19 +69,21 @@
         this->children[quadNum] = child;
       }
 
-      List<QuadtreeElement<class_type>*>* query(uint32_t xPos, uint32_t yPos, uint32_t width, uint32_t height, uint16_t depth=0) {
+      LinkedList<QuadtreeElement<class_type>*>* query(uint32_t xPos, uint32_t yPos, uint32_t width, uint32_t height, uint16_t depth=0) {
         uint8_t quadNum = this->calculateQuadrant(xPos, yPos);
 
         Quadtree<class_type>* child = this->children[quadNum];
 
         if (!child) {
-          return new List<QuadtreeElement<class_type>*>();
+          // TODO: maybe return NULL instead of creating a new object.
+          return new LinkedList<QuadtreeElement<class_type>*>();
         }
 
         if (
           ((xPos - this->xPos) + width > this->width)
           && ((yPos - this->yPos) + height > this->height)
         ) {
+          // TODO: maybe clone this->elements to avoid breaking our list.
           return this->elements;
         }
 
