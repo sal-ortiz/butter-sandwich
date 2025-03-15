@@ -41,7 +41,13 @@
         uint8_t quadNum = this->calculateQuadrant(xPos, yPos);
         Quadtree<class_type>* child = this->children[quadNum];
 
-        QuadtreeElement<class_type>* newEl = new QuadtreeElement<class_type>(xPos, yPos, width, height, val);
+        QuadtreeElement<class_type>* newEl = new QuadtreeElement<class_type>();
+
+        newEl->horzPos = xPos;
+        newEl->vertPos = yPos;
+        newEl->width = width;
+        newEl->height = height;
+        newEl->value = val;
 
         this->elements->push(newEl);
 
