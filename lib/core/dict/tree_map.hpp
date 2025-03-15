@@ -93,10 +93,10 @@
       }
 
 
-      List<const char*>* getKeys(TreeMapNode<class_type>* node, List<const char*>* list=NULL) {
+      LinkedList<const char*>* getKeys(TreeMapNode<class_type>* node, LinkedList<const char*>* list=NULL) {
 
         if (list == NULL) {
-          list = new List<const char*>{};
+          list = new LinkedList<const char*>{};
         }
 
         if (node != NULL) {
@@ -112,10 +112,10 @@
         return list;
       }
 
-      List<class_type>* getValues(TreeMapNode<class_type>* node, List<class_type>* list=NULL) {
+      LinkedList<class_type>* getValues(TreeMapNode<class_type>* node, LinkedList<class_type>* list=NULL) {
 
         if (list == NULL) {
-          list = new List<class_type>{};
+          list = new LinkedList<class_type>{};
         }
 
         if (node != NULL) {
@@ -266,11 +266,11 @@
       //  this->deleteEntry(key);
       //}
 
-      List<const char*>* getKeys() {
+      LinkedList<const char*>* getKeys() {
         return this->getKeys(this->root);
       }
 
-      List<class_type>* getValues() {
+      LinkedList<class_type>* getValues() {
         return this->getValues(this->root);
       }
 
