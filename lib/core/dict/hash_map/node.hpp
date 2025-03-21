@@ -6,8 +6,8 @@
   template <typename data_type>
   struct HashMapNode {
 
-    const char* key;
     data_type value;
+    const char* key;
 
   };
 
