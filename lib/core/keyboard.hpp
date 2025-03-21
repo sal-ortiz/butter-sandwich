@@ -16,7 +16,8 @@
     uint8_t code;   // scancode
   };
 
-  static BinaryTreeList<KeyboardStateEntry*>* keyboardState/* = new BinaryTreeList<KeyboardStateEntry*>()*/;
+  //static BinaryTreeList<KeyboardStateEntry*>* keyboardState/* = new BinaryTreeList<KeyboardStateEntry*>()*/;
+  static ArrayList<KeyboardStateEntry*>* keyboardState/* = new ArrayList<KeyboardStateEntry*>()*/;
 
   class KeyboardInput {
 
@@ -34,7 +35,8 @@
     public:
 
       static void initialize() {
-        keyboardState = new BinaryTreeList<KeyboardStateEntry*>();
+        //keyboardState = new BinaryTreeList<KeyboardStateEntry*>();
+        keyboardState = new ArrayList<KeyboardStateEntry*>();
       }
 
       static void deinitialize() {
