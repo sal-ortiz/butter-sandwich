@@ -11,7 +11,7 @@
   #include "./hash_map/node.hpp"
 
   #define HASHMAP_ARRAY_LEN     128
-  #define HASHMAP_LISTLEN_MAX   128
+  #define HASHMAP_LISTLEN_MAX   192
 
   #define MAX_HASHCODE_KEY_LEN    8
 
