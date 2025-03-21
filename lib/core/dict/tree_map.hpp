@@ -8,6 +8,7 @@
   #include <stdint.h>
   #include <string.h>
   #include "./tree_map/node.hpp"
+  #include "../list.hpp"
 
 
   template <class class_type>
@@ -93,10 +94,10 @@
       }
 
 
-      LinkedList<const char*>* getKeys(TreeMapNode<class_type>* node, LinkedList<const char*>* list=NULL) {
+      List<const char*>* getKeys(TreeMapNode<class_type>* node, List<const char*>* list=NULL) {
 
         if (list == NULL) {
-          list = new LinkedList<const char*>{};
+          list = new List<const char*>{};
         }
 
         if (node != NULL) {
@@ -112,10 +113,10 @@
         return list;
       }
 
-      LinkedList<class_type>* getValues(TreeMapNode<class_type>* node, LinkedList<class_type>* list=NULL) {
+      List<class_type>* getValues(TreeMapNode<class_type>* node, List<class_type>* list=NULL) {
 
         if (list == NULL) {
-          list = new LinkedList<class_type>{};
+          list = new List<class_type>{};
         }
 
         if (node != NULL) {
@@ -266,11 +267,11 @@
       //  this->deleteEntry(key);
       //}
 
-      LinkedList<const char*>* getKeys() {
+      List<const char*>* getKeys() {
         return this->getKeys(this->root);
       }
 
-      LinkedList<class_type>* getValues() {
+      List<class_type>* getValues() {
         return this->getValues(this->root);
       }
 
