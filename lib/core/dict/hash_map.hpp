@@ -10,8 +10,8 @@
   #include "./../list/fixed_tree_list.hpp"
   #include "./hash_map/node.hpp"
 
-  #define HASHMAP_LIST_ARYLEN   128
-  #define HASHMAP_LISTLEN_MAX   512
+  #define HASHMAP_ARRAY_LEN     128
+  #define HASHMAP_LISTLEN_MAX   128
 
   #define MAX_HASHCODE_KEY_LEN    8
 
@@ -101,17 +101,14 @@
         list->unshift(newEntry);  // FixedTreeList, FixedTreeList, BinaryTreeListi
         //list->push(newEntry);   // FixedTreeList, BinaryTreeList, ArrayList
 
-        //this->data[aryIdx] = list;
         this->data->set(aryIdx, list);
 
         uint32_t innerLoopLen = list->getLength();
 
         if (innerLoopLen > HASHMAP_LISTLEN_MAX) {
-          uint32_t newLen = this->data->getLength() * REALLOC_BUFFER_SCALE;
+          uint32_t newLen = this->data->getLength() + HASHMAP_ARRAY_LEN;
 
-          printf("\nREBASING: %s", key);
-
-          //this->rebase(newLen);
+          this->rebase(newLen);
         }
 
       }
@@ -120,48 +117,37 @@
       public: // only for testing purposes
 
       void rebase(uint32_t newLen) {
-        //uint32_t newSize = newLen * sizeof(FixedTreeList<HashMapNode<class_type>*>*);
+        FixedTreeList<FixedTreeList<HashMapNode<class_type>*>*>* oldData = this->data;
+        FixedTreeList<FixedTreeList<HashMapNode<class_type>*>*>* newData = new FixedTreeList<FixedTreeList<HashMapNode<class_type>*>*>();
 
-        //this->allocateBlock(newLen);
+        newData->set(newLen, NULL);
 
+        this->data = newData;
 
+        uint32_t oldDataLen = oldData->getLength();
 
+        for (uint32_t idx = 0; idx < oldDataLen; idx++) {
+          FixedTreeList<HashMapNode<class_type>*>* list = oldData->get(idx);
 
+          if (list == NULL) {
+            continue;
+          }
 
+          uint32_t listLen = list->getLength();
 
-        //uint32_t aryLen = this->listArrayLen;
-        //uint32_t newAryLen = newLen;  // assumes new length > old length
-        //uint32_t newArySize = newAryLen * sizeof(FixedTreeList<HashMapNode<class_type>*>*);
+          for (uint32_t listIdx = 0; listIdx < listLen; listIdx++) {
+            HashMapNode<class_type>* entry = list->get(listIdx);
 
-        //FixedTreeList<HashMapNode<class_type>*>** newAry = (FixedTreeList<HashMapNode<class_type>*>**)malloc(newArySize);
+            if (entry == NULL) {
+              continue;
+            }
 
-        //for (uint32_t newAryIdx = 0; newAryIdx < newAryLen; newAryIdx++) {
-        //  newAry[newAryIdx] = new FixedTreeList<HashMapNode<class_type>*>();
-        //}
+            this->setEntry(entry->key, entry->value);
+          }
 
-        //for (uint32_t aryIdx = 0; aryIdx < aryLen; aryIdx++) {
-        //  FixedTreeList<HashMapNode<class_type>*>* curList = this->data[aryIdx];
+        }
 
-        //  uint32_t curListLen = curList->getLength();
-
-        //  for (uint32_t curListIdx = 0; curListIdx < curListLen; curListIdx++) {
-        //    HashMapNode<class_type>* curEntry = curList->get(curListIdx);
-
-        //    const char* curKey = curEntry->key;
-
-        //    uint32_t newAryIdx = HashMap::hashCode(curKey) % newAryLen;
-
-        //    newAry[newAryIdx]->unshift(curEntry);
-        //  }
-
-        //  delete curList;
-        //}
-
-        //this->listArrayLen = newAryLen;
-
-        //free(this->data);
-
-        //this->data = newAry;
+        delete oldData;
       }
 
       //void deleteEntry(const char* key) {
@@ -199,7 +185,7 @@
       HashMap() {
         this->data = new FixedTreeList<FixedTreeList<HashMapNode<class_type>*>*>();
 
-        this->data->set(HASHMAP_LIST_ARYLEN - 1, NULL);
+        this->data->set(HASHMAP_ARRAY_LEN - 1, NULL);
 
       }
 
