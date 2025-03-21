@@ -3,26 +3,10 @@
 
   #define _POSITION_HPP
 
-
-  class Position {
-
-    public:
-
-      float horz;
-      float vert;
-      float depth;
-
-      Position(
-        float xPos=0.0,
-        float yPos=0.0,
-        float zPos=0.0
-      ) {
-
-        this->horz = xPos;
-        this->vert = yPos;
-        this->depth = zPos;
-      }
-
+  struct Position {
+    float horz = 0.0;
+    float vert = 0.0;
+    float depth = 0.0;
   };
 
 #endif
