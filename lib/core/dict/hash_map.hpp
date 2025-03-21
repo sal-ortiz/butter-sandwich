@@ -15,8 +15,6 @@
 
   #define MAX_HASHCODE_KEY_LEN    8
 
-  #define REALLOC_BUFFER_SCALE  2
-
 
   template <class class_type>
   class HashMap {
@@ -98,7 +96,7 @@
         newEntry->key = key;
         newEntry->value = value;
 
-        list->unshift(newEntry);  // FixedTreeList, FixedTreeList, BinaryTreeListi
+        list->unshift(newEntry);  // LinkedList, BinaryTreeList
         //list->push(newEntry);   // FixedTreeList, BinaryTreeList, ArrayList
 
         this->data->set(aryIdx, list);
@@ -108,13 +106,12 @@
         if (innerLoopLen > HASHMAP_LISTLEN_MAX) {
           uint32_t newLen = this->data->getLength() + HASHMAP_ARRAY_LEN;
 
+          printf("REBASING to %d / %d\n", list->getLength(), this->data->getLength());
+
           this->rebase(newLen);
         }
 
       }
-
-
-      public: // only for testing purposes
 
       void rebase(uint32_t newLen) {
         FixedTreeList<FixedTreeList<HashMapNode<class_type>*>*>* oldData = this->data;
@@ -180,7 +177,7 @@
       //}
 
 
-    //public:
+    public:
 
       HashMap() {
         this->data = new FixedTreeList<FixedTreeList<HashMapNode<class_type>*>*>();
@@ -232,15 +229,10 @@
       //}
 
       List<const char*>* getKeys() {
-        // TODO: It might be faster/efficient to merge the various lists
-        //       contained in data instead of iterating through each one.
-
         List<const char*>* outp = new List<const char*>();
-        //uint32_t aryLen = this->listArrayLen;
         uint32_t aryLen = this->data->getLength();;
 
         for (uint32_t aryIdx = 0; aryIdx < aryLen; aryIdx++) {
-          //FixedTreeList<HashMapNode<class_type>*>* list = data[aryIdx];
           FixedTreeList<HashMapNode<class_type>*>* list = data->get(aryIdx);
 
           if (list == NULL) {
@@ -266,15 +258,10 @@
       }
 
       List<class_type>* getValues() {
-        // TODO: It might be faster/efficient to merge the various lists
-        //       contained in data instead of iterating through each one.
-
         List<class_type>* outp = new List<class_type>();
-        //uint32_t aryLen = this->listArrayLen;
         uint32_t aryLen = this->data->getLength();;
 
         for (uint32_t aryIdx = 0; aryIdx < aryLen; aryIdx++) {
-          //FixedTreeList<HashMapNode<class_type>*>* list = data[aryIdx];
           FixedTreeList<HashMapNode<class_type>*>* list = data->get(aryIdx);
 
           if (list == NULL) {
