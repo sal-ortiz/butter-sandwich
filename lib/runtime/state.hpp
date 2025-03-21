@@ -32,7 +32,7 @@
       }
 
       ~State() {
-        LinkedList<void*>* dataList = this->data->getValues();
+        List<void*>* dataList = this->data->getValues();
         uint32_t dataListLen = dataList->getLength();
 
         for (uint32_t idx = 0; idx < dataListLen; idx++) {

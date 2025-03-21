@@ -34,7 +34,7 @@
       }
 
       static void deinitialize() {
-        LinkedList<HookCallbackRecord*>* cbList = _hookCallbacks->getValues();
+        List<HookCallbackRecord*>* cbList = _hookCallbacks->getValues();
 
         uint32_t cbListLen = cbList->getLength();
 
