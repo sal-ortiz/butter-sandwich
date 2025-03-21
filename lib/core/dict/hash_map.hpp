@@ -140,6 +140,8 @@
             }
 
             this->setEntry(entry->key, entry->value);
+
+            delete entry;
           }
 
         }
