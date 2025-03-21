@@ -12,8 +12,8 @@
 
   template <class class_type>
   //class List: public LinkedList<class_type> {
-  //class List: public ArrayList<class_type> {
-  class List: public FixedTreeList<class_type> {
+  class List: public ArrayList<class_type> {
+  //class List: public FixedTreeList<class_type> {
   //class List: public BinaryTreeList<class_type> {
     // intentionally left blank.
   };
