@@ -21,7 +21,7 @@
 
     private:
 
-      FixedTreeList<FixedTreeList<HashMapNode<class_type>*>*>* data;
+      FixedTreeList<LinkedList<HashMapNode<class_type>*>*>* data;
 
       static uint32_t hashCode(const char* key) {
         uint32_t outpValue = 7;
@@ -44,7 +44,7 @@
       HashMapNode<class_type>* getEntry(const char* key) {
         uint32_t aryIdx = HashMap::hashCode(key) % this->data->getLength();
 
-        FixedTreeList<HashMapNode<class_type>*>* list = this->data->get(aryIdx);
+        LinkedList<HashMapNode<class_type>*>* list = this->data->get(aryIdx);
 
         uint32_t listLen = list->getLength();
 
@@ -69,10 +69,10 @@
       void setEntry(const char* key, class_type value) {
         uint32_t aryIdx = HashMap::hashCode(key) % this->data->getLength();
 
-        FixedTreeList<HashMapNode<class_type>*>* list = this->data->get(aryIdx);
+        LinkedList<HashMapNode<class_type>*>* list = this->data->get(aryIdx);
 
         if (list == NULL) {
-          list = new FixedTreeList<HashMapNode<class_type>*>();
+          list = new LinkedList<HashMapNode<class_type>*>();
 
           this->data->set(aryIdx, list);
         }
@@ -114,8 +114,8 @@
       }
 
       void rebase(uint32_t newLen) {
-        FixedTreeList<FixedTreeList<HashMapNode<class_type>*>*>* oldData = this->data;
-        FixedTreeList<FixedTreeList<HashMapNode<class_type>*>*>* newData = new FixedTreeList<FixedTreeList<HashMapNode<class_type>*>*>();
+        FixedTreeList<LinkedList<HashMapNode<class_type>*>*>* oldData = this->data;
+        FixedTreeList<LinkedList<HashMapNode<class_type>*>*>* newData = new FixedTreeList<LinkedList<HashMapNode<class_type>*>*>();
 
         newData->set(newLen, NULL);
 
@@ -124,7 +124,7 @@
         uint32_t oldDataLen = oldData->getLength();
 
         for (uint32_t idx = 0; idx < oldDataLen; idx++) {
-          FixedTreeList<HashMapNode<class_type>*>* list = oldData->get(idx);
+          LinkedList<HashMapNode<class_type>*>* list = oldData->get(idx);
 
           if (list == NULL) {
             continue;
@@ -180,7 +180,7 @@
     public:
 
       HashMap() {
-        this->data = new FixedTreeList<FixedTreeList<HashMapNode<class_type>*>*>();
+        this->data = new FixedTreeList<LinkedList<HashMapNode<class_type>*>*>();
 
         this->data->set(HASHMAP_ARRAY_LEN - 1, NULL);
 
@@ -190,7 +190,7 @@
         uint32_t aryLen = this->data->getLength();
 
         for (uint32_t idx = 0; idx < aryLen; idx++) {
-          FixedTreeList<HashMapNode<class_type>*>* list = this->data->get(idx);
+          LinkedList<HashMapNode<class_type>*>* list = this->data->get(idx);
 
           if (list == NULL) {
             continue;
@@ -233,7 +233,7 @@
         uint32_t aryLen = this->data->getLength();;
 
         for (uint32_t aryIdx = 0; aryIdx < aryLen; aryIdx++) {
-          FixedTreeList<HashMapNode<class_type>*>* list = data->get(aryIdx);
+          LinkedList<HashMapNode<class_type>*>* list = data->get(aryIdx);
 
           if (list == NULL) {
             continue;
@@ -262,7 +262,7 @@
         uint32_t aryLen = this->data->getLength();;
 
         for (uint32_t aryIdx = 0; aryIdx < aryLen; aryIdx++) {
-          FixedTreeList<HashMapNode<class_type>*>* list = data->get(aryIdx);
+          LinkedList<HashMapNode<class_type>*>* list = data->get(aryIdx);
 
           if (list == NULL) {
             continue;
