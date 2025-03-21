@@ -23,9 +23,15 @@
       uint32_t length;
 
       void allocateArray(uint32_t newLen) {
+        uint32_t arrayLen = this->arraySize / sizeof(ArrayListNode<class_type>*);
         uint32_t newSize = newLen * sizeof(ArrayListNode<class_type>*);
 
         this->array = (ArrayListNode<class_type>**)realloc(this->array, newSize);
+
+        for (uint32_t idx = arrayLen; idx < newLen; idx++) {
+          this->array[idx] = NULL;
+        }
+
         this->arraySize = newSize;
       }
 
@@ -40,9 +46,10 @@
 
       void setEntry(uint32_t targIndex, class_type value) {
         uint32_t arySize = this->arraySize;
-        uint32_t aryLen = this->arraySize / sizeof(ArrayListNode<class_type>*);
+        //uint32_t aryLen = this->arraySize / sizeof(ArrayListNode<class_type>*);
+        uint32_t aryPtr = targIndex * sizeof(ArrayListNode<class_type>*);
 
-        if ((targIndex * sizeof(ArrayListNode<class_type>*)) > arySize) {
+        if (aryPtr >= arySize) {
           this->allocateArray(targIndex + _ARRAY_LIST_ALLOC_INCREMENT);
         }
 
