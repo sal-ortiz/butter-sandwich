@@ -18,81 +18,87 @@
 
       TreeMapNode<class_type>* root;
 
-      class_type getEntry(const char* key) {
-        TreeMapNode<class_type>* node = getEntry(this->root, key);
+      TreeMapNode<class_type>* getEntry(const char* targKey) {
+        TreeMapNode<class_type>* node = this->root;
 
-        if (node != NULL) {
-          return node->value;
+        while (node != NULL) {
+          const char* nodeKey = node->key;
+
+          TreeMapNode<class_type>* left = NULL;
+          TreeMapNode<class_type>* right = NULL;
+
+          uint8_t keyCmp = strcmp(targKey, nodeKey);
+
+          if (keyCmp == 0) {
+            return node;
+          } else if (keyCmp < 0) {
+            node = node->left;
+          } else if (keyCmp > 0) {
+            node = node->right;
+          }
+
         }
 
-        return (class_type)NULL;
-      }
-
-      TreeMapNode<class_type>* getEntry(TreeMapNode<class_type>* node, const char* key) {
-
-        if (node == NULL) {
-          return NULL;
-        }
-
-        const char* nodeKey = node->key;
-        uint8_t keyCmp = strcmp(key, nodeKey);
-
-        TreeMapNode<class_type>* left = NULL;
-        TreeMapNode<class_type>* right = NULL;
-
-        if (keyCmp == 0) {
-          return node;
-        } else if (keyCmp < 0) {
-          left = getEntry(node->left, key);
-        } else if (keyCmp > 0) {
-          right = getEntry(node->right, key);
-        }
-
-        if (left) {
-          return left;
-        } else {
-          return right;
-        }
-
+        return NULL;
       }
 
       void setEntry(const char* key, class_type value) {
-        this->root = this->setEntry(this->root, key, value);
-      }
 
-      TreeMapNode<class_type>* setEntry(TreeMapNode<class_type>* node, const char* key, class_type value) {
-
-        if (node == NULL) {
-          TreeMapNode<class_type>* newNode = new TreeMapNode<class_type>{};
+        if (this->root == NULL) {
+          TreeMapNode<class_type>* newNode = new TreeMapNode<class_type>();
 
           newNode->key = key;
           newNode->value = value;
 
-          return newNode;
+          this->root = newNode;
+
+          return;
         }
 
-        const char* nodeKey = node->key;
-        uint8_t keyCmp = strcmp(key, nodeKey);
+        TreeMapNode<class_type>* node = this->root;
 
-        if (keyCmp < 0) {
-          TreeMapNode<class_type>* leftNode = node->left;
-          TreeMapNode<class_type>* tmpLeft = this->setEntry(leftNode, key, value);
+        do {
+          uint8_t keyCmp = strcmp(key, node->key);
 
-          node->left = tmpLeft;
+          if (keyCmp < 0) {
 
-        } else if (keyCmp > 0) {
-          TreeMapNode<class_type>* rightNode = node->right;
-          TreeMapNode<class_type>* tmpRight = this->setEntry(rightNode, key, value);
+            if (node->left == NULL) {
+              TreeMapNode<class_type>* newNode = new TreeMapNode<class_type>();
 
-          node->right = tmpRight;
+              newNode->key = key;
+              newNode->value = value;
 
-        } else {
-          node->value = value;
-        }
+              node->left = newNode;
 
-        return node;
+              return;
+            }
+
+            node = node->left;
+
+          } else if (keyCmp > 0) {
+
+            if (node->right == NULL) {
+              TreeMapNode<class_type>* newNode = new TreeMapNode<class_type>();
+
+              newNode->key = key;
+              newNode->value = value;
+
+              node->right = newNode;
+
+              return;
+            }
+
+            node = node->right;
+
+          } else {
+            node->value = value;
+
+            return;
+          }
+
+        } while (node != NULL);
+
       }
-
 
       List<const char*>* getKeys(TreeMapNode<class_type>* node, List<const char*>* list=NULL) {
 
@@ -256,7 +262,13 @@
       //}
 
       class_type get(const char* key) {
-        return this->getEntry(key);
+        TreeMapNode<class_type>* entry = this->getEntry(key);
+
+        if (entry == NULL) {
+          return NULL;
+        }
+
+        return entry->value;
       }
 
       void set(const char* key, class_type value) {
@@ -276,6 +288,5 @@
       }
 
   };
-
 
 #endif

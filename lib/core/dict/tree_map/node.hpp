@@ -9,6 +9,7 @@
 
   template <typename data_type>
   struct TreeMapNode {
+
     TreeMapNode<data_type>* left;
     TreeMapNode<data_type>* right;
 
