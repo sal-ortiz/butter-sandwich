@@ -81,8 +81,7 @@
         Quadtree<class_type>* child = this->children[quadNum];
 
         if (!child) {
-          // TODO: maybe return NULL instead of creating a new object.
-          return new LinkedList<QuadtreeElement<class_type>*>();
+          return NULL;
         }
 
         if (

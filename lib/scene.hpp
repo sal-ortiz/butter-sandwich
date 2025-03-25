@@ -174,7 +174,7 @@
 
           LinkedList<QuadtreeElement<SceneBase*>*>* hitList = this->quadtree->query(pos->horz, pos->vert, el->width, el->height);
 
-          if (hitList->getLength() > 1) {
+          if (hitList && hitList->getLength() > 1) {
 
             for (uint32_t hitIdx = 0; hitIdx < hitList->getLength(); hitIdx++) {
               //QuadtreeElement<SceneBase*>*>* hitListEl = hitList->get(hitIdx);
