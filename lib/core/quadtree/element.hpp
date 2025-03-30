@@ -10,6 +10,7 @@
 
     uint32_t horzPos;
     uint32_t vertPos;
+
     uint32_t width;
     uint32_t height;
   };

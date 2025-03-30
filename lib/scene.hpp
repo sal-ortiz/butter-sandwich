@@ -148,15 +148,24 @@
 
         // TODO: delete  old this->quadtree entries.
 
-        this->quadtree = new Quadtree<SceneBase*>(sceneWidth, sceneHeight, 0, 0);
+        if (this->quadtree != NULL) {
+          delete this->quadtree;
+        }
+
+        this->quadtree = new Quadtree<SceneBase*>(sceneWidth, sceneHeight);
 
         uint32_t numEls = this->elements->getLength();
 
         for (uint32_t elIdx = 0; elIdx < numEls; elIdx++) {
           SceneBase* el = this->elements->get(elIdx);
-          Position* elPos = (Position*)el->state->get("absolute_position");
 
-          this->quadtree->insert(elPos->horz, elPos->vert, el->width, el->height, el);
+          if (el->isActive == true) {
+            Position* elPos = (Position*)el->state->get("absolute_position");
+
+            this->quadtree->insert(elPos->horz, elPos->vert, el->width, el->height, el);
+
+          }
+
         }
 
       }
@@ -177,21 +186,111 @@
           if (hitList && hitList->getLength() > 1) {
 
             for (uint32_t hitIdx = 0; hitIdx < hitList->getLength(); hitIdx++) {
-              //QuadtreeElement<SceneBase*>*>* hitListEl = hitList->get(hitIdx);
-
               QuadtreeElement<SceneBase*>* hitEntry = hitList->get(hitIdx);
               SceneBase* hitEl = hitEntry->value;
 
-              if (
-                (/*el->isActive &&*/ hitEl->isActive)
-                && (el->getIdentifier() != hitEl->getIdentifier())
-              ) {
-                uint32_t charId = el->getIdentifier();
+              if (!hitEl->isActive) {
+                continue;
+              }
 
-                char* hookId = new char[Hook::ID_LENGTH];
-                Hook::generateIdentifier(hookId, "hook", charId, "onCollision", "action");
+              if (el->getIdentifier() != hitEl->getIdentifier()) {
+                Position* elPos = (Position*)el->state->get("absolute_position");
+                Position* hitElPos = (Position*)hitEl->state->get("absolute_position");
 
-                Hook::executeCallback(hookId, (void*)this);
+                //Size* elSize = (Size*)el->state->get("size");
+                //Size* hitElSize = (Size*)hitEl->state->get("size");
+
+                uint32_t elLeft = elPos->horz;
+                //uint32_t elRight = elPos->horz + elSize->horz;
+                uint32_t elRight = elPos->horz + el->width;
+                uint32_t elTop = elPos->vert;
+                //uint32_t elBottom = elPos->vert + elSize->vert;
+                uint32_t elBottom = elPos->vert + el->height;
+
+                uint32_t hitElLeft = hitElPos->horz;
+                //uint32_t hitElRight = hitElPos->horz + hitElSize->horz;
+                uint32_t hitElRight = hitElPos->horz + hitEl->width;
+                uint32_t hitElTop = hitElPos->vert;
+                //uint32_t hitElBottom = hitElPos->vert + hitElSize->vert;
+                uint32_t hitElBottom = hitElPos->vert + hitEl->height;
+
+                if (
+                  (
+                    // bottom-right of A and upper-left of B
+                    elLeft < hitElLeft && elRight > hitElLeft &&
+                    elTop < hitElTop && elBottom > hitElTop
+                  ) || (
+                    // upper-right of A and bottom left of B
+                    elLeft < hitElLeft && elRight > hitElLeft &&
+                    elTop < hitElBottom && elBottom > hitElBottom
+
+                  ) || (
+                    // right of A within left of B
+                    elLeft < hitElLeft && elRight > hitElLeft &&
+                    elTop > hitElTop && elBottom < hitElBottom
+                  ) || (
+                    // right of A around left of B
+                    elLeft < hitElLeft && elRight > hitElLeft &&
+                    elTop < hitElTop && elBottom > hitElBottom
+
+                  ) || (
+                    // top of A arround and bottom of B
+                    elLeft < hitElLeft && elRight > hitElRight &&
+                    elTop < hitElTop && elBottom > hitElTop
+                  ) || (
+                    // bottom of A around top of B
+                    elLeft < hitElLeft && elRight > hitElRight &&
+                    elBottom > hitElTop && elBottom < hitElBottom
+
+                  ) || (
+
+                    // bottom-right of B and top-left of A
+                    hitElLeft < elLeft && hitElRight > elLeft &&
+                    hitElTop < elTop && hitElBottom > elTop
+                  ) || (
+                    // top-right of B and bottom-left of A
+                    hitElLeft < elLeft && hitElRight > elLeft &&
+                    hitElTop < elBottom && hitElBottom > elBottom
+
+                  ) || (
+                    // right of B within left of A
+                    hitElLeft < elLeft && hitElRight > elLeft &&
+                    hitElTop > elTop && hitElBottom < elBottom
+                  ) || (
+                    // right of B around left of A
+                    hitElLeft < elLeft && hitElRight > elLeft &&
+                    hitElTop < elTop && hitElBottom > elBottom
+
+                  ) || (
+                    // bottom of A within top of B
+                    hitElLeft < elLeft && hitElRight > elRight &&
+                    hitElTop < elTop && hitElBottom > elTop
+                  ) || (
+                    // top of B around top of A
+                    hitElLeft < elLeft && hitElRight > elRight &&
+                    hitElBottom > elTop && hitElBottom < elBottom
+
+                  ) || (
+
+                    // B wihin A
+                    elLeft < hitElLeft && elRight > hitElRight &&
+                    elTop < hitElTop && elBottom > hitElBottom
+                  ) || (
+                    // A within B
+                    hitElLeft < elLeft && hitElRight > elRight &&
+                    hitElTop < elTop && hitElBottom > elBottom
+                  )
+
+                ) {
+                  uint32_t charId = el->getIdentifier();
+
+                  char* hookId = new char[Hook::ID_LENGTH];
+                  Hook::generateIdentifier(hookId, "hook", charId, "onCollision", "action");
+
+                  Hook::executeCallback(hookId, (void*)this);
+
+                }
+
               }
 
             }
