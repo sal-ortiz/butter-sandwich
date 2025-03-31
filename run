@@ -1,14 +1,20 @@
 #!/usr/bin/env bash
 
+SCRIPT_PATH=$( readlink --canonicalize $( dirname $0 ) )
+#ROOT_PATH=$( readlink --canonicalize $SCRIPT_PATH )
+ROOT_PATH=$( readlink --canonicalize . )
+
 clear
 
-g++ ./src/main.cpp -o ./main -std=c++17 -lSDL2 -lSDL2_image
+#g++ $ROOT_PATH/src/main.cpp -o $ROOT_PATH/main -Og -std=c++17 -lSDL2 -lSDL2_image
+g++ $ROOT_PATH/src/main.cpp -o $ROOT_PATH/main -g -std=c++17 -lSDL2 -lSDL2_image
+#g++ $ROOT_PATH/src/main.cpp -o $ROOT_PATH/main -std=c++23 -lSDL2 -lSDL2_image
 
 if [ $? == 0 ]; then
-  cat ./assets/title.asc
+  cat $ROOT_PATH/assets/title.asc
 
-  ./main
+  $ROOT_PATH/main
 
-  rm -f ./main
+  rm -f $ROOT_PATH/main
 fi
 
