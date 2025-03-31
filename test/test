@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+
+USER_PATH=$( pwd )
+SCRIPT_PATH=$( readlink --canonicalize $( dirname $0 ) )
+ROOT_PATH=$( readlink --canonicalize $SCRIPT_PATH/.. )
+TEST_PATH=$ROOT_PATH/test
+
+clear
+
+if [ -z $1 ]; then
+  echo "$( basename $0 ) <TARGET_ID>"
+
+  exit 1
+fi
+
+INP_FILE=$TEST_PATH/${1}_test.cpp
+OUTP_FILE=$TEST_PATH/test.o
+
+g++ $INP_FILE -o $OUTP_FILE -Og -std=c++17 -lSDL2 -lSDL2_image
+#g++ $ROOT_PATH/src/main.cpp -o $ROOT_PATH/main -std=c++17 -lSDL2 -lSDL2_image
+
+if [ $? == 0 ]; then
+  $TEST_PATH/test.o
+
+  #valgrind --leak-check=full $TEST_PATH/test.o
+
+  rm -f $TEST_PATH/test.o
+
+  exit $?
+fi
+
