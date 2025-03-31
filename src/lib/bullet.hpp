@@ -30,6 +30,9 @@
         trajectory->colorRate.green = 45.0;
         trajectory->colorRate.blue = 45.0;
         trajectory->colorRate.alpha = 45.0;
+
+
+        //printf("(%s) identifier: %d\t/\tidentifierString: %s\n", this->type, this->getIdentifier(), this->getIdentifierString());
       }
 
       static Bullet* loadAssets(Scene* scene) {
@@ -54,18 +57,22 @@
         absPosition->vert = -1;
 
         bullet->onEvaluate(Bullet::evaluateCallback, scene);
-        bullet->onCollision(Bullet::collisionCallback, scene);
+        bullet->onCollision(Bullet::collisionCallback, bullet, scene);
 
         return bullet;
       }
 
       static void* collisionCallback(void* inp, void* dataOne, void* dataTwo) {
         SceneBase* targ = reinterpret_cast<SceneBase*>(inp);
-        Scene* scene = reinterpret_cast<Scene*>(dataOne);
+        Bullet* bullet = reinterpret_cast<Bullet*>(dataOne);
+        Scene* scene = reinterpret_cast<Scene*>(dataTwo);
 
+        //printf("\n[%u] BULLET COLLISION!!", SDL_GetTicks());
+//        printf("\n%d\n", targ->getIdentifier());
+//        printf("\n%s\n", targ->type);
 
-        printf("\n[%u] BULLET COLLISION!!", SDL_GetTicks());
-
+        //printf("\ntarg: (%s) %u\n", targ->type, targ->getIdentifier());
+        //printf("\nbullet: (%s) %u\n\n", bullet->type, bullet->getIdentifier());
 
         return NULL;
       }

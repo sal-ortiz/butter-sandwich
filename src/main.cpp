@@ -25,6 +25,15 @@
 const uint32_t SCREEN_WIDTH = 1200;
 const uint32_t SCREEN_HEIGHT = 800;
 
+
+//void* collisionCallback(void* inp, void* dataOne, void* dataTwo) {
+//  //Scene* scene = reinterpret_cast<Scene>(inp);
+//
+//  printf("\nalfksjdlas;dkfjasl;dfjas;lkfjdas;l\n");
+//
+//  return (void*)NULL;
+//}
+
 void* quitCallback(void* inp, void* dataOne, void* dataTwo) {
   ApplicationEventParams* parsedInp = reinterpret_cast<ApplicationEventParams*>(inp);
 
@@ -44,6 +53,14 @@ void* closedCallback(void* inp, void* dataOne, void* dataTwo) {
 //void* keyboardCallback(void* inp, void* dataOne, void* dataTwo) {
 //  KeyboardEventParams* parsedInp = reinterpret_cast<KeyboardEventParams*>(inp);
 //  Player* player = reinterpret_cast<Player*>(dataOne);
+//
+//  //if (KeyboardInput::isPressed(44)) {
+//  //  printf("\nSPACE PRESSED!!!!!!!!!!!!!");
+//  //} else if (KeyboardInput::isHeld(44)) {
+//  //  printf("\nSPACE HELD!!!!!!!!!!!!!!!!");
+//  //} else if (KeyboardInput::isReleased(44)) {
+//  //  printf("\nSPACE RELEASED!!!!!!!!!!!!");
+//  //}
 //
 //  return (void*)NULL;
 //}
@@ -102,21 +119,25 @@ int main(int argc, char *argv[]) {
   for (uint32_t asteroidIdx = 0; asteroidIdx < Asteroid00::MAX_COUNT; asteroidIdx++) {
     Asteroid00* asteroid = Asteroid00::loadAssets(scene);
 
-    char* name = new char();
+    char* name = new char[12];
 
-    sprintf(name, "asteroid-%u", asteroid->getIdentifier());
+    sprintf(name, "asteroid-%.2u", asteroid->getIdentifier());
 
     scene->addElement(name, asteroid);
+
+    delete name;
   }
 
   for (uint32_t bulletsIdx = 0; bulletsIdx < Bullet::MAX_COUNT; bulletsIdx++) {
     Bullet* bullet = Bullet::loadAssets(scene);
 
-    char* name = new char();
+    char* name = new char[10];
 
     sprintf(name, "bullet-%.2u", bulletsIdx);
 
     scene->addElement(name, bullet);
+
+    delete name;
   }
 
   Position* playerAbsolutePos = (Position*)player->state->get("absolute_position");
@@ -137,24 +158,23 @@ int main(int argc, char *argv[]) {
 
   uint32_t frameStart = 0;
   uint32_t framePasses = 0;
-  uint32_t frameEvalDelay = 100;
+  uint32_t frameEvalDelay = 250;
 
-  printf("\n[%u] load time: %ums", SDL_GetTicks(), SDL_GetTicks() - loadStartTimestamp);
+  printf("\n[%u] load time: %ums\n", SDL_GetTicks(), SDL_GetTicks() - loadStartTimestamp);
 
   while (app->isActive) {
     frameStart = SDL_GetTicks();
 
     Event::evaluate();
 
-    win->clear();
-
     scene->evaluate();
+
+    //win->clear();
+
     scene->render(renderer);
 
     frameElapsed += SDL_GetTicks() - frameStart;
     framePasses++;
-
-    win->render();
 
     if (framePasses % frameEvalDelay == 0) {
       float avgFrameTime = (float)frameElapsed / (float)framePasses;
@@ -165,6 +185,7 @@ int main(int argc, char *argv[]) {
       framePasses = 0;
     }
 
+    win->render();
   }
 
   Hook::deinitialize();

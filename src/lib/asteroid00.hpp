@@ -22,7 +22,7 @@
 
     public:
 
-      static const uint32_t MAX_COUNT = 1;
+      static const uint32_t MAX_COUNT = 120;
 
       Asteroid00() {
         Trajectory* trajectory = (Trajectory*)this->state->get("trajectory");
@@ -40,6 +40,13 @@
         trajectory->scaleRate.depth = 0.0;
 
         this->isActive = true;
+        this->type = "asteroid";
+
+        //if (this->getIdentifier() == 0) {
+        //  printf("IdentifierTools::generate(); %s\n", IdentifierTools::generate());
+        //}
+
+        //printf("(%s) identifier: %d\t/\tidentifierString: %s\n", this->type, this->getIdentifier(), this->getIdentifierString());
       }
 
       static Asteroid00* loadAssets(Scene* scene) {
@@ -80,22 +87,41 @@
         trajectory->angle.yaw = ((float)(rand() % 3) / 2) - 1.5;
 
         asteroid->onEvaluate(Asteroid00::evaluateCallback, scene);
-        asteroid->onCollision(Asteroid00::collisionCallback, scene);
+        asteroid->onCollision(Asteroid00::collisionCallback, asteroid, scene);
 
         return asteroid;
       }
 
+
+
+
+
+
+
+
+
+
+
+
+
       static void* collisionCallback(void* inp, void* dataOne, void* dataTwo) {
         SceneBase* targ = reinterpret_cast<SceneBase*>(inp);
-        Scene* scene = reinterpret_cast<Scene*>(dataOne);
-        //List<SceneBase*>* elements = reinterpret_cast<List<SceneBase*>*>(dataOne);
-
-
-        printf("\n[%u] ASTEROID COLLISION!!", SDL_GetTicks());
+        Asteroid00* asteroid = reinterpret_cast<Asteroid00*>(dataOne);
+        Scene* scene = reinterpret_cast<Scene*>(dataTwo);
 
 
         return NULL;
       }
+
+
+
+
+
+
+
+
+
+
 
       static void* evaluateCallback(void* inp, void* dataOne, void* dataTwo) {
         Asteroid00* asteroid = reinterpret_cast<Asteroid00*>(inp);
@@ -107,21 +133,13 @@
 
         Position* absPosition = (Position*)asteroid->state->get("absolute_position");
 
-        absPosition->horz += trajectory->position.horz;
-        absPosition->vert += trajectory->position.vert;
-        absPosition->depth += trajectory->position.depth;
+        //absPosition->horz += trajectory->position.horz;
+        //absPosition->vert += trajectory->position.vert;
+        //absPosition->depth += trajectory->position.depth;
 
         angle->pitch += trajectory->angle.pitch;
         angle->roll += trajectory->angle.roll;
         angle->yaw += trajectory->angle.yaw;
-
-        //trajectory->position.horz *= (trajectory->positionRate.horz);
-        //trajectory->position.vert *= (trajectory->positionRate.vert);
-        //trajectory->position.depth *= (trajectory->positionRate.depth);
-
-        //trajectory->angle.pitch *= (trajectory->angleRate.pitch);
-        //trajectory->angle.roll *= (trajectory->angleRate.roll);
-        //trajectory->angle.yaw *= (trajectory->angleRate.yaw);
 
         position->horz = absPosition->horz - scene->view->position.horz;
         position->vert = absPosition->vert - scene->view->position.vert;
@@ -146,13 +164,7 @@
           trajectory->position.vert = trajectory->position.vert * -1;
         }
 
-        //printf("\n\n=========================================================");
-        //printf("\n[%u] POSITION: (%f, %f)", SDL_GetTicks(), absPosition->horz, absPosition->vert);
-        //printf("\n[%u] ANGLE TRAJ: %f", SDL_GetTicks(), trajectory->angle.pitch);
-        //printf("\n[%u] POSITION TRAJ: (%f, %f)", SDL_GetTicks(), trajectory->position.horz, trajectory->position.vert);
-        //printf("\n=========================================================\n\n");
-
-        return (void*)NULL;
+        return NULL;
       }
 
   };

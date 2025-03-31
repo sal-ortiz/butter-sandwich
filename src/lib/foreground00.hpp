@@ -7,6 +7,7 @@
   #include "../../lib/runtime/sprite.hpp"
   #include "../../lib/runtime/data/trajectory.hpp"
   #include "../../lib/runtime/data/view.hpp"
+  #include "../../lib/runtime/data/color.hpp"
   #include "../../lib/scene/background.hpp"
   #include "../../lib/scene.hpp"
 
@@ -17,19 +18,22 @@
 
       Foreground00() {
         Trajectory* trajectory = (Trajectory*)this->state->get("trajectory");
+        Color* color = (Color*)this->state->get("color");
 
         trajectory->positionRate.horz = 0.90;
         trajectory->positionRate.vert = 0.90;
         trajectory->positionRate.depth = 0.90;
+
+        color->alpha = 180;
 
         this->isActive = true;
       }
 
       static Foreground00* loadAssets(Scene* scene) {
         Foreground00* foreground = new Foreground00();
-
         Sprite* sprite = new Sprite();
         Image* image = Image::load("./src/assets/background01.png", 0, 0, 3840, 2160);
+
 
         sprite->addFrame(image, 0);
         sprite->setLoop(false);

@@ -16,7 +16,7 @@
   #include "../../lib/scene.hpp"
 
 
-  uint32_t lastBulletTimestamp = 0;
+  static uint32_t lastBulletTimestamp = 0;
 
   class Player: public SceneCharacter {
 
@@ -41,6 +41,8 @@
         trajectory->colorRate.green = 10.0;
         trajectory->colorRate.blue = 10.0;
         trajectory->colorRate.alpha = 10.0;
+
+        //printf("(%s) identifier: %d\t/\tidentifierString: %s\n", this->type, this->getIdentifier(), this->getIdentifierString());
 
         this->isActive = true;
       }
@@ -95,18 +97,22 @@
         color->alpha = 1.0;
 
         player->onEvaluate(Player::evaluateCallback, scene);
-        player->onCollision(Player::collisionCallback, scene);
+        player->onCollision(Player::collisionCallback, player, scene);
 
         return player;
       }
 
       static void* collisionCallback(void* inp, void* dataOne, void* dataTwo) {
         SceneBase* targ = reinterpret_cast<SceneBase*>(inp);
-        Scene* scene = reinterpret_cast<Scene*>(dataOne);
-
+        Player* player = reinterpret_cast<Player*>(dataOne);
+        Scene* scene = reinterpret_cast<Scene*>(dataTwo);
 
         printf("\n[%u] PLAYER COLLISION!!", SDL_GetTicks());
+        //printf("\ntarg->name: %s", targ->name);
+        //printf("\nplayer->name: %s", player->name);
+        //printf("\nscene->size->horz / scene->size->vert: %d / %d", scene->size->horz, scene->size->vert);
 
+        //printf("\n");
 
         return NULL;
       }
