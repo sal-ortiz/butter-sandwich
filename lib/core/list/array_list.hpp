@@ -7,8 +7,6 @@
   #include <stdio.h>
   #include <math.h>
 
-  #include "./array_list/node.hpp"
-
   #define _ARRAY_LIST_ALLOC_INCREMENT   64
 
 
@@ -17,16 +15,16 @@
 
     private:
 
-      ArrayListNode<class_type>** array;
+      class_type* array;
 
       uint32_t arraySize;
       uint32_t length;
 
       void allocateArray(uint32_t newLen) {
-        uint32_t arrayLen = this->arraySize / sizeof(ArrayListNode<class_type>*);
-        uint32_t newSize = newLen * sizeof(ArrayListNode<class_type>*);
+        uint32_t arrayLen = this->arraySize / sizeof(class_type);
+        uint32_t newSize = newLen * sizeof(class_type*);
 
-        this->array = (ArrayListNode<class_type>**)realloc(this->array, newSize);
+        this->array = (class_type*)realloc(this->array, newSize);
 
         for (uint32_t idx = arrayLen; idx < newLen; idx++) {
           this->array[idx] = NULL;
@@ -35,7 +33,7 @@
         this->arraySize = newSize;
       }
 
-      ArrayListNode<class_type>* getEntry(uint32_t targIndex) {
+      class_type getEntry(uint32_t targIndex) {
 
         if (targIndex >= this->length) {
           return NULL;
@@ -46,22 +44,13 @@
 
       void setEntry(uint32_t targIndex, class_type value) {
         uint32_t arySize = this->arraySize;
-        //uint32_t aryLen = this->arraySize / sizeof(ArrayListNode<class_type>*);
-        uint32_t aryPtr = targIndex * sizeof(ArrayListNode<class_type>*);
+        uint32_t targPtr = targIndex * sizeof(class_type);
 
-        if (aryPtr >= arySize) {
+        if (targPtr >= arySize) {
           this->allocateArray(targIndex + _ARRAY_LIST_ALLOC_INCREMENT);
         }
 
-        ArrayListNode<class_type>* curNode = this->array[targIndex];
-
-        if (curNode == NULL) {
-          curNode = new ArrayListNode<class_type>();
-        }
-
-        curNode->value = value;
-
-        this->array[targIndex] = curNode;
+        this->array[targIndex] = value;
 
         if (targIndex >= this->length) {
           this->length = targIndex + 1;
@@ -70,22 +59,16 @@
       }
 
       void insertEntry(uint32_t targIndex, class_type value) {
-        ArrayListNode<class_type>* curNode;
 
         for (uint32_t idx = this->length - 1; idx > targIndex; idx--) {
-          curNode = this->getEntry(idx);
+          class_type oldVal = this->getEntry(idx);
 
-          if (curNode) {
-            this->setEntry(idx + 1, curNode->value);
-          } else {
-            this->setEntry(idx + 1, NULL);
-          }
-
+          this->setEntry(idx + 1, oldVal);
         }
 
-        ArrayListNode<class_type>* lastNode = this->getEntry(targIndex);
+        class_type lastEntry = this->getEntry(targIndex);
 
-        this->setEntry(targIndex + 1, lastNode->value);
+        this->setEntry(targIndex + 1, lastEntry);
         this->setEntry(targIndex, value);
       }
 
@@ -96,15 +79,13 @@
         }
 
         for (uint32_t idx = targIndex; idx < this->length; idx++) {
-          ArrayListNode<class_type>* curNode = this->getEntry(idx + 1);
+          class_type oldVal = this->getEntry(idx + 1);
 
-          if (curNode != NULL) {
-            this->setEntry(idx, curNode->value);
-          }
-
+          this->setEntry(idx, oldVal);
         }
 
         this->setEntry(this->length - 1, NULL);
+
         this->length--;
       }
 
@@ -127,18 +108,9 @@
       }
 
       class_type get(uint32_t targIndex) {
+        class_type value = this->getEntry(targIndex);
 
-        //if (targIndex > (this->length - 1)) {
-        //  throw;
-        //}
-
-        ArrayListNode<class_type>* node = this->getEntry(targIndex);
-
-        if (node == NULL) {
-          return (class_type)NULL;
-        }
-
-        return node->value;
+        return value;
       }
 
       void set(uint32_t targIndex, class_type value) {
@@ -146,11 +118,6 @@
       }
 
       void remove(uint32_t targIndex) {
-
-        //if (targIndex > (this->length - 1)) {
-        //  throw;
-        //}
-
         this->deleteEntry(targIndex);
       }
 
@@ -169,33 +136,21 @@
       class_type pop() {
         uint32_t index = this->length - 1;
 
-        ArrayListNode<class_type>* node = this->getEntry(index);
-
-        if (node == NULL) {
-          return NULL;
-        }
-
-        class_type outpValue = node->value;
+        class_type* value = this->getEntry(index);
 
         this->deleteEntry(index);
 
-        return outpValue;
+        return value;
       }
 
       class_type shift() {
         uint32_t index = 0;
 
-        ArrayListNode<class_type>* node = this->getEntry(index);
-
-        if (node == NULL) {
-          return NULL;
-        }
-
-        class_type outpValue = node->value;
+        class_type value = this->getEntry(index);
 
         this->deleteEntry(index);
 
-        return outpValue;
+        return value;
       }
 
 //      ArrayList<class_type>* clone() {
