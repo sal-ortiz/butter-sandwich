@@ -19,20 +19,33 @@
       ArrayList<TimerCheckpoint*>* checkpoints;
 
       Timer(uint32_t start=0) {
-        this->start = start || SDL_GetTicks();
-
-        this->checkpoints = new ArrayList<TimerCheckpoint*>();
+        this->reset(start);
       }
 
       ~Timer() {
         uint32_t listLen = this->checkpoints->getLength();
 
-        for (uint32_t idx = 0; idx < listLen; idx++) {
+        for (uint32_t idx = 0; listLen; idx++) {
           TimerCheckpoint* checkpoint = this->checkpoints->get(idx);
 
           delete checkpoint;
         }
 
+        delete this->checkpoints;
+      }
+
+      void reset(uint32_t timer=0) {
+        this->start = start || SDL_GetTicks();
+
+        uint32_t listLen = this->checkpoints->getLength();
+
+        for (uint32_t idx = 0; listLen; idx++) {
+          TimerCheckpoint* checkpoint = this->checkpoints->get(idx);
+
+          delete checkpoint;
+        }
+
+        this->checkpoints = new ArrayList<TimerCheckpoint*>();
       }
 
       uint32_t setCheckpoint(const char* id, uint32_t inp=0) {
@@ -54,7 +67,7 @@
           TimerCheckpoint* checkpoint = this->checkpoints->get(idx);
 
           if (!strcmp(id, checkpoint->identifier)) {
-            return checkpoint->timestamp;
+            return SDL_GetTicks() - checkpoint->timestamp;
           }
 
         }
@@ -72,6 +85,21 @@
 
         return timestamp - this->start;
       }
+
+      float getAverage() {
+        uint32_t listLen = this->checkpoints->getLength();
+        uint32_t sum = 0;
+
+        for (uint32_t idx = 0; idx < listLen; idx++) {
+          TimerCheckpoint* checkpoint = this->checkpoints->get(idx);
+
+          sum += SDL_GetTicks() - checkpoint->timestamp;
+        }
+
+        return sum / listLen;
+      }
+
+
 
   };
 
