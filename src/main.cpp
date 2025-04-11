@@ -6,14 +6,14 @@
 
 #include <math.h>
 
-#include "../lib/core/keyboard.hpp"
-#include "../lib/core/renderer.hpp"
-#include "../lib/runtime/window.hpp"
-#include "../lib/runtime/application.hpp"
-#include "../lib/runtime/data/view.hpp"
-#include "../lib/runtime/data/angle.hpp"
-#include "../lib/runtime/data/position.hpp"
-#include "../lib/scene.hpp"
+#include <core/keyboard.hpp>
+#include <core/renderer.hpp>
+#include <runtime/window.hpp>
+#include <runtime/application.hpp>
+#include <runtime/data/view.hpp>
+#include <runtime/data/angle.hpp>
+#include <runtime/data/position.hpp>
+#include <scene.hpp>
 
 #include "./lib/bullet.hpp"
 #include "./lib/background00.hpp"

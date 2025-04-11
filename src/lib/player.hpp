@@ -5,15 +5,15 @@
 
   #include <string.h>
 
-  #include "../../lib/core/keyboard.hpp"
-  #include "../../lib/core/image.hpp"
-  #include "../../lib/runtime/sprite.hpp"
-  #include "../../lib/runtime/data/trajectory.hpp"
-  #include "../../lib/runtime/data/position.hpp"
-  #include "../../lib/runtime/data/angle.hpp"
-  #include "../../lib/runtime/data/scale.hpp"
-  #include "../../lib/runtime/data/view.hpp"
-  #include "../../lib/scene.hpp"
+  #include <core/keyboard.hpp>
+  #include <core/image.hpp>
+  #include <runtime/sprite.hpp>
+  #include <runtime/data/trajectory.hpp>
+  #include <runtime/data/position.hpp>
+  #include <runtime/data/angle.hpp>
+  #include <runtime/data/scale.hpp>
+  #include <runtime/data/view.hpp>
+  #include <scene.hpp>
 
 
   static uint32_t lastBulletTimestamp = 0;

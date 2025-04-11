@@ -3,13 +3,13 @@
 
   #define _GAME_BACKGROUND01_HPP
 
-  #include "../../lib/core/image.hpp"
-  #include "../../lib/runtime/sprite.hpp"
-  #include "../../lib/runtime/data/trajectory.hpp"
-  #include "../../lib/runtime/data/view.hpp"
-  #include "../../lib/runtime/data/color.hpp"
-  #include "../../lib/scene/background.hpp"
-  #include "../../lib/scene.hpp"
+  #include <core/image.hpp>
+  #include <runtime/sprite.hpp>
+  #include <runtime/data/trajectory.hpp>
+  #include <runtime/data/view.hpp>
+  #include <runtime/data/color.hpp>
+  #include <scene/background.hpp>
+  #include <scene.hpp>
 
 
   class Foreground00: public SceneBackground {
