@@ -5,11 +5,12 @@
 
   #include <stdint.h>
 
-  #include "fixed_tree_list/node.hpp"
+  #include "./list.hpp"
+  #include "./node/fixed_tree_list_node.hpp"
 
 
   template <class class_type>
-  class FixedTreeList {
+  class FixedTreeList: public List<class_type> {
 
     private:
 
@@ -17,7 +18,7 @@
 
       uint32_t length;
 
-      FixedTreeListNode<class_type>* getEntry(uint32_t targIndex) {
+      FixedTreeListNode<class_type>* getEntry(uint32_t targIndex) override {
         FixedTreeListNode<class_type>* curNode = this->root;
 
         uint32_t targLevelNum = log2(targIndex + 1);
@@ -50,7 +51,7 @@
         return curNode;
       }
 
-      void setEntry(uint32_t targIndex, class_type value) {
+      void setEntry(uint32_t targIndex, class_type value) override {
         FixedTreeListNode<class_type>* curNode = this->root;
         uint32_t curIndex = 0;
 
@@ -104,7 +105,7 @@
 
       }
 
-      void insertEntry(uint32_t targIndex, class_type value) {
+      void insertEntry(uint32_t targIndex, class_type value) override {
         // TODO: FIND A WAY TO OPTIMIZE THIS!!!1
 
 
@@ -120,7 +121,7 @@
           if (curNode != NULL) {
             this->setEntry(idx + 1, curNode->value);
 
-            this->setEntry(idx, NULL);
+            this->setEntry(idx, (class_type)NULL);
           }
 
         }
@@ -131,7 +132,7 @@
         this->setEntry(targIndex, value);
       }
 
-      void deleteEntry(uint32_t targIndex) {
+      void deleteEntry(uint32_t targIndex) override {
         // TODO: FIND A WAY TO OPTIMIZE THIS!!!1
 
         if (targIndex >= this->length) {
@@ -147,9 +148,8 @@
 
         }
 
-        this->setEntry(this->length - 1, NULL);
+        this->setEntry(this->length - 1, (class_type)NULL);
         this->length--;
-
       }
 
 
@@ -204,7 +204,7 @@
         FixedTreeListNode<class_type>* node = this->getEntry(index);
 
         if (node == NULL) {
-          return NULL;
+          return (class_type)NULL;
         }
 
         class_type outpValue = node->value;
@@ -220,7 +220,7 @@
         FixedTreeListNode<class_type>* node = this->getEntry(index);
 
         if (node == NULL) {
-          return NULL;
+          return (class_type)NULL;
         }
 
         class_type outpValue = node->value;

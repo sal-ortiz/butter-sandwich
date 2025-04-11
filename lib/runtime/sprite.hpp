@@ -6,7 +6,8 @@
   #include <stdint.h>
 
   #include "../core/image.hpp"
-  #include "../core/list.hpp"
+  #include "../core/list/binary_tree_list.hpp"
+  #include "../core/list/fixed_tree_list.hpp"
   #include "../core/renderer.hpp"
   #include "./sprite/frame.hpp"
   #include "./data/position.hpp"

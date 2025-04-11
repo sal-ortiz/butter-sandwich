@@ -7,13 +7,14 @@
 
   #include <SDL2/SDL.h>
 
-  #include "./list.hpp"
+  //#include "./list/binary_tree_list.hpp"
+  #include "./list/array_list.hpp"
 
 
   struct KeyboardStateEntry {
-    bool isPressed;       // false = released, true = pressed
     time_t timestamp;     // last action timestamp
-    uint8_t code;   // scancode
+    bool isPressed;       // false = released, true = pressed
+    uint8_t code;         // scancode
   };
 
   //static BinaryTreeList<KeyboardStateEntry*>* keyboardState/* = new BinaryTreeList<KeyboardStateEntry*>()*/;

@@ -6,8 +6,8 @@
   #include <string.h>
   #include <stdint.h>
 
-  #include "./../list.hpp"
-  #include "./../list/fixed_tree_list.hpp"
+  #include "../list/list.hpp"
+  #include "../list/fixed_tree_list.hpp"
   #include "./hash_map/node.hpp"
 
   #define HASHMAP_ARRAY_LEN     128

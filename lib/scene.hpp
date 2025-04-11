@@ -7,7 +7,7 @@
 
   #include "./core/renderer.hpp"
   #include "./core/quadtree.hpp"
-  #include "./core/list.hpp"
+  #include "./core/list/linked_list.hpp"
   #include "./runtime/collision.hpp"
   #include "./runtime/data/size.hpp"
   #include "./runtime/data/view.hpp"

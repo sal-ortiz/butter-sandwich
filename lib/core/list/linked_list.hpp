@@ -7,11 +7,12 @@
   #include <stdio.h>
   #include <math.h>
 
-  #include "./linked_list/node.hpp"
+  #include "./list.hpp"
+  #include "./node/linked_list_node.hpp"
 
 
   template <class class_type>
-  class LinkedList {
+  class LinkedList: public List<class_type> {
 
     private:
 
@@ -22,7 +23,7 @@
       uint32_t index;
       uint32_t length;
 
-      LinkedListNode<class_type>* getEntry(uint32_t targIndex) {
+      LinkedListNode<class_type>* getEntry(uint32_t targIndex) override {
         LinkedListNode<class_type>* node;
 
         uint32_t curIndex;
@@ -82,7 +83,7 @@
         return node;
       }
 
-      void setEntry(uint32_t targIndex, class_type value) {
+      void setEntry(uint32_t targIndex, class_type value) override {
         LinkedListNode<class_type>* node;
 
         uint32_t curIndex;
@@ -158,7 +159,7 @@
         }
       }
 
-      void insertEntry(uint32_t targIndex, class_type value) {
+      void insertEntry(uint32_t targIndex, class_type value) override {
 
         if (targIndex >= this->length) {
           this->setEntry(targIndex, value);
@@ -188,7 +189,7 @@
         this->length++;
       }
 
-      void deleteEntry(uint32_t targIndex) {
+      void deleteEntry(uint32_t targIndex) override {
         LinkedListNode<class_type>* node = this->getEntry(targIndex);
 
         if (node == NULL) {

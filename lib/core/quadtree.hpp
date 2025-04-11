@@ -3,7 +3,7 @@
 
   #define _QUADTREE_HPP
 
-  #include "./list.hpp"
+  #include "./list/list.hpp"
   #include "./quadtree/element.hpp"
 
 

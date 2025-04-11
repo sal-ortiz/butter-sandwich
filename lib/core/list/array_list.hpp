@@ -7,15 +7,18 @@
   #include <stdio.h>
   #include <math.h>
 
+  #include "./list.hpp"
+  #include "./node/array_list_node.hpp"
+
   #define _ARRAY_LIST_ALLOC_INCREMENT   64
 
 
   template <class class_type>
-  class ArrayList {
+  class ArrayList: List<class_type> {
 
     private:
 
-      class_type* array;
+      ArrayListNode<class_type>** array;
 
       uint32_t arraySize;
       uint32_t length;
@@ -24,7 +27,7 @@
         uint32_t arrayLen = this->arraySize / sizeof(class_type);
         uint32_t newSize = newLen * sizeof(class_type*);
 
-        this->array = (class_type*)realloc(this->array, newSize);
+        this->array = (ArrayListNode<class_type>**)realloc(this->array, newSize);
 
         for (uint32_t idx = arrayLen; idx < newLen; idx++) {
           this->array[idx] = NULL;
@@ -33,7 +36,7 @@
         this->arraySize = newSize;
       }
 
-      class_type getEntry(uint32_t targIndex) {
+      ArrayListNode<class_type>* getEntry(uint32_t targIndex) override {
 
         if (targIndex >= this->length) {
           return NULL;
@@ -42,7 +45,7 @@
         return this->array[targIndex];
       }
 
-      void setEntry(uint32_t targIndex, class_type value) {
+      void setEntry(uint32_t targIndex, class_type value) override {
         uint32_t arySize = this->arraySize;
         uint32_t targPtr = targIndex * sizeof(class_type);
 
@@ -50,7 +53,11 @@
           this->allocateArray(targIndex + _ARRAY_LIST_ALLOC_INCREMENT);
         }
 
-        this->array[targIndex] = value;
+        ArrayListNode<class_type>* newNode = new ArrayListNode<class_type>();
+
+        newNode->value = value;
+
+        this->array[targIndex] = newNode;
 
         if (targIndex >= this->length) {
           this->length = targIndex + 1;
@@ -58,30 +65,33 @@
 
       }
 
-      void insertEntry(uint32_t targIndex, class_type value) {
+      void insertEntry(uint32_t targIndex, class_type value) override {
 
         for (uint32_t idx = this->length - 1; idx > targIndex; idx--) {
-          class_type oldVal = this->getEntry(idx);
+          ArrayListNode<class_type>* oldEntry = this->getEntry(idx);
 
-          this->setEntry(idx + 1, oldVal);
+          this->setEntry(idx + 1, oldEntry->value);
+
+          delete oldEntry;
         }
 
-        class_type lastEntry = this->getEntry(targIndex);
+        ArrayListNode<class_type>* lastEntry = this->getEntry(targIndex);
 
-        this->setEntry(targIndex + 1, lastEntry);
+        this->array[targIndex + 1] = lastEntry;
+
         this->setEntry(targIndex, value);
       }
 
-      void deleteEntry(uint32_t targIndex) {
+      void deleteEntry(uint32_t targIndex) override {
 
         if (targIndex >= this->length) {
           return;
         }
 
         for (uint32_t idx = targIndex; idx < this->length; idx++) {
-          class_type oldVal = this->getEntry(idx + 1);
+          ArrayListNode<class_type>*  oldEntry = this->getEntry(idx + 1);
 
-          this->setEntry(idx, oldVal);
+          this->array[idx] = oldEntry;
         }
 
         this->setEntry(this->length - 1, NULL);
@@ -95,11 +105,16 @@
       ArrayList() {
         this->length = 0;
 
-        this->array = NULL;
+        //this->array = NULL;
         this->allocateArray(_ARRAY_LIST_ALLOC_INCREMENT);
       }
 
       ~ArrayList() {
+
+        for (uint32_t idx = 0; idx < this->length; idx++) {
+          delete this->array[idx];
+        }
+
         free(this->array);
       }
 
@@ -108,9 +123,13 @@
       }
 
       class_type get(uint32_t targIndex) {
-        class_type value = this->getEntry(targIndex);
+        ArrayListNode<class_type>* node = this->getEntry(targIndex);
 
-        return value;
+        if (node == NULL) {
+          return (class_type)NULL;
+        }
+
+        return node->value;
       }
 
       void set(uint32_t targIndex, class_type value) {

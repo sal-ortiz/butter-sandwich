@@ -6,11 +6,13 @@
 
   //#include <stdio.h>
   #include <stddef.h>
-  #include "binary_tree_list/node.hpp"
+
+  #include "./list.hpp"
+  #include "./node/binary_tree_list_node.hpp"
 
 
   template <class class_type>
-  class BinaryTreeList {
+  class BinaryTreeList: public List<class_type> {
 
     private:
 
@@ -19,7 +21,7 @@
       uint32_t length;
 
 
-      BinaryTreeListNode<class_type>* getEntry(uint32_t targIndex) {
+      BinaryTreeListNode<class_type>* getEntry(uint32_t targIndex) override {
 
         if (this->root == NULL) {
           return NULL;
@@ -107,7 +109,7 @@
 
       }
 
-      void insertEntry(uint32_t targIndex, class_type value) {
+      void insertEntry(uint32_t targIndex, class_type value) override {
         BinaryTreeListNode<class_type>* node = this->root;
 
         this->insertEntry(node, targIndex, value);
@@ -126,7 +128,7 @@
         uint32_t nodeIdx = node->index;
 
         if (nodeIdx >= targIndex) {
-          node->setIndex(nodeIdx + 1);
+          node->index = nodeIdx + 1;
         }
 
         BinaryTreeListNode<class_type>* leftChild = node->left;
@@ -137,7 +139,7 @@
       }
 
 
-      void deleteEntry(uint32_t targIndex) {
+      void deleteEntry(uint32_t targIndex) override {
         BinaryTreeListNode<class_type>* node = this->root;
 
         this->root = this->deleteEntry(node, targIndex);
@@ -191,7 +193,7 @@
           }
 
         } else if (nodeIndex > targIndex) {
-          node->setIndex(nodeIndex - 1);
+          node->index = nodeIndex - 1;
         }
 
         return node;
@@ -199,7 +201,6 @@
 
 
     public:
-
 
       BinaryTreeList() {
         this->root = NULL;

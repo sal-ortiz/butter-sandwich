@@ -5,16 +5,14 @@
 
   #include <stddef.h>
 
+  #include "./list_node.hpp"
+
 
   template <typename data_type>
-  struct LinkedListNode {
+  struct LinkedListNode: public ListNode<data_type> {
 
     LinkedListNode<data_type>* next;
     LinkedListNode<data_type>* prev;
-
-    data_type value;
   };
 
 #endif
-
-

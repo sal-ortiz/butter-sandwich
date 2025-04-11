@@ -7,7 +7,6 @@
 
   #include <SDL2/SDL.h>
 
-  #include "./list.hpp"
   //#include "../tools/identifier.hpp"
 
 
