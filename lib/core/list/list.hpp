@@ -1,8 +1,9 @@
+
 #ifndef _LIST_BASE_HPP
 
   #define _LIST_BASE_HPP
 
-  #include "./node/list_node.hpp"
+  #include <core/list/node/list_node.hpp>
 
 
   template <class class_type>

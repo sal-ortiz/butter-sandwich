@@ -6,7 +6,7 @@
 
   #include <stdint.h>
 
-  #include "./base.hpp"
+  #include <core/event/base.hpp>
 
 
   struct MouseButtonEventParams: EventParamsBase {

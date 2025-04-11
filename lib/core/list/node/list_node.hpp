@@ -3,6 +3,7 @@
 
   #define _LIST_NODE_BASE_HPP
 
+
   template <typename data_type>
   struct ListNode {
 

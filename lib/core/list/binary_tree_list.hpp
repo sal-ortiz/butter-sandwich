@@ -1,5 +1,4 @@
 
-
 #ifndef _BINARY_TREE_LIST
 
   #define _BINARY_TREE_LIST
@@ -7,8 +6,8 @@
   //#include <stdio.h>
   #include <stddef.h>
 
-  #include "./list.hpp"
-  #include "./node/binary_tree_list_node.hpp"
+  #include <core/list/list.hpp>
+  #include <core/list/node/binary_tree_list_node.hpp>
 
 
   template <class class_type>

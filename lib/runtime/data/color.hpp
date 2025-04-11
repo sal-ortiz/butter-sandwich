@@ -1,5 +1,4 @@
 
-
 #ifndef _COLOR_HPP
 
   #define _COLOR_HPP

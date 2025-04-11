@@ -9,8 +9,8 @@
   #include <SDL2/SDL.h>
   #include <SDL2/SDL_image.h>
 
-  #include "./renderer.hpp"
-  //#include "../tools/identifier.hpp"  // used by selective rendering
+  #include <core/renderer.hpp>
+  //#include <../tools/identifier.hpp>  // used by selective rendering
 
 
   class Image {

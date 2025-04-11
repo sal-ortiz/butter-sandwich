@@ -6,10 +6,10 @@
   #include <string.h>
   #include <stdint.h>
 
-  #include "./map.hpp"
-  #include "../list/list.hpp"
-  #include "../list/fixed_tree_list.hpp"
-  #include "./node/hash_map_node.hpp"
+  #include <core/map/map.hpp>
+  #include <core/map/node/hash_map_node.hpp>
+  #include <core/list/list.hpp>
+  #include <core/list/fixed_tree_list.hpp>
 
   #define HASHMAP_ARRAY_LEN     128
   #define HASHMAP_LISTLEN_MAX   192

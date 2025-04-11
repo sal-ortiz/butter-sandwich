@@ -7,13 +7,13 @@
 
   #include <SDL2/SDL.h>
 
-  #include "./map/hash_map.hpp"
-  #include "./event/window.hpp"
-  #include "./event/application.hpp"
-  #include "./event/keyboard.hpp"
-  #include "./event/mouse_motion.hpp"
-  #include "./event/mouse_button.hpp"
-  #include "./event/user.hpp"
+  #include <core/map/hash_map.hpp>
+  #include <core/event/window.hpp>
+  #include <core/event/application.hpp>
+  #include <core/event/keyboard.hpp>
+  #include <core/event/mouse_motion.hpp>
+  #include <core/event/mouse_button.hpp>
+  #include <core/event/user.hpp>
 
 
   class Event {

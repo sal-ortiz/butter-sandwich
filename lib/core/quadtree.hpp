@@ -3,8 +3,8 @@
 
   #define _QUADTREE_HPP
 
-  #include "./list/list.hpp"
-  #include "./quadtree/element.hpp"
+  #include <core/list/list.hpp>
+  #include <core/quadtree/element.hpp>
 
 
   #define _QUADTREE_MAX_DEPTH     18

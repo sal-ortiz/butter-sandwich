@@ -9,8 +9,8 @@
   #include <stdlib.h>
   #include <string.h>
 
-  #include "./hook.hpp"
-  #include "../tools/identifier.hpp"
+  #include <runtime/hook.hpp>
+  #include <tools/identifier.hpp>
 
 
   class RuntimeBase {

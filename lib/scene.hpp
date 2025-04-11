@@ -5,16 +5,16 @@
 
   #include <string.h>
 
-  #include "./core/renderer.hpp"
-  #include "./core/quadtree.hpp"
-  #include "./core/list/linked_list.hpp"
-  #include "./runtime/collision.hpp"
-  #include "./runtime/data/size.hpp"
-  #include "./runtime/data/view.hpp"
-  #include "./scene/base.hpp"
-  #include "./scene/character.hpp"
-  #include "./scene/background.hpp"
-  #include "./scene/element.hpp"
+  #include <core/renderer.hpp>
+  #include <core/quadtree.hpp>
+  #include <core/list/linked_list.hpp>
+  #include <runtime/collision.hpp>
+  #include <runtime/data/size.hpp>
+  #include <runtime/data/view.hpp>
+  #include <scene/base.hpp>
+  #include <scene/character.hpp>
+  #include <scene/background.hpp>
+  #include <scene/element.hpp>
 
 
   class Scene: public SceneBase {

@@ -3,7 +3,7 @@
 
   #define _ANGLE_HPP
 
-  #include "./position.hpp"
+  #include <runtime/data/position.hpp>
 
   struct Angle {
     Position center;

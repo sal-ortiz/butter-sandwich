@@ -3,8 +3,8 @@
 
   #define _VIEW_HPP
 
-  #include "./position.hpp"
-  #include "./size.hpp"
+  #include <runtime/data/position.hpp>
+  #include <runtime/data/size.hpp>
 
   struct View {
     Position position;

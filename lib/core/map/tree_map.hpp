@@ -7,9 +7,9 @@
   #include <stdint.h>
   #include <string.h>
 
-  #include "./map.hpp"
-  #include "./node/tree_map_node.hpp"
-  #include "../list/list.hpp"
+  #include <core/map/map.hpp>
+  #include <core/map/node/tree_map_node.hpp>
+  #include <core/list/list.hpp>
 
 
   template <class class_type>

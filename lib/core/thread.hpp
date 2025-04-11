@@ -7,7 +7,7 @@
 
   #include <SDL2/SDL.h>
 
-  //#include "../tools/identifier.hpp"
+  //#include <tools/identifier.hpp>
 
 
   struct ThreadParams {

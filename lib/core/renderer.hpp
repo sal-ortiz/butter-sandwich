@@ -7,8 +7,8 @@
 
   #include <SDL2/SDL.h>
 
-  #include "./list/linked_list.hpp"
-  #include "./renderer/cache.hpp"
+  #include <core/list/linked_list.hpp>
+  #include <core/renderer/cache.hpp>
 
 
   class Renderer {

@@ -7,8 +7,8 @@
   #include <stdio.h>
   #include <math.h>
 
-  #include "./list.hpp"
-  #include "./node/linked_list_node.hpp"
+  #include <core/list/list.hpp>
+  #include <core/list/node/linked_list_node.hpp>
 
 
   template <class class_type>

@@ -5,14 +5,14 @@
 
   #include <stdint.h>
 
-  #include "../core/image.hpp"
-  #include "../core/list/binary_tree_list.hpp"
-  #include "../core/list/fixed_tree_list.hpp"
-  #include "../core/renderer.hpp"
-  #include "./sprite/frame.hpp"
-  #include "./data/position.hpp"
-  #include "./data/angle.hpp"
-  #include "./data/view.hpp"
+  #include <core/image.hpp>
+  #include <core/list/binary_tree_list.hpp>
+  #include <core/list/fixed_tree_list.hpp>
+  #include <core/renderer.hpp>
+  #include <runtime/sprite/frame.hpp>
+  #include <runtime/data/position.hpp>
+  #include <runtime/data/angle.hpp>
+  #include <runtime/data/view.hpp>
 
 
   class Sprite {

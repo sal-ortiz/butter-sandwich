@@ -6,8 +6,8 @@
 
   #include <SDL2/SDL.h>
 
-  #include "../core/list/array_list.hpp"
-  #include "./timer/checkpoint.hpp"
+  #include <core/list/array_list.hpp>
+  #include <tools/timer/checkpoint.hpp>
 
 
   class Timer {

@@ -7,8 +7,8 @@
 
   #include <SDL2/SDL.h>
 
-  //#include "./list/binary_tree_list.hpp"
-  #include "./list/array_list.hpp"
+  //#include <core/list/binary_tree_list.hpp>
+  #include <core/list/array_list.hpp>
 
 
   struct KeyboardStateEntry {

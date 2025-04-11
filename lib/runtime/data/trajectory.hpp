@@ -3,10 +3,10 @@
 
   #define _TRAJECTORY_HPP
 
-  #include "./position.hpp"
-  #include "./angle.hpp"
-  #include "./scale.hpp"
-  #include "./color.hpp"
+  #include <runtime/data/position.hpp>
+  #include <runtime/data/angle.hpp>
+  #include <runtime/data/scale.hpp>
+  #include <runtime/data/color.hpp>
 
   struct Trajectory {
     Position position;

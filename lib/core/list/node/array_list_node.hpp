@@ -5,7 +5,7 @@
 
   #include <stddef.h>
 
-  #include "./list_node.hpp"
+  #include <core/list/node/list_node.hpp>
 
 
   template <typename data_type>

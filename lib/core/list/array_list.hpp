@@ -7,8 +7,8 @@
   #include <stdio.h>
   #include <math.h>
 
-  #include "./list.hpp"
-  #include "./node/array_list_node.hpp"
+  #include <core/list/list.hpp>
+  #include <core/list/node/array_list_node.hpp>
 
   #define _ARRAY_LIST_ALLOC_INCREMENT   64
 

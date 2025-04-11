@@ -5,8 +5,8 @@
 
   #include <stdint.h>
 
-  #include "./list.hpp"
-  #include "./node/fixed_tree_list_node.hpp"
+  #include <core/list/list.hpp>
+  #include <core/list/node/fixed_tree_list_node.hpp>
 
 
   template <class class_type>

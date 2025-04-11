@@ -5,8 +5,8 @@
 
   #include <SDL2/SDL.h>
 
-  #include "./base.hpp"
-  #include "../core/event.hpp"
+  #include <runtime/base.hpp>
+  #include <core/event.hpp>
 
 
   class Application: public RuntimeBase {

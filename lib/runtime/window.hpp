@@ -7,10 +7,10 @@
 
   #include <SDL2/SDL.h>
 
-  #include "./base.hpp"
-  #include "../core/event.hpp"
-  #include "../core/renderer.hpp"
-  #include "../core/thread.hpp"
+  #include <runtime/base.hpp>
+  #include <core/event.hpp>
+  #include <core/renderer.hpp>
+  #include <core/thread.hpp>
 
 
   class Window: public RuntimeBase {

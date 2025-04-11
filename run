@@ -6,9 +6,9 @@ ROOT_PATH=$( readlink --canonicalize . )
 
 clear
 
-#g++ $ROOT_PATH/src/main.cpp -o $ROOT_PATH/main -Og -std=c++17 -lSDL2 -lSDL2_image
-g++ $ROOT_PATH/src/main.cpp -o $ROOT_PATH/main -g -std=c++17 -lSDL2 -lSDL2_image
-#g++ $ROOT_PATH/src/main.cpp -o $ROOT_PATH/main -std=c++23 -lSDL2 -lSDL2_image
+#g++ $ROOT_PATH/src/main.cpp -o $ROOT_PATH/main -Og -std=c++17 -lSDL2 -lSDL2_image -I./lib
+g++ $ROOT_PATH/src/main.cpp -o $ROOT_PATH/main -g -std=c++17 -lSDL2 -lSDL2_image -I./lib
+#g++ $ROOT_PATH/src/main.cpp -o $ROOT_PATH/main -std=c++23 -lSDL2 -lSDL2_image -I./lib
 
 if [ $? == 0 ]; then
   cat $ROOT_PATH/assets/title.asc
