@@ -1,5 +1,4 @@
 
-
 #ifndef _TREE_MAP_HPP
 
   #define _TREE_MAP_HPP
@@ -7,12 +6,14 @@
   #include <stdio.h>
   #include <stdint.h>
   #include <string.h>
-  #include "./tree_map/node.hpp"
+
+  #include "./map.hpp"
+  #include "./node/tree_map_node.hpp"
   #include "../list/list.hpp"
 
 
   template <class class_type>
-  class TreeMap {
+  class TreeMap: Map<class_type> {
 
     private:
 

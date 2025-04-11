@@ -8,7 +8,7 @@
   #include <SDL2/SDL.h>
 
   #include "./base.hpp"
-  #include "../core/dict.hpp"
+  #include "../core/map/hash_map.hpp"
 
 
   //struct HookCallbackParams {

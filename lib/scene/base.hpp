@@ -3,7 +3,7 @@
 
   #define _SCENE_BASE_HPP
 
-  #include "../core/dict.hpp"
+  #include "../core/map/hash_map.hpp"
   #include "../core/renderer.hpp"
   #include "../runtime/base.hpp"
   #include "../runtime/sprite.hpp"
@@ -22,7 +22,7 @@
       //void*(*evalCallback)(void*);
 
       const char* action;
-      Dict<Sprite*>* sprites;
+      HashMap<Sprite*>* sprites;
 
 
     public:
@@ -40,7 +40,7 @@
 
       SceneBase() {
         //this->evalCallback = NULL;
-        this->sprites = new Dict<Sprite*>();
+        this->sprites = new HashMap<Sprite*>();
         this->state = new State();
 
         this->state->set("position", new Position());

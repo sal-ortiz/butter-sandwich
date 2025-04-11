@@ -6,9 +6,10 @@
   #include <string.h>
   #include <stdint.h>
 
+  #include "./map.hpp"
   #include "../list/list.hpp"
   #include "../list/fixed_tree_list.hpp"
-  #include "./hash_map/node.hpp"
+  #include "./node/hash_map_node.hpp"
 
   #define HASHMAP_ARRAY_LEN     128
   #define HASHMAP_LISTLEN_MAX   192
@@ -17,7 +18,7 @@
 
 
   template <class class_type>
-  class HashMap {
+  class HashMap: public Map<class_type> {
 
     private:
 

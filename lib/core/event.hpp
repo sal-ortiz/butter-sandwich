@@ -7,7 +7,7 @@
 
   #include <SDL2/SDL.h>
 
-  #include "./dict.hpp"
+  #include "./map/hash_map.hpp"
   #include "./event/window.hpp"
   #include "./event/application.hpp"
   #include "./event/keyboard.hpp"
