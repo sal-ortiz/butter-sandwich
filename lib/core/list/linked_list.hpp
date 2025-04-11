@@ -225,6 +225,19 @@
         this->indexNode = this->root;
       }
 
+      ~LinkedList() {
+        LinkedListNode<class_type>* node = this->root;
+
+        while (node != NULL) {
+          LinkedListNode<class_type>* next = node->next;
+
+          delete node;
+
+          node = next;
+        }
+
+      }
+
       uint32_t getLength() {
         return this->length;
       }
