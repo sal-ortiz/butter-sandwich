@@ -112,7 +112,9 @@
       ~ArrayList() {
 
         for (uint32_t idx = 0; idx < this->length; idx++) {
-          delete this->array[idx];
+          ArrayListNode<class_type>* node = this->array[idx];
+
+          delete node;
         }
 
         free(this->array);
