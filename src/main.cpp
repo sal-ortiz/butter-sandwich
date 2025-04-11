@@ -14,7 +14,6 @@
 #include <runtime/data/angle.hpp>
 #include <runtime/data/position.hpp>
 #include <scene.hpp>
-#include <tools/timer.hpp>
 
 #include "./lib/bullet.hpp"
 #include "./lib/background00.hpp"
