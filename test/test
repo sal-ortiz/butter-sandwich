@@ -16,7 +16,7 @@ fi
 INP_FILE=$TEST_PATH/${1}_test.cpp
 OUTP_FILE=$TEST_PATH/test.o
 
-g++ $INP_FILE -o $OUTP_FILE -Og -std=c++17 -lSDL2 -lSDL2_image
+g++ $INP_FILE -o $OUTP_FILE -Og -std=c++17 -lSDL2 -lSDL2_image -I../lib
 #g++ $ROOT_PATH/src/main.cpp -o $ROOT_PATH/main -std=c++17 -lSDL2 -lSDL2_image
 
 if [ $? == 0 ]; then
