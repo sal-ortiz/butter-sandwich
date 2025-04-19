@@ -34,16 +34,16 @@ const uint32_t SCREEN_HEIGHT = 800;
 //  return (void*)NULL;
 //}
 
-void* quitCallback(void* inp, void* dataOne, void* dataTwo) {
-  ApplicationEventParams* parsedInp = reinterpret_cast<ApplicationEventParams*>(inp);
+void* quitCallback(LinkedList<void*>* inp) {
+  ApplicationEventParams* parsedInp = reinterpret_cast<ApplicationEventParams*>(inp->get(0));
 
   printf("\n[%u] exiting application at %ums\n", SDL_GetTicks(), parsedInp->timestamp);
 
   return (void*)NULL;
 }
 
-void* closedCallback(void* inp, void* dataOne, void* dataTwo) {
-  WindowEventParams* parsedInp = reinterpret_cast<WindowEventParams*>(inp);
+void* closedCallback(LinkedList<void*>* inp) {
+  WindowEventParams* parsedInp = reinterpret_cast<WindowEventParams*>(inp->get(0));
 
   printf("\n[%u] window closed at %ums", SDL_GetTicks(), parsedInp->timestamp);
 
@@ -100,8 +100,8 @@ int main(int argc, char *argv[]) {
   Foreground00* foreground00 = Foreground00::loadAssets(scene);
 
   //app->on("KEYBOARD", keyboardCallback, (void*)player);
-  app->on("QUIT", quitCallback, (void*)NULL);
-  win->on("CLOSED", closedCallback, (void*)NULL);
+  app->on("QUIT", quitCallback);
+  win->on("CLOSED", closedCallback);
   //win->on("PRESENT", windowPresentCallback, (void*)win);
 
   scene->view->size.horz = SCREEN_WIDTH;
