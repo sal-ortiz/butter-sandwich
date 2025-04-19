@@ -104,10 +104,10 @@
 
 
 
-      static void* collisionCallback(void* inp, void* dataOne, void* dataTwo) {
-        SceneBase* targ = reinterpret_cast<SceneBase*>(inp);
-        Asteroid00* asteroid = reinterpret_cast<Asteroid00*>(dataOne);
-        Scene* scene = reinterpret_cast<Scene*>(dataTwo);
+      static void* collisionCallback(LinkedList<void*>* inp) {
+        SceneBase* targ = reinterpret_cast<SceneBase*>(inp->get(0));
+        Asteroid00* asteroid = reinterpret_cast<Asteroid00*>(inp->get(1));
+        Scene* scene = reinterpret_cast<Scene*>(inp->get(2));
 
 
         return NULL;
@@ -123,9 +123,9 @@
 
 
 
-      static void* evaluateCallback(void* inp, void* dataOne, void* dataTwo) {
-        Asteroid00* asteroid = reinterpret_cast<Asteroid00*>(inp);
-        Scene* scene = reinterpret_cast<Scene*>(dataOne);
+      static void* evaluateCallback(LinkedList<void*>* inp) {
+        Asteroid00* asteroid = reinterpret_cast<Asteroid00*>(inp->get(0));
+        Scene* scene = reinterpret_cast<Scene*>(inp->get(1));
 
         Position* position = (Position*)asteroid->state->get("position");
         Angle* angle = (Angle*)asteroid->state->get("angle");

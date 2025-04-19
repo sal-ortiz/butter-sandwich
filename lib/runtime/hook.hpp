@@ -10,9 +10,9 @@
 
 
   struct HookCallbackRecord {
-    void*(*method)(void*, void*, void*);
-    void* dataOne;
-    void* dataTwo;
+    void*(*method)(LinkedList<void*>*);
+
+    LinkedList<void*>* arguments;
   };
 
 
@@ -48,57 +48,39 @@
         delete _hookCallbacks;
       }
 
-      static bool hasCallback(const char* id) {
-        void* callbackRec = _hookCallbacks->get(id);
+      template <typename ... Args>
+      static void setCallback(const char* id, void*(*callback)(LinkedList<void*>*), Args...args) {
+        LinkedList<void*>* argsList = new LinkedList<void*>();
 
-        return callbackRec != NULL;
-      }
+        (argsList->push(args), ...);
 
-      static void*(*getCallback(const char* id))(void*, void*, void*) {
-        HookCallbackRecord* rec = _hookCallbacks->get(id);
-
-        return rec->method;
-      }
-
-      static void* getInputOne(const char* id) {
-        HookCallbackRecord* rec = _hookCallbacks->get(id);
-
-        return rec->dataOne;
-      }
-
-      static void* getInputTwo(const char* id) {
-        HookCallbackRecord* rec = _hookCallbacks->get(id);
-
-        return rec->dataTwo;
-      }
-
-      static void setCallback(const char* id, void*(*callback)(void*, void*, void*), void* dataOne, void* dataTwo) {
         HookCallbackRecord* rec = new HookCallbackRecord();
 
         rec->method = callback;
-        rec->dataOne = dataOne;
-        rec->dataTwo = dataTwo;
+        rec->arguments = argsList;
 
         _hookCallbacks->set(id, rec);
       }
 
-      static void* executeCallback(const char* id, void* inpOne=NULL, void* inpTwo=NULL, void* inpThree=NULL) {
+      template <typename ... Args>
+      static void* executeCallback(const char* id, Args...args) {
+        HookCallbackRecord* rec = _hookCallbacks->get(id);
 
-        if (Hook::hasCallback(id) == true) {
-          void*(*callback)(void*, void*, void*) = Hook::getCallback(id);
+        if (rec != NULL) {
+          void*(*callback)(LinkedList<void*>*) = rec->method;
+          LinkedList<void*>* recArgsList = rec->arguments;
+          LinkedList<void*>* argsList = new LinkedList<void*>();
 
-          if (inpTwo == NULL) {
-            inpTwo = Hook::getInputOne(id);
-          }
+          (argsList->push(args), ...);
 
-          if (inpThree == NULL) {
-            inpThree = Hook::getInputTwo(id);
-          }
+          argsList->concat(recArgsList);  // prioritize this function's args
+          //recArgsList->concat(argsList);    // prioritize our callback record's args
 
-          return callback(inpOne, inpTwo, inpThree);
+          return callback(argsList);    // prioritize this function's args
+          //return callback(recArgsList);   // prioritize our callback record's args
         }
 
-        return inpOne;
+        return (void*)NULL;
       }
 
   };

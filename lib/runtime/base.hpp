@@ -9,6 +9,7 @@
   #include <stdlib.h>
   #include <string.h>
 
+  #include <core/list/linked_list.hpp>
   #include <runtime/hook.hpp>
   #include <tools/identifier.hpp>
 
@@ -37,8 +38,9 @@
         return this->strIdentifier;
       }
 
-      void on(const char* id, void*(*callback)(void*, void*, void*), void* dataOne=NULL, void* dataTwo=NULL) {
-        Hook::setCallback(id, callback, dataOne, dataTwo);
+      template <typename ... Args>
+      void on(const char* id, void*(*callback)(LinkedList<void*>*), Args...args) {
+        Hook::setCallback(id, callback, args...);
       }
 
   };

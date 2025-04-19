@@ -87,22 +87,24 @@
         return this->type;
       }
 
-      void onCollision(void*(*callback)(void*, void*, void*), void* dataOne=NULL, void* dataTwo=NULL) {
+      template <typename ... Args>
+      void onCollision(void*(*callback)(LinkedList<void*>*), Args...args) {
         uint32_t charId = this->getIdentifier();
 
         char* hookId = new char[Hook::ID_LENGTH];
         Hook::generateIdentifier(hookId, "hook", charId, "onCollision", "action");
 
-        this->on(hookId, callback, dataOne, dataTwo);
+        this->on(hookId, callback, args...);
       }
 
-      void onEvaluate(void*(*callback)(void*, void*, void*), void* dataOne=NULL, void* dataTwo=NULL) {
+      template <typename ... Args>
+      void onEvaluate(void*(*callback)(LinkedList<void*>*), Args...args) {
         uint32_t charId = this->getIdentifier();
 
         char* hookId = new char[Hook::ID_LENGTH];
         Hook::generateIdentifier(hookId, "hook", charId, "onEvaluate", "action");
 
-        this->on(hookId, callback, dataOne, dataTwo);
+        this->on(hookId, callback, args...);
       }
 
       void render(Renderer* renderer) {

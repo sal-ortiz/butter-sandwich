@@ -42,9 +42,9 @@
         return background;
       }
 
-      static void* evaluateCallback(void* inp, void* dataOne, void* dataTwo) {
-        Background00* background = reinterpret_cast<Background00*>(inp);
-        Scene* scene = reinterpret_cast<Scene*>(dataOne);
+      static void* evaluateCallback(LinkedList<void*>* inp) {
+        Background00* background = reinterpret_cast<Background00*>(inp->get(0));
+        Scene* scene = reinterpret_cast<Scene*>(inp->get(1));
 
         Trajectory* trajectory = (Trajectory*)background->state->get("trajectory");
         View* view = (View*)background->state->get("view");

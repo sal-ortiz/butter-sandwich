@@ -46,6 +46,7 @@
       }
 
       void* get(const char* key) {
+        //  // TODO: REFACTOR GETTERS!!!!!!!?
         void* val;
         //uint32_t instId = this->getIdentifier();
         //
@@ -73,6 +74,7 @@
       }
 
       void set(const char* key, void* val) {
+        //  // TODO: REFACTOR SETTERS!!!!!!!?
         //void* oldVal;
         //uint32_t instId = this->getIdentifier();
 
@@ -103,6 +105,7 @@
       }
 
       //void onGet(const char* key, void*(*callback)(void*, void*, void*)) {
+      //  // TODO: REFACTOR GETTERS!!!!!!!?
       //  uint32_t instId = this->getIdentifier();
       //
       //  char hookId[Hook::ID_LENGTH];
@@ -114,6 +117,7 @@
       //}
 
       //void onSet(const char* key, void*(*callback)(void*, void*, void*)) {
+      //  // TODO: REFACTOR SETTERS!!!!!!!?
       //  uint32_t instId = this->getIdentifier();
       //
       //  char hookId[Hook::ID_LENGTH];

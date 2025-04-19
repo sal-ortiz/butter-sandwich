@@ -46,9 +46,9 @@
         return foreground;
       }
 
-      static void* evaluateCallback(void* inp, void* dataOne, void* dataTwo) {
-        Foreground00* foreground = reinterpret_cast<Foreground00*>(inp);
-        Scene* scene = reinterpret_cast<Scene*>(dataOne);
+      static void* evaluateCallback(LinkedList<void*>* inp) {
+        Foreground00* foreground = reinterpret_cast<Foreground00*>(inp->get(0));
+        Scene* scene = reinterpret_cast<Scene*>(inp->get(1));
 
         Background00* baseBackground = (Background00*)scene->getBackground("background00");;
 
