@@ -23,7 +23,7 @@
         uint32_t len = this->cache->getLength();
 
         for (uint32_t idx = 0; idx < len; idx++) {
-          RenderCache* entry = this->cache->get(idx);
+          RenderCache* entry = this->cache->shift();
 
           delete entry;
         }
