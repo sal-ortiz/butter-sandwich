@@ -33,73 +33,16 @@
         uint32_t distFromIndex = abs((int64_t)((uint32_t)targIndex - (uint32_t)this->index));
         uint32_t distFromTail = this->length - targIndex;
 
-        bool canUpdateIndex = false;
+        if (distFromTail <= distFromIndex && distFromTail <= distFromRoot) {
+          curIndex = this->length - 1;
 
-        if (distFromRoot <= distFromIndex && distFromRoot <= distFromTail) {
-          direction = 1;
-          curIndex = 0;
+          node = this->tail;
 
-          node = this->root->next;
-
-        } else if (distFromIndex <= distFromRoot && distFromIndex <= distFromTail) {
-          curIndex = this->index;
-          node = this->indexNode;
-
-          if (curIndex >= targIndex) {
+          if (targIndex <= curIndex) {
             direction = -1;
           } else {
             direction = 1;
           }
-
-          canUpdateIndex = true;
-
-        } else {
-          direction = -1;
-          curIndex = this->length - 1;
-
-          node = this->tail;
-        }
-
-        while (curIndex != targIndex) {
-
-          if (node == NULL) {
-            return NULL;
-          }
-
-          if (direction < 0) {
-            node = node->prev;
-          } else {
-            node = node->next;
-          }
-
-          curIndex += direction;
-        }
-
-        if (canUpdateIndex == true) {
-          this->indexNode = node;
-          this->index = curIndex;
-        }
-
-        return node;
-      }
-
-      void setEntry(uint32_t targIndex, class_type value) override {
-        LinkedListNode<class_type>* node;
-
-        uint32_t curIndex;
-        int8_t direction;
-
-        uint32_t distFromRoot = targIndex;
-        uint32_t distFromIndex = abs((int64_t)((uint32_t)targIndex - (uint32_t)this->index));
-        uint32_t distFromTail = this->length - targIndex;
-
-        bool canUpdateIndex = false;
-
-        if (targIndex >= this->length) {
-          direction = 1;
-          curIndex = this->length - 1;
-
-          node = this->tail;
 
         } else if (distFromRoot <= distFromIndex && distFromRoot <= distFromTail) {
           direction = 1;
@@ -111,23 +54,84 @@
           curIndex = this->index;
           node = this->indexNode;
 
-          if (curIndex >= targIndex) {
+          if (curIndex > targIndex) {
             direction = -1;
           } else {
             direction = 1;
           }
 
-          canUpdateIndex = true;
+        }
 
-        } else {
-          direction = -1;
+        while (curIndex != targIndex) {
+
+          if (direction >= 0) {
+            node = node->next;
+          } else {
+            node = node->prev;
+          }
+
+          curIndex += direction;
+        }
+
+        if (curIndex > 0 && curIndex < this->length - 1) {
+          this->index = curIndex;
+          this->indexNode = node;
+        }
+
+        return node;
+      }
+
+      void setEntry(uint32_t targIndex, class_type value) override {
+        LinkedListNode<class_type>* node;
+
+        if (targIndex == 0) {
+          this->root->value = value;
+
+          if (this->length == 0) {
+            this->length++;
+          }
+
+          return;
+        }
+
+        if (targIndex == this->length - 1) {
+          this->tail->value = value;
+        }
+
+        uint32_t curIndex;
+        int8_t direction;
+
+        uint32_t distFromRoot = targIndex;
+        uint32_t distFromIndex = abs((int64_t)((uint32_t)targIndex - (uint32_t)this->index));
+        uint32_t distFromTail = this->length - targIndex;
+
+        if (distFromTail <= distFromIndex && distFromTail <= distFromRoot) {
           curIndex = this->length - 1;
 
           node = this->tail;
-        }
 
-        if (targIndex >= this->length) {
-          this->length = targIndex + 1;
+          if (curIndex > targIndex) {
+            direction = -1;
+          } else {
+            direction = 1;
+          }
+
+        } else if (distFromRoot <= distFromIndex && distFromRoot <= distFromTail) {
+          direction = 1;
+          curIndex = 0;
+
+          node = this->root;
+
+        } else if (distFromIndex <= distFromRoot && distFromIndex <= distFromTail) {
+          curIndex = this->index;
+          node = this->indexNode;
+
+          if (curIndex > targIndex) {
+            direction = -1;
+          } else {
+            direction = 1;
+          }
+
         }
 
         while (curIndex != targIndex) {
@@ -144,19 +148,26 @@
             }
 
             node = node->next;
+
           } else {
 
             node = node->prev;
           }
+
           curIndex += direction;
         }
 
         node->value = value;
 
-        if (canUpdateIndex == true) {
-          this->index = curIndex - 1;
+        if (targIndex >= this->length) {
+          this->length = targIndex + 1;
+        }
+
+        if (curIndex > 0 && curIndex < this->length - 1) {
+          this->index = curIndex;
           this->indexNode = node;
         }
+
       }
 
       void insertEntry(uint32_t targIndex, class_type value) override {
@@ -170,47 +181,68 @@
         LinkedListNode<class_type>* newNode = new LinkedListNode<class_type>{};
         LinkedListNode<class_type>* node = this->getEntry(targIndex);
 
-        newNode->value = value;
-
-        newNode->prev = node->prev;
+        node->prev = newNode;
         newNode->next = node;
 
-        node->prev->next = newNode;
-
-        if (node->next == NULL) {
-          this->tail = node;
+        if (targIndex == 0) {
+          this->root = newNode;
         }
 
-        node->prev = newNode;
+        newNode->value = value;
 
-        this->indexNode = newNode;
-        this->index = targIndex;
+        if (targIndex > 0 && targIndex < this->length - 1) {
+          this->indexNode = newNode;
+          this->index = targIndex;
+        }
 
         this->length++;
       }
 
       void deleteEntry(uint32_t targIndex) override {
-        LinkedListNode<class_type>* node = this->getEntry(targIndex);
 
-        if (node == NULL) {
+        if (targIndex >= this->length) {
           return;
         }
 
-        node->prev->next = node->next;
+        if (this->length < 2) {
+          this->root->value = NULL;
+          this->length = 0;
+
+          return;
+        }
+
+
+        LinkedListNode<class_type>* node = this->getEntry(targIndex);
+
+        //if (node == NULL) {
+        //  return;
+        //}
+
+        if (node->prev != NULL) {
+          node->prev->next = node->next;
+        }
 
         if (node->next != NULL) {
           node->next->prev = node->prev;
-        } else {
-          this->tail = node->prev;
         }
 
-        this->length--;
+        if (targIndex == 0) {
+          this->root = node->next;
+        }
 
-        //// TODO: make sure we're preserving our index node.
-        //this->indexNode = node->prev;
-        //this->index = targIndex/* - 1*/;
+        if (targIndex == this->length - 1) {
+          this->indexNode = node->prev;
+
+          this->index = targIndex - 1;
+        } else {
+          this->indexNode = node->next;
+
+          this->index = targIndex;
+        }
 
         delete node;
+
+        this->length--;
       }
 
 
@@ -220,7 +252,7 @@
         this->length = 0;
         this->index = 0;
 
-        this->root = new LinkedListNode<class_type>{};
+        this->root = new LinkedListNode<class_type>();
         this->tail = this->root;
         this->indexNode = this->root;
       }
@@ -287,9 +319,9 @@
 
         LinkedListNode<class_type>* node = this->getEntry(index);
 
-        if (node == NULL) {
-          return NULL;
-        }
+        //if (node == NULL) {
+        //  return NULL;
+        //}
 
         class_type outpValue = node->value;
 
@@ -303,9 +335,9 @@
 
         LinkedListNode<class_type>* node = this->getEntry(index);
 
-        if (node == NULL) {
-          return NULL;
-        }
+        //if (node == NULL) {
+        //  return NULL;
+        //}
 
         class_type outpValue = node->value;
 
@@ -320,30 +352,22 @@
         uint32_t listLen = this->getLength();
 
         for (uint32_t idx = 0; idx < listLen; idx++) {
-          class_type entry = this->get(idx);
+          class_type val = this->get(idx);
 
-          newList->push(entry);
+          newList->push(val);
         }
 
         return newList;
       }
 
-      void concat(LinkedList<class_type> list) {
-        uint32_t listLen = list->getLength();
+      void concat(LinkedList<class_type>* list) {
+        this->tail->next = list->root;
+        list->root->prev = this->tail;
 
-        LinkedList<class_type>* newList = list->clone();
+        this->tail = list->tail;
 
-        this->last->next = newList->root;
-        newList->root->prev = this->last;
-
-        //for (uint32_t idx = 0; idx < listLen; idx++) {
-        //  class_type entry = list->get(idx);
-
-        //  this->push(entry);
-        //}
-
+        this->length += list->getLength();
       }
-
 
   };
 

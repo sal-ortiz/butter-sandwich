@@ -98,7 +98,7 @@
         newEntry->value = value;
 
         list->unshift(newEntry);  // LinkedList, BinaryTreeList
-        //list->push(newEntry);   // FixedTreeList, BinaryTreeList, ArrayList
+        //list->push(newEntry);   // LinkedList, FixedTreeList, ArrayList
 
         this->data->set(aryIdx, list);
 
