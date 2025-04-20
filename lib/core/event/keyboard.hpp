@@ -46,26 +46,25 @@
       static void* parse(SDL_KeyboardEvent evt) {
         KeyboardEventParams* params = KeyboardEvent::parseEventParams(evt);
 
-        void* retVal = KeyboardEvent::handleEvent("SystemEvent.KEYBOARD", evt, params);
+        KeyboardEvent::handleEvent("SystemEvent.KEYBOARD", evt, params);
 
         delete params;
-        return retVal;
+
+        return NULL;
       }
 
       static void* handleEvent(const char* name, SDL_KeyboardEvent evt, KeyboardEventParams* params) {
-        void* retVal = (void*)true;
-
         EventCallbackRecord* rec = _eventCallbacks->get(name);
 
         if (rec) {
-          void*(*callback)(void*) = rec->method;
+          void*(*callback)(KeyboardEventParams*) = (void*(*)(KeyboardEventParams*))rec->method;
 
           params->data = rec->input;
 
-          retVal = callback((void*)params);
+          return callback(params);
         }
 
-        return retVal;
+        return NULL;
       }
 
   };

@@ -11,13 +11,16 @@
 
   struct MouseMotionEventParams: EventParamsBase {
     uint32_t mouseId;
-    uint32_t state;
 
-    int32_t absoluteHorzPos;
-    int32_t absoluteVertPos;
+    bool leftBtnIsPressed;
+    bool midBtnIsPressed;
+    bool rightBtnIsPressed;
 
-    int32_t relativeHorzPos;
-    int32_t relativeVertPos;
+    int32_t horzPos;
+    int32_t vertPos;
+
+    int32_t horzOffset;
+    int32_t vertOffset;
   };
 
 
@@ -33,12 +36,12 @@
         params->data = NULL;
 
         params->mouseId = evt.which;
-        params->state = evt.state;
+        //params->state = evt.state;
 
-        params->absoluteHorzPos = evt.x;
-        params->absoluteVertPos = evt.y;
-        params->relativeHorzPos = evt.xrel;
-        params->relativeVertPos = evt.yrel;
+        params->horzPos = evt.x;
+        params->vertPos = evt.y;
+        params->horzOffset = evt.xrel;
+        params->vertOffset = evt.yrel;
 
         return params;
       }
@@ -49,25 +52,25 @@
       static void* parse(SDL_MouseMotionEvent evt) {
         MouseMotionEventParams* params = MouseMotionEvent::parseEventParams(evt);
 
-        void* retVal =  MouseMotionEvent::handleEvent("SystemEvent.MOUSEMOTION", evt, params);
+        MouseMotionEvent::handleEvent("SystemEvent.MOUSEMOTION", evt, params);
 
         delete params;
-        return retVal;
+
+        return NULL;
       }
 
       static void* handleEvent(const char* name, SDL_MouseMotionEvent, MouseMotionEventParams* params) {
-        void* retVal = (void*)true;
-
         EventCallbackRecord* rec = _eventCallbacks->get(name);
 
         if (rec) {
-          void*(*callback)(void*) = rec->method;
+          void*(*callback)(MouseMotionEventParams*) = (void*(*)(MouseMotionEventParams*))rec->method;
 
           params->data = rec->input;
-          retVal = callback((void*)params);
+
+          return callback(params);
         }
 
-        return retVal;
+        return NULL;
       }
 
   };

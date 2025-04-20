@@ -16,10 +16,10 @@
       bool isActive;
 
       Application() {
-        Event::on("SystemEvent.QUIT", Application::quitCallback, this);
-        Event::on("SystemEvent.KEYBOARD", Application::keyboardCallback, this);
-        Event::on("SystemEvent.MOUSEMOTION", Application::mouseMotionCallback, this);
-        Event::on("SystemEvent.MOUSEBUTTON", Application::mouseButtonCallback, this);
+        Event::on("SystemEvent.QUIT", (void* (*)(EventParamsBase*))Application::quitCallback, this);
+        Event::on("SystemEvent.KEYBOARD", (void* (*)(EventParamsBase*))Application::keyboardCallback, this);
+        Event::on("SystemEvent.MOUSEMOTION", (void* (*)(EventParamsBase*))Application::mouseMotionCallback, this);
+        Event::on("SystemEvent.MOUSEBUTTON", (void* (*)(EventParamsBase*))Application::mouseButtonCallback, this);
       }
 
       ~Application() {
@@ -36,46 +36,62 @@
         this->isActive = false;
       }
 
-      static void* quitCallback(void* inp) {
-        ApplicationEventParams* params = reinterpret_cast<ApplicationEventParams*>(inp);
+      static void* quitCallback(ApplicationEventParams* params) {
         Application* app = (Application*)params->data;
 
-        void* retVal = Hook::executeCallback("QUIT", inp);
+        Hook::executeCallback("QUIT", app);
 
         app->exit();
 
-        return retVal;
+        return NULL;
       }
 
-      static void* keyboardCallback(void* inp) {
-        KeyboardEventParams* params = reinterpret_cast<KeyboardEventParams*>(inp);
+      static void* keyboardCallback(KeyboardEventParams* params) {
+        Application* app = (Application*)params->data;
+
+        uint32_t scanCode = params->scanCode;
         bool isPressed = false;
 
         if (params->state == SDL_PRESSED) {
           isPressed = true;
         }
 
-        KeyboardInput::setState(params->scanCode, isPressed);
+        KeyboardInput::setState(scanCode, isPressed);
 
-        void* retVal = Hook::executeCallback("KEYBOARD", inp);
+        Hook::executeCallback("KEYBOARD", app, scanCode, isPressed);
 
-        return retVal;
+        return NULL;
       }
 
-      static void* mouseMotionCallback(void* inp) {
-        //MouseMotionEventParams* params = reinterpret_cast<MouseMotionEventParams*>(inp);
+      static void* mouseMotionCallback(MouseMotionEventParams* params) {
+        Application* app = (Application*)params->data;
 
-        void* retVal = Hook::executeCallback("MOUSEMOTION", inp);
+        uint32_t horzPos = params->horzPos;
+        uint32_t vertPos = params->vertPos;
 
-        return retVal;
+        uint32_t horzOffset = params->horzOffset;
+        uint32_t vertOffset = params->vertOffset;
+
+        Hook::executeCallback("MOUSEMOTION", app, horzPos, vertPos/*, horzOffset*//*, vertOffset*/);
+
+        //printf("MOUSE AT (%ld, %ld)\n", horzPos, vertPos);
+
+        return NULL;
       }
 
-      static void* mouseButtonCallback(void* inp) {
-        //MouseButtonEventParams* params = reinterpret_cast<MouseButtonEventParams*>(inp);
+      static void* mouseButtonCallback(MouseButtonEventParams* params) {
+        Application* app = (Application*)params->data;
 
-        void* retVal = Hook::executeCallback("MOUSEBUTTON", inp);
+        uint32_t state = params->state;
+        uint32_t button = params->button;
+        uint32_t numClicks = params->numClicks;
 
-        return retVal;
+
+        Hook::executeCallback("MOUSEBUTTON", button, state, numClicks);
+
+        //printf("MOUSE BUTTON %d %s\n", button, state ? "down" : "up");
+
+        return NULL;
       }
 
   };

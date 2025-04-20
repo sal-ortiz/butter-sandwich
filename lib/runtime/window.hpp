@@ -28,10 +28,10 @@
     public:
 
       Window() {
-        Event::on("WindowEvent.CLOSED", Window::closedCallback, this);
-        Event::on("WindowEvent.MOVED", Window::movedCallback, this);
-        Event::on("WindowEvent.RESIZED", Window::resizedCallback, this);
-        Event::on("UserEvent.WINDOWPRESENT", Window::presentCallback, this);
+        Event::on("WindowEvent.CLOSED", (void* (*)(EventParamsBase*))Window::closedCallback, this);
+        Event::on("WindowEvent.MOVED", (void* (*)(EventParamsBase*))Window::movedCallback, this);
+        Event::on("WindowEvent.RESIZED", (void* (*)(EventParamsBase*))Window::resizedCallback, this);
+        Event::on("UserEvent.WINDOWPRESENT", (void* (*)(EventParamsBase*))Window::presentCallback, this);
 
         //this->renderThread = new Thread();
       }
@@ -48,7 +48,7 @@
 
         this->handle = SDL_CreateWindow(title, xPos, yPos, width, height, windowFlags);
         this->renderer = new Renderer(this->handle);
-        this->windowId = SDL_GetWindowID(this->handle);
+        this->id = SDL_GetWindowID(this->handle);
 
         //this->renderThread->execute(Window::renderThreadFunc, this->renderer);
       }
@@ -76,42 +76,53 @@
         return this->renderer;
       }
 
-      static void* closedCallback(void* inp) {
-        WindowEventParams* params = reinterpret_cast<WindowEventParams*>(inp);
+      static void* closedCallback(WindowEventParams* params) {
         Window* win = (Window*)params->data;
 
-        void* retVal = Hook::executeCallback("CLOSED", inp);
+        uint32_t horzPos = params->horz;
+        uint32_t vertPos = params->vert;
+
+        Hook::executeCallback("CLOSED", win, horzPos, vertPos);
 
         win->close();
 
-        return retVal;
+        return NULL;
       }
 
-      static void* movedCallback(void* inp) {
-        WindowEventParams* params = reinterpret_cast<WindowEventParams*>(inp);
-        void* retVal = Hook::executeCallback("MOVED", inp);
+      static void* movedCallback(WindowEventParams* params) {
+        Window* win = (Window*)params->data;
 
-        //printf("MOVED TO %ld, %ld\n", params->horz, params->vert);
+        uint32_t horzPos = params->horz;
+        uint32_t vertPos = params->vert;
 
-        return retVal;
+        Hook::executeCallback("MOVED", win, horzPos, vertPos);
+
+        //printf("MOVED TO (%ld, %ld)\n", params->horz, params->vert);
+
+        return NULL;
       }
 
-      static void* resizedCallback(void* inp) {
-        WindowEventParams* params = reinterpret_cast<WindowEventParams*>(inp);
-        void* retVal = Hook::executeCallback("RESIZED", inp);
+      static void* resizedCallback(WindowEventParams* params) {
+        Window* win = (Window*)params->data;
 
-        //printf("RESIZED TO %ld, %ld\n", params->horz, params->vert);
+        uint32_t width = params->horz;
+        uint32_t height = params->vert;
 
-        return retVal;
+        Hook::executeCallback("RESIZED", win, width, height);
+
+        //printf("RESIZED TO (%ld, %ld)\n", params->horz, params->vert);
+
+        return NULL;
       }
 
-      static void* presentCallback(void* inp) {
-        UserEventParams* params = reinterpret_cast<UserEventParams*>(inp);
-        void* retVal = Hook::executeCallback("PRESENT", inp);
+      static void* presentCallback(UserEventParams* params) {
+        Window* win = (Window*)params->data;
+
+        Hook::executeCallback("PRESENT", win);
 
         //printf("RENDERING WINDOW\n");
 
-        return retVal;
+        return NULL;
       }
 
       //static void* renderThreadFunc(void* inpOne, void* inpTwo, void* inpThree) {

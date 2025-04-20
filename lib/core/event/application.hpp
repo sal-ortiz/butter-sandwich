@@ -32,25 +32,25 @@
 
       static void* parse(SDL_QuitEvent evt) {
         ApplicationEventParams* params = ApplicationEvent::parseEventParams(evt);
-        void* retVal = ApplicationEvent::handleEvent("SystemEvent.QUIT", evt, params);
+        ApplicationEvent::handleEvent("SystemEvent.QUIT", evt, params);
 
         delete params;
-        return retVal;
+
+        return NULL;
       }
 
       static void* handleEvent(const char* name, SDL_QuitEvent evt, ApplicationEventParams* params) {
-        void* retVal = (void*)true;
-
         EventCallbackRecord* rec = _eventCallbacks->get(name);
 
         if (rec) {
-          void*(*callback)(void*) = rec->method;
+          void*(*callback)(ApplicationEventParams*) = (void*(*)(ApplicationEventParams*))rec->method;
 
           params->data = rec->input;
-          retVal = callback((void*)params);
+
+          return callback(params);
         }
 
-        return retVal;
+        return NULL;
       }
 
   };

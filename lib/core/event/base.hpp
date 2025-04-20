@@ -6,16 +6,15 @@
   #include <stdint.h>
 
 
-  struct EventCallbackRecord {
-    void*(*method)(void*);
-    void* input;
-  };
-
-
   struct EventParamsBase {
     uint32_t timestamp;
     uint32_t windowId;
     void* data;
+  };
+
+  struct EventCallbackRecord {
+    void*(*method)(EventParamsBase*);
+    void* input;
   };
 
 

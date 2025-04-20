@@ -11,10 +11,10 @@
 
   struct MouseButtonEventParams: EventParamsBase {
     uint32_t mouseId;
-    uint8_t state;
 
+    uint8_t state;
     uint8_t button;
-    uint8_t clicks;
+    uint8_t numClicks;
 
     int32_t horzPos;
     int32_t vertPos;
@@ -33,12 +33,12 @@
         params->data = NULL;
 
         params->mouseId = evt.which;
-        params->state = evt.state;
 
+        params->state = evt.state;
         params->button = evt.button;
-        params->clicks = evt.clicks;
-        params->horzPos = evt.x;
-        params->vertPos = evt.y;
+        params->numClicks = evt.clicks;
+        //params->horzPos = evt.x;
+        //params->vertPos = evt.y;
 
         return params;
       }
@@ -52,22 +52,22 @@
         void* retVal = MouseButtonEvent::handleEvent("SystemEvent.MOUSEBUTTON", evt, params);
 
         delete params;
-        return retVal;
+
+        return NULL;
       }
 
       static void* handleEvent(const char* name, SDL_MouseButtonEvent, MouseButtonEventParams* params) {
-        void* retVal = (void*)true;
-
         EventCallbackRecord* rec = _eventCallbacks->get(name);
 
         if (rec) {
-          void*(*callback)(void*) = rec->method;
+          void*(*callback)(MouseButtonEventParams*) = (void*(*)(MouseButtonEventParams*))rec->method;
 
           params->data = rec->input;
-          retVal = callback((void*)params);
+
+          return callback(params);
         }
 
-        return retVal;
+        return NULL;
       }
 
   };

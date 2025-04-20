@@ -35,43 +35,41 @@
     public:
 
       static void* parse(SDL_WindowEvent evt) {
-        void* retVal = (void*)true;
-
         WindowEventParams* params = WindowEvent::parseEventParams(evt);
 
         switch (evt.event) {
 
           case SDL_WINDOWEVENT_CLOSE:
-            retVal = handleEvent("WindowEvent.CLOSED", evt, params);
+            handleEvent("WindowEvent.CLOSED", evt, params);
             break;
 
           case SDL_WINDOWEVENT_MOVED:
-            retVal = handleEvent("WindowEvent.MOVED", evt, params);
+            handleEvent("WindowEvent.MOVED", evt, params);
             break;
 
           case SDL_WINDOWEVENT_RESIZED:
-            retVal = handleEvent("WindowEvent.RESIZED", evt, params);
+            handleEvent("WindowEvent.RESIZED", evt, params);
             break;
 
         }
 
         delete params;
-        return retVal;
+
+        return NULL;
       }
 
       static void* handleEvent(const char* name, SDL_WindowEvent evt, WindowEventParams* params) {
-        void* retVal = (void*)true;
-
         EventCallbackRecord* rec = _eventCallbacks->get(name);
 
         if (rec) {
-          void*(*callback)(void*) = rec->method;
+          void*(*callback)(WindowEventParams*) = (void*(*)(WindowEventParams*))(rec->method);
 
           params->data = rec->input;
-          retVal = callback((void*)params);
+
+          return callback(params);
         }
 
-        return retVal;
+        return NULL;
       }
 
   };

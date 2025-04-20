@@ -71,7 +71,7 @@
           LinkedList<void*>* recArgsList = rec->arguments;
           LinkedList<void*>* argsList = new LinkedList<void*>();
 
-          (argsList->push(args), ...);
+          (argsList->push((void*)(uintptr_t)args), ...);
 
           argsList->concat(recArgsList);  // prioritize this function's args
           //recArgsList->concat(argsList);    // prioritize our callback record's args

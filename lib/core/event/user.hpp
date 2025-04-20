@@ -35,38 +35,36 @@
     public:
 
       static void* parse(SDL_UserEvent evt) {
-        void* retVal = (void*)true;
-
         UserEventParams* params = UserEvent::parseEventParams(evt);
 
         switch (evt.code) {
           //case RENDER_ELEMENT:
-          //  retVal = handleEvent("UserEvent.RENDER", evt, params);
+          //  handleEvent("UserEvent.RENDER", evt, params);
           //  break;
 
           case PRESENT_WINDOW:
-            retVal = handleEvent("UserEvent.WINDOWPRESENT", evt, params);
+            handleEvent("UserEvent.WINDOWPRESENT", evt, params);
             break;
 
         }
 
         delete params;
-        return retVal;
+
+        return NULL;
       }
 
       static void* handleEvent(const char* name, SDL_UserEvent evt, UserEventParams* params) {
-        void* retVal = (void*)true;
-
         EventCallbackRecord* rec = _eventCallbacks->get(name);
 
         if (rec) {
-          void*(*callback)(void*) = rec->method;
+          void*(*callback)(UserEventParams*) = (void*(*)(UserEventParams*))(rec->method);
 
           params->data = rec->input;
-          retVal = callback((void*)params);
+
+          return callback(params);
         }
 
-        return retVal;
+        return NULL;
       }
 
   };
