@@ -20,6 +20,8 @@
       SDL_Window* handle;
       Renderer* renderer;
 
+      uint32_t id;
+
       //Thread* renderThread;
 
 
@@ -46,6 +48,7 @@
 
         this->handle = SDL_CreateWindow(title, xPos, yPos, width, height, windowFlags);
         this->renderer = new Renderer(this->handle);
+        this->windowId = SDL_GetWindowID(this->handle);
 
         //this->renderThread->execute(Window::renderThreadFunc, this->renderer);
       }
