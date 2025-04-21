@@ -311,7 +311,7 @@
           SceneBase* bg = this->backgrounds->get(bgIdx);
 
           if (bg->isActive) {
-            bg->evaluate();
+            bg->evaluate(this);
           }
 
         }
@@ -320,7 +320,7 @@
           SceneBase* el = this->elements->get(elIdx);
 
           if (el->isActive) {
-            el->evaluate();
+            el->evaluate(this);
           }
 
         }
@@ -329,7 +329,7 @@
           SceneBase* fg = this->foregrounds->get(fgIdx);
 
           if (fg->isActive) {
-            fg->evaluate();
+            fg->evaluate(this);
           }
 
         }
@@ -337,7 +337,7 @@
         this->populateCollision();
         this->evaluateCollision();
 
-        SceneBase::evaluate();
+        SceneBase::evaluate(this);
       }
 
       void render(Renderer* renderer) {
