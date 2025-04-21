@@ -56,8 +56,8 @@
         absPosition->horz = -1;
         absPosition->vert = -1;
 
-        bullet->onEvaluate(Bullet::evaluateCallback, scene);
-        bullet->onCollision(Bullet::collisionCallback, bullet, scene);
+        bullet->onEvaluate(Bullet::evaluateCallback);
+        bullet->onCollision(Bullet::collisionCallback);
 
         return bullet;
       }

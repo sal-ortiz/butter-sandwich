@@ -96,8 +96,8 @@
         color->blue = 1.0;
         color->alpha = 1.0;
 
-        player->onEvaluate(Player::evaluateCallback, scene);
-        player->onCollision(Player::collisionCallback, player, scene);
+        player->onEvaluate(Player::evaluateCallback);
+        player->onCollision(Player::collisionCallback);
 
         return player;
       }

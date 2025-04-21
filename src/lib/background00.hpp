@@ -37,7 +37,7 @@
         background->addSprite("background", sprite);
         background->setAction("background");
 
-        background->onEvaluate(Background00::evaluateCallback, scene);
+        background->onEvaluate(Background00::evaluateCallback);
 
         return background;
       }

@@ -86,8 +86,8 @@
         trajectory->angle.roll = ((float)(rand() % 3) / 2) - 1.5;
         trajectory->angle.yaw = ((float)(rand() % 3) / 2) - 1.5;
 
-        asteroid->onEvaluate(Asteroid00::evaluateCallback, scene);
-        asteroid->onCollision(Asteroid00::collisionCallback, asteroid, scene);
+        asteroid->onEvaluate(Asteroid00::evaluateCallback);
+        asteroid->onCollision(Asteroid00::collisionCallback);
 
         return asteroid;
       }

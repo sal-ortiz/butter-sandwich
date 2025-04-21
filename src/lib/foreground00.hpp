@@ -41,7 +41,7 @@
         foreground->addSprite("foreground", sprite);
         foreground->setAction("foreground");
 
-        foreground->onEvaluate(Foreground00::evaluateCallback, scene);
+        foreground->onEvaluate(Foreground00::evaluateCallback);
 
         return foreground;
       }
