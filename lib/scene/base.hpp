@@ -88,23 +88,23 @@
       }
 
       template <typename ... Args>
-      void onCollision(void*(*callback)(LinkedList<void*>*), Args...args) {
+      void onCollision(void*(*callback)(Args...)) {
         uint32_t charId = this->getIdentifier();
 
         char* hookId = new char[Hook::ID_LENGTH];
         Hook::generateIdentifier(hookId, "hook", charId, "onCollision", "action");
 
-        this->on(hookId, callback, args...);
+        this->on(hookId, callback);
       }
 
       template <typename ... Args>
-      void onEvaluate(void*(*callback)(LinkedList<void*>*), Args...args) {
+      void onEvaluate(void*(*callback)(Args...)) {
         uint32_t charId = this->getIdentifier();
 
         char* hookId = new char[Hook::ID_LENGTH];
         Hook::generateIdentifier(hookId, "hook", charId, "onEvaluate", "action");
 
-        this->on(hookId, callback, args...);
+        this->on(hookId, callback);
       }
 
       void render(Renderer* renderer) {
@@ -124,13 +124,13 @@
         sprite->render(renderer, position, view, angle, scale, color);
       }
 
-      void evaluate() {
+      void evaluate(SceneBase* scene) {
         uint32_t charId = this->getIdentifier();
 
         char* hookId = new char[Hook::ID_LENGTH];
         Hook::generateIdentifier(hookId, "hook", charId, "onEvaluate", "action");
 
-        Hook::executeCallback(hookId, (void*)this);
+        Hook::executeCallback(hookId, this, scene);
       }
 
   };

@@ -39,8 +39,8 @@
       }
 
       template <typename ... Args>
-      void on(const char* id, void*(*callback)(LinkedList<void*>*), Args...args) {
-        Hook::setCallback(id, callback, args...);
+      void on(const char* id, void*(*callback)(Args...)) {
+        Hook::setCallback(id, callback);
       }
 
   };

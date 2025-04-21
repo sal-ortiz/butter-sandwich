@@ -9,14 +9,14 @@
   #include <core/map/tree_map.hpp>
 
 
+  template <typename ... Args>
   struct HookCallbackRecord {
-    void*(*method)(LinkedList<void*>*);
-
-    LinkedList<void*>* arguments;
+    void*(*method)(Args...);
   };
 
 
-  static TreeMap<HookCallbackRecord*>* _hookCallbacks;
+  template <typename ... Args>
+  static TreeMap<HookCallbackRecord<Args...>*>* _hookCallbacks;
 
 
   class Hook {
@@ -29,58 +29,47 @@
         sprintf(dest, "%.12s-%.20u-%.12s-%.12s", objType, objId, key, action);
       }
 
+      template <typename ... Args>
       static void initialize() {
-        _hookCallbacks = new TreeMap<HookCallbackRecord*>();
+        _hookCallbacks<> = new TreeMap<HookCallbackRecord<Args...>*>();
       }
 
+      template <typename ... Args>
       static void deinitialize() {
-        List<HookCallbackRecord*>* cbList = _hookCallbacks->getValues();
+        List<HookCallbackRecord<Args...>*>* cbList = _hookCallbacks<>->getValues();
 
         uint32_t cbListLen = cbList->getLength();
 
         for (uint32_t cbIdx = 0; cbIdx < cbListLen; cbIdx++) {
-          HookCallbackRecord* record = cbList->get(cbIdx);
+          HookCallbackRecord<Args...>* record = cbList->get(cbIdx);
 
           delete record;
         }
 
         delete cbList;
-        delete _hookCallbacks;
+        delete _hookCallbacks<>;
       }
 
       template <typename ... Args>
-      static void setCallback(const char* id, void*(*callback)(LinkedList<void*>*), Args...args) {
-        LinkedList<void*>* argsList = new LinkedList<void*>();
-
-        (argsList->push(args), ...);
-
-        HookCallbackRecord* rec = new HookCallbackRecord();
+      static void setCallback(const char* id, void*(*callback)(Args...)) {
+        HookCallbackRecord<Args...>* rec = new HookCallbackRecord<Args...>();
 
         rec->method = callback;
-        rec->arguments = argsList;
 
-        _hookCallbacks->set(id, rec);
+        _hookCallbacks<>->set(id, (HookCallbackRecord<>*)rec);
       }
 
       template <typename ... Args>
       static void* executeCallback(const char* id, Args...args) {
-        HookCallbackRecord* rec = _hookCallbacks->get(id);
+        HookCallbackRecord<>* rec = _hookCallbacks<>->get(id);
 
         if (rec != NULL) {
-          void*(*callback)(LinkedList<void*>*) = rec->method;
-          LinkedList<void*>* recArgsList = rec->arguments;
-          LinkedList<void*>* argsList = new LinkedList<void*>();
+          void*(*callback)(Args...) = (void*(*)(Args...))rec->method;
 
-          (argsList->push((void*)(uintptr_t)args), ...);
-
-          argsList->concat(recArgsList);  // prioritize this function's args
-          //recArgsList->concat(argsList);    // prioritize our callback record's args
-
-          return callback(argsList);    // prioritize this function's args
-          //return callback(recArgsList);   // prioritize our callback record's args
+          return callback(args...);
         }
 
-        return (void*)NULL;
+        return NULL;
       }
 
   };

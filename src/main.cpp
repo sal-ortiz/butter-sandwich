@@ -35,20 +35,13 @@ const uint32_t SCREEN_HEIGHT = 800;
 //}
 
 //void* quitCallback(LinkedList<void*>* inp) {
-void* quitCallback(LinkedList<void*>* inp) {
-  Application* app = reinterpret_cast<Application*>(inp->get(0));
-
+void* quitCallback(Application* app) {
   printf("\n[%u] exiting application\n", SDL_GetTicks());
 
   return (void*)NULL;
 }
 
-void* closedCallback(LinkedList<void*>* inp) {
-  Window* win = reinterpret_cast<Window*>(inp->get(0));
-
-  uint32_t horzPos = static_cast<uint32_t>((uint64_t)inp->get(1));
-  uint32_t vertPos = static_cast<uint32_t>((uint64_t)inp->get(2));
-
+void* closedCallback(Window* win, uint32_t horzPos, uint32_t vertPos) {
   printf("\n[%u] window closed", SDL_GetTicks());
 
   return (void*)NULL;
