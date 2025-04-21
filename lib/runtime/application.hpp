@@ -86,8 +86,7 @@
         uint32_t button = params->button;
         uint32_t numClicks = params->numClicks;
 
-
-        Hook::executeCallback("MOUSEBUTTON", button, state, numClicks);
+        Hook::executeCallback("MOUSEBUTTON", app, button, state, numClicks);
 
         //printf("MOUSE BUTTON %d %s\n", button, state ? "down" : "up");
 
