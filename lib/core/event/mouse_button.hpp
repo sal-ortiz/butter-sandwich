@@ -30,7 +30,7 @@
 
         params->timestamp = evt.timestamp;
         params->windowId = evt.windowID;
-        params->data = NULL;
+        params->context = NULL;   // set later from callback record
 
         params->mouseId = evt.which;
 
@@ -62,7 +62,7 @@
         if (rec) {
           void*(*callback)(MouseButtonEventParams*) = (void*(*)(MouseButtonEventParams*))rec->method;
 
-          params->data = rec->input;
+          params->context = rec->context;
 
           return callback(params);
         }

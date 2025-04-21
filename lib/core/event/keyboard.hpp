@@ -28,7 +28,7 @@
 
         params->timestamp = evt.timestamp;
         params->windowId = evt.windowID;
-        params->data = NULL;
+        params->context = NULL;   // set later from callback record
 
         params->state = evt.state;
         params->repeat = evt.repeat;
@@ -59,7 +59,7 @@
         if (rec) {
           void*(*callback)(KeyboardEventParams*) = (void*(*)(KeyboardEventParams*))rec->method;
 
-          params->data = rec->input;
+          params->context = rec->context;
 
           return callback(params);
         }

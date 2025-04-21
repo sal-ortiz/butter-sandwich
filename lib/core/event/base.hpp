@@ -9,12 +9,12 @@
   struct EventParamsBase {
     uint32_t timestamp;
     uint32_t windowId;
-    void* data;
+    void* context;
   };
 
   struct EventCallbackRecord {
     void*(*method)(EventParamsBase*);
-    void* input;
+    void* context;
   };
 
 

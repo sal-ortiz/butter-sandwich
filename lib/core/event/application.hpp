@@ -22,7 +22,7 @@
 
         params->timestamp = evt.timestamp;
         params->windowId = (uint32_t)NULL;
-        params->data = NULL;
+        params->context = NULL;   // set later from callback record
 
         return params;
       }
@@ -45,7 +45,7 @@
         if (rec) {
           void*(*callback)(ApplicationEventParams*) = (void*(*)(ApplicationEventParams*))rec->method;
 
-          params->data = rec->input;
+          params->context = rec->context;
 
           return callback(params);
         }

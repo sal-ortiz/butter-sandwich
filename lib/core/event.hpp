@@ -39,11 +39,11 @@
         delete _eventCallbacks;
       }
 
-      static void on(const char* id, void*(*callback)(EventParamsBase*), void* inp) {
+      static void on(const char* id, void*(*callback)(EventParamsBase*), void* context=NULL) {
         EventCallbackRecord* entry = new EventCallbackRecord();
 
         entry->method = callback;
-        entry->input = inp;
+        entry->context = context;
 
         _eventCallbacks->set(id, entry);
       }

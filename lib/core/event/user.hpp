@@ -26,7 +26,7 @@
 
         params->timestamp = evt.timestamp;
         params->windowId = evt.windowID;
-        params->data = NULL;
+        params->context = NULL;   // set later from callback record
 
         return params;
       }
@@ -59,7 +59,7 @@
         if (rec) {
           void*(*callback)(UserEventParams*) = (void*(*)(UserEventParams*))(rec->method);
 
-          params->data = rec->input;
+          params->context = rec->context;
 
           return callback(params);
         }

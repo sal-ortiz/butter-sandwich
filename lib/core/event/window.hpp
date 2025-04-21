@@ -23,7 +23,7 @@
 
         params->timestamp = evt.timestamp;
         params->windowId = evt.windowID;
-        params->data = NULL;
+        params->context = NULL;   // set later from callback record
 
         params->horz = evt.data1;
         params->vert = evt.data2;
@@ -64,7 +64,7 @@
         if (rec) {
           void*(*callback)(WindowEventParams*) = (void*(*)(WindowEventParams*))(rec->method);
 
-          params->data = rec->input;
+          params->context = rec->context;
 
           return callback(params);
         }
