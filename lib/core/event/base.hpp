@@ -18,7 +18,7 @@
   };
 
 
-  HashMap<EventCallbackRecord*>* _eventCallbacks;
+  TreeMap<EventCallbackRecord*>* _eventCallbacks;
 
 
   class EventBase {

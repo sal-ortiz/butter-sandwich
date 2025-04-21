@@ -21,7 +21,7 @@
     public:
 
       static void initialize() {
-        _eventCallbacks = new HashMap<EventCallbackRecord*>();
+        _eventCallbacks = new TreeMap<EventCallbackRecord*>();
       }
 
       static void deinitialize() {
