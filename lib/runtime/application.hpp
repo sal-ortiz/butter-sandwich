@@ -37,7 +37,7 @@
       }
 
       static void* quitCallback(ApplicationEventParams* params) {
-        Application* app = (Application*)params->data;
+        Application* app = (Application*)params->context;
 
         Hook::executeCallback("QUIT", app);
 
@@ -47,7 +47,7 @@
       }
 
       static void* keyboardCallback(KeyboardEventParams* params) {
-        Application* app = (Application*)params->data;
+        Application* app = (Application*)params->context;
 
         uint32_t scanCode = params->scanCode;
         bool isPressed = false;
@@ -64,7 +64,7 @@
       }
 
       static void* mouseMotionCallback(MouseMotionEventParams* params) {
-        Application* app = (Application*)params->data;
+        Application* app = (Application*)params->context;
 
         uint32_t horzPos = params->horzPos;
         uint32_t vertPos = params->vertPos;
@@ -80,7 +80,7 @@
       }
 
       static void* mouseButtonCallback(MouseButtonEventParams* params) {
-        Application* app = (Application*)params->data;
+        Application* app = (Application*)params->context;
 
         uint32_t state = params->state;
         uint32_t button = params->button;

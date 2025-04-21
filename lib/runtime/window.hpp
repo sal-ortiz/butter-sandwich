@@ -77,7 +77,7 @@
       }
 
       static void* closedCallback(WindowEventParams* params) {
-        Window* win = (Window*)params->data;
+        Window* win = (Window*)params->context;
 
         uint32_t horzPos = params->horz;
         uint32_t vertPos = params->vert;
@@ -90,7 +90,7 @@
       }
 
       static void* movedCallback(WindowEventParams* params) {
-        Window* win = (Window*)params->data;
+        Window* win = (Window*)params->context;
 
         uint32_t horzPos = params->horz;
         uint32_t vertPos = params->vert;
@@ -103,7 +103,7 @@
       }
 
       static void* resizedCallback(WindowEventParams* params) {
-        Window* win = (Window*)params->data;
+        Window* win = (Window*)params->context;
 
         uint32_t width = params->horz;
         uint32_t height = params->vert;
@@ -116,7 +116,7 @@
       }
 
       static void* presentCallback(UserEventParams* params) {
-        Window* win = (Window*)params->data;
+        Window* win = (Window*)params->context;
 
         Hook::executeCallback("PRESENT", win);
 
