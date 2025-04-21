@@ -102,10 +102,7 @@
         return player;
       }
 
-      static void* collisionCallback(LinkedList<void*>* inp) {
-        SceneBase* targ = reinterpret_cast<SceneBase*>(inp->get(0));
-        Player* player = reinterpret_cast<Player*>(inp->get(1));
-        Scene* scene = reinterpret_cast<Scene*>(inp->get(2));
+      static void* collisionCallback(SceneBase* tag, Player* player, Scene* scene) {
 
         printf("\n[%u] PLAYER COLLISION!!", SDL_GetTicks());
         //printf("\ntarg->name: %s", targ->name);
@@ -117,10 +114,7 @@
         return NULL;
       }
 
-      static void* evaluateCallback(LinkedList<void*>* inp) {
-        Player* player = reinterpret_cast<Player*>(inp->get(0));
-        Scene* scene = reinterpret_cast<Scene*>(inp->get(1));
-
+      static void* evaluateCallback(Player* player, Scene* scene) {
         Position* position = (Position*)player->state->get("position");
         Angle* angle = (Angle*)player->state->get("angle");
         Color* color = (Color*)player->state->get("color");

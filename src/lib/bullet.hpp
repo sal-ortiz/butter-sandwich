@@ -62,10 +62,7 @@
         return bullet;
       }
 
-      static void* collisionCallback(LinkedList<void*>* inp) {
-        SceneBase* targ = reinterpret_cast<SceneBase*>(inp->get(0));
-        Bullet* bullet = reinterpret_cast<Bullet*>(inp->get(1));
-        Scene* scene = reinterpret_cast<Scene*>(inp->get(2));
+      static void* collisionCallback(SceneBase* targ, Bullet* bullet, Scene* scene) {
 
         //printf("\n[%u] BULLET COLLISION!!", SDL_GetTicks());
 //        printf("\n%d\n", targ->getIdentifier());
@@ -77,10 +74,7 @@
         return NULL;
       }
 
-      static void* evaluateCallback(LinkedList<void*>* inp) {
-        Bullet* bullet = reinterpret_cast<Bullet*>(inp->get(0));
-        Scene* scene = reinterpret_cast<Scene*>(inp->get(1));
-
+      static void* evaluateCallback(Bullet* bullet, Scene* scene) {
         Position* absPosition = (Position*)bullet->state->get("absolute_position");
 
         Position* position = (Position*)bullet->state->get("position");

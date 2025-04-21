@@ -46,10 +46,7 @@
         return foreground;
       }
 
-      static void* evaluateCallback(LinkedList<void*>* inp) {
-        Foreground00* foreground = reinterpret_cast<Foreground00*>(inp->get(0));
-        Scene* scene = reinterpret_cast<Scene*>(inp->get(1));
-
+      static void* evaluateCallback(Foreground00* foreground, Scene* scene) {
         Background00* baseBackground = (Background00*)scene->getBackground("background00");;
 
         Trajectory* trajectory = (Trajectory*)foreground->state->get("trajectory");
