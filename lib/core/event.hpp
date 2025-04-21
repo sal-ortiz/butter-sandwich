@@ -92,18 +92,18 @@
         return retVal;
       }
 
-      static void pushEvent(int32_t code, void* dataOne=(void*)NULL, void* dataTwo=(void*)NULL) {
-        SDL_Event* event;
-
-        event->type = SDL_USEREVENT;
-        event->user.code = code;
-        event->user.data1 = dataOne;
-        event->user.data2 = dataTwo;
-
-        SDL_PushEvent(event);
-
-        delete event;
-      }
+      //static void pushEvent(int32_t code, void* dataOne=(void*)NULL, void* dataTwo=(void*)NULL) {
+      //  SDL_Event* event;
+      //
+      //  event->type = SDL_USEREVENT;
+      //  event->user.code = code;
+      //  event->user.data1 = dataOne;
+      //  event->user.data2 = dataTwo;
+      //
+      //  SDL_PushEvent(event);
+      //
+      //  delete event;
+      //}
 
   };
 
