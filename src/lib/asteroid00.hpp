@@ -73,8 +73,8 @@
         //scale->horz = (rand() % 2) - 1;
         //scale->vert = (rand() % 2) - 1;
 
-        angle->center.horz = 28;
-        angle->center.vert = 33;
+        angle->center->horz = 28;
+        angle->center->vert = 33;
 
         absPosition->horz = rand() % (uint32_t)scene->size->horz;
         absPosition->vert = rand() % (uint32_t)scene->size->vert;

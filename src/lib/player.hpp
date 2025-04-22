@@ -85,8 +85,8 @@
         scale->horz = 1.0;
         scale->vert = 1.0;
 
-        angle->center.horz = 43;
-        angle->center.vert = 43;
+        angle->center->horz = 43;
+        angle->center->vert = 43;
 
         absPosition->horz = scene->size->horz / 2;
         absPosition->vert = scene->size->vert / 2;
@@ -285,8 +285,8 @@
               Angle* bulletAngle = (Angle*)bullet->state->get("angle");
               Trajectory* bulletTraj = (Trajectory*)bullet->state->get("trajectory");
 
-              bulletAngle->center.horz = angle->center.horz - 36;
-              bulletAngle->center.vert = angle->center.vert - 36;
+              bulletAngle->center->horz = angle->center->horz - 36;
+              bulletAngle->center->vert = angle->center->vert - 36;
 
               bulletTraj->position.horz = 24 * horzRatio;
               bulletTraj->position.vert = 24 * vertRatio;

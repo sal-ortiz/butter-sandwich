@@ -5,12 +5,24 @@
 
   #include <runtime/data/position.hpp>
 
-  struct Angle {
-    Position center;
+  class Angle {
 
-    float pitch = 0;
-    float roll = 0;
-    float yaw = 0;
+    public:
+
+      Position* center;
+
+      float pitch;
+      float roll;
+      float yaw;
+
+      Angle() {
+        this->center = new Position();
+
+        this->pitch = 0;
+        this->roll = 0;
+        this->yaw = 0;
+      }
+
   };
 
 #endif
