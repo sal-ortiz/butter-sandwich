@@ -3,10 +3,14 @@
 
   #define _POSITION_HPP
 
-  struct Position {
-    float horz = 0.0;
-    float vert = 0.0;
-    float depth = 0.0;
+  class Position {
+
+    public:
+
+      float horz = 0.0;
+      float vert = 0.0;
+      float depth = 0.0;
+
   };
 
 #endif
