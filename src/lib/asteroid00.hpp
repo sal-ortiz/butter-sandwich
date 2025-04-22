@@ -134,8 +134,8 @@
         angle->roll += trajectory->angle->roll;
         angle->yaw += trajectory->angle->yaw;
 
-        position->horz = absPosition->horz - scene->view->position.horz;
-        position->vert = absPosition->vert - scene->view->position.vert;
+        position->horz = absPosition->horz - scene->view->position->horz;
+        position->vert = absPosition->vert - scene->view->position->vert;
 
         if (absPosition->horz < round(asteroid->width / 2)) {
           // enforce our leftmost border

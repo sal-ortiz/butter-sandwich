@@ -178,36 +178,36 @@
           trajectory->position->vert = 0;
         }
 
-        if (absPosition->horz > round(scene->view->size.horz / 2)
-          && absPosition->horz < scene->size->horz - round(scene->view->size.horz / 2)
+        if (absPosition->horz > round(scene->view->size->horz / 2)
+          && absPosition->horz < scene->size->horz - round(scene->view->size->horz / 2)
         ) {
           // moving horizontally around the center of our map
-          position->horz = round(scene->view->size.horz / 2);
-          scene->view->position.horz = absPosition->horz - round(scene->view->size.horz / 2);
+          position->horz = round(scene->view->size->horz / 2);
+          scene->view->position->horz = absPosition->horz - round(scene->view->size->horz / 2);
 
-        } else if (absPosition->horz < round(scene->view->size.horz / 2)) {
+        } else if (absPosition->horz < round(scene->view->size->horz / 2)) {
           // moving horizontally around the left border of our map
           position->horz = absPosition->horz;
 
-        } else if (absPosition->horz > scene->size->horz - round(scene->view->size.horz / 2)) {
+        } else if (absPosition->horz > scene->size->horz - round(scene->view->size->horz / 2)) {
           // moving horizontally around the right border of our map
-          position->horz = scene->view->size.horz - (scene->size->horz - absPosition->horz);
+          position->horz = scene->view->size->horz - (scene->size->horz - absPosition->horz);
         }
 
-        if (absPosition->vert > round(scene->view->size.vert / 2)
-          && absPosition->vert < scene->size->vert - round(scene->view->size.vert / 2)
+        if (absPosition->vert > round(scene->view->size->vert / 2)
+          && absPosition->vert < scene->size->vert - round(scene->view->size->vert / 2)
         ) {
           // moving vertically around the center of our map.
-          position->vert = round(scene->view->size.vert / 2);
-          scene->view->position.vert = absPosition->vert - round(scene->view->size.vert / 2);
+          position->vert = round(scene->view->size->vert / 2);
+          scene->view->position->vert = absPosition->vert - round(scene->view->size->vert / 2);
 
-        } else if (absPosition->vert < round(scene->view->size.vert / 2)) {
+        } else if (absPosition->vert < round(scene->view->size->vert / 2)) {
           // moving vertically around the upper border of our map.
           position->vert = absPosition->vert;
 
-        } else if (absPosition->vert > scene->size->vert - round(scene->view->size.vert / 2)) {
+        } else if (absPosition->vert > scene->size->vert - round(scene->view->size->vert / 2)) {
           // moving vertically around the lower border of our map.
-          position->vert = scene->view->size.vert - (scene->size->vert - absPosition->vert);
+          position->vert = scene->view->size->vert - (scene->size->vert - absPosition->vert);
         }
 
         float horzRatio = 0.0;
@@ -278,8 +278,8 @@
               Bullet* bullet = reinterpret_cast<Bullet*>(element);
 
               Position* bulletAbsolutePos = (Position*)bullet->state->get("absolute_position");
-              bulletAbsolutePos->horz = (scene->size->horz / 2) - (scene->view->size.horz / 2) - (player->width / 2) + 20;
-              bulletAbsolutePos->vert = (scene->size->vert / 2) - (scene->view->size.vert / 2) - (player->width / 2) + 20;
+              bulletAbsolutePos->horz = (scene->size->horz / 2) - (scene->view->size->horz / 2) - (player->width / 2) + 20;
+              bulletAbsolutePos->vert = (scene->size->vert / 2) - (scene->view->size->vert / 2) - (player->width / 2) + 20;
 
               Position* bulletPos = (Position*)bullet->state->get("position");
               Angle* bulletAngle = (Angle*)bullet->state->get("angle");

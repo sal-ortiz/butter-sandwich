@@ -100,14 +100,14 @@
         if (trajectory->color->green > 255)  trajectory->color->green = 255;
         if (trajectory->color->alpha > 255)  trajectory->color->alpha = 255;
 
-        if (absPosition->horz > scene->view->position.horz
-          && absPosition->horz < (scene->view->position.horz + scene->view->size.horz)
-          && absPosition->vert > scene->view->position.vert
-          && absPosition->vert < (scene->view->position.vert + scene->view->size.vert)
+        if (absPosition->horz > scene->view->position->horz
+          && absPosition->horz < (scene->view->position->horz + scene->view->size->horz)
+          && absPosition->vert > scene->view->position->vert
+          && absPosition->vert < (scene->view->position->vert + scene->view->size->vert)
         ) {
           // our bullet is visible within our screen.
-          position->horz = (absPosition->horz - scene->view->position.horz);
-          position->vert = (absPosition->vert - scene->view->position.vert);
+          position->horz = (absPosition->horz - scene->view->position->horz);
+          position->vert = (absPosition->vert - scene->view->position->vert);
 
         }
 

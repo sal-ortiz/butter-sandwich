@@ -101,8 +101,8 @@ int main(int argc, char *argv[]) {
   win->on("CLOSED", closedCallback);
   //win->on("PRESENT", windowPresentCallback, (void*)win);
 
-  scene->view->size.horz = SCREEN_WIDTH;
-  scene->view->size.vert = SCREEN_HEIGHT;
+  scene->view->size->horz = SCREEN_WIDTH;
+  scene->view->size->vert = SCREEN_HEIGHT;
 
   //scene->onEvaluate(sceneEvaluateCallback, (void*)NULL);
 
@@ -142,8 +142,8 @@ int main(int argc, char *argv[]) {
   playerAbsolutePos->horz = scene->size->horz / 2;
   playerAbsolutePos->vert = scene->size->vert / 2;
 
-  scene->view->position.horz = round((scene->size->horz / 2) - (scene->view->size.horz / 2));
-  scene->view->position.vert = round((scene->size->vert / 2) - (scene->view->size.vert / 2));
+  scene->view->position->horz = round((scene->size->horz / 2) - (scene->view->size->horz / 2));
+  scene->view->position->vert = round((scene->size->vert / 2) - (scene->view->size->vert / 2));
 
   win->open("blasteroids", 600, 150, SCREEN_WIDTH, SCREEN_HEIGHT);
 
