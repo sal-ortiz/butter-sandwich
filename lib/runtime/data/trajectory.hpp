@@ -8,16 +8,32 @@
   #include <runtime/data/scale.hpp>
   #include <runtime/data/color.hpp>
 
-  struct Trajectory {
-    Position position;
-    Angle angle;
-    Scale scale;
-    Color color;
+  class Trajectory {
 
-    Position positionRate;
-    Angle angleRate;
-    Scale scaleRate;
-    Color colorRate;
+    public:
+
+      Position* position;
+      Angle* angle;
+      Scale* scale;
+      Color* color;
+
+      Position* positionRate;
+      Angle* angleRate;
+      Scale* scaleRate;
+      Color* colorRate;
+
+      Trajectory() {
+        this->position = new Position();
+        this->angle = new Angle();
+        this->scale = new Scale();
+        this->color = new Color();
+
+        this->positionRate = new Position();
+        this->angleRate = new Angle();
+        this->scaleRate = new Scale();
+        this->colorRate = new Color();
+      }
+
   };
 
 #endif

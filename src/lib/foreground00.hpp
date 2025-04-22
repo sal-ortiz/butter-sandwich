@@ -20,9 +20,9 @@
         Trajectory* trajectory = (Trajectory*)this->state->get("trajectory");
         Color* color = (Color*)this->state->get("color");
 
-        trajectory->positionRate.horz = 0.90;
-        trajectory->positionRate.vert = 0.90;
-        trajectory->positionRate.depth = 0.90;
+        trajectory->positionRate->horz = 0.90;
+        trajectory->positionRate->vert = 0.90;
+        trajectory->positionRate->depth = 0.90;
 
         color->alpha = 180;
 
@@ -58,13 +58,13 @@
         view->size.horz = scene->view->size.horz;
         view->size.vert = scene->view->size.vert;
 
-        scene->view->position.horz += trajectory->position.horz;
-        scene->view->position.vert += trajectory->position.vert;
-        scene->view->position.depth += trajectory->position.depth;
+        scene->view->position.horz += trajectory->position->horz;
+        scene->view->position.vert += trajectory->position->vert;
+        scene->view->position.depth += trajectory->position->depth;
 
-        trajectory->position.horz *= trajectory->positionRate.horz;
-        trajectory->position.vert *= trajectory->positionRate.vert;
-        trajectory->position.depth *= trajectory->positionRate.depth;
+        trajectory->position->horz *= trajectory->positionRate->horz;
+        trajectory->position->vert *= trajectory->positionRate->vert;
+        trajectory->position->depth *= trajectory->positionRate->depth;
 
         view->position.horz = scene->view->position.horz;
         view->position.vert = scene->view->position.vert;

@@ -27,17 +27,17 @@
       Asteroid00() {
         Trajectory* trajectory = (Trajectory*)this->state->get("trajectory");
 
-        trajectory->positionRate.horz = 1.0;
-        trajectory->positionRate.vert = 1.0;
-        trajectory->positionRate.depth = 1.0;
+        trajectory->positionRate->horz = 1.0;
+        trajectory->positionRate->vert = 1.0;
+        trajectory->positionRate->depth = 1.0;
 
-        trajectory->angleRate.pitch = 1.0;
-        trajectory->angleRate.roll = 1.0;
-        trajectory->angleRate.yaw = 1.0;
+        trajectory->angleRate->pitch = 1.0;
+        trajectory->angleRate->roll = 1.0;
+        trajectory->angleRate->yaw = 1.0;
 
-        trajectory->scaleRate.horz = 0.0;
-        trajectory->scaleRate.vert = 0.0;
-        trajectory->scaleRate.depth = 0.0;
+        trajectory->scaleRate->horz = 0.0;
+        trajectory->scaleRate->vert = 0.0;
+        trajectory->scaleRate->depth = 0.0;
 
         this->isActive = true;
         this->type = "asteroid";
@@ -79,12 +79,12 @@
         absPosition->horz = rand() % (uint32_t)scene->size->horz;
         absPosition->vert = rand() % (uint32_t)scene->size->vert;
 
-        trajectory->position.horz = ((float)(rand() % 3) / 2) - 1.5;
-        trajectory->position.vert = ((float)(rand() % 3) / 2) - 1.5;
+        trajectory->position->horz = ((float)(rand() % 3) / 2) - 1.5;
+        trajectory->position->vert = ((float)(rand() % 3) / 2) - 1.5;
 
-        trajectory->angle.pitch = ((float)(rand() % 3) / 2) - 1.5;
-        trajectory->angle.roll = ((float)(rand() % 3) / 2) - 1.5;
-        trajectory->angle.yaw = ((float)(rand() % 3) / 2) - 1.5;
+        trajectory->angle->pitch = ((float)(rand() % 3) / 2) - 1.5;
+        trajectory->angle->roll = ((float)(rand() % 3) / 2) - 1.5;
+        trajectory->angle->yaw = ((float)(rand() % 3) / 2) - 1.5;
 
         asteroid->onEvaluate(Asteroid00::evaluateCallback);
         asteroid->onCollision(Asteroid00::collisionCallback);
@@ -126,35 +126,35 @@
 
         Position* absPosition = (Position*)asteroid->state->get("absolute_position");
 
-        //absPosition->horz += trajectory->position.horz;
-        //absPosition->vert += trajectory->position.vert;
-        //absPosition->depth += trajectory->position.depth;
+        //absPosition->horz += trajectory->position->horz;
+        //absPosition->vert += trajectory->position->vert;
+        //absPosition->depth += trajectory->position->depth;
 
-        angle->pitch += trajectory->angle.pitch;
-        angle->roll += trajectory->angle.roll;
-        angle->yaw += trajectory->angle.yaw;
+        angle->pitch += trajectory->angle->pitch;
+        angle->roll += trajectory->angle->roll;
+        angle->yaw += trajectory->angle->yaw;
 
         position->horz = absPosition->horz - scene->view->position.horz;
         position->vert = absPosition->vert - scene->view->position.vert;
 
         if (absPosition->horz < round(asteroid->width / 2)) {
           // enforce our leftmost border
-          trajectory->position.horz = trajectory->position.horz * -1;
+          trajectory->position->horz = trajectory->position->horz * -1;
         }
 
         if (absPosition->vert < round(asteroid->height / 2)) {
           // enforce our upper border
-          trajectory->position.vert = trajectory->position.vert * -1;
+          trajectory->position->vert = trajectory->position->vert * -1;
         }
 
         if (absPosition->horz > (scene->size->horz - round(asteroid->width / 2))) {
           // enforce our rightmost border
-          trajectory->position.horz = trajectory->position.horz * -1;
+          trajectory->position->horz = trajectory->position->horz * -1;
         }
 
         if (absPosition->vert > (scene->size->vert - round(asteroid->height / 2))) {
           // enforce our lower border
-          trajectory->position.vert = trajectory->position.vert * -1;
+          trajectory->position->vert = trajectory->position->vert * -1;
         }
 
         return NULL;

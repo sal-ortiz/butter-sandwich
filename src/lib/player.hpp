@@ -25,22 +25,22 @@
       Player() {
         Trajectory* trajectory = (Trajectory*)this->state->get("trajectory");
 
-        trajectory->positionRate.horz = 0.925;
-        trajectory->positionRate.vert = 0.925;
-        trajectory->positionRate.depth = 0.925;
+        trajectory->positionRate->horz = 0.925;
+        trajectory->positionRate->vert = 0.925;
+        trajectory->positionRate->depth = 0.925;
 
-        trajectory->angleRate.pitch = 0.85;
-        trajectory->angleRate.roll = 0.85;
-        trajectory->angleRate.yaw = 0.85;
+        trajectory->angleRate->pitch = 0.85;
+        trajectory->angleRate->roll = 0.85;
+        trajectory->angleRate->yaw = 0.85;
 
-        trajectory->scaleRate.horz = 0.90;
-        trajectory->scaleRate.vert = 0.90;
-        trajectory->scaleRate.depth = 0.90;
+        trajectory->scaleRate->horz = 0.90;
+        trajectory->scaleRate->vert = 0.90;
+        trajectory->scaleRate->depth = 0.90;
 
-        trajectory->colorRate.red = 10.0;
-        trajectory->colorRate.green = 10.0;
-        trajectory->colorRate.blue = 10.0;
-        trajectory->colorRate.alpha = 10.0;
+        trajectory->colorRate->red = 10.0;
+        trajectory->colorRate->green = 10.0;
+        trajectory->colorRate->blue = 10.0;
+        trajectory->colorRate->alpha = 10.0;
 
         //printf("(%s) identifier: %d\t/\tidentifierString: %s\n", this->type, this->getIdentifier(), this->getIdentifierString());
 
@@ -122,60 +122,60 @@
 
         Position* absPosition = (Position*)player->state->get("absolute_position");
 
-        absPosition->horz += trajectory->position.horz;
-        absPosition->vert += trajectory->position.vert;
-        absPosition->depth += trajectory->position.depth;
+        absPosition->horz += trajectory->position->horz;
+        absPosition->vert += trajectory->position->vert;
+        absPosition->depth += trajectory->position->depth;
 
-        angle->pitch += trajectory->angle.pitch;
-        angle->roll += trajectory->angle.roll;
-        angle->yaw += trajectory->angle.yaw;
+        angle->pitch += trajectory->angle->pitch;
+        angle->roll += trajectory->angle->roll;
+        angle->yaw += trajectory->angle->yaw;
 
-        color->red = trajectory->color.red;
-        color->green = trajectory->color.green;
-        color->blue = trajectory->color.blue;
-        color->alpha = trajectory->color.alpha;
+        color->red = trajectory->color->red;
+        color->green = trajectory->color->green;
+        color->blue = trajectory->color->blue;
+        color->alpha = trajectory->color->alpha;
 
-        trajectory->position.horz *= (trajectory->positionRate.horz);
-        trajectory->position.vert *= (trajectory->positionRate.vert);
-        trajectory->position.depth *= (trajectory->positionRate.depth);
+        trajectory->position->horz *= (trajectory->positionRate->horz);
+        trajectory->position->vert *= (trajectory->positionRate->vert);
+        trajectory->position->depth *= (trajectory->positionRate->depth);
 
-        trajectory->angle.pitch *= (trajectory->angleRate.pitch);
-        trajectory->angle.roll *= (trajectory->angleRate.roll);
-        trajectory->angle.yaw *= (trajectory->angleRate.yaw);
+        trajectory->angle->pitch *= (trajectory->angleRate->pitch);
+        trajectory->angle->roll *= (trajectory->angleRate->roll);
+        trajectory->angle->yaw *= (trajectory->angleRate->yaw);
 
-        trajectory->color.red += ((1 + trajectory->color.red) * trajectory->colorRate.red) / 36;
-        trajectory->color.green += ((1 + trajectory->color.green) * trajectory->colorRate.green) / 36;
-        trajectory->color.blue += ((1 + trajectory->color.blue) * trajectory->colorRate.blue) / 36;
-        trajectory->color.alpha += ((1 + trajectory->color.alpha) * trajectory->colorRate.alpha) / 36;
+        trajectory->color->red += ((1 + trajectory->color->red) * trajectory->colorRate->red) / 36;
+        trajectory->color->green += ((1 + trajectory->color->green) * trajectory->colorRate->green) / 36;
+        trajectory->color->blue += ((1 + trajectory->color->blue) * trajectory->colorRate->blue) / 36;
+        trajectory->color->alpha += ((1 + trajectory->color->alpha) * trajectory->colorRate->alpha) / 36;
 
 
-        if (trajectory->color.red > 255)    trajectory->color.red = 255;
-        if (trajectory->color.blue > 255)   trajectory->color.blue = 255;
-        if (trajectory->color.green > 255)  trajectory->color.green = 255;
-        if (trajectory->color.alpha > 255)  trajectory->color.alpha = 255;
+        if (trajectory->color->red > 255)    trajectory->color->red = 255;
+        if (trajectory->color->blue > 255)   trajectory->color->blue = 255;
+        if (trajectory->color->green > 255)  trajectory->color->green = 255;
+        if (trajectory->color->alpha > 255)  trajectory->color->alpha = 255;
 
         if (absPosition->horz < round(player->width / 2) + 6) { // +6 tweak
           // enforce our leftmost border
           absPosition->horz = round(player->width / 2) + 6;     // +6 tweak
-          trajectory->position.horz = 0;
+          trajectory->position->horz = 0;
         }
 
         if (absPosition->vert < round(player->height / 2) + 6) {  // +6 tweak
           // enforce our upper border
           absPosition->vert = round(player->height / 2) + 6;      // +6 tweak
-          trajectory->position.vert = 0;
+          trajectory->position->vert = 0;
         }
 
         if (absPosition->horz > (scene->size->horz - round(player->width / 2))) {
           // enforce our rightmost border
           absPosition->horz = scene->size->horz - round(player->width / 2);
-          trajectory->position.horz = 0;
+          trajectory->position->horz = 0;
         }
 
         if (absPosition->vert > (scene->size->vert - round(player->height / 2))) {
           // enforce our lower border
           absPosition->vert = scene->size->vert - round(player->height / 2);
-          trajectory->position.vert = 0;
+          trajectory->position->vert = 0;
         }
 
         if (absPosition->horz > round(scene->view->size.horz / 2)
@@ -230,21 +230,21 @@
         if (KeyboardInput::isPressed(80) || KeyboardInput::isHeld(80)) {
           // turn left.
           player->setAction("turning_left");
-          trajectory->angle.pitch -= 1;
+          trajectory->angle->pitch -= 1;
         }
 
         if (KeyboardInput::isPressed(79) || KeyboardInput::isHeld(79)) {
           // turn right.
           player->setAction("turning_right");
-          trajectory->angle.pitch += 1;
+          trajectory->angle->pitch += 1;
         }
 
         if (KeyboardInput::isPressed(82) || KeyboardInput::isHeld(82)) {
           // move forward.
           player->setAction("moving_forward");
 
-          trajectory->position.horz += 1.5 * horzRatio;
-          trajectory->position.vert += 1.5 * vertRatio;
+          trajectory->position->horz += 1.5 * horzRatio;
+          trajectory->position->vert += 1.5 * vertRatio;
         }
 
         if (
@@ -288,8 +288,8 @@
               bulletAngle->center->horz = angle->center->horz - 36;
               bulletAngle->center->vert = angle->center->vert - 36;
 
-              bulletTraj->position.horz = 24 * horzRatio;
-              bulletTraj->position.vert = 24 * vertRatio;
+              bulletTraj->position->horz = 24 * horzRatio;
+              bulletTraj->position->vert = 24 * vertRatio;
 
               bulletAbsolutePos->horz = absPosition->horz;
               bulletAbsolutePos->vert = absPosition->vert;
@@ -300,10 +300,10 @@
 
               lastBulletTimestamp = SDL_GetTicks();
 
-              bulletTraj->color.red = 120;
-              bulletTraj->color.green = 10;
-              bulletTraj->color.blue = 10;
-              bulletTraj->color.alpha = 100;
+              bulletTraj->color->red = 120;
+              bulletTraj->color->green = 10;
+              bulletTraj->color->blue = 10;
+              bulletTraj->color->alpha = 100;
 
               break;
             }
