@@ -28,27 +28,27 @@
         this->image = NULL;
       }
 
-      void render(Renderer* renderer, Position dstPos, View srcView, Angle angle, Scale scale, Color color) {
+      void render(Renderer* renderer, Position* dstPos, View* srcView, Angle* angle, Scale* scale, Color* color) {
 
         if (this->image) {
 
           this->image->render(
             renderer,
-            dstPos.horz,
-            dstPos.vert,
-            scale.horz,
-            scale.vert,
-            srcView.position->horz,
-            srcView.position->vert,
-            srcView.size->horz,
-            srcView.size->vert,
-            angle.pitch,
-            angle.center->horz,
-            angle.center->vert,
-            color.red,
-            color.blue,
-            color.green,
-            color.alpha
+            dstPos->horz,
+            dstPos->vert,
+            scale->horz,
+            scale->vert,
+            srcView->position->horz,
+            srcView->position->vert,
+            srcView->size->horz,
+            srcView->size->vert,
+            angle->pitch,
+            angle->center->horz,
+            angle->center->vert,
+            color->red,
+            color->blue,
+            color->green,
+            color->alpha
           );
 
         }
