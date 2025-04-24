@@ -19,9 +19,8 @@
 
     private:
 
-      //BinaryTreeList<SpriteFrame*>* frames;
       LinkedList<SpriteFrame*>* frames;
-//      FixedTreeList<uint32_t>* framesList;
+      //ArrayList<SpriteFrame*>* frames;
 
       Position position;
       uint32_t currentFrame;
@@ -34,9 +33,9 @@
       float width;
       float height;
 
-
       Sprite() {
         this->frames = new LinkedList<SpriteFrame*>();
+        //this->frames = new ArrayList<SpriteFrame*>();
 
         this->currentFrame = 0;
 
@@ -64,10 +63,6 @@
       void setLoop(bool value) {
         this->loop = value;
       }
-
-      //void jumpToFrame(uint32_t frameNum) {
-      //  this->currentFrame = frameNum;
-      //}
 
       void addFrame(Image* img, uint32_t frameNum) {
         SpriteFrame* newFrame = new SpriteFrame();
@@ -112,10 +107,6 @@
         uint32_t frameNum = this->currentFrame;
 
         SpriteFrame* frame = this->frames->get(frameNum);
-
-        if (frame == NULL) {
-          printf("frameNum: %d / %d\n", frameNum, this->frames->getLength());
-        }
 
         this->width = frame->width;
         this->height = frame->height;
