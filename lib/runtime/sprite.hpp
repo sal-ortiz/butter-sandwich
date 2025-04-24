@@ -19,30 +19,14 @@
 
     private:
 
-      BinaryTreeList<SpriteFrame*>* frames;
-      FixedTreeList<uint32_t>* framesList;
+      //BinaryTreeList<SpriteFrame*>* frames;
+      LinkedList<SpriteFrame*>* frames;
+//      FixedTreeList<uint32_t>* framesList;
 
       Position position;
       uint32_t currentFrame;
 
       bool loop;
-
-
-      void normalizeFramesList() {
-        uint32_t lastRenderedFrame = -1;
-        uint32_t framesListLen = this->framesList->getLength();
-
-        for (uint32_t idx = 0; idx < framesListLen; idx++) {
-          uint32_t curFrame = this->framesList->get(idx);
-
-          if (curFrame < framesListLen) {
-            lastRenderedFrame = this->framesList->get(idx);
-          }
-
-          this->framesList->set(idx, lastRenderedFrame);
-        }
-
-      }
 
 
     public:
@@ -52,8 +36,7 @@
 
 
       Sprite() {
-        this->frames = new BinaryTreeList<SpriteFrame*>();
-        this->framesList = new FixedTreeList<uint32_t>();
+        this->frames = new LinkedList<SpriteFrame*>();
 
         this->currentFrame = 0;
 
@@ -76,7 +59,6 @@
         }
 
         delete this->frames;
-        delete this->framesList;
       }
 
       void setLoop(bool value) {
@@ -87,37 +69,37 @@
       //  this->currentFrame = frameNum;
       //}
 
-      void addFrame(uint32_t frameNum) {
-        framesList->set(frameNum, frames->getLength() - 1);
-
-        this->normalizeFramesList();
-      }
-
       void addFrame(Image* img, uint32_t frameNum) {
-        // NOTE: The first frasme *must* begin at index 0.
-
-        if (this->frames->getLength() > 0) {
-          uint32_t curFrame = this->currentFrame;
-          uint32_t frameRef = this->framesList->get(curFrame);
-
-          SpriteFrame* frame = this->frames->get(frameRef);
-
-          this->width = frame->width;
-          this->height = frame->height;
-
-        } else {
-          this->width = img->view.w;
-          this->height = img->view.h;
-
-        }
-
         SpriteFrame* newFrame = new SpriteFrame();
 
         newFrame->setImage(img);
-        this->frames->push(newFrame);
-        this->framesList->set(frameNum, this->frames->getLength() - 1);
 
-        this->normalizeFramesList();
+        newFrame->width = img->view.w;
+        newFrame->height = img->view.h;
+
+        this->frames->set(frameNum, newFrame);
+
+        uint32_t numFrames = this->frames->getLength();
+        uint32_t curFrameNum = frameNum + 1;
+
+        SpriteFrame* curFrame = this->frames->get(curFrameNum);
+
+        while (curFrameNum < (numFrames - 1) && curFrame != NULL) {
+
+          if (curFrame == NULL) {
+            SpriteFrame* newFrame = new SpriteFrame();
+
+            newFrame->setImage(img);
+
+            newFrame->width = img->view.w;
+            newFrame->height = img->view.h;
+
+            this->frames->set(curFrameNum, newFrame);
+          }
+
+          curFrame = this->frames->get(++curFrameNum);
+        }
+
       }
 
       void render(Renderer *renderer, Position* dstPos, View* srcView, Angle* angle, Scale* scale, Color* color) {
@@ -127,30 +109,33 @@
       }
 
       SpriteFrame* nextFrame() {
-        uint32_t idx = this->currentFrame;
-        uint32_t frameRef = this->framesList->get(idx);
+        uint32_t frameNum = this->currentFrame;
 
-        SpriteFrame* frame = this->frames->get(frameRef);
+        SpriteFrame* frame = this->frames->get(frameNum);
 
-        if (this->currentFrame < (this->framesList->getLength() - 1)) {
-          this->currentFrame = (this->currentFrame + 1);
-
-        } else if (this->loop == true) {
-          this->currentFrame = this->currentFrame % (this->framesList->getLength() - 1);
-
+        if (frame == NULL) {
+          printf("frameNum: %d / %d\n", frameNum, this->frames->getLength());
         }
 
         this->width = frame->width;
         this->height = frame->height;
 
+        uint32_t numFrames = this->frames->getLength();
+
+          this->currentFrame++;
+
+        if (this->currentFrame >= numFrames) {
+          this->currentFrame = this->currentFrame % numFrames;
+        }
+
         return frame;
       }
 
       SpriteFrame* prevFrame() {
-        if (this->currentFrame == 0) {
-          this->currentFrame = this->frames->getLength() - 1;
-        } else {
+        if (this->currentFrame > 0) {
           this->currentFrame--;
+        } else {
+          this->currentFrame = this->frames->getLength() - 1;
         }
 
         return this->frames->get(this->currentFrame);
