@@ -152,6 +152,22 @@
         this->length--;
       }
 
+      static void emptyList(FixedTreeListNode<class_type>* node) {
+
+        if (node->left != NULL) {
+          FixedTreeList::emptyList(node->left);
+
+          delete node->left;
+        }
+
+        if (node->right != NULL) {
+          FixedTreeList::emptyList(node->right);
+
+          delete node->right;
+        }
+
+      }
+
 
     public:
 
@@ -160,9 +176,11 @@
         this->length = 0;
       }
 
-      //~FixedTreeList() {
-      //
-      //}
+      ~FixedTreeList() {
+        this->emptyList(this->root);
+
+        delete this->root;
+      }
 
       uint32_t getLength() {
         return this->length;
