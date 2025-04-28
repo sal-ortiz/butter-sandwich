@@ -82,27 +82,23 @@
           } else if (targIndex > curNode->index) {
             prevNode = curNode;
             curNode = curNode->right;
-
           }
 
         }
 
         uint32_t prevNodeIdx = prevNode->index;
 
+        BinaryTreeListNode<class_type>* newNode = new BinaryTreeListNode<class_type>();
+
+        newNode->index = targIndex;
+        newNode->value = value;
+
+        //newNode->left = NULL;
+        //newNode->right = NULL;
+
         if (targIndex < prevNodeIdx) {
-          BinaryTreeListNode<class_type>* newNode = new BinaryTreeListNode<class_type>();
-
-          newNode->index = targIndex;
-          newNode->value = value;
-
           prevNode->left = newNode;
-
         } else if (targIndex > prevNodeIdx) {
-          BinaryTreeListNode<class_type>* newNode = new BinaryTreeListNode<class_type>();
-
-          newNode->index = targIndex;
-          newNode->value = value;
-
           prevNode->right = newNode;
         }
 
@@ -198,6 +194,22 @@
         return node;
       }
 
+      static void emptyList(BinaryTreeListNode<class_type>* node) {
+
+        if (node->left != NULL) {
+          BinaryTreeList::emptyList(node->left);
+
+          delete node->left;
+        }
+
+        if (node->right != NULL) {
+          BinaryTreeList::emptyList(node->right);
+
+          delete node->right;
+        }
+
+      }
+
 
     public:
 
@@ -206,9 +218,11 @@
         this->length = 0;
       }
 
-      //~StaticTreeList() {
-      //
-      //}
+      ~BinaryTreeList() {
+        this->emptyList(this->root);
+
+        delete this->root;
+      }
 
       uint32_t getLength() {
         return this->length;
