@@ -190,6 +190,7 @@
 
         }
 
+        return NULL;
       }
 
       static void emptyList(BinaryTreeListNode<class_type>* node) {
