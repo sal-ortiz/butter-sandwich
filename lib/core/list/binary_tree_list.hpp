@@ -134,81 +134,94 @@
       }
 
 
-      void deleteEntry(uint32_t targIndex) override {
-        BinaryTreeListNode<class_type>* node = this->root;
 
-        this->root = this->deleteEntry(node, targIndex);
+
+
+
+
+      void deleteEntry(uint32_t targIndex) override {
+
+        //if (this->root != NULL) {
+          this->root = this->deleteEntryWorker(targIndex, this->root);
+        //}
+
+      }
+
+      BinaryTreeListNode<class_type>* deleteEntryWorker(uint32_t targIndex, BinaryTreeListNode<class_type>* curNode=NULL) {
+
+      //if (curNode == NULL) {
+      //  return NULL;
+      //}
+
+      if (targIndex < curNode->index) {
+        curNode->left = this->deleteEntryWorker(targIndex, curNode->left);
+
+        return curNode;
+
+      } else if (targIndex > curNode->index) {
+        curNode->right = this->deleteEntryWorker(targIndex, curNode->right);
+
+        return curNode;
+
+      } else {
 
         this->length--;
-      }
 
-      BinaryTreeListNode<class_type>* deleteEntry(BinaryTreeListNode<class_type>* node, uint32_t targIndex) {
+        if (!curNode->left && !curNode->right) {
+          delete curNode;
 
-        if (node == NULL) {
           return NULL;
-        }
 
-        BinaryTreeListNode<class_type>* leftChild = node->left;
-        BinaryTreeListNode<class_type>* rightChild = node->right;
+        } else if (curNode->left && !curNode->right) {
+          BinaryTreeListNode<class_type>* leftNode = curNode->left;
 
-        leftChild = this->deleteEntry(leftChild, targIndex);
-        rightChild = this->deleteEntry(rightChild, targIndex);
+          delete curNode;
+          return leftNode;
 
-        uint32_t nodeIndex = node->index;
+        } else if (!curNode->left && curNode->right) {
+          BinaryTreeListNode<class_type>* rightNode = curNode->right;
 
-        if (nodeIndex == targIndex) {
+          delete curNode;
+          return rightNode;
 
-          if (!leftChild && !rightChild) {
-            return NULL;
-          } else if (!leftChild && rightChild) {
-            return rightChild;
-          } else if (leftChild && !rightChild) {
-            return leftChild;
-          } else {
+        } else if (curNode->left && curNode->right) {
+          BinaryTreeListNode<class_type>* newNode = curNode->right;
 
-            BinaryTreeListNode<class_type>* prev = node;
-            BinaryTreeListNode<class_type>* succ = rightChild;
-
-            while (succ->left != NULL) {
-              prev = succ;
-              succ = succ->left;
-            }
-
-            BinaryTreeListNode<class_type>* newLeaf = succ->right;
-
-            prev->left = newLeaf;
-
-            succ->left = leftChild;
-            succ->right = rightChild;
-
-
-            delete node;
-
-            return succ;
+          while (newNode->left != NULL) {
+            newNode = newNode->left;
           }
 
-        } else if (nodeIndex > targIndex) {
-          node->index = nodeIndex - 1;
-        }
+          //// TODO: what happens if newNode has a right child??
+          if (newNode->right != NULL) {
+            newNode = newNode->right;
+          }
 
-        return node;
-      }
+          //newNode->right = curNode->right;
 
-      static void emptyList(BinaryTreeListNode<class_type>* node) {
+          delete curNode;
 
-        if (node->left != NULL) {
-          BinaryTreeList::emptyList(node->left);
-
-          delete node->left;
-        }
-
-        if (node->right != NULL) {
-          BinaryTreeList::emptyList(node->right);
-
-          delete node->right;
+          return newNode;
         }
 
       }
+
+    }
+
+    static void emptyList(BinaryTreeListNode<class_type>* node) {
+
+      if (node->left != NULL) {
+        BinaryTreeList::emptyList(node->left);
+
+        delete node->left;
+      }
+
+      if (node->right != NULL) {
+        BinaryTreeList::emptyList(node->right);
+
+        delete node->right;
+      }
+
+    }
 
 
     public:
@@ -219,9 +232,14 @@
       }
 
       ~BinaryTreeList() {
-        this->emptyList(this->root);
 
-        delete this->root;
+        if (this->root != NULL) {
+          this->emptyList(this->root);
+
+          delete this->root;
+        }
+
+        this->length = 0;
       }
 
       uint32_t getLength() {
@@ -252,10 +270,11 @@
         uint32_t index = this->length - 1;
 
         BinaryTreeListNode<class_type>* entry = this->getEntry(index);
+        class_type value = entry->value;
 
         this->deleteEntry(index);
 
-        return entry->value;
+        return value;
       }
 
       class_type shift() {
