@@ -3,6 +3,9 @@
 
   #define _LIST_BASE_HPP
 
+  #include <stdlib.h>
+  #include <stdint.h>
+
   #include <core/list/node/list_node.hpp>
 
 
