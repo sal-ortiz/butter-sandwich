@@ -63,6 +63,11 @@
           this->length = targIndex + 1;
 
         } else {
+
+          if (this->array[targIndex] == NULL) {
+            this->array[targIndex] = new ArrayListNode<class_type>();
+          }
+
           this->array[targIndex]->value = value;
         }
 
