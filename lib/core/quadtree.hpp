@@ -3,11 +3,13 @@
 
   #define _QUADTREE_HPP
 
-  #include <core/list/list.hpp>
+  #include <core/list/linked_list.hpp>
+  #include <core/quadtree/node.hpp>
   #include <core/quadtree/element.hpp>
 
 
-  #define _QUADTREE_MAX_DEPTH     18
+  #define _QUADTREE_MAX_DEPTH     16
+
 
   template <class class_type>
   class Quadtree {
@@ -17,77 +19,114 @@
       float width;
       float height;
 
-      uint32_t xPos;
-      uint32_t yPos;
-
-      Quadtree<class_type>* children[4];    // four cartesian quadrants
       LinkedList<QuadtreeElement<class_type>*>* elements;
+
+      QuadtreeNode<class_type>* tree;
 
       Quadtree(float width, float height) {
         this->width = width;
         this->height = height;
 
-        this->children[0] = NULL;   // upper-right
-        this->children[1] = NULL;   // upper-left
-        this->children[2] = NULL;   // lower-left
-        this->children[3] = NULL;   // lower-right
-
-        this->elements = new LinkedList<QuadtreeElement<class_type>*>();
+        this->tree = new QuadtreeNode<class_type>(0, 0, width, height);
       }
 
-      void insert(uint32_t xPos, uint32_t yPos, uint32_t width, uint32_t height, class_type val, uint16_t depth=0) {
+      ~Quadtree() {
+        this->emptyTree(this->tree);
 
-        if (depth > _QUADTREE_MAX_DEPTH) {
-          return;
+        delete this->tree;
+      }
+
+      static void emptyTree(QuadtreeNode<class_type>* node) {
+
+        for (uint8_t idx = 0; idx < 4; idx++) {
+          QuadtreeNode<class_type>* child = node->children[idx];
+
+          if (child != NULL) {
+            Quadtree::emptyTree(child);
+
+            delete child;
+          }
+
         }
 
-        QuadtreeElement<class_type>* newEl = new QuadtreeElement<class_type>();
+      }
 
-        newEl->horzPos = xPos;
-        newEl->vertPos = yPos;
-        newEl->width = width;
-        newEl->height = height;
-        newEl->value = val;
+      void insert(uint32_t xPos, uint32_t yPos, uint32_t width, uint32_t height, class_type val) {
 
-        this->elements->push(newEl);
-        //this->elements->unshift(newEl);
+        QuadtreeNode<class_type>* node = this->tree;
+        QuadtreeNode<class_type>* prev;
 
-        uint8_t quadNum = this->calculateQuadrant(xPos, yPos);
+        uint32_t depth = 0;
 
-        Quadtree<class_type>* child = this->children[quadNum];
+        while (depth < _QUADTREE_MAX_DEPTH) {
 
-        if (!child) {
-          float childWidth = this->width / 2;
-          float childHeight = this->height / 2;
+          if (node == NULL) {
+            uint8_t quadNum = Quadtree::calculateQuadrant(prev, xPos, yPos);
 
-          child = new Quadtree<class_type>(childWidth, childHeight);
+            uint32_t newNodeHorzPos = prev->xPos;
+            uint32_t newNodeVertPos = prev->yPos;
+
+            float newNodeWidth = prev->width / 2;
+            float newNodeHeight = prev->height / 2;
+
+            if (quadNum == 0) {
+              newNodeHorzPos += newNodeWidth;
+            }
+
+            if (quadNum == 2) {
+              newNodeVertPos += newNodeHeight;
+            }
+
+            if (quadNum == 3) {
+              newNodeHorzPos += newNodeWidth;
+              newNodeVertPos += newNodeHeight;
+            }
+
+            QuadtreeNode<class_type>* newNode = new QuadtreeNode<class_type>(newNodeHorzPos, newNodeVertPos, newNodeWidth, newNodeHeight);
+
+            prev->children[quadNum] = newNode;
+            node = newNode;
+          }
+
+          uint8_t quadNum = Quadtree::calculateQuadrant(node, xPos, yPos);
+
+          node->addElement(xPos, yPos, width, height, val);
+
+          prev = node;
+          node = node->children[quadNum];
+
+          depth++;
         }
 
-        if ((child->width > width && child->height > height) || this->elements->getLength() > 1) {
-          child->insert(xPos, yPos, width, height, val, depth + 1);
-        }
-
-        this->children[quadNum] = child;
       }
 
       LinkedList<QuadtreeElement<class_type>*>* query(uint32_t xPos, uint32_t yPos, uint32_t width, uint32_t height) {
-        uint8_t quadNum = this->calculateQuadrant(xPos, yPos);
 
-        Quadtree<class_type>* child = this->children[quadNum];
+        QuadtreeNode<class_type>* prev = NULL;
+        QuadtreeNode<class_type>* node = this->tree;
 
-        if (!child || child->elements->getLength() < 2) {
-          return this->elements;
+        while (node != NULL) {
+          uint8_t quadNum = Quadtree::calculateQuadrant(node, xPos, yPos);
+
+          prev = node;
+          node = node->children[quadNum];
         }
 
-        return child->query(xPos, yPos, width, height);
+        return prev->elements->clone();  // maybe clone this list?
       }
 
-      uint8_t calculateQuadrant(uint32_t xPos, uint32_t yPos) {
+      static uint8_t calculateQuadrant(QuadtreeNode<class_type>* node, uint32_t xPos, uint32_t yPos) {
         uint8_t quadNum = 1;
 
-        if (xPos > (this->width / 2)) {
+        uint32_t quadWidth = node->width / 2;
+        uint32_t quadHeight = node->height / 2;
 
-          if (yPos > (this->height / 2)) {
+        float adjHorzPos = xPos - node->xPos;
+        float adjVertPos = yPos - node->yPos;
+
+        if (adjHorzPos > quadWidth) {
+
+          if (adjVertPos > quadHeight) {
             quadNum = 3;
           } else {
             quadNum = 0;
@@ -95,7 +134,7 @@
 
         } else {
 
-          if (yPos > (this->height / 2)) {
+          if (adjVertPos > quadHeight) {
             quadNum = 2;
           }/* else {
             quadNum = 1;
