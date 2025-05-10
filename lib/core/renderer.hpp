@@ -8,7 +8,7 @@
   #include <SDL2/SDL.h>
 
   #include <core/list/linked_list.hpp>
-  #include <core/renderer/cache.hpp>
+  #include <core/renderer/queue_entry.hpp>
 
 
   class Renderer {
@@ -17,24 +17,24 @@
 
       SDL_Renderer* renderer;
 
-      LinkedList<RenderCache*>* cache;
+      LinkedList<RenderQueueEntry*>* queue;
 
-      void emptyCache() {
-        uint32_t len = this->cache->getLength();
+      void emptyQueue() {
+        uint32_t len = this->queue->getLength();
 
         for (uint32_t idx = 0; idx < len; idx++) {
-          RenderCache* entry = this->cache->shift();
+          RenderQueueEntry* entry = this->queue->shift();
 
           delete entry;
         }
 
       }
 
-      void renderCache() {
-        uint32_t len = this->cache->getLength();
+      void renderQueue() {
+        uint32_t len = this->queue->getLength();
 
         for (uint32_t idx = 0; idx < len; idx++) {
-          RenderCache* entry = this->cache->shift();
+          RenderQueueEntry* entry = this->queue->shift();
 
           SDL_SetTextureColorMod(
             entry->texture,
@@ -70,15 +70,15 @@
         uint32_t flags = SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC;
 
         this->renderer = SDL_CreateRenderer(winHandle, -1, flags);
-        this->cache = new LinkedList<RenderCache*>();
+        this->queue = new LinkedList<RenderQueueEntry*>();
       }
 
       ~Renderer() {
         SDL_DestroyRenderer(this->renderer);
 
-        this->emptyCache();
+        this->emptyQueue();
 
-        delete this->cache;
+        delete this->queue;
       }
 
       SDL_Renderer* getRenderer() {
@@ -90,7 +90,7 @@
       }
 
       void present() {
-        this->renderCache();
+        this->renderQueue();
 
         SDL_RenderPresent(this->renderer);
       }
@@ -140,9 +140,9 @@
           (uint8_t)alpha
         };
 
-        RenderCache* newEntry = new RenderCache(texture, srcRect, dstRect, center, dstAngle, color);
+        RenderQueueEntry* newEntry = new RenderQueueEntry(texture, srcRect, dstRect, center, dstAngle, color);
 
-        this->cache->push(newEntry);
+        this->queue->push(newEntry);
       }
 
   };
