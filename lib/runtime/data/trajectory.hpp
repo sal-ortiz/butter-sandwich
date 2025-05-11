@@ -34,6 +34,18 @@
         this->colorRate = new Color();
       }
 
+      ~Trajectory() {
+        delete this->position;
+        delete this->angle;
+        delete this->scale;
+        delete this->color;
+
+        delete this->positionRate;
+        delete this->angleRate;
+        delete this->scaleRate;
+        delete this->colorRate;
+      }
+
   };
 
 #endif
