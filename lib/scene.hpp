@@ -39,6 +39,8 @@
 
         this->size = new Size();
         this->view = new View();
+
+        this->quadtree = NULL;
       }
 
       ~Scene() {
@@ -70,6 +72,9 @@
         delete this->elements;
         delete this->foregrounds;
         delete this->backgrounds;
+
+        delete this->size;
+        delete this->view;
       }
 
       uint32_t getNumElements() {
@@ -313,8 +318,7 @@
         uint32_t bgsLen = this->backgrounds->getLength();
         uint32_t fgsLen = this->foregrounds->getLength();
 
-
-      for (uint32_t bgIdx = 0; bgIdx < bgsLen; bgIdx++) {
+        for (uint32_t bgIdx = 0; bgIdx < bgsLen; bgIdx++) {
           SceneBase* bg = this->backgrounds->get(bgIdx);
 
           if (bg->isActive) {
