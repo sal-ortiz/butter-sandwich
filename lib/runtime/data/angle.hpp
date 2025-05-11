@@ -23,6 +23,10 @@
         this->yaw = 0;
       }
 
+      ~Angle() {
+        delete this->center;
+      }
+
   };
 
 #endif
