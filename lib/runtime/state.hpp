@@ -32,6 +32,10 @@
       }
 
       ~State() {
+        // TODO: It's possible that not all of the value stored here
+        //       are pointers. If this is the case, then trying to
+        //       delete them here might break. Perhaps these values
+        //       should be deleted by the lib that created them.
         List<void*>* dataList = this->data->getValues();
         uint32_t dataListLen = dataList->getLength();
 
