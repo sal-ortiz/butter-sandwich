@@ -16,13 +16,13 @@ fi
 INP_FILE=$TEST_PATH/${1}_test.cpp
 OUTP_FILE=$TEST_PATH/test.o
 
-g++ $INP_FILE -o $OUTP_FILE -Og -std=c++17 -lSDL2 -lSDL2_image -I../lib
-#g++ $ROOT_PATH/src/main.cpp -o $ROOT_PATH/main -std=c++17 -lSDL2 -lSDL2_image
+g++ $INP_FILE -o $OUTP_FILE -Og -g3 -std=c++17 -lSDL2 -lSDL2_image -I../lib
+#g++ $ROOT_PATH/src/main.cpp -o -g3 $ROOT_PATH/main -std=c++17 -lSDL2 -lSDL2_image -I../lib
 
 if [ $? == 0 ]; then
   $TEST_PATH/test.o
 
-  #valgrind --leak-check=full $TEST_PATH/test.o
+  valgrind --leak-check=full --track-origins=yes $TEST_PATH/test.o
 
   rm -f $TEST_PATH/test.o
 
