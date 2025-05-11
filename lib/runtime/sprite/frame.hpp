@@ -28,6 +28,10 @@
         this->image = NULL;
       }
 
+      ~SpriteFrame() {
+        delete this->image;
+      }
+
       void render(Renderer* renderer, Position* dstPos, View* srcView, Angle* angle, Scale* scale, Color* color) {
 
         if (this->image) {

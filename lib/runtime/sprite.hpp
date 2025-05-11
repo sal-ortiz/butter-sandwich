@@ -22,7 +22,7 @@
       LinkedList<SpriteFrame*>* frames;
       //ArrayList<SpriteFrame*>* frames;
 
-      Position position;
+      Position* position;
       uint32_t currentFrame;
 
       bool loop;
@@ -37,10 +37,12 @@
         this->frames = new LinkedList<SpriteFrame*>();
         //this->frames = new ArrayList<SpriteFrame*>();
 
+        this->position = new Position();
+
         this->currentFrame = 0;
 
-        this->position.horz = 0;
-        this->position.vert = 0;
+        this->position->horz = 0;
+        this->position->vert = 0;
 
         this->loop = true;
 
@@ -58,6 +60,7 @@
         }
 
         delete this->frames;
+        delete this->position;
       }
 
       void setLoop(bool value) {
