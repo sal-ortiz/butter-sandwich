@@ -31,24 +31,7 @@
       }
 
       ~Quadtree() {
-        this->emptyTree(this->tree);
-
         delete this->tree;
-      }
-
-      static void emptyTree(QuadtreeNode<class_type>* node) {
-
-        for (uint8_t idx = 0; idx < 4; idx++) {
-          QuadtreeNode<class_type>* child = node->children[idx];
-
-          if (child != NULL) {
-            Quadtree::emptyTree(child);
-
-            delete child;
-          }
-
-        }
-
       }
 
       void insert(uint32_t xPos, uint32_t yPos, uint32_t width, uint32_t height, class_type val) {

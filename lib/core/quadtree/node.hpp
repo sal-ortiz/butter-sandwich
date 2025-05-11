@@ -45,6 +45,11 @@
         }
 
         delete this->elements;
+
+        delete this->children[0];
+        delete this->children[1];
+        delete this->children[2];
+        delete this->children[3];
       }
 
       void addElement(uint32_t xPos, uint32_t yPos, uint32_t width, uint32_t height, class_type val) {
