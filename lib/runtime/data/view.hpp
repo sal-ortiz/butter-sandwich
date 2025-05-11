@@ -18,6 +18,11 @@
         this->size = new Size();
       }
 
+      ~View() {
+        delete this->position;
+        delete this->size;
+      }
+
   };
 
 #endif
