@@ -56,7 +56,6 @@
       }
 
       ~SceneBase() {
-        // TODO: delete this->sprites and every Sprite object
         LinkedList<Sprite*>* sprites = this->sprites->getValues();
 
         uint32_t numSprites = sprites->getLength();
