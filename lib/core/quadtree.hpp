@@ -19,8 +19,6 @@
       float width;
       float height;
 
-      LinkedList<QuadtreeElement<class_type>*>* elements;
-
       QuadtreeNode<class_type>* tree;
 
       Quadtree(float width, float height) {
