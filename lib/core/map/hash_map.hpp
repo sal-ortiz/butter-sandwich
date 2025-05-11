@@ -10,7 +10,8 @@
   #include <core/map/map.hpp>
   #include <core/map/node/hash_map_node.hpp>
   #include <core/list/list.hpp>
-  #include <core/list/array_list.hpp>
+  //#include <core/list/array_list.hpp>
+  #include <core/list/fixed_tree_list.hpp>
   #include <core/list/linked_list.hpp>
 
   #define HASHMAP_ARRAY_LEN     128
@@ -24,7 +25,12 @@
 
     private:
 
-      ArrayList<LinkedList<HashMapNode<class_type>*>*>* data;
+      // TODO: We're probably better off using an ArrayList instead of a
+      //       FixedTreeList here to facilitate random access. Unfortunately,
+      //       there appears to be a bug in ArrayList that keeps triggering
+      //       a "realloc(): invalid old size" error
+      //ArrayList<LinkedList<HashMapNode<class_type>*>*>* data;
+      FixedTreeList<LinkedList<HashMapNode<class_type>*>*>* data;
 
       static uint32_t hashCode(const char* key) {
         uint32_t outpValue = 7;
@@ -117,8 +123,11 @@
       }
 
       void rebase(uint32_t newLen) {
-        ArrayList<LinkedList<HashMapNode<class_type>*>*>* oldData = this->data;
-        ArrayList<LinkedList<HashMapNode<class_type>*>*>* newData = new ArrayList<LinkedList<HashMapNode<class_type>*>*>();
+        //ArrayList<LinkedList<HashMapNode<class_type>*>*>* oldData = this->data;
+        //ArrayList<LinkedList<HashMapNode<class_type>*>*>* newData = new ArrayList<LinkedList<HashMapNode<class_type>*>*>();
+        FixedTreeList<LinkedList<HashMapNode<class_type>*>*>* oldData = this->data;
+        FixedTreeList<LinkedList<HashMapNode<class_type>*>*>* newData = new FixedTreeList<LinkedList<HashMapNode<class_type>*>*>();
+
 
         newData->set(newLen, NULL);
 
@@ -186,7 +195,8 @@
     public:
 
       HashMap() {
-        this->data = new ArrayList<LinkedList<HashMapNode<class_type>*>*>();
+        //this->data = new ArrayList<LinkedList<HashMapNode<class_type>*>*>();
+        this->data = new FixedTreeList<LinkedList<HashMapNode<class_type>*>*>();
 
         this->data->set(HASHMAP_ARRAY_LEN - 1, NULL);
 
