@@ -300,6 +300,10 @@
 
           }
 
+          if (hitList != NULL) {
+            delete hitList;
+          }
+
         }
 
       }
