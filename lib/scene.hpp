@@ -42,6 +42,9 @@
       }
 
       ~Scene() {
+        // TODO: It might make more sense to have the
+        //       code that created these elements delete
+        //       them instead of doing it here.
         uint32_t elsLen = this->elements->getLength();
         uint32_t bgsLen = this->backgrounds->getLength();
         uint32_t fgsLen = this->foregrounds->getLength();

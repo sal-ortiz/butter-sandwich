@@ -3,6 +3,7 @@
 
   #define _SCENE_BASE_HPP
 
+  #include <core/list/linked_list.hpp>
   #include <core/map/hash_map.hpp>
   #include <core/renderer.hpp>
   #include <runtime/base.hpp>
@@ -40,6 +41,7 @@
 
       SceneBase() {
         //this->evalCallback = NULL;
+
         this->sprites = new HashMap<Sprite*>();
         this->state = new State();
 
@@ -51,6 +53,22 @@
         this->state->set("trajectory", new Trajectory());
 
         this->state->set("absolute_position", new Position());
+      }
+
+      ~SceneBase() {
+        // TODO: delete this->sprites and every Sprite object
+        LinkedList<Sprite*>* sprites = this->sprites->getValues();
+
+        uint32_t numSprites = sprites->getLength();
+
+        for (uint32_t idx = 0; idx < numSprites; idx++) {
+          Sprite* sprite = sprites->get(idx);
+
+          delete sprite;
+        }
+
+        delete this->sprites;
+        delete this->state;
       }
 
       void addSprite(const char* actionId, Sprite* sprite) {
