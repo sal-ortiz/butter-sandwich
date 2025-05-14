@@ -1,4 +1,6 @@
 
+#include <stdint.h>
+
 #include "../lib/core/quadtree.hpp"
 
 
@@ -11,10 +13,10 @@ int main(int argc, char* argv[]) {
   tree->insert(101, 100, 10, 10, "two");
   tree->insert(101, 100, 10, 10, "three");
   tree->insert(100, 100, 10, 10, "four");
-//  tree->insert(101, 100, 10, 10, "five");
+  tree->insert(101, 100, 10, 10, "five");
   tree->insert(111, 400, 10, 10, "six");
   tree->insert(121, 401, 10, 10, "seven");
-//  tree->insert(666, 100, 10, 10, "eight');
+  tree->insert(666, 100, 10, 10, "eight");
   tree->insert(322, 120, 10, 10, "nine");
   tree->insert(333, 130, 10, 10, "ten");
   tree->insert(676, 200, 10, 10, "eleven");
@@ -34,10 +36,10 @@ int main(int argc, char* argv[]) {
   //printf("\n\n\n================[ OUTPUT ]======================");
   //LinkedList<QuadtreeElement<const char*>*>* list = tree->query(320, 115, 10, 10);
   //LinkedList<QuadtreeElement<const char*>*>* list = tree->query(674, 195, 20, 20);
-  //LinkedList<QuadtreeElement<const char*>*>* list = tree->query(100, 100, 20, 20);
+  LinkedList<QuadtreeElement<const char*>*>* list = tree->query(100, 100, 20, 20);
   //LinkedList<QuadtreeElement<const char*>*>* list = tree->query(90, 90, 20, 20);
   //LinkedList<QuadtreeElement<const char*>*>* list = tree->query(166, 100, 10, 10);
-  LinkedList<QuadtreeElement<const char*>*>* list = tree->query(50, 50, 10, 10);
+  //LinkedList<QuadtreeElement<const char*>*>* list = tree->query(50, 50, 10, 10);
   //LinkedList<QuadtreeElement<const char*>*>* list = tree->query(675, 199, 5, 5);
 
   //for (uint16_t horzOffset = 0; horzOffset < 1000; horzOffset++) {
@@ -52,12 +54,30 @@ int main(int argc, char* argv[]) {
   //printf("\n\n****** SHOULD RETURN ENTRY *****");
   //printf("\npopdList->getLength(): %d\n", list->getLength());
 
-  for (uint32_t idx = 0; idx < list->getLength(); idx++) {
-    QuadtreeElement<const char*>* entry = list->get(idx);
+  if (list != NULL) {
+    uint32_t listLen = list->getLength();
 
-    //printf("\n[%d]: %d", idx, entry->value);
-    printf("\n[%d]: (%d, %d): %s", idx, entry->horzPos, entry->vertPos, entry->value);
+    for (uint32_t idx = 0; idx < listLen; idx++) {
+      QuadtreeElement<const char*>* entry = list->get(idx);
+
+      const char* str = entry->value;
+
+      printf("[%d]: (%d, %d): %s\n", idx, entry->horzPos, entry->vertPos, str);
+
+      //delete str;
+    }
+
+  } else {
+//    printf("\nTHE LIST IS EMPTY\n");
   }
 
+
+
+
+
+
   printf("\n");
+
+  delete list;
+  delete tree;
 }
