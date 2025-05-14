@@ -66,6 +66,14 @@
           delete sprite;
         }
 
+        delete (Position*)this->state->get("position");
+        delete (Angle*)this->state->get("angle");
+        delete (Scale*)this->state->get("scale");
+        delete (View*)this->state->get("view");
+        delete (Color*)this->state->get("color");
+        delete (Trajectory*)this->state->get("trajectory");
+        delete (Position*)this->state->get("absolute_position");
+
         delete this->sprites;
         delete this->state;
       }
