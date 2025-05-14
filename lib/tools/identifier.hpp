@@ -9,7 +9,7 @@
 
   static uint32_t ID_TOOLS_MAGIC_NUMBER = 1;
 
-  class IdentifierTools {
+  class Identifier {
 
     public:
 

@@ -25,7 +25,7 @@
     public:
 
       RuntimeBase() {
-        this->intIdentifier = IdentifierTools::generate();
+        this->intIdentifier = Identifier::generate();
 
         sprintf(this->strIdentifier, "%u", this->intIdentifier);
       }
