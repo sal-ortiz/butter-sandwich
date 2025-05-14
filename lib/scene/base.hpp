@@ -148,6 +148,8 @@
         Hook::generateIdentifier(hookId, "hook", charId, "onEvaluate", "action");
 
         Hook::executeCallback(hookId, this, scene);
+
+        delete hookId;
       }
 
   };

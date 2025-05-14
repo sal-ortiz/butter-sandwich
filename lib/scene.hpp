@@ -297,6 +297,7 @@
 
                   Hook::executeCallback(hookId, (void*)this);
 
+                  delete hookId;
                 }
 
               }
