@@ -16,6 +16,8 @@
   #include <scene/background.hpp>
   #include <scene/element.hpp>
 
+  #define COLLISION_EVAL_FRAME_INTERVAL   3
+
 
   class Scene: public SceneBase {
 
@@ -26,6 +28,9 @@
       LinkedList<SceneBase*>* foregrounds;
 
       Quadtree<SceneBase*>* quadtree;
+
+      uint8_t collisionFrameCount;
+
 
     public:
 
@@ -41,6 +46,8 @@
         this->view = new View();
 
         this->quadtree = NULL;
+
+        this->collisionFrameCount = 0;
       }
 
       ~Scene() {
@@ -344,8 +351,13 @@
 
         }
 
-        this->populateCollision();
-        this->evaluateCollision();
+        uint8_t collFrameInterval = COLLISION_EVAL_FRAME_INTERVAL;
+        uint8_t collFrameCount = this->collisionFrameCount++;
+
+        if ((collFrameCount % collFrameInterval) == 0) {
+          this->populateCollision();
+          this->evaluateCollision();
+        }
 
         SceneBase::evaluate(this);
       }
