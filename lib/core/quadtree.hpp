@@ -86,7 +86,7 @@
         QuadtreeNode<class_type>* prev = NULL;
         QuadtreeNode<class_type>* node = this->tree;
 
-        while (node != NULL) {
+        while (node != NULL && node->elements->getLength() > 1) {
           uint8_t quadNum = Quadtree::calculateQuadrant(node, xPos, yPos);
 
           prev = node;
