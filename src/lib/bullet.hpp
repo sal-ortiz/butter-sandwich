@@ -9,6 +9,7 @@
   #include <runtime/data/angle.hpp>
   #include <runtime/data/trajectory.hpp>
   #include <runtime/data/view.hpp>
+  #include <tools/logger.hpp>
   #include <scene/element.hpp>
   #include <scene.hpp>
 

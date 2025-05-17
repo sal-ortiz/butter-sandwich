@@ -13,6 +13,7 @@
   #include <runtime/data/angle.hpp>
   #include <runtime/data/scale.hpp>
   #include <runtime/data/view.hpp>
+  #include <tools/logger.hpp>
   #include <scene.hpp>
 
 
@@ -104,7 +105,8 @@
 
       static void* collisionCallback(SceneBase* tag, Player* player, Scene* scene) {
 
-        printf("\n[%u] PLAYER COLLISION!!", SDL_GetTicks());
+        //printf("\n[%u] PLAYER COLLISION!!", SDL_GetTicks());
+        Logger::print("PLAYER COLLISION!!");
         //printf("\ntarg->name: %s", targ->name);
         //printf("\nplayer->name: %s", player->name);
         //printf("\nscene->size->horz / scene->size->vert: %d / %d", scene->size->horz, scene->size->vert);

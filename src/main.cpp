@@ -14,6 +14,7 @@
 #include <runtime/data/angle.hpp>
 #include <runtime/data/position.hpp>
 #include <scene.hpp>
+#include <tools/logger.hpp>
 
 #include "./lib/bullet.hpp"
 #include "./lib/background00.hpp"
@@ -36,13 +37,15 @@ const uint32_t SCREEN_HEIGHT = 800;
 
 //void* quitCallback(LinkedList<void*>* inp) {
 void* quitCallback(Application* app) {
-  printf("\n[%u] exiting application\n", SDL_GetTicks());
+  //printf("\n[%u] exiting application\n", SDL_GetTicks());
+  Logger::print("exiting application");
 
   return (void*)NULL;
 }
 
 void* closedCallback(Window* win, uint32_t horzPos, uint32_t vertPos) {
-  printf("\n[%u] window closed", SDL_GetTicks());
+  //printf("\n[%u] window closed", SDL_GetTicks());
+  Logger::print("window closed");
 
   return (void*)NULL;
 }
@@ -157,7 +160,8 @@ int main(int argc, char *argv[]) {
   uint32_t framePasses = 0;
   uint32_t frameEvalDelay = 250;
 
-  printf("\n[%u] load time: %ums\n", SDL_GetTicks(), SDL_GetTicks() - loadStartTimestamp);
+  //printf("\n[%u] load time: %ums\n", SDL_GetTicks(), SDL_GetTicks() - loadStartTimestamp);
+  Logger::print("load time: %ums", SDL_GetTicks(), SDL_GetTicks() - loadStartTimestamp);
 
   while (app->isActive) {
     frameStart = SDL_GetTicks();
@@ -176,7 +180,8 @@ int main(int argc, char *argv[]) {
     if (framePasses % frameEvalDelay == 0) {
       float avgFrameTime = (float)frameElapsed / (float)framePasses;
 
-      printf("\n[%u] average frame time: %.2fms", SDL_GetTicks(), avgFrameTime);
+      //printf("\n[%u] average frame time: %.2fms", SDL_GetTicks(), avgFrameTime);
+      Logger::print("average frame time: %.2fms", SDL_GetTicks(), avgFrameTime);
 
       frameElapsed = 0;
       framePasses = 0;

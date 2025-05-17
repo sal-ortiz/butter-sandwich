@@ -15,6 +15,7 @@
   #include <runtime/data/angle.hpp>
   #include <runtime/data/scale.hpp>
   #include <runtime/data/view.hpp>
+  #include <tools/logger.hpp>
   #include <scene.hpp>
 
 
