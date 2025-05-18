@@ -16,7 +16,7 @@
 
     private:
 
-      LinkedListNode<class_type>* root;
+      LinkedListNode<class_type>* head;
       LinkedListNode<class_type>* tail;
       LinkedListNode<class_type>* indexNode;
 
@@ -48,7 +48,7 @@
           direction = 1;
           curIndex = 0;
 
-          node = this->root;
+          node = this->head;
 
         } else if (distFromIndex <= distFromRoot && distFromIndex <= distFromTail) {
           curIndex = this->index;
@@ -85,7 +85,7 @@
         LinkedListNode<class_type>* node;
 
         if (targIndex == 0) {
-          this->root->value = value;
+          this->head->value = value;
 
           if (this->length == 0) {
             this->length++;
@@ -120,7 +120,7 @@
           direction = 1;
           curIndex = 0;
 
-          node = this->root;
+          node = this->head;
 
         } else if (distFromIndex <= distFromRoot && distFromIndex <= distFromTail) {
           curIndex = this->index;
@@ -185,7 +185,7 @@
         newNode->next = node;
 
         if (targIndex == 0) {
-          this->root = newNode;
+          this->head = newNode;
         }
 
         newNode->value = value;
@@ -205,7 +205,7 @@
         }
 
         if (this->length < 2) {
-          this->root->value = NULL;
+          this->head->value = NULL;
           this->length = 0;
 
           return;
@@ -227,7 +227,7 @@
         }
 
         if (targIndex == 0) {
-          this->root = node->next;
+          this->head = node->next;
         }
 
         if (targIndex == this->length - 1) {
@@ -252,13 +252,13 @@
         this->length = 0;
         this->index = 0;
 
-        this->root = new LinkedListNode<class_type>();
-        this->tail = this->root;
-        this->indexNode = this->root;
+        this->head = new LinkedListNode<class_type>();
+        this->tail = this->head;
+        this->indexNode = this->head;
       }
 
       ~LinkedList() {
-        LinkedListNode<class_type>* node = this->root;
+        LinkedListNode<class_type>* node = this->head;
 
         while (node != NULL) {
           LinkedListNode<class_type>* next = node->next;
@@ -361,8 +361,8 @@
       }
 
       void concat(LinkedList<class_type>* list) {
-        this->tail->next = list->root;
-        list->root->prev = this->tail;
+        this->tail->next = list->head;
+        list->head->prev = this->tail;
 
         this->tail = list->tail;
 
