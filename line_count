@@ -2,4 +2,8 @@
 
 #git ls-files | xargs wc -l
 
-cat $( git ls-files *.hpp *.cpp ) | grep . | wc -l
+NUM_LINES=$( cat $( git ls-files *.hpp *.cpp | grep lib | grep -v src ) | grep . | wc -l )
+#git ls-files *.hpp *.cpp | xargs wc -l
+#git ls-files *.hpp *.cpp | grep lib | grep -v src | xargs wc -l
+
+echo $NUM_LINES lines of code.
