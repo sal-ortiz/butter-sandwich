@@ -245,6 +245,73 @@
         this->length--;
       }
 
+      void sortList(int8_t(*func)(class_type, class_type), uint32_t startIdx, uint32_t endIdx, uint32_t depth=0) {
+        // merge sort
+        uint32_t leftStartIdx = startIdx;
+        //uint32_t leftEndIdx = startIdx + floor(endIdx / 2);
+        uint32_t leftEndIdx = startIdx + floor((endIdx - startIdx) / 2);
+
+        uint32_t rightStartIdx = leftEndIdx + 1;
+        uint32_t rightEndIdx = endIdx;
+
+        if ((leftEndIdx - leftStartIdx) >= 1) {
+          this->sortList(func, leftStartIdx, leftEndIdx, depth+1);
+        }
+
+        if ((rightEndIdx - rightStartIdx) >= 1) {
+          this->sortList(func, rightStartIdx, rightEndIdx, depth+1);
+        }
+
+        LinkedListNode<class_type>* leftStart = this->getEntry(leftStartIdx);
+        LinkedListNode<class_type>* rightStart = this->getEntry(rightStartIdx);
+
+        int8_t cmp = func(leftStart->value, rightStart->value);
+
+        if (cmp > 0) {
+
+          LinkedListNode<class_type>* leftEnd = this->getEntry(leftEndIdx);
+          LinkedListNode<class_type>* rightEnd = this->getEntry(rightEndIdx);
+
+          rightStart->prev = leftStart->prev;
+          leftStart->prev = rightEnd;
+
+          leftEnd->next = rightEnd->next;
+          rightEnd->next = leftStart;
+
+
+          if (rightStart->prev) {
+            rightStart->prev->next = rightStart;
+          }
+
+          if (leftEnd->next) {
+            leftEnd->next->prev = leftEnd;
+          }
+
+
+          if (rightEnd->next) {
+            rightEnd->next->prev = rightEnd;
+          }
+
+          if (leftStart->prev) {
+            leftStart->prev->next = leftStart;
+          }
+
+
+
+          if (startIdx == 0) {
+            this->head = rightStart;
+          }
+
+          if (endIdx == (this->length - 1)) {
+            this->tail = leftEnd;
+          }
+
+          this->indexNode = this->head;
+          this->index = 0;
+        }
+
+      }
+
 
     public:
 
@@ -367,6 +434,13 @@
         this->tail = list->tail;
 
         this->length += list->getLength();
+      }
+
+      void sort(int8_t(*func)(class_type, class_type)) {
+        uint32_t start = 0;
+        uint32_t end = this->length - 1;
+
+        this->sortList(func, start, end);
       }
 
   };
