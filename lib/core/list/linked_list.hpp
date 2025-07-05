@@ -413,12 +413,12 @@
         return outpValue;
       }
 
-      LinkedList<class_type>* clone() {
+      LinkedList<class_type>* clone(uint32_t startIdx=0, uint32_t len=0) {
         LinkedList<class_type>* newList = new LinkedList<class_type>();
 
-        uint32_t listLen = this->getLength();
+        uint32_t listLen = len || this->getLength();
 
-        for (uint32_t idx = 0; idx < listLen; idx++) {
+        for (uint32_t idx = startIdx; idx < listLen; idx++) {
           class_type val = this->get(idx);
 
           newList->push(val);
