@@ -245,7 +245,7 @@
         this->length--;
       }
 
-      void sortList(int8_t(*func)(class_type, class_type), uint32_t startIdx, uint32_t endIdx, uint32_t depth=0) {
+      void sortList(int32_t(*func)(class_type, class_type), uint32_t startIdx, uint32_t endIdx, uint32_t depth=0) {
         // merge sort
         uint32_t leftStartIdx = startIdx;
         //uint32_t leftEndIdx = startIdx + floor(endIdx / 2);
@@ -446,7 +446,7 @@
         this->length += list->getLength();
       }
 
-      void sort(int8_t(*func)(class_type, class_type)) {
+      void sort(int32_t(*func)(class_type, class_type)) {
         uint32_t start = 0;
         uint32_t end = this->length - 1;
 
