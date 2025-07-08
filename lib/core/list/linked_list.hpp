@@ -265,7 +265,7 @@
         LinkedListNode<class_type>* leftStart = this->getEntry(leftStartIdx);
         LinkedListNode<class_type>* rightStart = this->getEntry(rightStartIdx);
 
-        int8_t cmp = func(leftStart->value, rightStart->value);
+        int32_t cmp = func(leftStart->value, rightStart->value);
 
         if (cmp > 0) {
 
@@ -278,6 +278,10 @@
           leftEnd->next = rightEnd->next;
           rightEnd->next = leftStart;
 
+          //leftStart = this->getEntry(leftStartIdx);
+          //leftEnd = this->getEntry(leftEndIdx);
+          //rightStart = this->getEntry(rightStartIdx);
+          //rightEnd = this->getEntry(rightEndIdx);
 
           if (rightStart->prev) {
             rightStart->prev->next = rightStart;
@@ -287,16 +291,13 @@
             leftEnd->next->prev = leftEnd;
           }
 
+          //if (rightEnd->next) {
+          //  rightEnd->next->prev = rightEnd;
+          //}
 
-          if (rightEnd->next) {
-            rightEnd->next->prev = rightEnd;
-          }
-
-          if (leftStart->prev) {
-            leftStart->prev->next = leftStart;
-          }
-
-
+          //if (leftStart->prev) {
+          //  leftStart->prev->next = leftStart;
+          //}
 
           if (startIdx == 0) {
             this->head = rightStart;
@@ -308,6 +309,15 @@
 
           this->indexNode = this->head;
           this->index = 0;
+
+//          if ((leftEndIdx - leftStartIdx) >= 1) {
+//            this->sortList(func, leftStartIdx, leftEndIdx, depth+1);
+//          }
+//
+//          if ((rightEndIdx - rightStartIdx) >= 1) {
+//            this->sortList(func, rightStartIdx, rightEndIdx, depth+1);
+//          }
+
         }
 
       }
