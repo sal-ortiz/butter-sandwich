@@ -244,7 +244,7 @@
       //  this->deleteEntry(key);
       //}
 
-      LinkedList<const char*>* getKeys() {
+      LinkedList<const char*>* getKeys(int32_t(*func)(const char*, const char*)=NULL) {
         LinkedList<const char*>* outp = new LinkedList<const char*>();
         uint32_t aryLen = this->data->getLength();;
 
@@ -270,10 +270,14 @@
 
         }
 
+        if (func != NULL) {
+          outp->sort(func);
+        }
+
         return outp;
       }
 
-      LinkedList<class_type>* getValues() {
+      LinkedList<class_type>* getValues(int32_t(*func)(class_type, class_type)=NULL) {
         LinkedList<class_type>* outp = new LinkedList<class_type>();
         uint32_t aryLen = this->data->getLength();;
 
@@ -294,6 +298,10 @@
             outp->push(value);
           }
 
+        }
+
+        if (func != NULL) {
+          outp->sort(func);
         }
 
         return outp;
