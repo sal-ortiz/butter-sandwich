@@ -23,9 +23,14 @@
 
     private:
 
-      LinkedList<SceneBase*>* elements;
-      LinkedList<SceneBase*>* backgrounds;
-      LinkedList<SceneBase*>* foregrounds;
+      LinkedList<SceneBase*>* elementsList;
+      LinkedList<SceneBase*>* backgroundsList;
+      LinkedList<SceneBase*>* foregroundsList;
+
+
+      HashMap<SceneBase*>* elements;
+      HashMap<SceneBase*>* backgrounds;
+      HashMap<SceneBase*>* foregrounds;
 
       Quadtree<SceneBase*>* quadtree;
 
@@ -38,9 +43,14 @@
       View* view;
 
       Scene() {
-        this->elements = new LinkedList<SceneBase*>();
-        this->backgrounds = new LinkedList<SceneBase*>();
-        this->foregrounds = new LinkedList<SceneBase*>();
+        this->elements = new HashMap<SceneBase*>();
+        this->backgrounds = new HashMap<SceneBase*>();
+        this->foregrounds = new HashMap<SceneBase*>();
+
+        this->elementsList = this->elements->getValues();
+        this->backgroundsList = this->backgrounds->getValues();
+        this->foregroundsList = this->foregrounds->getValues();
+
 
         this->size = new Size();
         this->view = new View();
@@ -54,24 +64,28 @@
         // TODO: It might make more sense to have the
         //       code that created these elements delete
         //       them instead of doing it here.
-        uint32_t elsLen = this->elements->getLength();
-        uint32_t bgsLen = this->backgrounds->getLength();
-        uint32_t fgsLen = this->foregrounds->getLength();
+        LinkedList<SceneBase*>* els = this->elementsList;
+        LinkedList<SceneBase*>* bgs = this->backgroundsList;
+        LinkedList<SceneBase*>* fgs = this->foregroundsList;
+
+        uint32_t elsLen = els->getLength();
+        uint32_t bgsLen = bgs->getLength();
+        uint32_t fgsLen = fgs->getLength();
 
         for (uint32_t elIdx = 0; elIdx < elsLen; elIdx++) {
-          SceneBase* el = this->elements->get(elIdx);
+          SceneBase* el = els->get(elIdx);
 
           delete el;
         }
 
         for (uint32_t fgIdx = 0; fgIdx < fgsLen; fgIdx++) {
-          SceneBase* fg = this->foregrounds->get(fgIdx);
+          SceneBase* fg = fgs->get(fgIdx);
 
           delete fg;
         }
 
         for (uint32_t bgIdx = 0; bgIdx < bgsLen; bgIdx++) {
-          SceneBase* bg = this->backgrounds->get(bgIdx);
+          SceneBase* bg = bgs->get(bgIdx);
 
           delete bg;
         }
@@ -85,76 +99,36 @@
       }
 
       uint32_t getNumElements() {
-        return this->elements->getLength();
+        LinkedList<SceneBase*>* els = this->elements->getValues();
+
+        return els->getLength();
       }
 
       void addElement(const char* name, SceneBase* el) {
-        el->setName(name);
-
-        this->elements->push(el);
+        this->elements->set(name, el);
+        this->elementsList = this->elements->getValues();
       }
 
       void addBackground(const char* name, SceneBase* el) {
-        el->setName(name);
-
-        this->backgrounds->push(el);
+        this->backgrounds->set(name, el);
+        this->backgroundsList = this->backgrounds->getValues();
       }
 
       void addForeground(const char* name, SceneBase* el) {
-        el->setName(name);
-
-        this->foregrounds->push(el);
+        this->foregrounds->set(name, el);
+        this->foregroundsList = this->foregrounds->getValues();
       }
 
       SceneBase* getElement(const char* name) {
-        uint32_t elsLen = this->elements->getLength();
-
-        for (uint32_t elIdx = 0; elIdx < elsLen; elIdx++) {
-          SceneBase* element = this->elements->get(elIdx);
-
-          int32_t cmp = strcmp(element->getName(), name);
-
-          if (cmp == 0) {
-            return element;
-          }
-
-        }
-
-        return (SceneBase*)NULL;
+        return this->elements->get(name);
       }
 
       SceneBase* getBackground(const char* name) {
-        uint32_t len = this->backgrounds->getLength();
-
-        for (uint32_t idx = 0; idx < len; idx++) {
-          SceneBase* el = this->backgrounds->get(idx);
-
-          int32_t cmp = strcmp(el->getName(), name);
-
-          if (cmp == 0) {
-            return el;
-          }
-
-        }
-
-        return (SceneBase*)NULL;
+        return this->backgrounds->get(name);
       }
 
       SceneBase* getForeground(const char* name) {
-        uint32_t len = this->foregrounds->getLength();
-
-        for (uint32_t idx = 0; idx < len; idx++) {
-          SceneBase* el = this->foregrounds->get(idx);
-
-          int32_t cmp = strcmp(el->getName(), name);
-
-          if (cmp == 0) {
-            return el;
-          }
-
-        }
-
-        return (SceneBase*)NULL;
+        return this->foregrounds->get(name);
       }
 
       void populateCollision() {
@@ -165,10 +139,12 @@
 
         this->quadtree = new Quadtree<SceneBase*>(sceneWidth, sceneHeight);
 
-        uint32_t numEls = this->elements->getLength();
+        LinkedList<SceneBase*>* els = this->elementsList;
+
+        uint32_t numEls = els->getLength();
 
         for (uint32_t elIdx = 0; elIdx < numEls; elIdx++) {
-          SceneBase* el = this->elements->get(elIdx);
+          SceneBase* el = els->get(elIdx);
 
           if (el->isActive == true) {
             Position* elPos = (Position*)el->state->get("absolute_position");
@@ -182,10 +158,11 @@
       }
 
       void evaluateCollision() {
-        uint32_t numEls = elements->getLength();
+        LinkedList<SceneBase*>* els = this->elementsList;
+        uint32_t numEls = els->getLength();
 
         for (uint32_t baseElsIdx = 0; baseElsIdx < numEls - 1; baseElsIdx++) {
-          SceneBase* el = this->elements->get(baseElsIdx);
+          SceneBase* el = els->get(baseElsIdx);
           Position* pos = (Position*)el->state->get("absolute_position");
 
           if (!el->isActive) {
@@ -195,6 +172,7 @@
           LinkedList<QuadtreeElement<SceneBase*>*>* hitList = this->quadtree->query(pos->horz, pos->vert, el->width, el->height);
 
           if (hitList && hitList->getLength() > 1) {
+
 
             for (uint32_t hitIdx = 0; hitIdx < hitList->getLength(); hitIdx++) {
               QuadtreeElement<SceneBase*>* hitEntry = hitList->get(hitIdx);
@@ -320,12 +298,17 @@
       }
 
       void evaluate() {
-        uint32_t elsLen = this->elements->getLength();
-        uint32_t bgsLen = this->backgrounds->getLength();
-        uint32_t fgsLen = this->foregrounds->getLength();
+        LinkedList<SceneBase*>* els = this->elementsList;
+        LinkedList<SceneBase*>* bgs = this->backgroundsList;
+        LinkedList<SceneBase*>* fgs = this->foregroundsList;
+
+
+        uint32_t elsLen = els->getLength();
+        uint32_t bgsLen = bgs->getLength();
+        uint32_t fgsLen = fgs->getLength();
 
         for (uint32_t bgIdx = 0; bgIdx < bgsLen; bgIdx++) {
-          SceneBase* bg = this->backgrounds->get(bgIdx);
+          SceneBase* bg = bgs->get(bgIdx);
 
           if (bg->isActive) {
             bg->evaluate(this);
@@ -334,7 +317,7 @@
         }
 
         for (uint32_t elIdx = 0; elIdx < elsLen; elIdx++) {
-          SceneBase* el = this->elements->get(elIdx);
+          SceneBase* el = els->get(elIdx);
 
           if (el->isActive) {
             el->evaluate(this);
@@ -343,7 +326,7 @@
         }
 
         for (uint32_t fgIdx = 0; fgIdx < fgsLen; fgIdx++) {
-          SceneBase* fg = this->foregrounds->get(fgIdx);
+          SceneBase* fg = fgs->get(fgIdx);
 
           if (fg->isActive) {
             fg->evaluate(this);
@@ -363,12 +346,17 @@
       }
 
       void render(Renderer* renderer) {
-        uint32_t elsLen = this->elements->getLength();
-        uint32_t bgsLen = this->backgrounds->getLength();
-        uint32_t foregroundsLen = this->backgrounds->getLength();
+        LinkedList<SceneBase*>* els = this->elementsList;
+        LinkedList<SceneBase*>* bgs = this->backgroundsList;
+        LinkedList<SceneBase*>* fgs = this->foregroundsList;
+
+
+        uint32_t elsLen = els->getLength();
+        uint32_t bgsLen = bgs->getLength();
+        uint32_t fgsLen = fgs->getLength();
 
         for (uint32_t bgIdx = 0; bgIdx < bgsLen; bgIdx++) {
-          SceneBase* element = this->backgrounds->get(bgIdx);
+          SceneBase* element = bgs->get(bgIdx);
 
           if (element->isActive) {
             element->render(renderer);
@@ -377,7 +365,7 @@
         }
 
         for (uint32_t elIdx = 0; elIdx < elsLen; elIdx++) {
-          SceneBase* element = this->elements->get(elIdx);
+          SceneBase* element = els->get(elIdx);
 
           if (element->isActive) {
             element->render(renderer);
@@ -385,8 +373,8 @@
 
         }
 
-        for (uint32_t fgIdx = 0; fgIdx < foregroundsLen; fgIdx++) {
-          SceneBase* element = this->foregrounds->get(fgIdx);
+        for (uint32_t fgIdx = 0; fgIdx < fgsLen; fgIdx++) {
+          SceneBase* element = fgs->get(fgIdx);
 
           if (element->isActive) {
             element->render(renderer);
