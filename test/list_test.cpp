@@ -5,7 +5,7 @@
 #include <time.h>
 //#include <cstddef>
 #include <stdint.h>
-
+#include <string.h>
 
 #include "../lib/core/list/linked_list.hpp"
 #include "../lib/core/list/fixed_tree_list.hpp"
@@ -13,11 +13,32 @@
 #include "../lib/core/list/binary_tree_list.hpp"
 
 
+//int8_t sortCallback(const char*, const char*);
+int32_t sortCallback(const char* left, const char* right) {
+
+//  printf("compairing %s with %s\n", left, right);
+  //if (strcmp(left, right) == 0) {
+  //  return 0;
+  //}
+
+
+printf("%s <> %s :: %d\n", left, right, strcmp(left, right));
+//printf("\n");
+
+  //return -1;
+  //return 1;
+  //return -1 * strcmp(left, right);
+  //return -1 * strcmp(right, left);
+  //return strcmp(left, right);
+  return strcmp(right, left);
+}
+
+
 int main(int argc, char* argv[]) {
 
-  //LinkedList<const char*>* list = new LinkedList<const char*>();
+  LinkedList<const char*>* list = new LinkedList<const char*>();
   //FixedTreeList<const char*>* list = new FixedTreeList<const char*>();
-  ArrayList<const char*>* list = new ArrayList<const char*>();
+  //ArrayList<const char*>* list = new ArrayList<const char*>();
   //BinaryTreeList<const char*>* list = new BinaryTreeList<const char*>();
 
   time_t timestamp = time(0);
@@ -60,7 +81,7 @@ int main(int argc, char* argv[]) {
 //  list->unshift("shitty");
 
 
-  uint32_t listLen = 16384;
+  uint32_t listLen = 11;
 
 //  for (uint32_t idx = 0; idx < listLen; idx++) {
 //    char* str = (char*)malloc(9);
@@ -179,7 +200,7 @@ int main(int argc, char* argv[]) {
   for (uint32_t idx = 0; idx < listLen; idx++) {
     char* str = (char*)malloc(9);
 
-    sprintf(str, "%d", idx);
+    sprintf(str, "%2d", idx);
 
     //list->set(idx, str);
     list->push(str);
@@ -188,15 +209,15 @@ int main(int argc, char* argv[]) {
 
   printf("list->getLength(): %d\n", list->getLength());
 
-  for (uint32_t idx = 0; idx < listLen; idx++) {
-    const char* str  = list->pop();
-    //const char* str  = list->shift();
-    //const char* str  = list->get(idx);
-
-    //printf("[%ld] INDEX %d/%d: %s\n\n", time(0), idx, list->getLength(), str);
-
-    free((void*)str);
-  }
+//  for (uint32_t idx = 0; idx < listLen; idx++) {
+//    const char* str  = list->pop();
+//    //const char* str  = list->shift();
+//    //const char* str  = list->get(idx);
+//
+//    //printf("[%ld] INDEX %d/%d: %s\n\n", time(0), idx, list->getLength(), str);
+//
+//    free((void*)str);
+//  }
 
 
 
@@ -255,8 +276,19 @@ int main(int argc, char* argv[]) {
 //  printf("\n[%ld] INDEX 19: %s", timestamp, list->get(19));
 //  printf("\n[%ld] INDEX 20: %s", timestamp, list->get(20));
 
-  printf("\n");
-  printf("list->getLength(): %d\n", list->getLength());
+
+
+  list->sort(sortCallback);
+  //list->sort(sortCallback);
+  //list->sort(sortCallback);
+
+  printf("\n========================================\n\n");
+
+  for (uint32_t idx = 0; idx < list->getLength(); idx++) {
+    const char* str = list->get(idx);
+
+    printf("[%d] %s\n", idx, str);
+  }
 
 
   for (uint32_t idx = 0; idx < list->getLength(); idx++) {
@@ -269,3 +301,4 @@ int main(int argc, char* argv[]) {
 
   delete list;
 }
+

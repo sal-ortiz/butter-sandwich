@@ -7,11 +7,17 @@
 #include <core/map/tree_map.hpp>
 //#include <core/list/list.hpp>
 
+
+int32_t cmpFunc(const char* left, const char* right) {
+  return 1;
+}
+
+
 int main() {
 
   //Dict<const char*>* map = new Dict<const char*>();
-  //HashMap<const char*>* map = new HashMap<const char*>();
-  TreeMap<const char*>* map = new TreeMap<const char*>();
+  HashMap<const char*>* map = new HashMap<const char*>();
+  //TreeMap<const char*>* map = new TreeMap<const char*>();
 
   printf("\n====================================================");
 
@@ -86,14 +92,14 @@ int main() {
 
   printf("\n\n");
 
-  LinkedList<const char*>* keys = map->getKeys();
-  LinkedList<const char*>* vals = map->getValues();
+  LinkedList<const char*>* keys = map->getKeys(cmpFunc);
+  LinkedList<const char*>* vals = map->getValues(cmpFunc);
 
   for (int idx = 0; idx < keys->getLength(); idx++) {
-    //const char* key = keys->get(idx);
+    const char* key = keys->get(idx);
     const char* val = vals->get(idx);
 
-    //printf("%s => %s\n", key, val);
+    printf("%s => %s\n", key, val);
 
     //free((void*)key);
     free((void*)val);
