@@ -245,8 +245,9 @@
         this->length--;
       }
 
-      void sortList(int32_t(*func)(class_type, class_type), uint32_t startIdx, uint32_t endIdx, uint32_t depth=0) {
+      void sortList(int32_t(*func)(class_type, class_type), uint32_t startIdx, uint32_t endIdx) {
         // merge sort
+
         uint32_t leftStartIdx = startIdx;
         //uint32_t leftEndIdx = startIdx + floor(endIdx / 2);
         uint32_t leftEndIdx = startIdx + floor((endIdx - startIdx) / 2);
@@ -255,11 +256,11 @@
         uint32_t rightEndIdx = endIdx;
 
         if ((leftEndIdx - leftStartIdx) >= 1) {
-          this->sortList(func, leftStartIdx, leftEndIdx, depth+1);
+          this->sortList(func, leftStartIdx, leftEndIdx);
         }
 
         if ((rightEndIdx - rightStartIdx) >= 1) {
-          this->sortList(func, rightStartIdx, rightEndIdx, depth+1);
+          this->sortList(func, rightStartIdx, rightEndIdx);
         }
 
         LinkedListNode<class_type>* leftStart = this->getEntry(leftStartIdx);
@@ -311,11 +312,11 @@
           this->index = 0;
 
 //          if ((leftEndIdx - leftStartIdx) >= 1) {
-//            this->sortList(func, leftStartIdx, leftEndIdx, depth+1);
+//            this->sortList(func, leftStartIdx, leftEndIdx);
 //          }
 //
 //          if ((rightEndIdx - rightStartIdx) >= 1) {
-//            this->sortList(func, rightStartIdx, rightEndIdx, depth+1);
+//            this->sortList(func, rightStartIdx, rightEndIdx);
 //          }
 
         }
