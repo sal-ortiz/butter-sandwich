@@ -22,15 +22,15 @@ int32_t sortCallback(const char* left, const char* right) {
   //}
 
 
-printf("%s <> %s :: %d\n", left, right, strcmp(left, right));
+//printf("%s <> %s :: %d\n", left, right, strcmp(left, right));
 //printf("\n");
 
   //return -1;
   //return 1;
   //return -1 * strcmp(left, right);
   //return -1 * strcmp(right, left);
-  //return strcmp(left, right);
-  return strcmp(right, left);
+  return strcmp(left, right);
+  //return strcmp(right, left);
 }
 
 
@@ -81,7 +81,7 @@ int main(int argc, char* argv[]) {
 //  list->unshift("shitty");
 
 
-  uint32_t listLen = 11;
+  uint32_t listLen = 3;
 
 //  for (uint32_t idx = 0; idx < listLen; idx++) {
 //    char* str = (char*)malloc(9);
@@ -195,6 +195,10 @@ int main(int argc, char* argv[]) {
   //printf("list->root->next->next->next->next->next->next->next->next->next->next->next->next: %s\n", list->root->next->next->next->next->next->next->next->next->next->next->next->next->value);
 
 
+
+
+  listLen = 2;
+
   printf("\n\n");
 
   for (uint32_t idx = 0; idx < listLen; idx++) {
@@ -278,6 +282,20 @@ int main(int argc, char* argv[]) {
 
 
 
+
+list->set(0, "zero");
+list->set(1, "one");
+list->set(2, "two");
+list->set(3, "three");
+list->set(4, "four");
+list->set(5, "five");
+//list->set(6, "six");
+//list->set(7, "seven");
+//list->set(8, "eight");
+//list->set(9, "nine");
+//list->set(10, "ten");
+
+
   list->sort(sortCallback);
   //list->sort(sortCallback);
   //list->sort(sortCallback);
@@ -291,13 +309,13 @@ int main(int argc, char* argv[]) {
   }
 
 
-  for (uint32_t idx = 0; idx < list->getLength(); idx++) {
-    const char* str = list->get(idx);
-
-    printf("deleting %d: %s\n", idx, str);
-
-    free((void*)str);
-  }
+//  for (uint32_t idx = 0; idx < list->getLength(); idx++) {
+//    const char* str = list->get(idx);
+//
+//    printf("deleting %d: %s\n", idx, str);
+//
+//    free((void*)str);
+//  }
 
   delete list;
 }
