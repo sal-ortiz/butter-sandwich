@@ -9,7 +9,7 @@
 
   #include <core/list/list.hpp>
   #include <core/list/node/linked_list_node.hpp>
-
+  #include <core/list/linked_list/sort.hpp>
 
   template <class class_type>
   class LinkedList: public List<class_type> {
@@ -245,83 +245,129 @@
         this->length--;
       }
 
-      void sortList(int32_t(*func)(class_type, class_type), uint32_t startIdx, uint32_t endIdx) {
-        // merge sort
 
-        uint32_t leftStartIdx = startIdx;
-        //uint32_t leftEndIdx = startIdx + floor(endIdx / 2);
-        uint32_t leftEndIdx = startIdx + floor((endIdx - startIdx) / 2);
 
-        uint32_t rightStartIdx = leftEndIdx + 1;
-        uint32_t rightEndIdx = endIdx;
 
-        if ((leftEndIdx - leftStartIdx) >= 1) {
-          this->sortList(func, leftStartIdx, leftEndIdx);
-        }
 
-        if ((rightEndIdx - rightStartIdx) >= 1) {
-          this->sortList(func, rightStartIdx, rightEndIdx);
-        }
 
-        LinkedListNode<class_type>* leftStart = this->getEntry(leftStartIdx);
-        LinkedListNode<class_type>* rightStart = this->getEntry(rightStartIdx);
 
-        int32_t cmp = func(leftStart->value, rightStart->value);
 
-        if (cmp > 0) {
 
-          LinkedListNode<class_type>* leftEnd = this->getEntry(leftEndIdx);
-          LinkedListNode<class_type>* rightEnd = this->getEntry(rightEndIdx);
 
-          rightStart->prev = leftStart->prev;
-          leftStart->prev = rightEnd;
 
-          leftEnd->next = rightEnd->next;
-          rightEnd->next = leftStart;
 
-          //leftStart = this->getEntry(leftStartIdx);
-          //leftEnd = this->getEntry(leftEndIdx);
-          //rightStart = this->getEntry(rightStartIdx);
-          //rightEnd = this->getEntry(rightEndIdx);
 
-          if (rightStart->prev) {
-            rightStart->prev->next = rightStart;
-          }
 
-          if (leftEnd->next) {
-            leftEnd->next->prev = leftEnd;
-          }
-
-          //if (rightEnd->next) {
-          //  rightEnd->next->prev = rightEnd;
-          //}
-
-          //if (leftStart->prev) {
-          //  leftStart->prev->next = leftStart;
-          //}
-
-          if (startIdx == 0) {
-            this->head = rightStart;
-          }
-
-          if (endIdx == (this->length - 1)) {
-            this->tail = leftEnd;
-          }
-
-          this->indexNode = this->head;
-          this->index = 0;
-
-//          if ((leftEndIdx - leftStartIdx) >= 1) {
-//            this->sortList(func, leftStartIdx, leftEndIdx);
+//      LinkedListNode<class_type>* sortList(int32_t(*func)(class_type, class_type), uint32_t startIdx, uint32_t endIdx, uint32_t depth=0) {
+//        // merge sort
+//
+//        uint32_t leftStartIdx = startIdx;
+//        uint32_t leftEndIdx = startIdx + floor((endIdx - startIdx) / 2);
+//
+//        uint32_t rightStartIdx = leftEndIdx + 1;
+//        uint32_t rightEndIdx = endIdx;
+//
+//
+//
+//        LinkedListNode<class_type>* leftStart = this->getEntry(leftStartIdx);
+//        LinkedListNode<class_type>* rightStart = this->getEntry(rightStartIdx);
+//
+//
+//
+//
+//        if ((leftEndIdx - leftStartIdx) >= 1) {
+//          leftStart = this->sortList(func, leftStartIdx, leftEndIdx, depth+1);
+//        }
+//
+//        if ((rightEndIdx - rightStartIdx) >= 1) {
+//          rightStart = this->sortList(func, rightStartIdx, rightEndIdx, depth+1);
+//        }
+//
+//
+//
+//
+//
+//
+//
+//       //this->indexNode = this->head;
+//       //this->index = 0;
+//
+////        LinkedListNode<class_type>* leftStart = this->getEntry(leftStartIdx);
+////        LinkedListNode<class_type>* rightStart = this->getEntry(rightStartIdx);
+//
+//
+//
+//printf("[%d] leftStartIdx: %d leftEndIdx: %d\trightStartIdx: %d rightEndIdx: %d\t\t", depth, leftStartIdx, leftEndIdx, rightStartIdx, rightEndIdx);
+//
+//        int32_t cmp = func(leftStart->value, rightStart->value);
+//
+//printf("\n");
+//
+//        if (cmp > 0) {
+//
+//          LinkedListNode<class_type>* leftEnd = this->getEntry(leftEndIdx);
+//          LinkedListNode<class_type>* rightEnd = this->getEntry(rightEndIdx);
+//
+//          rightStart->prev = leftStart->prev;
+//          leftStart->prev = rightEnd;
+//
+//          leftEnd->next = rightEnd->next;
+//          rightEnd->next = leftStart;
+//
+//          //leftStart = this->getEntry(leftStartIdx);
+//          //leftEnd = this->getEntry(leftEndIdx);
+//          //rightStart = this->getEntry(rightStartIdx);
+//          //rightEnd = this->getEntry(rightEndIdx);
+//
+//          if (rightStart->prev) {
+//            rightStart->prev->next = rightStart;
 //          }
 //
-//          if ((rightEndIdx - rightStartIdx) >= 1) {
-//            this->sortList(func, rightStartIdx, rightEndIdx);
+//          if (leftEnd->next) {
+//            leftEnd->next->prev = leftEnd;
 //          }
-
-        }
-
-      }
+//
+//          //if (rightEnd->next) {
+//          //  rightEnd->next->prev = rightEnd;
+//          //}
+//
+//          //if (leftStart->prev) {
+//          //  leftStart->prev->next = leftStart;
+//          //}
+//
+//          if (startIdx == 0) {
+//            this->head = rightStart;
+//          }
+//
+//          if (endIdx == (this->length - 1)) {
+//            this->tail = leftEnd;
+//          }
+//
+//          this->indexNode = this->head;
+//          this->index = 0;
+//
+//
+//
+//
+//
+////          if ((leftEndIdx - leftStartIdx) >= 1) {
+////            this->sortList(func, leftStartIdx, leftEndIdx, depth+1);
+////          }
+////
+////          if ((rightEndIdx - rightStartIdx) >= 1) {
+////            this->sortList(func, rightStartIdx, rightEndIdx, depth+1);
+////          }
+//
+//
+//
+//
+//        }
+//
+//
+//        LinkedListNode<class_type>* ret = this->getEntry(startIdx);
+//
+//        return ret;
+//      }
 
 
     public:
@@ -451,7 +497,23 @@
         uint32_t start = 0;
         uint32_t end = this->length - 1;
 
-        this->sortList(func, start, end);
+        //this->sortList(func, start, end);
+        this->head = LinkedListSort<class_type>::mergeSort(this->head, func);
+
+        this->indexNode = this->head;
+        this->index = 0;
+
+        uint32_t len = this->length;
+
+        // HACK! Our merge sort corrupts the tail node placeholder
+        //       so we need to find it manually and reset it.
+        LinkedListNode<class_type>* node = this->head;
+
+        while (node != NULL && node->next != NULL) {
+          node = node->next;
+        }
+
+        this->tail = node;
       }
 
   };
