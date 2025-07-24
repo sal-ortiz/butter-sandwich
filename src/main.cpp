@@ -160,7 +160,6 @@ int main(int argc, char *argv[]) {
   uint32_t framePasses = 0;
   uint32_t frameEvalDelay = 250;
 
-  //printf("\n[%u] load time: %ums\n", SDL_GetTicks(), SDL_GetTicks() - loadStartTimestamp);
   Logger::print("load time: %ums", SDL_GetTicks(), SDL_GetTicks() - loadStartTimestamp);
 
   while (app->isActive) {
@@ -180,7 +179,6 @@ int main(int argc, char *argv[]) {
     if (framePasses % frameEvalDelay == 0) {
       float avgFrameTime = (float)frameElapsed / (float)framePasses;
 
-      //printf("\n[%u] average frame time: %.2fms", SDL_GetTicks(), avgFrameTime);
       Logger::print("average frame time: %.2fms", SDL_GetTicks(), avgFrameTime);
 
       frameElapsed = 0;
