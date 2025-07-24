@@ -257,7 +257,7 @@
 
 
 
-
+//      // Ideally, we'd like to use this merge sort but it needs work.
 //      LinkedListNode<class_type>* sortList(int32_t(*func)(class_type, class_type), uint32_t startIdx, uint32_t endIdx, uint32_t depth=0) {
 //        // merge sort
 //
@@ -267,13 +267,8 @@
 //        uint32_t rightStartIdx = leftEndIdx + 1;
 //        uint32_t rightEndIdx = endIdx;
 //
-//
-//
 //        LinkedListNode<class_type>* leftStart = this->getEntry(leftStartIdx);
 //        LinkedListNode<class_type>* rightStart = this->getEntry(rightStartIdx);
-//
-//
-//
 //
 //        if ((leftEndIdx - leftStartIdx) >= 1) {
 //          leftStart = this->sortList(func, leftStartIdx, leftEndIdx, depth+1);
@@ -283,25 +278,13 @@
 //          rightStart = this->sortList(func, rightStartIdx, rightEndIdx, depth+1);
 //        }
 //
-//
-//
-//
-//
-//
-//
 //       //this->indexNode = this->head;
 //       //this->index = 0;
 //
 ////        LinkedListNode<class_type>* leftStart = this->getEntry(leftStartIdx);
 ////        LinkedListNode<class_type>* rightStart = this->getEntry(rightStartIdx);
 //
-//
-//
-//printf("[%d] leftStartIdx: %d leftEndIdx: %d\trightStartIdx: %d rightEndIdx: %d\t\t", depth, leftStartIdx, leftEndIdx, rightStartIdx, rightEndIdx);
-//
 //        int32_t cmp = func(leftStart->value, rightStart->value);
-//
-//printf("\n");
 //
 //        if (cmp > 0) {
 //
@@ -346,10 +329,6 @@
 //          this->indexNode = this->head;
 //          this->index = 0;
 //
-//
-//
-//
-//
 ////          if ((leftEndIdx - leftStartIdx) >= 1) {
 ////            this->sortList(func, leftStartIdx, leftEndIdx, depth+1);
 ////          }
@@ -358,11 +337,7 @@
 ////            this->sortList(func, rightStartIdx, rightEndIdx, depth+1);
 ////          }
 //
-//
-//
-//
 //        }
-//
 //
 //        LinkedListNode<class_type>* ret = this->getEntry(startIdx);
 //
