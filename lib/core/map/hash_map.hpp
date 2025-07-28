@@ -115,8 +115,6 @@
         if (innerLoopLen >= HASHMAP_LISTLEN_MAX) {
           uint32_t newLen = this->data->getLength() + HASHMAP_ARRAY_LEN;
 
-          printf("REBASING to %d / %d\n", list->getLength(), this->data->getLength());
-
           this->rebase(newLen);
         }
 
