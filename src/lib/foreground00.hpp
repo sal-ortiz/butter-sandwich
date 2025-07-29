@@ -25,6 +25,7 @@
         trajectory->positionRate->depth = 0.90;
 
         color->alpha = 180;
+        this->type = "foreground";
 
         this->isActive = true;
       }
@@ -34,12 +35,14 @@
         Sprite* sprite = new Sprite();
         Image* image = Image::load("./src/assets/background01.png", 0, 0, 3840, 2160);
 
-
         sprite->addFrame(image, 0);
         sprite->setLoop(false);
 
         foreground->addSprite("foreground", sprite);
         foreground->setAction("foreground");
+
+        Position* fgPos = (Position*)foreground->state->get("absolute_position");
+        fgPos->depth = 1000;
 
         foreground->onEvaluate(Foreground00::evaluateCallback);
 
@@ -47,12 +50,16 @@
       }
 
       static void* evaluateCallback(Foreground00* foreground, Scene* scene) {
-        Background00* baseBackground = (Background00*)scene->getBackground("background00");;
+        //Background00* baseBackground = (Background00*)scene->getBackground("background00");;
+        Background00* baseBackground = (Background00*)scene->getElement("background00");;
 
         Trajectory* trajectory = (Trajectory*)foreground->state->get("trajectory");
         View* view = (View*)foreground->state->get("view");
         Position* absPosition = (Position*)foreground->state->get("absolute_position");
         Position* position = (Position*)foreground->state->get("position");
+
+
+        //absPosition->depth = 0;
 
         // NOTE: This only needs to be set once.
         view->size->horz = scene->view->size->horz;
