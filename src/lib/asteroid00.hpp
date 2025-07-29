@@ -79,6 +79,7 @@
 
         absPosition->horz = rand() % (uint32_t)scene->size->horz;
         absPosition->vert = rand() % (uint32_t)scene->size->vert;
+        absPosition->depth = 750;
 
         trajectory->position->horz = ((float)(rand() % 3) / 2) - 1.5;
         trajectory->position->vert = ((float)(rand() % 3) / 2) - 1.5;
