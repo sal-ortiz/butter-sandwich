@@ -43,9 +43,9 @@
         trajectory->colorRate->blue = 10.0;
         trajectory->colorRate->alpha = 10.0;
 
-        //printf("(%s) identifier: %d\t/\tidentifierString: %s\n", this->type, this->getIdentifier(), this->getIdentifierString());
-
         this->isActive = true;
+        this->type = "player";
+
       }
 
       static Player* loadAssets(Scene* scene) {
@@ -91,6 +91,7 @@
 
         absPosition->horz = scene->size->horz / 2;
         absPosition->vert = scene->size->vert / 2;
+        absPosition->depth = 500;
 
         color->red = 1.0;
         color->green = 1.0;
@@ -106,7 +107,7 @@
       static void* collisionCallback(SceneBase* tag, Player* player, Scene* scene) {
 
         //printf("\n[%u] PLAYER COLLISION!!", SDL_GetTicks());
-        Logger::print("PLAYER COLLISION!!");
+        Logger::warning("PLAYER COLLISION!!");
         //printf("\ntarg->name: %s", targ->name);
         //printf("\nplayer->name: %s", player->name);
         //printf("\nscene->size->horz / scene->size->vert: %d / %d", scene->size->horz, scene->size->vert);
@@ -126,7 +127,7 @@
 
         absPosition->horz += trajectory->position->horz;
         absPosition->vert += trajectory->position->vert;
-        absPosition->depth += trajectory->position->depth;
+        //absPosition->depth += trajectory->position->depth;
 
         angle->pitch += trajectory->angle->pitch;
         angle->roll += trajectory->angle->roll;
@@ -262,57 +263,47 @@
           && (SDL_GetTicks() - lastBulletTimestamp) > Bullet::DELAY
         ) {
           // fire a pellet
+          Bullet* bullet = Bullet::loadAssets(scene);
 
-          for (uint32_t bulletIdx = 0; bulletIdx < scene->getNumElements(); bulletIdx++) {
-            char* name = new char();
+          Position* bulletAbsolutePos = (Position*)bullet->state->get("absolute_position");
+          bulletAbsolutePos->horz = (scene->size->horz / 2) - (scene->view->size->horz / 2) - (player->width / 2) + 20;
+          bulletAbsolutePos->vert = (scene->size->vert / 2) - (scene->view->size->vert / 2) - (player->width / 2) + 20;
 
-            sprintf(name, "bullet-%.2u", bulletIdx);
+          Position* bulletPos = (Position*)bullet->state->get("position");
+          Angle* bulletAngle = (Angle*)bullet->state->get("angle");
+          Trajectory* bulletTraj = (Trajectory*)bullet->state->get("trajectory");
 
-            SceneElement* element = (SceneElement*)scene->getElement(name);
+          bulletAngle->center->horz = angle->center->horz - 36;
+          bulletAngle->center->vert = angle->center->vert - 36;
 
-            if (element == NULL) {
-              continue;
-            }
+          bulletTraj->position->horz = 24 * horzRatio;
+          bulletTraj->position->vert = 24 * vertRatio;
 
-            int32_t typeCmpRes = strcmp(element->getType(), "bullet");
+          bulletAbsolutePos->horz = absPosition->horz;
+          bulletAbsolutePos->vert = absPosition->vert;
 
-            if (element->isActive == false && typeCmpRes == 0) {
-              Bullet* bullet = reinterpret_cast<Bullet*>(element);
+          bulletAngle->pitch = angle->pitch + 132;
 
-              Position* bulletAbsolutePos = (Position*)bullet->state->get("absolute_position");
-              bulletAbsolutePos->horz = (scene->size->horz / 2) - (scene->view->size->horz / 2) - (player->width / 2) + 20;
-              bulletAbsolutePos->vert = (scene->size->vert / 2) - (scene->view->size->vert / 2) - (player->width / 2) + 20;
+          bullet->isActive = true;
 
-              Position* bulletPos = (Position*)bullet->state->get("position");
-              Angle* bulletAngle = (Angle*)bullet->state->get("angle");
-              Trajectory* bulletTraj = (Trajectory*)bullet->state->get("trajectory");
+          lastBulletTimestamp = SDL_GetTicks();
 
-              bulletAngle->center->horz = angle->center->horz - 36;
-              bulletAngle->center->vert = angle->center->vert - 36;
+          bulletTraj->color->red = 120;
+          bulletTraj->color->green = 10;
+          bulletTraj->color->blue = 10;
+          bulletTraj->color->alpha = 100;
 
-              bulletTraj->position->horz = 24 * horzRatio;
-              bulletTraj->position->vert = 24 * vertRatio;
+          char* name = new char[10];
 
-              bulletAbsolutePos->horz = absPosition->horz;
-              bulletAbsolutePos->vert = absPosition->vert;
+          bullet->name = name;
 
-              bulletAngle->pitch = angle->pitch + 132;
+          sprintf(name, "bullet-%.2u", bullet->getIdentifier());
 
-              bullet->isActive = true;
+          scene->addElement(name, bullet);
 
-              lastBulletTimestamp = SDL_GetTicks();
-
-              bulletTraj->color->red = 120;
-              bulletTraj->color->green = 10;
-              bulletTraj->color->blue = 10;
-              bulletTraj->color->alpha = 100;
-
-              break;
-            }
-
-          }
-
+          delete name;
         }
+
         // keep angle within 360 degrees
         // TODO: enforce this from a state callback.
         angle->pitch = angle->pitch < 0 ? 360 - abs(angle->pitch) : angle->pitch;
