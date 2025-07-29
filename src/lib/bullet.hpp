@@ -22,7 +22,7 @@
       static const uint32_t MAX_COUNT = 8;
 
       Bullet() {
-        this->isActive = false;
+        this->isActive = true;
         this->type = "bullet";
 
         Trajectory* trajectory = (Trajectory*)this->state->get("trajectory");
@@ -31,9 +31,6 @@
         trajectory->colorRate->green = 45.0;
         trajectory->colorRate->blue = 45.0;
         trajectory->colorRate->alpha = 45.0;
-
-
-        //printf("(%s) identifier: %d\t/\tidentifierString: %s\n", this->type, this->getIdentifier(), this->getIdentifierString());
       }
 
       static Bullet* loadAssets(Scene* scene) {
@@ -56,6 +53,7 @@
 
         absPosition->horz = -1;
         absPosition->vert = -1;
+        absPosition->depth = 250;
 
         bullet->onEvaluate(Bullet::evaluateCallback);
         bullet->onCollision(Bullet::collisionCallback);
@@ -84,7 +82,7 @@
 
         absPosition->horz += trajectory->position->horz;
         absPosition->vert += trajectory->position->vert;
-        absPosition->depth += trajectory->position->depth;
+        //absPosition->depth += trajectory->position->depth;
 
         color->red = trajectory->color->red;
         color->green = trajectory->color->green;
@@ -118,9 +116,14 @@
           || absPosition->vert > scene->size->vert
         ) {
           // our bullet has left our space.
-
           bullet->isActive = false;
+
+
+          bullet->isGarbage = true;
+          //delete bullet;  // ???
+
         }
+
 
         return (void*)NULL;
       }
