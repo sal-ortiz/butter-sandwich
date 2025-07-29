@@ -38,14 +38,14 @@ const uint32_t SCREEN_HEIGHT = 800;
 //void* quitCallback(LinkedList<void*>* inp) {
 void* quitCallback(Application* app) {
   //printf("\n[%u] exiting application\n", SDL_GetTicks());
-  Logger::print("exiting application");
+  Logger::warning("exiting application");
 
   return (void*)NULL;
 }
 
 void* closedCallback(Window* win, uint32_t horzPos, uint32_t vertPos) {
   //printf("\n[%u] window closed", SDL_GetTicks());
-  Logger::print("window closed");
+  Logger::warning("window closed");
 
   return (void*)NULL;
 }
@@ -112,8 +112,8 @@ int main(int argc, char *argv[]) {
   scene->size->horz = 3000;
   scene->size->vert = 1688;
 
-  scene->addBackground("background00", background00);
-  scene->addForeground("foreground00", foreground00);
+  scene->addElement("background00", background00);
+  scene->addElement("foreground00", foreground00);
   scene->addElement("player", player);
 
   for (uint32_t asteroidIdx = 0; asteroidIdx < Asteroid00::MAX_COUNT; asteroidIdx++) {
@@ -124,18 +124,6 @@ int main(int argc, char *argv[]) {
     sprintf(name, "asteroid-%.2u", asteroid->getIdentifier());
 
     scene->addElement(name, asteroid);
-
-    delete name;
-  }
-
-  for (uint32_t bulletsIdx = 0; bulletsIdx < Bullet::MAX_COUNT; bulletsIdx++) {
-    Bullet* bullet = Bullet::loadAssets(scene);
-
-    char* name = new char[10];
-
-    sprintf(name, "bullet-%.2u", bulletsIdx);
-
-    scene->addElement(name, bullet);
 
     delete name;
   }
@@ -160,7 +148,7 @@ int main(int argc, char *argv[]) {
   uint32_t framePasses = 0;
   uint32_t frameEvalDelay = 250;
 
-  Logger::print("load time: %ums", SDL_GetTicks(), SDL_GetTicks() - loadStartTimestamp);
+  Logger::warning("load time: %ums", SDL_GetTicks(), SDL_GetTicks() - loadStartTimestamp);
 
   while (app->isActive) {
     frameStart = SDL_GetTicks();
@@ -179,7 +167,7 @@ int main(int argc, char *argv[]) {
     if (framePasses % frameEvalDelay == 0) {
       float avgFrameTime = (float)frameElapsed / (float)framePasses;
 
-      Logger::print("average frame time: %.2fms", SDL_GetTicks(), avgFrameTime);
+      Logger::info("average frame time: %.2fms", SDL_GetTicks(), avgFrameTime);
 
       frameElapsed = 0;
       framePasses = 0;
