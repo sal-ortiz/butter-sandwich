@@ -37,6 +37,9 @@
         background->addSprite("background", sprite);
         background->setAction("background");
 
+        Position* bgPos = (Position*)background->state->get("absolute_position");
+        bgPos->depth = 0;
+
         background->onEvaluate(Background00::evaluateCallback);
 
         return background;
@@ -47,6 +50,8 @@
         View* view = (View*)background->state->get("view");
         Position* absPosition = (Position*)background->state->get("absolute_position");
         Position* position = (Position*)background->state->get("position");
+
+        //absPosition->depth = -50;
 
         // NOTE: This only needs to be set once.
         view->size->horz = scene->view->size->horz;
