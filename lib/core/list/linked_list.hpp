@@ -211,12 +211,22 @@
           return;
         }
 
-
-        LinkedListNode<class_type>* node = this->getEntry(targIndex);
-
         //if (node == NULL) {
         //  return;
         //}
+
+        if (targIndex == 0) {
+          LinkedListNode<class_type>* node = this->head;
+
+          this->head = this->head->next;
+
+          this->head->prev = NULL;
+          this->length--;
+
+          return;
+        }
+
+        LinkedListNode<class_type>* node = this->getEntry(targIndex);
 
         if (node->prev != NULL) {
           node->prev->next = node->next;
@@ -226,34 +236,17 @@
           node->next->prev = node->prev;
         }
 
-        if (targIndex == 0) {
-          this->head = node->next;
-        }
-
         if (targIndex == this->length - 1) {
-          this->indexNode = node->prev;
-
-          this->index = targIndex - 1;
-        } else {
-          this->indexNode = node->next;
-
-          this->index = targIndex;
+          this->tail = node->prev;
         }
+
+        this->index = 0;
+        this->indexNode = this->head;
 
         delete node;
 
         this->length--;
       }
-
-
-
-
-
-
-
-
-
-
 
 
 
