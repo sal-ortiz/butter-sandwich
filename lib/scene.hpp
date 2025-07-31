@@ -75,6 +75,8 @@
       }
 
       void addElement(const char* name, SceneBase* el) {
+        el->name = name;
+
         this->elements->set(name, el);
         this->elementsList = this->elements->getValues(/*Scene::sortByDepthCallback*/);
 
