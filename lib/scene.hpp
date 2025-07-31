@@ -87,6 +87,31 @@
         return this->elements->get(name);
       }
 
+      void elementsListGarbagePickup() {
+        LinkedList<const char*>* keys = this->elements->getKeys();
+        uint32_t keysLen = keys->getLength();
+
+
+        for (uint32_t idx = 0; idx < keysLen; idx++) {
+          const char* key = keys->get(idx);
+
+          SceneBase* el = this->elements->get(key);
+
+          if (el->isGarbage) {
+            this->elements->remove(key);
+
+            this->elementsList = this->elements->getValues();
+            this->elementsList->sort(Scene::sortByDepthCallback);
+
+            delete el;
+          }
+
+        }
+
+        //this->elementsList = this->elements->getValues();
+        //this->elementsList->sort(Scene::sortByDepthCallback);
+      }
+
       void populateCollision() {
         uint32_t sceneWidth = this->size->horz;
         uint32_t sceneHeight = this->size->vert;
