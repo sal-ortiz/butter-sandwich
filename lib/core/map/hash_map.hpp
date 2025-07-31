@@ -160,34 +160,29 @@
         delete oldData;
       }
 
-      //void deleteEntry(const char* key) {
-      //  uint32_t aryIdx = HashMap::hashCode(key) % this->listArrayLen;
-      //
-      //  ArrayList<HashMapNode<class_type>> list = data[aryIdx];
-      //  HashMapNode<class_type> entry;
-      //
-      //  uint32_t listLen = list.getLength();
-      //
-      //  bool found = false;
-      //
-      //  for (uint32_t idx = 0; idx < listLen; idx++) {
-      //    entry = list.get(idx);
-      //
-      //    if (!strcmp(entry.key, key) == 0) {
-      //      found = true;
-      //
-      //      list.remove(idx);
-      //
-      //      break;
-      //    }
-      //
-      //  }
-      //
-      //  //if (!found) {
-      //  //  throw (void*)NULL;
-      //  //}
-      //
-      //}
+      void deleteEntry(const char* key) {
+        uint32_t aryIdx = HashMap::hashCode(key) % this->data->getLength();
+
+        LinkedList<HashMapNode<class_type>*>* list = this->data->get(aryIdx);
+
+        uint32_t listLen = list->getLength();
+
+        for (uint32_t idx = 0; idx < listLen; idx++) {
+          HashMapNode<class_type>* el = list->get(idx);
+
+          if (!strcmp(key, el->key)) {
+            list->remove(idx);
+
+            listLen--;
+            delete el;
+
+            //continue;
+            break;
+          }
+
+        }
+
+      }
 
 
     public:
@@ -238,9 +233,9 @@
         this->setEntry(key, value);
       }
 
-      //void remove(const char* key) {
-      //  this->deleteEntry(key);
-      //}
+      void remove(const char* key) {
+        this->deleteEntry(key);
+      }
 
       LinkedList<const char*>* getKeys(int32_t(*func)(const char*, const char*)=NULL) {
         LinkedList<const char*>* outp = new LinkedList<const char*>();
