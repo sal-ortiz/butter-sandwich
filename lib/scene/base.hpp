@@ -38,9 +38,12 @@
       uint32_t height;
 
       bool isActive;
+      bool isGarbage;
 
       SceneBase() {
         //this->evalCallback = NULL;
+        this->isActive = true;
+        this->isGarbage = false;
 
         this->sprites = new HashMap<Sprite*>();
         this->state = new State();
