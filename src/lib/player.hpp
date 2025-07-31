@@ -300,8 +300,6 @@
           sprintf(name, "bullet-%.2u", bullet->getIdentifier());
 
           scene->addElement(name, bullet);
-
-          delete name;
         }
 
         // keep angle within 360 degrees

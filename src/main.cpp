@@ -124,8 +124,6 @@ int main(int argc, char *argv[]) {
     sprintf(name, "asteroid-%.2u", asteroid->getIdentifier());
 
     scene->addElement(name, asteroid);
-
-    delete name;
   }
 
   Position* playerAbsolutePos = (Position*)player->state->get("absolute_position");
