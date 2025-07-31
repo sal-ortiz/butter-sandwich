@@ -13,6 +13,7 @@
   //#include <core/list/array_list.hpp>
   #include <core/list/fixed_tree_list.hpp>
   #include <core/list/linked_list.hpp>
+  #include <tools/logger.hpp>
 
   #define HASHMAP_ARRAY_LEN     128
   #define HASHMAP_LISTLEN_MAX   192
@@ -114,6 +115,8 @@
 
         if (innerLoopLen >= HASHMAP_LISTLEN_MAX) {
           uint32_t newLen = this->data->getLength() + HASHMAP_ARRAY_LEN;
+
+          Logger::info("rebasing HashMap list to %d entries", newLen);
 
           this->rebase(newLen);
         }
