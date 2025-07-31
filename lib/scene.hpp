@@ -17,6 +17,8 @@
   #include <scene/element.hpp>
 
   #define COLLISION_EVAL_FRAME_INTERVAL   3
+  #define MAINT_FRAME_INTERVAL            10
+  #define EVAL_FRAME_INTERVAL             2
 
 
   class Scene: public SceneBase {
@@ -31,6 +33,8 @@
       LinkedList<SceneBase*>* elementsList;
 
       uint8_t collisionFrameCount;
+      uint8_t evalFrameCount;
+      uint8_t maintFrameCount;
 
 
     public:
@@ -48,6 +52,8 @@
         this->quadtree = NULL;
 
         this->collisionFrameCount = 0;
+        this->evalFrameCount = 0;
+        this->maintFrameCount = 0;
       }
 
       ~Scene() {
@@ -278,18 +284,26 @@
       }
 
       void evaluate() {
-        LinkedList<SceneBase*>* els = this->elementsList;
 
-        uint32_t elsLen = els->getLength();
+        //uint8_t evalFrameInterval = EVAL_FRAME_INTERVAL;
+        //uint8_t evalFrameCount = this->evalFrameCount++;
+        //
+        //if ((evalFrameCount % evalFrameInterval) == 0) {
+          LinkedList<SceneBase*>* els = this->elementsList;
 
-        for (uint32_t elIdx = 0; elIdx < elsLen; elIdx++) {
-          SceneBase* el = els->get(elIdx);
+          uint32_t elsLen = els->getLength();
 
-          if (el->isActive) {
-            el->evaluate(this);
+          for (uint32_t elIdx = 0; elIdx < elsLen; elIdx++) {
+            SceneBase* el = els->get(elIdx);
+
+            if (el->isActive) {
+              el->evaluate(this);
+            }
+
           }
 
-        }
+          SceneBase::evaluate(this);
+        //}
 
         uint8_t collFrameInterval = COLLISION_EVAL_FRAME_INTERVAL;
         uint8_t collFrameCount = this->collisionFrameCount++;
@@ -299,7 +313,13 @@
           this->evaluateCollision();
         }
 
-        SceneBase::evaluate(this);
+        uint8_t maintFrameInterval = MAINT_FRAME_INTERVAL;
+        uint8_t maintFrameCount = this->maintFrameCount++;
+
+        if ((maintFrameCount % maintFrameInterval) == 0) {
+          elementsListGarbagePickup();
+        }
+
       }
 
       void render(Renderer* renderer) {
