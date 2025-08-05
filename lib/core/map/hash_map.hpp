@@ -15,14 +15,16 @@
   #include <core/list/linked_list.hpp>
   #include <tools/logger.hpp>
 
-  #define HASHMAP_ARRAY_LEN     128
-  #define HASHMAP_LISTLEN_MAX   192
+  #define HASHMAP_ARRAY_LEN     192
+  #define HASHMAP_LISTLEN_MAX   128
 
-  #define MAX_HASHCODE_KEY_LEN    8
+
+  #define MAX_HASHCODE_KEY_LEN    10
 
 
   template <class class_type>
   class HashMap: public Map<class_type> {
+    // an array of lists
 
     private:
 
@@ -58,10 +60,8 @@
 
         uint32_t listLen = list->getLength();
 
-        HashMapNode<class_type>* entry;
-
         for (uint32_t idx = 0; idx < listLen; idx++) {
-          entry = list->get(idx);
+          HashMapNode<class_type>* entry = list->get(idx);
 
           if (entry == NULL) {
             break;
@@ -106,8 +106,8 @@
         newEntry->key = key;
         newEntry->value = value;
 
-        //list->unshift(newEntry);  // LinkedList, BinaryTreeList
-        list->push(newEntry);   // LinkedList, FixedTreeList, ArrayList
+        list->unshift(newEntry);  // LinkedList
+        //list->push(newEntry);   // FixedTreeList, ArrayList, BinaryTreeList
 
         this->data->set(aryIdx, list);
 
@@ -116,51 +116,42 @@
         if (innerLoopLen >= HASHMAP_LISTLEN_MAX) {
           uint32_t newLen = this->data->getLength() + HASHMAP_ARRAY_LEN;
 
-          Logger::info("rebasing HashMap list to %d entries", newLen);
-
+          //Logger::info("rebasing HashMap list to %d entries from %d", newLen, this->data->getLength());
           this->rebase(newLen);
         }
 
       }
 
       void rebase(uint32_t newLen) {
-        //ArrayList<LinkedList<HashMapNode<class_type>*>*>* oldData = this->data;
-        //ArrayList<LinkedList<HashMapNode<class_type>*>*>* newData = new ArrayList<LinkedList<HashMapNode<class_type>*>*>();
-        FixedTreeList<LinkedList<HashMapNode<class_type>*>*>* oldData = this->data;
         FixedTreeList<LinkedList<HashMapNode<class_type>*>*>* newData = new FixedTreeList<LinkedList<HashMapNode<class_type>*>*>();
 
+        newData->set(newLen - 1, NULL);
 
-        newData->set(newLen, NULL);
+        LinkedList<const char*>* keys = this->getKeys();
+        uint32_t keysLen = keys->getLength();
 
-        this->data = newData;
+        for (uint32_t idx = 0; idx < keysLen; idx++) {
+          const char* key = keys->get(idx);
+          uint32_t aryIdx = HashMap::hashCode(key) % newLen;
 
-        uint32_t oldDataLen = oldData->getLength();
-
-        for (uint32_t idx = 0; idx < oldDataLen; idx++) {
-          LinkedList<HashMapNode<class_type>*>* list = oldData->get(idx);
+          LinkedList<HashMapNode<class_type>*>* list = newData->get(aryIdx);
 
           if (list == NULL) {
-            continue;
+            list = new LinkedList<HashMapNode<class_type>*>();
           }
 
-          uint32_t listLen = list->getLength();
+          HashMapNode<class_type>* node = this->getEntry(key);
 
-          for (uint32_t listIdx = 0; listIdx < listLen; listIdx++) {
-            HashMapNode<class_type>* entry = list->get(listIdx);
+          //list->push(node);     // FixedTreeList, BinaryTreeList, ArrayList
+          list->unshift(node);  // LinkedList
 
-            if (entry == NULL) {
-              continue;
-            }
-
-            this->setEntry(entry->key, entry->value);
-
-            delete entry;
-          }
-
-          delete list;
+          newData->set(aryIdx, list);
         }
 
-        delete oldData;
+        delete keys;
+        delete this->data;
+
+        this->data = newData;
       }
 
       void deleteEntry(const char* key) {
