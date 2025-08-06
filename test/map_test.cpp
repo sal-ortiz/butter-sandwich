@@ -97,12 +97,13 @@ int main() {
 
   for (int idx = 0; idx < keys->getLength(); idx++) {
     const char* key = keys->get(idx);
-    const char* val = vals->get(idx);
+    //const char* val = vals->get(idx);
+    const char* val = map->get(key);
 
     printf("%s => %s\n", key, val);
 
     //free((void*)key);
-    free((void*)val);
+    //free((void*)val);
   }
 
   //printf("\n%d\n", keys->getLength());
@@ -112,7 +113,7 @@ int main() {
   printf("\n====================================================\n\n");
 
 
-  delete keys;
-  delete vals;
-  delete map;
+  //delete keys;
+  //delete vals;
+  //delete map;
 }
