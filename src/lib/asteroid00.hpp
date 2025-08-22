@@ -42,12 +42,6 @@
 
         this->isActive = true;
         this->type = "asteroid";
-
-        //if (this->getIdentifier() == 0) {
-        //  printf("IdentifierTools::generate(); %s\n", IdentifierTools::generate());
-        //}
-
-        //printf("(%s) identifier: %d\t/\tidentifierString: %s\n", this->type, this->getIdentifier(), this->getIdentifierString());
       }
 
       static Asteroid00* loadAssets(Scene* scene) {
