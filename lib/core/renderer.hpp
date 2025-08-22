@@ -20,10 +20,12 @@
       LinkedList<RenderQueueEntry*>* queue;
 
       void renderQueue() {
+
         uint32_t len = this->queue->getLength();
 
         for (uint32_t idx = 0; idx < len; idx++) {
-          RenderQueueEntry* entry = this->queue->shift();
+          //RenderQueueEntry* entry = this->queue->shift();
+          RenderQueueEntry* entry = this->queue->get(idx);
 
           SDL_SetTextureColorMod(
             entry->texture,
@@ -50,6 +52,9 @@
           delete entry;
         }
 
+        delete this->queue;
+
+        this->queue = NULL;
       }
 
 
@@ -59,7 +64,8 @@
         uint32_t flags = SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC;
 
         this->renderer = SDL_CreateRenderer(winHandle, -1, flags);
-        this->queue = new LinkedList<RenderQueueEntry*>();
+        //this->queue = new LinkedList<RenderQueueEntry*>();
+        this->queue = NULL;
       }
 
       ~Renderer() {
@@ -91,6 +97,11 @@
       }
 
       void present() {
+
+        if (this->queue == NULL) {
+          return;
+        }
+
         this->renderQueue();
 
         SDL_RenderPresent(this->renderer);
@@ -140,6 +151,10 @@
           (uint8_t)blue,
           (uint8_t)alpha
         };
+
+        if (this->queue == NULL) {
+          this->queue = new LinkedList<RenderQueueEntry*>();
+        }
 
         RenderQueueEntry* newEntry = new RenderQueueEntry(texture, srcRect, dstRect, center, dstAngle, color);
 
