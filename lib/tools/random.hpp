@@ -29,7 +29,7 @@
         srand(timestamp);
 
         Random::seeded = true;
-        Random::tableIndex = rand() % 1000;
+        Random::tableIndex = rand() % 10000;
       }
 
       static uint16_t getNumber(uint16_t seedVal=0) {
@@ -43,7 +43,7 @@
 
       static uint16_t getNumberFromTable() {
         uin16_t num = Numbers::table[Random::tableIndex];
-        Random::tableIndex = (Random::tableIndex++) % 1000;
+        Random::tableIndex = (Random::tableIndex++) % 10000;
 
         return num;
       }
