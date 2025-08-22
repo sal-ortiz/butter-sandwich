@@ -6,6 +6,7 @@
 
 #include <math.h>
 
+#include <tools/logger.hpp>
 #include <core/keyboard.hpp>
 #include <core/renderer.hpp>
 #include <runtime/window.hpp>
@@ -14,7 +15,6 @@
 #include <runtime/data/angle.hpp>
 #include <runtime/data/position.hpp>
 #include <scene.hpp>
-#include <tools/logger.hpp>
 
 #include "./lib/bullet.hpp"
 #include "./lib/background00.hpp"
