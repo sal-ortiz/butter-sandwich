@@ -184,13 +184,15 @@
         node->prev = newNode;
         newNode->next = node;
 
-        if (targIndex == 0) {
-          this->head = newNode;
-        }
-
         newNode->value = value;
 
-        if (targIndex > 0 && targIndex < this->length - 1) {
+        if (targIndex == 0) {
+          this->head = newNode;
+
+        } else if (targIndex == (this->length - 1)) {
+          this->tail = newNode;
+
+        } else if (targIndex > 0 && targIndex < this->length - 1) {
           this->indexNode = newNode;
           this->index = targIndex;
         }
