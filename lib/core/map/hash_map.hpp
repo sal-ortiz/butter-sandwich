@@ -142,8 +142,8 @@
 
           HashMapNode<class_type>* node = this->getEntry(key);
 
-          //list->push(node);     // FixedTreeList, BinaryTreeList, ArrayList
           list->unshift(node);  // LinkedList
+          //list->push(node);     // FixedTreeList, BinaryTreeList, ArrayList
 
           newData->set(aryIdx, list);
         }
@@ -204,6 +204,7 @@
           for (uint32_t listIdx = 0; listIdx < listLen; listIdx++) {
             HashMapNode<class_type>* entry = list->get(listIdx);
 
+            //delete entry->key;
             delete entry;
           }
 
