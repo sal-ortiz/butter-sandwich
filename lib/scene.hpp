@@ -132,7 +132,9 @@
         uint32_t sceneWidth = this->size->horz;
         uint32_t sceneHeight = this->size->vert;
 
-        // TODO: delete  old this->quadtree entries.
+        if (this->quadtree != NULL) {
+          delete this->quadtree;
+        }
 
         this->quadtree = new Quadtree<SceneBase*>(sceneWidth, sceneHeight);
 
@@ -289,8 +291,8 @@
 
         }
 
-        delete this->quadtree;
-        this->quadtree = NULL;
+        //delete this->quadtree;
+        //this->quadtree = NULL;
       }
 
       void evaluate() {
