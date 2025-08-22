@@ -264,7 +264,7 @@
       }
 
       LinkedList<class_type>* getValues(int32_t(*func)(class_type, class_type)=NULL) {
-        LinkedList<class_type>* outp = new LinkedList<class_type>();
+        LinkedList<class_type>* vals = new LinkedList<class_type>();
         uint32_t aryLen = this->data->getLength();;
 
         for (uint32_t aryIdx = 0; aryIdx < aryLen; aryIdx++) {
@@ -279,18 +279,19 @@
           for (uint32_t listIdx = 0; listIdx < listLen; listIdx++) {
             HashMapNode<class_type>* entry = list->get(listIdx);
 
-            class_type value = entry->value;
+            class_type val = entry->value;
 
-            outp->push(value);
+            vals->unshift(val);  // LinkedList
+            //vals->push(val;     // FixedTreeList, BinaryTreeList, ArrayList
           }
 
         }
 
         if (func != NULL) {
-          outp->sort(func);
+          vals->sort(func);
         }
 
-        return outp;
+        return vals;
       }
 
   };
