@@ -71,6 +71,7 @@
         }
 
         delete this->elements;
+        delete this->elementsList;
 
         delete this->size;
         delete this->view;
@@ -84,8 +85,10 @@
         el->name = name;
 
         this->elements->set(name, el);
-        this->elementsList = this->elements->getValues(/*Scene::sortByDepthCallback*/);
 
+        delete this->elementsList;
+
+        this->elementsList = this->elements->getValues(/*Scene::sortByDepthCallback*/);
         this->elementsList->sort(Scene::sortByDepthCallback);
       }
 
@@ -97,6 +100,7 @@
         LinkedList<const char*>* keys = this->elements->getKeys();
         uint32_t keysLen = keys->getLength();
 
+        bool shouldReinitList = false;
 
         for (uint32_t idx = 0; idx < keysLen; idx++) {
           const char* key = keys->get(idx);
@@ -106,16 +110,22 @@
           if (el->isGarbage) {
             this->elements->remove(key);
 
-            this->elementsList = this->elements->getValues();
-            this->elementsList->sort(Scene::sortByDepthCallback);
+            shouldReinitList = true;
 
             delete el;
           }
 
         }
 
-        //this->elementsList = this->elements->getValues();
-        //this->elementsList->sort(Scene::sortByDepthCallback);
+        delete keys;
+
+        if (shouldReinitList == true) {
+          delete this->elementsList;
+
+          this->elementsList = this->elements->getValues();
+          this->elementsList->sort(Scene::sortByDepthCallback);
+        }
+
       }
 
       void populateCollision() {
