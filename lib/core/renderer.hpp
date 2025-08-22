@@ -19,17 +19,6 @@
 
       LinkedList<RenderQueueEntry*>* queue;
 
-      void emptyQueue() {
-        uint32_t len = this->queue->getLength();
-
-        for (uint32_t idx = 0; idx < len; idx++) {
-          RenderQueueEntry* entry = this->queue->shift();
-
-          delete entry;
-        }
-
-      }
-
       void renderQueue() {
         uint32_t len = this->queue->getLength();
 
@@ -76,9 +65,21 @@
       ~Renderer() {
         SDL_DestroyRenderer(this->renderer);
 
-        this->emptyQueue();
+        if (this->queue != NULL) {
+          uint32_t queueLen = this->queue->getLength();
 
-        delete this->queue;
+          for (uint32_t idx = 0; idx < queueLen; idx++) {
+            //RenderQueueEntry* entry = this->queue->shift();
+            RenderQueueEntry* entry = this->queue->get(idx);
+
+            delete entry;
+          }
+
+          delete this->queue;
+
+          //this->queue = NULL;
+        }
+
       }
 
       SDL_Renderer* getRenderer() {
