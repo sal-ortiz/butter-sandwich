@@ -233,7 +233,7 @@
       }
 
       LinkedList<const char*>* getKeys(int32_t(*func)(const char*, const char*)=NULL) {
-        LinkedList<const char*>* outp = new LinkedList<const char*>();
+        LinkedList<const char*>* keys = new LinkedList<const char*>();
         uint32_t aryLen = this->data->getLength();;
 
         for (uint32_t aryIdx = 0; aryIdx < aryLen; aryIdx++) {
@@ -250,19 +250,17 @@
 
             const char* key = entry->key;
 
-            //if (key != NULL) {
-              outp->push(key);
-            //}
-
+            keys->unshift(key);  // LinkedList
+            //keys->push(key);     // FixedTreeList, BinaryTreeList, ArrayList
           }
 
         }
 
         if (func != NULL) {
-          outp->sort(func);
+          keys->sort(func);
         }
 
-        return outp;
+        return keys;
       }
 
       LinkedList<class_type>* getValues(int32_t(*func)(class_type, class_type)=NULL) {
