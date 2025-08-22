@@ -323,6 +323,8 @@
         if ((collFrameCount % collFrameInterval) == 0) {
           this->populateCollision();
           this->evaluateCollision();
+
+          this->collisionFrameCount = 0;
         }
 
         uint8_t maintFrameInterval = MAINT_FRAME_INTERVAL;
@@ -330,6 +332,8 @@
 
         if ((maintFrameCount % maintFrameInterval) == 0) {
           elementsListGarbagePickup();
+
+          this->maintFrameCount = 0;
         }
 
       }
