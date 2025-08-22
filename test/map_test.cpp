@@ -2,6 +2,7 @@
 #include <time.h>
 #include <stdio.h>
 #include <cstddef>
+#include <string.h>
 
 #include <core/map/hash_map.hpp>
 #include <core/map/tree_map.hpp>
@@ -9,7 +10,7 @@
 
 
 int32_t cmpFunc(const char* left, const char* right) {
-  return 1;
+  return strcmp(left, right);
 }
 
 
@@ -64,9 +65,10 @@ int main() {
 
 
   for (uint32_t listIdx = 0; listIdx < 8192; listIdx++) {
-    char* str = (char*)malloc(32);
+    char* str = (char*)malloc(6);
 
-    sprintf(str, "%d", listIdx);
+    //sprintf(str, "%d", listIdx);
+    sprintf(str, "%05d", listIdx);
 
     if ((listIdx % 512) == 0) {
       printf(".");
@@ -95,6 +97,9 @@ int main() {
   LinkedList<const char*>* keys = map->getKeys(cmpFunc);
   LinkedList<const char*>* vals = map->getValues(cmpFunc);
 
+  printf("%d\n", keys->getLength());
+  printf("%d\n", vals->getLength());
+
   for (int idx = 0; idx < keys->getLength(); idx++) {
     const char* key = keys->get(idx);
     //const char* val = vals->get(idx);
@@ -102,7 +107,7 @@ int main() {
 
     printf("%s => %s\n", key, val);
 
-    //free((void*)key);
+    free((void*)key);
     //free((void*)val);
   }
 
@@ -113,7 +118,7 @@ int main() {
   printf("\n====================================================\n\n");
 
 
-  //delete keys;
-  //delete vals;
-  //delete map;
+  delete keys;
+  delete vals;
+  delete map;
 }
